@@ -1,0 +1,104 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="8">
+            <item index="0" class="java.lang.String" itemvalue="nobr" />
+            <item index="1" class="java.lang.String" itemvalue="noembed" />
+            <item index="2" class="java.lang.String" itemvalue="comment" />
+            <item index="3" class="java.lang.String" itemvalue="noscript" />
+            <item index="4" class="java.lang.String" itemvalue="embed" />
+            <item index="5" class="java.lang.String" itemvalue="script" />
+            <item index="6" class="java.lang.String" itemvalue="div" />
+            <item index="7" class="java.lang.String" itemvalue="style" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="64">
+            <item index="0" class="java.lang.String" itemvalue="pandas" />
+            <item index="1" class="java.lang.String" itemvalue="dash" />
+            <item index="2" class="java.lang.String" itemvalue="gunicorn" />
+            <item index="3" class="java.lang.String" itemvalue="newsapi" />
+            <item index="4" class="java.lang.String" itemvalue="pipasgiref" />
+            <item index="5" class="java.lang.String" itemvalue="geopandas" />
+            <item index="6" class="java.lang.String" itemvalue="Fiona" />
+            <item index="7" class="java.lang.String" itemvalue="Shapely" />
+            <item index="8" class="java.lang.String" itemvalue="xz" />
+            <item index="9" class="java.lang.String" itemvalue="krb5" />
+            <item index="10" class="java.lang.String" itemvalue="psycopg2" />
+            <item index="11" class="java.lang.String" itemvalue="geotiff" />
+            <item index="12" class="java.lang.String" itemvalue="ncurses" />
+            <item index="13" class="java.lang.String" itemvalue="bzip2" />
+            <item index="14" class="java.lang.String" itemvalue="kealib" />
+            <item index="15" class="java.lang.String" itemvalue="glib" />
+            <item index="16" class="java.lang.String" itemvalue="fontconfig" />
+            <item index="17" class="java.lang.String" itemvalue="libtiff" />
+            <item index="18" class="java.lang.String" itemvalue="gettext" />
+            <item index="19" class="java.lang.String" itemvalue="icu" />
+            <item index="20" class="java.lang.String" itemvalue="libspatialite" />
+            <item index="21" class="java.lang.String" itemvalue="sqlite" />
+            <item index="22" class="java.lang.String" itemvalue="libiconv" />
+            <item index="23" class="java.lang.String" itemvalue="boost-cpp" />
+            <item index="24" class="java.lang.String" itemvalue="libgdal" />
+            <item index="25" class="java.lang.String" itemvalue="openssl" />
+            <item index="26" class="java.lang.String" itemvalue="hdf4" />
+            <item index="27" class="java.lang.String" itemvalue="libgfortran" />
+            <item index="28" class="java.lang.String" itemvalue="hdf5" />
+            <item index="29" class="java.lang.String" itemvalue="ca-certificates" />
+            <item index="30" class="java.lang.String" itemvalue="libcxx" />
+            <item index="31" class="java.lang.String" itemvalue="mkl-service" />
+            <item index="32" class="java.lang.String" itemvalue="mkl_fft" />
+            <item index="33" class="java.lang.String" itemvalue="libffi" />
+            <item index="34" class="java.lang.String" itemvalue="libpng" />
+            <item index="35" class="java.lang.String" itemvalue="pixman" />
+            <item index="36" class="java.lang.String" itemvalue="libssh2" />
+            <item index="37" class="java.lang.String" itemvalue="openjpeg" />
+            <item index="38" class="java.lang.String" itemvalue="libcurl" />
+            <item index="39" class="java.lang.String" itemvalue="blas" />
+            <item index="40" class="java.lang.String" itemvalue="pcre" />
+            <item index="41" class="java.lang.String" itemvalue="json-c" />
+            <item index="42" class="java.lang.String" itemvalue="postgresql" />
+            <item index="43" class="java.lang.String" itemvalue="expat" />
+            <item index="44" class="java.lang.String" itemvalue="jpeg" />
+            <item index="45" class="java.lang.String" itemvalue="cfitsio" />
+            <item index="46" class="java.lang.String" itemvalue="numpy-base" />
+            <item index="47" class="java.lang.String" itemvalue="readline" />
+            <item index="48" class="java.lang.String" itemvalue="freexl" />
+            <item index="49" class="java.lang.String" itemvalue="libkml" />
+            <item index="50" class="java.lang.String" itemvalue="poppler-data" />
+            <item index="51" class="java.lang.String" itemvalue="libpq" />
+            <item index="52" class="java.lang.String" itemvalue="libdap4" />
+            <item index="53" class="java.lang.String" itemvalue="cairo" />
+            <item index="54" class="java.lang.String" itemvalue="libxml2" />
+            <item index="55" class="java.lang.String" itemvalue="libedit" />
+            <item index="56" class="java.lang.String" itemvalue="xerces-c" />
+            <item index="57" class="java.lang.String" itemvalue="zlib" />
+            <item index="58" class="java.lang.String" itemvalue="mkl_random" />
+            <item index="59" class="java.lang.String" itemvalue="gdal" />
+            <item index="60" class="java.lang.String" itemvalue="poppler" />
+            <item index="61" class="java.lang.String" itemvalue="libnetcdf" />
+            <item index="62" class="java.lang.String" itemvalue="freetype" />
+            <item index="63" class="java.lang.String" itemvalue="giflib" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N802" />
+          <option value="N801" />
+          <option value="N806" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
