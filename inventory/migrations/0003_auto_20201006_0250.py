@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shop', '0002_remove_product_slug'),
+        ('inventory', '0002_remove_product_slug'),
     ]
 
     operations = [
@@ -23,6 +23,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='product',
             name='category',
-            field=models.ManyToManyField(to='shop.ProductCategories'),
+            field=models.ManyToManyField(to='inventory.ProductCategories'),
         ),
     ]

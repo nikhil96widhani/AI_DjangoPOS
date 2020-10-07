@@ -72,7 +72,7 @@ class User(AbstractBaseUser):
         verbose_name_plural = "users"
 
     def __str__(self):
-        return self.email
+        return '{} {}'.format(self.firstname, self.lastname)
 
     # These functions are required in a custom user model
     # This sets permissions
