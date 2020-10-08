@@ -1,18 +1,37 @@
 from django.db import models
 from accounts.models import User
+from .helpers import *
+
 
 # Create your models here.
 
 
 class Product(models.Model):
+    # RUN SQL COMMAND TO START PRODUCT CODE NUMBER FORM 1000
+    """
+    for postgres
+    ALTER TABLE inventory_product AUTO_INCREMENT = 1000;
+
+    for sqlite
+    UPDATE SQLITE_SEQUENCE SET seq = 1000 WHERE name = 'inventory_product'
+    """
+    product_code = models.AutoField(primary_key=True)
+
     name = models.CharField(max_length=100)
     cost = models.FloatField()
     mrp = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
     quantity = models.IntegerField()
     description = models.TextField(blank=True, null=True)
-    product_code = models.CharField(max_length=20)
     category = models.ManyToManyField('ProductCategories', blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.discount_price is None:
+            self.discount_price = self.mrp
+            super(Product, self).save(*args, **kwargs)
+        else:
+            self.discount_price = self.discount_price
+            super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -57,4 +76,3 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return str(self.id)
-
