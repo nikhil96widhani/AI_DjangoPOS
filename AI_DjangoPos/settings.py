@@ -24,7 +24,7 @@ SECRET_KEY = 'jvn8p#8ugyr18e^nqnz_^*d22-vuc!@a&@amu11x08&&i!wq)x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'accounts',
-    'inventory'
+    'inventory',
+    'pos'
 ]
 
 MIDDLEWARE = [

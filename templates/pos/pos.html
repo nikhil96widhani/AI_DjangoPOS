@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load pos_tags %}
+{% block content %}
+    <!-- Section: Sale -->
+    <section class="mb-5">
+
+        <!-- Card -->
+        <div class="card card-cascade narrower">
+
+            <!-- Section: CART -->
+            <section class="pb-3">
+
+                <!-- Grid row -->
+                <div class="row">
+
+                    <!-- Grid column -->
+                    <div class="col-xl-4 col-md-12 mr-0">
+
+                        <!-- Card Title -->
+                        <div class="view view-cascade gradient-card-header light-blue lighten-1">
+                            <h4 class="h4-responsive mb-0 font-weight-bold">Sale - POS</h4>
+                        </div>
+                        <!-- Card Title -->
+
+                        <!-- Card content -->
+                        <div class="card-body card-body-cascade pb-0">
+
+                            <!-- Panel data -->
+                            <div class="row card-body pt-3">
+
+                                <!-- First column -->
+                                <div class="col-md-12">
+
+                                    <!-- All Products -->
+                                    <div class="">
+                                        <div class="md-form mt-1">
+                                            <input type="text" id="AllProductList" class="form-control">
+                                            <label for="AllProductList">All Products</label>
+                                        </div>
+                                        <br>
+                                        <ul class="list-group list-group-flush overflow-auto " id="AllProductListLi"
+                                        style="max-height: 600px;">
+                                            {% for p in all_products %}
+                                                <li class="list-group-item">
+                                                    <div class="row pt-2 ">
+                                                        <div class="col">
+                                                            <div>{{ p.name|truncatechars:25 }}</div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <span class="align-middle text-muted small">Code: {{ p.product_code }}</span>
+                                                                </div>
+                                                                <div class="col">
+                                                                    {% if p.weight %}
+                                                                        <span class="align-middle text-muted small">wt. {{ p.weight }}</span>
+                                                                    {% else %}
+                                                                        <span class="align-middle text-muted small">NA</span>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="col-auto">
+                                                                <span class="align-middle text-muted small float-right">
+                                                                    {% if p.discount_price < p.mrp %}
+                                                                        <span class="text-success">
+                                                                            ₹{{ p.discount_price|price_format }}
+                                                                        </span>
+                                                                    {% else %}
+                                                                        <span>
+                                                                            ₹{{ p.discount_price|price_format }}
+                                                                        </span>
+                                                                    {% endif %}
+                                                                </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <button type="button"
+                                                                    class="btn btn-primary btn-sm mr-1"><i
+                                                                    class="fas fa-shopping-cart"></i> +
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <!-- All Products -->
+
+                                </div>
+                                <!-- First column -->
+
+                            </div>
+                            <!-- Panel data -->
+
+                        </div>
+                        <!-- Card content -->
+
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-xl-8 col-md-12 mb-4">
+
+                        <!-- Card image -->
+                        <div class="view view-cascade gradient-card-header white">
+                            <h5 class="text-black-50"> CART </h5>
+                            <!-- Shopping Cart table -->
+                            <div class="table-responsive">
+
+                                <table class="table product-table table-cart-v-2">
+
+                                    <!-- Table head -->
+                                    <thead class="mdb-color lighten-5">
+                                    <tr>
+                                        <th class="font-weight-bold">
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th class="font-weight-bold">
+                                            <strong>Weight</strong>
+                                        </th>
+                                        <th class="font-weight-bold">
+                                            <strong>Price</strong>
+                                        </th>
+                                        <th class="font-weight-bold">
+                                            <strong>QTY</strong>
+                                        </th>
+                                        <th class="font-weight-bold">
+                                            <strong>Amount</strong>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <!-- Table head -->
+
+                                    <!-- Table body -->
+                                    <tbody>
+{% for i in cart_items %}
+                                    <!--  row table -->
+                                    <tr>
+                                        <td>
+                                            <div class="font-weight-bold">
+                                                {{ i.product }} - {{ i.product.product_code }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% if i.product.weight %}
+                                                {{ i.product.weight }}
+                                            {% else %}
+                                            NA
+                                            {% endif %}
+                                        </td>
+                                        <td>₹{{ i.product.discount_price|price_format }}</td>
+                                        <td class="text-center text-md-center">
+                                            <span class="qty">{{ i.quantity }} </span>
+                                            <div class="btn-group radio-group ml-2" data-toggle="buttons">
+                                                <label class="btn btn-sm btn-primary btn-rounded">
+                                                    <input type="radio" name="options" id="option1">&mdash;
+                                                </label>
+                                                <label class="btn btn-sm btn-primary btn-rounded">
+                                                    <input type="radio" name="options" id="option2">+
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td class="font-weight-bold">
+                                            <strong>₹{{ i.get_total|price_format }}</strong>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Remove item">X
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- row -->
+{% endfor %}
+                                    </tbody>
+                                    <!-- Table body -->
+
+                                </table>
+
+                            </div>
+                            <!-- Shopping Cart table -->
+
+                        </div>
+                        <!-- Card image -->
+
+
+                        <!-- STEPPER -->
+                        <div class="container pt-5 px-4">
+                            <ul class="stepper horizontal" id="horizontal-stepper">
+                                <li class="step active">
+                                    <div class="step-title waves-effect waves-dark">Cart Details</div>
+                                    <div class="step-new-content">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <h4 class="mt-1 ml-3 text-center">
+                                                    Total {{ order.get_cart_items_quantity }} items,
+                                                    ₹{{ order.get_cart_total|price_format }}
+                                                </h4>
+                                            </div>
+                                            <div class="col-sm">
+                                                <!-- Money Received -->
+                                                <!-- Material input -->
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="CashReceived">- ₹</span>
+  </div>
+  <input id="CashReceivedValue" type="number" class="form-control" aria-label="Small"
+         aria-describedby="CashReceived" min="0" max="10000000" onkeyup="CalculateRefund(value, {{ order.get_cart_total|safe }})">
+</div>
+
+                                                    <small id="emailHelp" class="form-text text-muted">Cash received</small>
+                                            </div>
+                                            <div class="col-sm text-center">
+                                                <span class="h5 text-center font-weight-bold mt-2" id="RefundAmount"></span>
+                                            </div>
+                                        </div>
+                                        <div class="step-actions">
+                                            <button class="waves-effect waves-dark btn btn-primary next-step btn-rounded"
+                                                    data-feedback="someFunction21">COMPLETE ORDER
+                                            </button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="step">
+                                    <div class="step-title waves-effect waves-dark">Step 2</div>
+                                    <div class="step-new-content">
+                                        <div class="row">
+                                            <div class="md-form col-12 ml-auto">
+                                                <input id="password-horizontal" type="password"
+                                                       class="validate form-control" required>
+                                                <label for="password-horizontal">Your password</label>
+                                            </div>
+                                        </div>
+                                        <div class="step-actions">
+                                            <button class="waves-effect waves-dark btn btn-sm btn-primary next-step"
+                                                    data-feedback="someFunction21">CONTINUE
+                                            </button>
+                                            <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">
+                                                BACK
+                                            </button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="step">
+                                    <div class="step-title waves-effect waves-dark">Step 3</div>
+                                    <div class="step-new-content">
+                                        Finish!
+                                        <div class="step-actions">
+                                            <button class="waves-effect waves-dark btn-sm btn btn-primary m-0 mt-4"
+                                                    type="button">SUBMIT
+                                            </button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <!-- STEPPER -->
+
+
+                    </div>
+                    <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+
+            </section>
+            <!-- Section: CART -->
+
+        </div>
+        <!-- Card -->
+
+    </section>
+    <!-- Section: Analytical panel -->
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/pos/pos-home.js' %}"></script>
+{% endblock %}
