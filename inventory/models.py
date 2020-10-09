@@ -15,13 +15,14 @@ class Product(models.Model):
     for sqlite
     UPDATE SQLITE_SEQUENCE SET seq = 1000 WHERE name = 'inventory_product'
     """
-    product_code = models.AutoField(primary_key=True)
+    product_code = models.CharField(primary_key=True, max_length=20)
 
     name = models.CharField(max_length=100)
     cost = models.FloatField()
     mrp = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(blank=True, null=True)
+    weight = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     category = models.ManyToManyField('ProductCategories', blank=True)
 
@@ -52,6 +53,18 @@ class Order(models.Model):
     date_order = models.DateField(auto_now_add=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
 
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+
+    @property
+    def get_cart_items_quantity(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total
+
     def __str__(self):
         return str(self.id)
 
@@ -73,6 +86,11 @@ class OrderItem(models.Model):
         else:
             self.amount = None
             super(OrderItem, self).save(*args, **kwargs)
+
+    @property
+    def get_total(self):
+        total = self.quantity * self.product.mrp
+        return total
 
     def __str__(self):
         return str(self.id)
