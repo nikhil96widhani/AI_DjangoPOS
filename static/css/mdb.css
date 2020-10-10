@@ -12235,6 +12235,7 @@ footer.page-footer a {
     border-bottom-left-radius: .125rem
 }
 
+
 .list-group a,
 .list-group button {
     -webkit-transition: .5s;
@@ -18054,7 +18055,7 @@ button.mdb-autocomplete-clear svg {
     top: 0;
     left: 0;
     z-index: 1040;
-    width: 15rem;
+    width: 12rem;
     height: 100%;
     padding: 0;
     padding-bottom: 3.75rem;
@@ -18075,7 +18076,7 @@ button.mdb-autocomplete-clear svg {
 }
 
 .side-nav.wide {
-    width: 15rem;
+    width: 12rem;
     -webkit-transition-timing-function: linear, linear, ease;
     transition-timing-function: linear, linear, ease;
     -webkit-transition-duration: .5s, .5s, .55s;
@@ -18377,7 +18378,7 @@ button.mdb-autocomplete-clear svg {
     bottom: 0;
     left: 0;
     z-index: -1;
-    width: 15rem;
+    width: 12;
     background-attachment: fixed
 }
 
@@ -18401,7 +18402,7 @@ button.mdb-autocomplete-clear svg {
 }
 
 .side-nav .logo-wrapper a {
-    width: 15rem;
+    width: 12rem;
     height: 8.75rem;
     padding: 0
 }
@@ -27709,7 +27710,7 @@ div.datepicker input~i.input-prefix {
 .fixed-sn .double-nav,
 .fixed-sn main,
 .fixed-sn footer {
-    padding-left: 15rem
+    padding-left: 12rem
 }
 
 .fixed-sn main {

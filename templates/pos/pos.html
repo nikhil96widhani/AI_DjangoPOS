@@ -39,7 +39,8 @@
                                             <label for="AllProductList">All Products</label>
                                         </div>
                                         <br>
-                                        <ul class="list-group" id="AllProductListLi">
+                                        <ul class="list-group list-group-flush overflow-auto " id="AllProductListLi"
+                                        style="max-height: 600px;">
                                             {% for p in all_products %}
                                                 <li class="list-group-item">
                                                     <div class="row pt-2 ">
@@ -78,6 +79,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
+
                                                 </li>
                                             {% endfor %}
                                         </ul>
@@ -190,31 +192,32 @@
                                     <div class="step-title waves-effect waves-dark">Cart Details</div>
                                     <div class="step-new-content">
                                         <div class="row">
-                                            <div class="col-6">
-                                                <h4 class="mt-1 ml-3">
+                                            <div class="col-sm">
+                                                <h4 class="mt-1 ml-3 text-center">
                                                     Total {{ order.get_cart_items_quantity }} items,
                                                     ₹{{ order.get_cart_total|price_format }}
                                                 </h4>
                                             </div>
-                                            <div class="col-3">
+                                            <div class="col-sm">
                                                 <!-- Money Received -->
                                                 <!-- Material input -->
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">- ₹</span>
+    <span class="input-group-text" id="CashReceived">- ₹</span>
   </div>
-  <input type="number" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" min="0" max="10000000">
+  <input id="CashReceivedValue" type="number" class="form-control" aria-label="Small"
+         aria-describedby="CashReceived" min="0" max="10000000" onkeyup="CalculateRefund(value, {{ order.get_cart_total|safe }})">
 </div>
+
                                                     <small id="emailHelp" class="form-text text-muted">Cash received</small>
                                             </div>
-                                            <div class="col-3 text-center">
-                                                <span class="text-center pt-1">Refund: </span>
-                                                <span class="h5 text-center font-weight-bold pt-1">₹2400</span>
+                                            <div class="col-sm text-center">
+                                                <span class="h5 text-center font-weight-bold mt-2" id="RefundAmount"></span>
                                             </div>
                                         </div>
                                         <div class="step-actions">
                                             <button class="waves-effect waves-dark btn btn-primary next-step btn-rounded"
-                                                    data-feedback="someFunction21">CREATE ORDER
+                                                    data-feedback="someFunction21">COMPLETE ORDER
                                             </button>
                                         </div>
                                     </div>

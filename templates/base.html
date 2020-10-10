@@ -123,7 +123,11 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
+                    {% if user.is_authenticated %}
+                    <i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">{{ user.username }}</span></a>
+                    {% else %}
                     <i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Profile</span></a>
+                    {% endif %}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                     <a class="dropdown-item" href="#">Log Out</a>
