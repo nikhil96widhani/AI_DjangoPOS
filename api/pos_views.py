@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import View
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, generics
@@ -30,20 +31,24 @@ class Cart(APIView):
 
 
 class ProductCategoryList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = ProductCategories.objects.all()
     serializer_class = ProductCategoriesSerializer
 
 
 class ProductCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = ProductCategories.objects.all()
     serializer_class = ProductCategoriesSerializer
 
 
 class ProductList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
