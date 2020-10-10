@@ -74,6 +74,7 @@
                                                         </div>
                                                         <div class="col-auto">
                                                             <button type="button"
+                                                                    onclick="updateUserOrder({{ p.product_code }}, 'add')"
                                                                     class="btn btn-primary btn-sm mr-1"><i
                                                                     class="fas fa-shopping-cart"></i> +
                                                             </button>
@@ -133,46 +134,8 @@
                                     <!-- Table head -->
 
                                     <!-- Table body -->
-                                    <tbody>
-{% for i in cart_items %}
-                                    <!--  row table -->
-                                    <tr>
-                                        <td>
-                                            <div class="font-weight-bold">
-                                                {{ i.product }} - {{ i.product.product_code }}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {% if i.product.weight %}
-                                                {{ i.product.weight }}
-                                            {% else %}
-                                            NA
-                                            {% endif %}
-                                        </td>
-                                        <td>₹{{ i.product.discount_price|price_format }}</td>
-                                        <td class="text-center text-md-center">
-                                            <span class="qty">{{ i.quantity }} </span>
-                                            <div class="btn-group radio-group ml-2" data-toggle="buttons">
-                                                <label class="btn btn-sm btn-primary btn-rounded">
-                                                    <input type="radio" name="options" id="option1">&mdash;
-                                                </label>
-                                                <label class="btn btn-sm btn-primary btn-rounded">
-                                                    <input type="radio" name="options" id="option2">+
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td class="font-weight-bold">
-                                            <strong>₹{{ i.get_total|price_format }}</strong>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-primary" data-toggle="tooltip"
-                                                    data-placement="top"
-                                                    title="Remove item">X
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <!-- row -->
-{% endfor %}
+                                    <tbody id="datatable-ajax">
+
                                     </tbody>
                                     <!-- Table body -->
 
@@ -180,6 +143,7 @@
 
                             </div>
                             <!-- Shopping Cart table -->
+
 
                         </div>
                         <!-- Card image -->
@@ -193,9 +157,7 @@
                                     <div class="step-new-content">
                                         <div class="row">
                                             <div class="col-sm">
-                                                <h4 class="mt-1 ml-3 text-center">
-                                                    Total {{ order.get_cart_items_quantity }} items,
-                                                    ₹{{ order.get_cart_total|price_format }}
+                                                <h4 class="mt-1 ml-3 text-center" id="cart_details">
                                                 </h4>
                                             </div>
                                             <div class="col-sm">
@@ -216,7 +178,8 @@
                                             </div>
                                         </div>
                                         <div class="step-actions">
-                                            <button class="waves-effect waves-dark btn btn-primary next-step btn-rounded"
+                                            <button class="waves-effect waves-dark btn btn-primary next-step btn-rounded update-cart"
+                                                    onclick="updateUserOrder(1, 'complete')"
                                                     data-feedback="someFunction21">COMPLETE ORDER
                                             </button>
                                         </div>
@@ -276,5 +239,7 @@
 {% endblock %}
 
 {% block javascript %}
-    <script src="{% static 'js/pos/pos-home.js' %}"></script>
+    <script src="{% static 'js/pos-home.js' %}"></script>
+    <script src="{% static 'js/jquery.pos.js' %}"></script>
+
 {% endblock %}
