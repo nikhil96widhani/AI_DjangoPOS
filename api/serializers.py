@@ -3,7 +3,8 @@ from rest_framework import serializers
 from inventory.models import *
 
 
-class cart_serializer(serializers.ModelSerializer):
+class cart_items_serializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ['product', 'quantity', 'amount']
+        depth = 1
+        fields = '__all__'
