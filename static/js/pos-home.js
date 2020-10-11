@@ -81,7 +81,8 @@ function loadTable() {
         methood: "GET",
         url: cart_data,
         success: function (data) {
-            updateCartDetails('Total ' + data.cart_items_quantity + ' items, ₹' + data.cart_total)
+            updateCartDetails('Total ' + data.cart_items_quantity + ' items, ₹' +
+                '<span id="cart-total-amount">' +data.cart_total+ '</span>')
             var trHTML = '';
             $.each(data.items, function (e, item) {
                 trHTML += '<tr>' +
@@ -123,7 +124,7 @@ function loadTable() {
                     '        <button type="button"' +
                     '                                        data-product="1001"' +
                     '                                        data-action="add"' +
-                    '                                        class="btn btn-primary btn-sm mr-1 btn-rounded" ' +
+                    '                                        class="btn btn-danger btn-sm mr-1 btn-rounded" ' +
                     'onclick="updateUserOrder(' + item.product.product_code + ', \'delete\')"><i' +
                     '                                        class="fas fa-trash"></i>' +
                     '                                </button>' +
@@ -192,11 +193,15 @@ function updateUserOrder(product_code, action) {
 
 
 // Refund Calculator
-function CalculateRefund(cash, total) {
-    if (cash < total) {
+function CalculateRefund(cash) {
+    var cart_total_amount = document.getElementById('cart-total-amount');
+    cart_total_amount = parseInt(cart_total_amount.innerText)
+    cash = parseInt(cash)
+    console.log(cart_total_amount- cash)
+    if (cash < cart_total_amount) {
         document.getElementById('RefundAmount').innerHTML = "Less Cash Recieved";
-    } else if (cash > total) {
-        document.getElementById('RefundAmount').innerHTML = "Refund: " + (cash - total).toString();
+    } else if (cash > cart_total_amount) {
+        document.getElementById('RefundAmount').innerHTML = "Refund: ₹" + (cash - cart_total_amount).toString();
     } else {
         document.getElementById('RefundAmount').innerHTML = "No items to calculate or unknown error";
     }
