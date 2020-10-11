@@ -77,6 +77,7 @@ class ProductList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    pagination_class = None
 
 
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):

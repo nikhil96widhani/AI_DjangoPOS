@@ -19,4 +19,5 @@ class ProductCategoriesSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
+        depth = 1
         fields = '__all__'

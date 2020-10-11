@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load rest_framework %}
+
+{% block css %}
+    <!-- DataTables.net  -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}">
+{% endblock %}
+
+{% block page-title %}
+    Products
+{% endblock %}
+
+{% block content %}
+    {#    <form>#}
+    {#        {% render_form serializer %}#}
+    {#        <input type="submit" value="Add Product"/>#}
+    {#    </form>#}
+    <div class="card">
+        <div class="card-body">
+            <table id="paginationFullNumbers" class="table" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th class="th-sm">Product Code</th>
+                    <th class="th-sm">Product Name</th>
+                    <th class="th-sm">Cost</th>
+                    <th class="th-sm">MRP</th>
+                    <th class="th-sm">Discount Price</th>
+                    <th class="th-sm">Quantity</th>
+                    <th class="th-sm">Weight</th>
+                    <th class="th-sm">Category</th>
+                    <th class="th-sm">Edit</th>
+                </tr>
+                </thead>
+                <tbody id="products-table-body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/products.js' %}"></script>
+    <!-- DataTables  -->
+    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+    <!-- Custom scripts -->
+    <script>
+
+    </script>
+{% endblock %}
