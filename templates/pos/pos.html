@@ -168,7 +168,7 @@
     <span class="input-group-text" id="CashReceived">- ₹</span>
   </div>
   <input id="CashReceivedValue" type="number" class="form-control" aria-label="Small"
-         aria-describedby="CashReceived" min="0" max="10000000" onkeyup="CalculateRefund(value, {{ order.get_cart_total|safe }})">
+         aria-describedby="CashReceived" min="0" max="10000000" onkeyup="CalculateRefund(value)">
 </div>
 
                                                     <small id="emailHelp" class="form-text text-muted">Cash received</small>
