@@ -6,4 +6,5 @@ from django.contrib.auth.views import LoginView, LogoutView
 urlpatterns = [
     # path('', indexView.as_view(), name='home'),
     path('', homeView, name='home'),
+    path('products/', productsView, name='products'),
 ]

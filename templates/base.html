@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="{% static 'css/mdb.css' %}">
     <link rel="stylesheet" href="{% static 'css/steppers.min.css' %}">
 
+    {% block css %}
+
+    {% endblock %}
+
     <!-- Your custom styles (optional) -->
     <style>
 
@@ -77,8 +81,10 @@
             <a href="#" data-activates="slide-out" class="button-collapse black-text"><i class="fas fa-bars"></i></a>
         </div>
         <!-- Breadcrumb-->
-        <div class="breadcrumb-dn mr-auto">
-            <p>Material Design for Bootstrap</p>
+        <div class="breadcrumb-dn mr-auto ml-3">
+            <h4>{% block page-title %}
+            POS
+            {% endblock %}</h4>
         </div>
 
         <!--Navbar links-->

@@ -194,7 +194,7 @@ function updateUserOrder(product_code, action) {
 // Refund Calculator
 function CalculateRefund(cash, total) {
     if (cash < total) {
-        document.getElementById('RefundAmount').innerHTML = "Less Cash Recieved";
+        document.getElementById('RefundAmount').innerHTML = "Less Cash Received";
     } else if (cash > total) {
         document.getElementById('RefundAmount').innerHTML = "Refund: " + (cash - total).toString();
     } else {
