@@ -5,4 +5,5 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('', pos_homeView, name='pos-home'),
+    path('receipt/<int:pk>', receiptView, name='receipt'),
 ]
