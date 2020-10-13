@@ -17,11 +17,14 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from api import pos_views
+from accounts import views as account_views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('inventory.urls')),
+    path('', account_views.user_redirect, name='user-redirect'),
+    path('inventory/', include('inventory.urls')),
+    path('accounts/', include('accounts.urls')),
     path('pos/', include('pos.urls')),
     path('api/', include('api.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

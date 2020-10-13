@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.views.generic import View
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -12,7 +13,8 @@ from inventory.models import *
 
 class Cart(APIView):
     def get(self, request, format=None):
-        if request.user.is_authenticated:
+        order_id = request.GET.get("order_id")
+        if order_id is None and request.user.is_authenticated:
             customer = request.user
             order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
@@ -25,6 +27,21 @@ class Cart(APIView):
                 'cart_total': order.get_cart_total,
                 'order_id': order.id
             }
+            return Response(content)
+        elif order_id:
+            try:
+                order = Order.objects.get(pk=order_id, complete=True)
+                items = order.orderitem_set.all()
+                item_serializer = cart_items_serializer(items, many=True)
+                content = {
+                    'items': item_serializer.data,
+                    'cart_items_quantity': order.get_cart_items_quantity,
+                    'cart_total': order.get_cart_total,
+                    'order_id': order.id
+                }
+                return Response(content)
+            except ObjectDoesNotExist:
+                return Response({'error': "no such completed order"})
         else:
             content = {
                 'items': [],

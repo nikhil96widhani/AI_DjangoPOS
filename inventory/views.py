@@ -10,3 +10,5 @@ def homeView(request):
 def productsView(request):
     serializer = ProductSerializer()
     return render(request, 'pos/products.html', {'serializer': serializer})
+
+

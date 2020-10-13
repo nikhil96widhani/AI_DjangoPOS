@@ -132,5 +132,6 @@ STATICFILES_DIRS = [
 
 # Account MODEL
 # Property for the custom user model. <app.model>
+LOGIN_REDIRECT_URL = 'user-redirect'
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
