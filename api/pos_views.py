@@ -82,6 +82,7 @@ class ProductCategoryList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = ProductCategories.objects.all()
     serializer_class = ProductCategoriesSerializer
+    pagination_class = None
 
 
 class ProductCategoryDetail(generics.RetrieveUpdateDestroyAPIView):

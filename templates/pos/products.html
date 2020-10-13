@@ -5,6 +5,7 @@
 {% block css %}
     <!-- DataTables.net  -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/products.css' %}">
 {% endblock %}
 
 {% block page-title %}
@@ -12,12 +13,22 @@
 {% endblock %}
 
 {% block content %}
-    {#    <form>#}
-    {#        {% render_form serializer %}#}
-    {#        <input type="submit" value="Add Product"/>#}
-    {#    </form>#}
+
     <div class="card">
         <div class="card-body">
+            <div class="row justify-content-between mt-1 mb-3">
+                <div class="col-4">
+                    <h3 class="pt-2">Products Details</h3>
+                </div>
+                <div class="col-4">
+                    {#                    <button class="float-right btn aqua-gradient btn-rounded waves-effect waves-light">Add Product</button>#}
+                    {#                    <a class="float-right btn-floating btn-secondary waves-effect waves-light"><i class="fas fa-plus"></i></a>#}
+                    <button class="float-right btn btn-outline-dark btn-rounded waves-effect waves-light"
+                            data-toggle="modal" data-target="#elegantModalForm"><i
+                            class="fas fa-plus mr-3"></i>Add Product
+                    </button>
+                </div>
+            </div>
             <table id="paginationFullNumbers" class="table" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -32,12 +43,13 @@
                     <th class="th-sm">Edit</th>
                 </tr>
                 </thead>
-                <tbody id="products-table-body">
-
-                </tbody>
+                <tbody id="products-table-body"></tbody>
             </table>
         </div>
     </div>
+
+    {% include 'components/add-product-form.html' %}
+
 {% endblock %}
 
 {% block javascript %}
