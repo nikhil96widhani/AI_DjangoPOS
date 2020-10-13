@@ -1,0 +1,71 @@
+{% load static %}
+
+{% if error %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <div class="alert alert-danger text-center" role="alert">
+        {{ error }} <a href="javascript:window.open('','_self').close();">Close Tab</a>
+    </div>
+
+{% else %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="{% static 'css/receipt.css' %}">
+        <title>Receipt example</title>
+    </head>
+    <body>
+    <div class="ticket">
+        <img src="{% static "images/receipt-logo.png" %}" alt="Logo">
+        <p class="centered">RECEIPT EXAMPLE
+            <br>Address line 1
+            <br>Address line 2</p>
+        <table>
+            <thead>
+            <tr>
+                <th class="quantity">Q.</th>
+                <th class="description">Description</th>
+                <th class="price">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for a in cart_items %}
+                <tr>
+                    <td class="quantity">{{ a.quantity }}</td>
+                    <td class="description">{{ a.product.name }}
+                        {% if a.product.weight %}, {{ a.product.weight }}
+                        {% endif %}
+                    </td>
+                    <td class="price">₹{{ a.amount }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot style="vertical-align:bottom">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr style="height:50px">
+                <td class="footer">{{ cart_items_quantity }}</td>
+                <td class="footer">= Total Quantity</td>
+                <td class="footer"></td>
+            </tr>
+            <tr>
+                <td class="footer"></td>
+                <td class="footer">Total Amount =</td>
+                <td class="footer">₹{{ cart_total }}</td>
+            </tr>
+            </tfoot>
+        </table>
+        <br>
+        <p class="footer-receipt-text">Thank you for your purchase!
+            <br>Hope to see you again</p>
+    </div>
+    <button id="btnPrint" class="hidden-print">Print</button>
+    <script type="text/javascript" src="{% static 'js/receipt.js' %}"></script>
+    </body>
+    </html>
+{% endif %}
