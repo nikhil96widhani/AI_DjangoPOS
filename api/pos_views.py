@@ -25,6 +25,7 @@ class Cart(APIView):
                 'items': item_serializer.data,
                 'cart_items_quantity': order.get_cart_items_quantity,
                 'cart_total': order.get_cart_total,
+                'cart_mrp_total': order.get_cart_mrp_total,
                 'order_id': order.id
             }
             return Response(content)
@@ -37,6 +38,7 @@ class Cart(APIView):
                     'items': item_serializer.data,
                     'cart_items_quantity': order.get_cart_items_quantity,
                     'cart_total': order.get_cart_total,
+                    'cart_mrp_total': order.get_cart_mrp_total,
                     'order_id': order.id
                 }
                 return Response(content)
@@ -47,6 +49,7 @@ class Cart(APIView):
                 'items': [],
                 'cart_items_quantity': '',
                 'cart_total': '',
+                'cart_mrp_total': '',
                 'order_id': ''
             }
         return Response(content)

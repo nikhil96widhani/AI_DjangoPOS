@@ -12,3 +12,8 @@ def price_format(num):
             return num
     except:
         return num
+
+
+@register.filter(name='subtract')
+def subtract(value, arg):
+    return value - arg
