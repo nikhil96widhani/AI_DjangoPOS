@@ -1,4 +1,5 @@
 {% load static %}
+{% load pos_tags %}
 
 {% if error %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -14,55 +15,87 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="{% static 'css/receipt.css' %}">
+        <script src="https://kit.fontawesome.com/ad14bd368c.js" crossorigin="anonymous"></script>
         <title>Receipt example</title>
     </head>
     <body>
     <div class="ticket">
         <img src="{% static "images/receipt-logo.png" %}" alt="Logo">
-        <p class="centered">RECEIPT EXAMPLE
-            <br>Address line 1
-            <br>Address line 2</p>
-        <table>
+        <p class="centered">21, POOJA SHRI NAGAR, CTO, BAIRAGARH</p>
+        <p class="text-small centered">PHONE: 8989017745 - WHATSAPP: 9179722160
+            <br>EMAIL: shoprightsupermarket@gmail.com</p>
+        <p class="centered h1">CASH MEMO</p>
+    <hr>
+        <div style="text-align:left;">
+            Cashier :
+            <span style="float:right;">
+                {{ order.customer }}
+            </span>
+        </div>
+    <div style="text-align:left;">
+            Date
+            <span style="float:right;">
+                {{ order.date_order }}
+            </span>
+        </div>
+    <hr>
+    <div class="description centered">Description</div>
+            <table style="width: 100%">
             <thead>
             <tr>
-                <th class="quantity">Q.</th>
-                <th class="description">Description</th>
-                <th class="price">Total</th>
+                <th class="equal">Qty</th>
+                <th class="equal">M.R.P</th>
+                <th class="equal">Our Price</th>
+                <th class="equal">Amount</th>
             </tr>
             </thead>
-            <tbody>
-            {% for a in cart_items %}
-                <tr>
-                    <td class="quantity">{{ a.quantity }}</td>
-                    <td class="description">{{ a.product.name }}
+            </table>
+    <hr>
+    <br>
+                {% for a in cart_items %}
+    <div class="description">{{ a.product.name }}
                         {% if a.product.weight %}, {{ a.product.weight }}
-                        {% endif %}
-                    </td>
-                    <td class="price">₹{{ a.amount }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            <tfoot style="vertical-align:bottom">
+                        {% endif %}</div>
+    <table style="width: 100%">
+        <thead>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td class="equal">{{ a.quantity }}</td>
+                <td class="equal">₹{{ a.product.mrp }}</td>
+                <td class="equal">₹{{ a.product.discount_price }}</td>
+                <td class="equal">₹{{ a.amount }}</td>
             </tr>
-            <tr style="height:50px">
-                <td class="footer">{{ cart_items_quantity }}</td>
-                <td class="footer">= Total Quantity</td>
-                <td class="footer"></td>
-            </tr>
+        </thead>
+    </table>
+{% endfor %}
+<hr>
+    <table style="width: 100%">
+            <thead>
             <tr>
-                <td class="footer"></td>
-                <td class="footer">Total Amount =</td>
-                <td class="footer">₹{{ cart_total }}</td>
+                <th class="equal">{{ cart_items_quantity }}</th>
+                <th class="equal"></th>
+                <th class="equal"></th>
+                <th class="equal">₹{{ cart_total }}</th>
             </tr>
-            </tfoot>
-        </table>
+            </thead>
+            </table>
+<hr>
+<div style="text-align: right">
+    <div class="mrp">M.R.P TOTAL: ₹{{ cart_mrp_total }} </div>
+    <div class="save">YOU SAVED: ₹{{ savings }}</div>
+    <br>
+    <div class="amount">NET PAYABLE: ₹{{ cart_total }} </div>
+</div>
+<hr>
+<p class="centered">Terms & Conditions</p>
+    <li class="ml-20">No Return on goods sold</li>
+    <li class="ml-20">Non Discounted Goods Can be exchanged within 7 days</li>
+    <li class="ml-20">Whole grains will not be taken back</li>
+    <li class="ml-20">This bill will be visible for only 10 days</li>
+    <li class="ml-20">Subject to BHOPAL Jurisdiction</li>
+
         <br>
         <p class="footer-receipt-text">Thank you for your purchase!
-            <br>Hope to see you again</p>
+            <br>Hope to see you again!</p>
     </div>
     <button id="btnPrint" class="hidden-print">Print</button>
     <script type="text/javascript" src="{% static 'js/receipt.js' %}"></script>

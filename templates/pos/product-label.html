@@ -1,0 +1,71 @@
+{% load static %}
+{% load pos_tags %}
+
+{% if error %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <div class="alert alert-danger text-center" role="alert">
+        {{ error }} <a href="javascript:window.open('','_self').close();">Close Tab</a>
+    </div>
+
+{% else %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="{% static 'css/product_label.css' %}">
+        <title>Label example</title>
+    </head>
+    <body>
+    <div class="card product-label">
+        <div class="card-body">
+            <div class="row">
+                <div class="column left">
+                    <div class="a card-title">{{ product.name }}
+                        {% if product.weight %}
+                            , {{ product.weight }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="column right">
+                    <div class="numberCircle">{{ product.get_discount_percentage|floatformat:0 }}% OFF</div>
+                </div>
+            </div>
+            <div class="a price-tag"><strike class="price-tag">MRP: ₹{{ product.mrp|price_format }}
+            </strike>OUR PRICE : ₹{{ product.discount_price|price_format }}</div>
+            <div style="text-align:center;">
+                <svg id="barcode" class="div.a"></svg>
+            </div>
+        </div>
+
+    </div>
+    <button id="btnPrint" class="hidden-print">Print</button>
+
+    <script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>
+    <script type="text/javascript">
+        JsBarcode("#barcode", {{ product.product_code|safe }}, {
+            format: "CODE128",
+            font: "monospace",
+            textPosition: "bottom",
+            marginLeft: 2,
+            marginTop: 2,
+            marginBottom: 2,
+            marginRight: 2,
+            fontSize: 5,
+            {#lineColor: "#0aa",#}
+            width: 1,
+            textMargin: 0,
+            height: 30,
+            {#displayValue: false#}
+        });
+    </script>
+    <script type="text/javascript" src="{% static 'js/receipt.js' %}"></script>
+    <script type="text/javascript">
+        window.print();
+        window.open('', '_parent', '');
+        window.close()
+    </script>
+    </body>
+    </html>
+{% endif %}
