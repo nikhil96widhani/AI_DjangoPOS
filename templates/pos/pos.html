@@ -2,10 +2,23 @@
 {% load static %}
 {% load pos_tags %}
 
+{% block css %}
+    <style>
+        tr.clicked{
+          animation: fadeOut 2s forwards;
+        }
+
+        @keyframes fadeOut {
+            0%   {background-color: dodgerblue;}
+            100% {background-color: white;}
+        }
+    </style>
+{% endblock %}
 
 {% block page-title %}
     <i class="fas fa-angle-right align-middle fa-xs"></i> POS - Sale
 {% endblock %}
+
 
 
 {% block content %}
