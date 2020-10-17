@@ -25,7 +25,7 @@ function loadProductsData() {
                     <td>${item.weight}</td>
                     <td>${category_array.join(", ")}</td>
                     <td>
-                    <a class="pr-3"><i class="fa fa-print" aria-hidden="true" data-toggle="modal" data-target="#" onclick=""></i></a>
+                    <a class="pr-3" href="/pos/product-label/${item.product_code}"><i class="fa fa-print" aria-hidden="true"></i></a>
                     <a class="pr-3"><i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal" data-target="#editProductModalForm" onclick="editProductDetails('${item.product_code}')"></i></a>
                     <a class="pr-3"><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${item.product_code}', '${item.name}')"></i></a>
                     </td>
