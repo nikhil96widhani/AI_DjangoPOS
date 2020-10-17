@@ -1,0 +1,72 @@
+<!-- Modal -->
+<div class="modal fade" id="editProductModalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!--Content-->
+        <div class="modal-content form-elegant">
+            <!--Header-->
+            <div class="modal-header text-center">
+                <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-2" id="myModalLabel">
+                    <strong>Edit Product Details</strong>
+                </h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <h6 class="text-center">Product Code - <span id="static-product-code"></span></h6>
+            <!--Body-->
+            <div class="modal-body mx-4">
+                <form id="edit-product-form">
+                    <div class="md-form">
+                        <input type="text" id="edit_product_name" name="name" class="form-control validate">
+                        <label data-error="wrong" data-success="right" for="edit_product_name">Product Name</label>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="md-form">
+                                <input type="number" id="edit_product_cost" name="cost" class="form-control validate">
+                                <label data-error="wrong" data-success="right" for="edit_product_cost">Cost</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="md-form">
+                                <input type="number" id="edit_product_mrp" name="mrp" class="form-control validate">
+                                <label data-error="wrong" data-success="right" for="edit_product_mrp">MRP</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="md-form">
+                                <input type="number" id="edit_product_discount_price" name="discount_price" class="form-control validate">
+                                <label data-error="wrong" data-success="right"
+                                       for="edit_product_discount_price">Discount</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="md-form">
+                                <input type="number" id="edit_product_quantity" name="quantity" class="form-control validate">
+                                <label data-error="wrong" data-success="right" for="edit_product_quantity">Quantity</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md-form">
+                        <input type="text" id="edit_product_weight" name="weight" class="form-control validate">
+                        <label data-error="wrong" data-success="right" for="edit_product_weight">Weight</label>
+                    </div>
+
+                    <select class="mdb-select md-form product-category-selector" id="edit_product_category" name="category" multiple searchable="Search here..">
+                    </select>
+
+                    <div class="md-form mt-2">
+                        <textarea id="edit_product_description" name="description" class="md-textarea form-control" rows="2"></textarea>
+                        <label data-error="wrong" data-success="right" for="edit_product_description">Description</label>
+                    </div>
+
+                    <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
+                            id="update-product-form-submit-button" type="submit">Update
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

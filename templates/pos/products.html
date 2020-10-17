@@ -13,7 +13,6 @@
 {% endblock %}
 
 {% block content %}
-
     <div class="card">
         <div class="card-body">
             <div class="row justify-content-between mt-1 mb-3">
@@ -21,15 +20,13 @@
                     <h3 class="pt-2">Products Details</h3>
                 </div>
                 <div class="col-4">
-                    {#                    <button class="float-right btn aqua-gradient btn-rounded waves-effect waves-light">Add Product</button>#}
-                    {#                    <a class="float-right btn-floating btn-secondary waves-effect waves-light"><i class="fas fa-plus"></i></a>#}
                     <button class="float-right btn btn-outline-dark btn-rounded waves-effect waves-light"
-                            data-toggle="modal" data-target="#elegantModalForm"><i
+                            data-toggle="modal" data-target="#addProductModalForm"><i
                             class="fas fa-plus mr-3"></i>Add Product
                     </button>
                 </div>
             </div>
-            <table id="paginationFullNumbers" class="table" cellspacing="0" width="100%">
+            <table id="products-data-table" class="table" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th class="th-sm">Product Code</th>
@@ -49,6 +46,32 @@
     </div>
 
     {% include 'components/add-product-form.html' %}
+    {% include 'components/edit-product-form.html' %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteProductPrompt" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Product (Code - <span class="text-warning" id="static-product-code-delete"></span> | Name - <span class="text-warning" id="static-product-name-delete"></span>) will be deleted.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="product-delete-yes">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 

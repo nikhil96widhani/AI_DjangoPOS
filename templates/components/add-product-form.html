@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="elegantModalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="addProductModalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <!--Content-->
@@ -53,12 +53,11 @@
                     </div>
 
                     <select class="mdb-select md-form" id="product_category" name="category" multiple searchable="Search here..">
-                        <option value="" disabled selected>Select Categories</option>
                     </select>
 
                     <div class="md-form mt-2">
-                        <textarea id="product_description" name="description" class="md-textarea form-control" rows="2"></textarea>
-                        <label for="product_description">Description</label>
+                        <textarea id="product_description" name="description" class="md-textarea form-control validate" rows="2"></textarea>
+                        <label data-error="wrong" data-success="right" for="product_description">Description</label>
                     </div>
 
                     <div class="form-row my-0">
