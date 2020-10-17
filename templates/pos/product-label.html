@@ -44,7 +44,7 @@
 
     <script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>
     <script type="text/javascript">
-        JsBarcode("#barcode", {{ product.product_code|safe }}, {
+        JsBarcode("#barcode", '1234', {
             format: "CODE128",
             font: "monospace",
             textPosition: "bottom",

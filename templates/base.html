@@ -90,6 +90,12 @@
 
         </div>
 
+          <div class="d-flex change-mode">
+
+        <div class="ml-auto mb-0 mr-3 change-mode-wrapper">
+          <button class="btn btn-outline-black btn-sm" id="dark-mode">Change Mode</button>
+        </div>
+
         <!--Navbar links-->
         <ul class="nav navbar-nav nav-flex-icons ml-auto">
 
@@ -151,6 +157,7 @@
 
         </ul>
         <!--/Navbar links-->
+          </div>
     </nav>
     <!-- /.Navbar -->
 
@@ -200,6 +207,8 @@
 <script type="text/javascript" src="{% static 'js/steppers.js' %}"></script>
 <!--Custom scripts-->
 <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/darkmode.js' %}"></script>
 <script>
     // SideNav Initialization
     $(".button-collapse").sideNav();
