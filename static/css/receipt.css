@@ -1,18 +1,56 @@
 * {
     font-size: 12px;
-    font-family: 'Arial';
+    font-family: 'Arial', serif;
+    line-height: normal;
+}
+.text-small{
+    font-size: 10px;
 }
 
+.h1{
+    font-size: 15px;
+    font-weight: bold;
+}
+.ml-20{
+    margin-left: 20px;
+}
 td,
 th,
 tr,
 table {
-    border-top: 1px solid black;
+    /*border-bottom: 1px solid black;*/
     border-collapse: collapse;
 }
 
-td.description{
+td.equal{
+    text-align: center;
+    padding-right: 5px;
+    width: 25%;
+    max-width: 25%;
+}
+th.equal {
+    text-align: center;
+    padding-right: 5px;
+    width: 25%;
+    max-width: 25%;
+}
+
+div.description{
+    font-weight: bold;
     padding-left: 5px;
+}
+div.mrp{
+    /*font-weight: bold;*/
+    font-size: 18px;
+}
+div.amount{
+    font-weight: bold;
+    font-size: 20px;
+}
+div.save{
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
 }
 th.description {
     width: 180px;
@@ -61,6 +99,12 @@ img {
     max-width: inherit;
     width: inherit;
 }
+.hidden-print{
+    background-color: red;
+    font-size: 30px;
+    height: 50px;
+    width: 100px
+    }
 
  @page {
   size: auto;

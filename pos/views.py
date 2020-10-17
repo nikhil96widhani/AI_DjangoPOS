@@ -35,7 +35,9 @@ def receiptView(request, pk):
             'order': order,
             'cart_items': cart_items,
             'cart_items_quantity': order.get_cart_items_quantity,
-            'cart_total': order.get_cart_total
+            'cart_total': order.get_cart_total,
+            'cart_mrp_total': order.get_cart_mrp_total,
+            'savings': order.get_cart_mrp_total - order.get_cart_total,
         }
         return render(request, 'pos/receipt.html', context)
     except ObjectDoesNotExist:
@@ -43,3 +45,15 @@ def receiptView(request, pk):
                                                              "Maybe order doesn't exist,"
                                                              " Check if you have completed the order on POS page,"
                                                              " Check orders page to print the receipt"})
+
+
+def productLabelView(request, pk):
+    try:
+        product = Product.objects.get(product_code=pk)
+        context = {
+            'product': product,
+        }
+        return render(request, 'pos/product-label.html', context)
+    except ObjectDoesNotExist:
+        return render(request, 'pos/product-label.html', {'error': "ERROR REASON: "
+                                                                   "Product not found with that product id"})

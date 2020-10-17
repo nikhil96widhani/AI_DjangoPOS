@@ -21,7 +21,6 @@ function someFunction21() {
 $(function(){
 	$(document).pos();
 	$(document).on('scan.pos.barcode', function(event){
-	    console.log(event.code)
         updateUserOrder(event.code, 'add')
 
 		//access `event.code` - barcode data
@@ -73,7 +72,7 @@ $(document).pos(options);
 
 
 // Generate DataTable
-function loadTable() {
+function loadTable(product_code) {
 
     var cart_data = "/api/cart";
 
@@ -84,9 +83,15 @@ function loadTable() {
             updateCartDetails('Total ' + data.cart_items_quantity + ' items, ₹' +
                 '<span id="cart-total-amount">' +data.cart_total+ '</span>')
             var trHTML = '';
-            $.each(data.items, function (e, item) {
-                trHTML += `<tr><td><div class="font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"ß                                        data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
+            $.each(data.items.reverse(), function (e, item) {
+                if(item.product.product_code === product_code) {
+                    trHTML += `<tr class="clicked"><td><div class="font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"ß                                        data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
 
+                }
+                else {
+                    trHTML += `<tr><td><div class="font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"ß                                        data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
+
+                }
             });
             $('#datatable-ajax').empty().append(trHTML);
         },
@@ -125,6 +130,7 @@ function updateCartDetails(data) {
 // }
 
 function updateUserOrder(product_code, action) {
+    console.log(product_code, action)
 
     var url = "/api/cart/"
 
@@ -142,7 +148,7 @@ function updateUserOrder(product_code, action) {
         .then((data) => {
             // console.log(data)
             // location.reload()
-            loadTable();
+            loadTable(product_code.toString());
         });
 }
 

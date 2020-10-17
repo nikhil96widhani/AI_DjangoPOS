@@ -1,0 +1,76 @@
+* {
+    font-size: 6px;
+    font-family: 'Arial';
+    line-height: 10px;
+}
+div.a {
+  line-height: normal;
+}
+.price-tag {
+  font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+.product-label {
+    width: 171px;
+    max-width: 171px;
+    height: 73px;
+    max-height: 73px;
+}
+.numberCircle {
+    width: 60px;
+    height: 17px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 10px;
+    border: 1px solid #000000;
+    color: white;
+    float: right;
+    background: #000000;
+    z-index: 1;
+    transform: translateY(-30%);
+    line-height: 17px;
+}
+
+.card{
+    /*margin-top: 15px;*/
+    border: 1px solid black;
+}
+.card-title{
+    text-align: center;
+    padding-top: 2px;
+}
+.row{
+    height: 15px;
+    border-bottom: 1px dotted #000000;
+}
+.column {
+  float: left;
+}
+
+.left {
+  width: 63%;
+    /*background-color: #0b51c5;*/
+}
+
+.right {
+  width: 37%;
+}
+.hidden-print{
+    background-color: red;
+    font-size: 30px;
+    height: 50px;
+    width: 100px
+    }
+
+@page {
+  size: auto;
+  margin: 0;
+       }
+
+@media print {
+    .hidden-print,
+    .hidden-print * {
+        display: none !important;
+    }
+}
