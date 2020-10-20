@@ -5,15 +5,40 @@ from .helpers import *
 
 # Create your models here.
 
+Quantity_unit = (
+    ("PCS", "PCS"),
+    ("PACK", "PACK")
+)
+
+Weight_unit = (
+    ("", ""),
+    ("mg", "mg"),
+    ("g", "g"),
+    ("kg", "kg")
+)
+
 
 class Product(models.Model):
-    # RUN SQL COMMAND TO START PRODUCT CODE NUMBER FORM 1000
     """
-    for postgres
-    ALTER TABLE inventory_product AUTO_INCREMENT = 1000;
+    New Fields Added :
+        Weight Unit: Self Explain
+        Quantity Unit: Self Explain
+        Company: Name of the company
+        Rack Number: Place where item is located
+        Expiry Date: Self Explain
+    """
 
-    for sqlite
-    UPDATE SQLITE_SEQUENCE SET seq = 1000 WHERE name = 'inventory_product'
+    """
+        IN CASE YOU EVER FUCK UP MIGRATIONS AND YOU HAVE TO ADD SOME FIELDS BUT YOU DELETED OLD MIGRATIONS HISTORY->
+        
+        FIRST COMMENT NEW FIELDS AN RUN MIGRATIONS WITH DB CURRENT STATE -> RUN
+        $ python manage.py makemigrations
+        $ python manage.py migrate appname --fake-initial
+        
+        IF RAN SMOOTHLY THEN UNCOMMENT NEW FIELDS AND RUN BELOW LINES.
+        $ python manage.py makemigrations
+        $ python manage.py migrate
+        
     """
     product_code = models.CharField(primary_key=True, max_length=20)
 
@@ -21,10 +46,15 @@ class Product(models.Model):
     cost = models.FloatField()
     mrp = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
+    quantity_unit = models.CharField(max_length=9, choices=Quantity_unit, default="PCS", blank=True, null=True)
     quantity = models.IntegerField(blank=True, null=True)
-    weight = models.CharField(max_length=100, blank=True, null=True)
+    weight = models.IntegerField(blank=True, null=True)
+    weight_unit = models.CharField(max_length=9, choices=Weight_unit, default="", blank=True, null=True)
+    expiry_date = models.DateField(blank=True, null=True)
+    company = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     category = models.ManyToManyField('ProductCategories', blank=True)
+    rack_number = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.discount_price is None:
