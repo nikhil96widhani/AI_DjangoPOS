@@ -39,8 +39,7 @@ INSTALLED_APPS = [
     'api',
     'accounts',
     'inventory',
-    'pos',
-    'testing'
+    'pos'
 ]
 
 MIDDLEWARE = [
