@@ -1,6 +1,6 @@
 {% load static %}
 {% load pos_tags %}
-
+{#<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">#}
 {% if error %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <div class="alert alert-danger text-center" role="alert">
@@ -32,14 +32,62 @@
                     <div class="numberCircle">{{ product.get_discount_percentage|floatformat:0 }}% OFF</div>
                 </div>
             </div>
-            <div class="a price-tag"><strike class="price-tag">MRP: ₹{{ product.mrp|price_format }}
-            </strike>OUR PRICE : ₹{{ product.discount_price|price_format }}</div>
-            <div style="text-align:center;">
-                <svg id="barcode" class="div.a"></svg>
+
+            <div class="row">
+                <div class="column left">
+                    <div style="text-align:;"><svg id="barcode" class="div.a"></svg></div>
+                </div>
+                <div class="column right">
+                    <div class="a price-tag rotated" style="text-align:right;">
+                        <p> OUR PRICE : ₹{{ product.discount_price|price_format }}</p>
+                        <p><strike>MRP: ₹{{ product.mrp|price_format }}</strike></p>
+                    </div>
+                </div>
+            </div>
+
             </div>
         </div>
 
     </div>
+
+
+{#    NEW LABEL STYLE#}
+
+{#<div class="card product-label border-dark">#}
+{#    <div class="card-header">#}
+{#        <div class="row">#}
+{#            <div class="col-9">#}
+{#                {{ product.name }}#}
+{#                {% if product.weight %}#}
+{#                    , {{ product.weight }}#}
+{#                {% endif %}#}
+{#            </div>#}
+{#            <div class="col-3">#}
+{#                <div class="badge badge-pill badge-success">#}
+{#                    <div>{{ product.get_discount_percentage|floatformat:0 }}% OFF</div></div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="card-body my-3">#}
+{#        <div class="row">#}
+{#            <div class="col-9">#}
+{#                <div class="text-center align-middle"><svg id="barcode" class="div.a"></svg></div>#}
+{#            </div>#}
+{#            <div class="col-3 rotated">#}
+{#                    <div class="text-left">#}
+{#                        <h5 class="font-weight-bold">MRP: ₹{{ product.mrp|price_format }}</h5>#}
+{#                        <div>OUR PRICE</div>#}
+{#                        <h3 class="font-weight-bold">₹{{ product.discount_price|price_format }} </h3>#}
+{#                    </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="card-footer text-muted text-center" style="max-height: 20px;">SHOPRIGHT SUPERMARKET  <span class="font-italic">(Prices Inclusive of all Taxes)</span></div>#}
+{#    </div>#}
+
+{#    asda#}
+
+
     <button id="btnPrint" class="hidden-print">Print</button>
 
     <script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>

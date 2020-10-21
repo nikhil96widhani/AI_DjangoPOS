@@ -31,6 +31,11 @@ div.a {
     transform: translateY(-30%);
     line-height: 17px;
 }
+.rotated {
+    -ms-transform: rotate(270deg); /* IE 9 */
+    -webkit-transform: rotate(270deg); /* Chrome, Safari, Opera */
+    transform: rotate(270deg);
+}
 
 .card{
     /*margin-top: 15px;*/
@@ -74,3 +79,57 @@ div.a {
         display: none !important;
     }
 }
+
+
+
+
+
+/*NEW LABEL STYLE-----------*/
+
+
+/** {*/
+/*    font-size: 6px;*/
+/*    font-family: 'Arial';*/
+/*    line-height: 10px;*/
+/*}*/
+
+
+/*.product-label {*/
+/*    margin-top: 1.5px;*/
+/*    margin-left: 1px;*/
+/*    !*width: 171px;*!*/
+/*    !*max-width: 171px;*!*/
+/*    height: 135px;*/
+/*    max-height: 135px;*/
+/*    width: 280px;*/
+/*    max-width: 280px;*/
+/*}*/
+
+/*.rotated {*/
+/*    -ms-transform: rotate(270deg); !* IE 9 *!*/
+/*    -webkit-transform: rotate(270deg); !* Chrome, Safari, Opera *!*/
+/*    transform: rotate(270deg);*/
+/*}*/
+
+
+/*.hidden-print{*/
+/*    background-color: red;*/
+/*    font-size: 30px;*/
+/*    height: 50px;*/
+/*    width: 100px*/
+/*    }*/
+
+/*@page {*/
+/*  size: auto;*/
+/*  margin: 0;*/
+/*       }*/
+
+/*@media print {*/
+/*      html, body {*/
+/*        width: 100% ;*/
+/*      }*/
+/*    .hidden-print,*/
+/*    .hidden-print * {*/
+/*        display: none !important;*/
+/*    }*/
+/*}*/
