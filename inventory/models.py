@@ -46,6 +46,7 @@ class Product(models.Model):
     cost = models.FloatField()
     mrp = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
+    discount_percentage = models.FloatField(blank=True, null=True)
     quantity_unit = models.CharField(max_length=9, choices=Quantity_unit, default="PCS", blank=True, null=True)
     quantity = models.IntegerField(blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
