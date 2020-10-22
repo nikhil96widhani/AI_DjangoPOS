@@ -3,19 +3,35 @@
     font-family: 'Arial';
     line-height: 10px;
 }
+
 div.a {
   line-height: normal;
 }
+hr {
+    text-align: -moz-left;
+    border:none;
+    border-top:1px dashed #000000;
+    color:#fff;
+    background-color:#fff;
+    height:1px;
+    width:100%;
+    line-height: 1px;
+    margin: 0;
+}
+
+.pt-3{
+    padding-top: 3px;
+}
 .price-tag {
-  font-size: 10px;
+  font-size: 12px;
     font-weight: bold;
     text-align: center;
 }
 .product-label {
     width: 171px;
     max-width: 171px;
-    height: 73px;
-    max-height: 73px;
+    height: 68px;
+    max-height: 68px;
 }
 .numberCircle {
     width: 60px;
@@ -33,6 +49,7 @@ div.a {
 }
 .rotated {
     -ms-transform: rotate(270deg); /* IE 9 */
+    -moz-transform: rotate(270deg); /* IE 9 */
     -webkit-transform: rotate(270deg); /* Chrome, Safari, Opera */
     transform: rotate(270deg);
 }
@@ -45,9 +62,14 @@ div.a {
     text-align: center;
     padding-top: 2px;
 }
+/*hr.title-row{*/
+/*    border:none;*/
+/*    border-top: 1px dotted #000000;*/
+/*    line-height: normal;*/
+
+/*}*/
 .row{
-    height: 15px;
-    border-bottom: 1px dotted #000000;
+    height: auto;
 }
 .column {
   float: left;
@@ -61,6 +83,21 @@ div.a {
 .right {
   width: 37%;
 }
+
+p.footer-text {
+    line-height: normal;
+    font-size : 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.text-italic {
+    line-height: normal;
+    font-size: 4px;
+    font-style: italic;
+    font-weight: normal;
+}
+
 .hidden-print{
     background-color: red;
     font-size: 30px;
