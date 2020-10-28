@@ -1,6 +1,6 @@
 {% load static %}
 {% load pos_tags %}
-{#<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">#}
+
 {% if error %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <div class="alert alert-danger text-center" role="alert">
@@ -14,13 +14,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {#        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">#}
         <link rel="stylesheet" href="{% static 'css/product_label.css' %}">
         <title>Label example</title>
     </head>
     <body>
+    <div class="product-label">
     <div class="card product-label">
         <div class="card-body">
-            <div class="row">
+            <div class="row hr-bottom-row1">
                 <div class="column left">
                     <div class="a card-title">{{ product.name }}
                         {% if product.weight %}
@@ -32,67 +34,69 @@
                     <div class="numberCircle">{{ product.get_discount_percentage|floatformat:0 }}% OFF</div>
                 </div>
             </div>
-
+{#            <hr>#}
             <div class="row">
                 <div class="column left">
-                    <div style="text-align:;"><svg id="barcode" class="div.a"></svg></div>
+                    <div style="text-align:center;">
+                        <svg id="barcode" class="div.a"></svg>
+                    </div>
                 </div>
-                <div class="column right">
-                    <div class="a price-tag rotated" style="text-align:right;">
-                        <p> OUR PRICE : ₹{{ product.discount_price|price_format }}</p>
-                        <p><strike>MRP: ₹{{ product.mrp|price_format }}</strike></p>
+                <div class="column right rotated pt-3">
+                    <div style="text-align: center ">
+                        <div class="a">MRP: ₹{{ product.mrp|price_format }}</div>
+                        <div class=""> OUR PRICE</div>
+                        <div class="a price-tag">₹{{ product.discount_price|price_format }}</div>
                     </div>
                 </div>
             </div>
 
-            </div>
         </div>
-
+    </div>
+        <p class="footer-text">SHOPRIGHT SUPERMARKET <span class="text-italic">(Prices are Inclusive of all Taxes)</span></p>
     </div>
 
+    {#    NEW LABEL STYLE#}
 
-{#    NEW LABEL STYLE#}
+    {#<div class="card product-label border-dark">#}
+    {#    <div class="card-header">#}
+    {#        <div class="row">#}
+    {#            <div class="col-9">#}
+    {#                {{ product.name }}#}
+    {#                {% if product.weight %}#}
+    {#                    , {{ product.weight }}#}
+    {#                {% endif %}#}
+    {#            </div>#}
+    {#            <div class="col-3">#}
+    {#                <div class="badge badge-pill badge-success">#}
+    {#                    <div>{{ product.get_discount_percentage|floatformat:0 }}% OFF</div></div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+    {#    <div class="card-body my-3">#}
+    {#        <div class="row">#}
+    {#            <div class="col-9">#}
+    {#                <div class="text-center align-middle"><svg id="barcode" class="div.a"></svg></div>#}
+    {#            </div>#}
+    {#            <div class="col-3 rotated">#}
+    {#                    <div class="text-left">#}
+    {#                        <h5 class="font-weight-bold">MRP: ₹{{ product.mrp|price_format }}</h5>#}
+    {#                        <div>OUR PRICE</div>#}
+    {#                        <h3 class="font-weight-bold">₹{{ product.discount_price|price_format }} </h3>#}
+    {#                    </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+    {#    <div class="card-footer text-muted text-center" style="max-height: 20px;">SHOPRIGHT SUPERMARKET  <span class="font-italic">(Prices Inclusive of all Taxes)</span></div>#}
+    {#    </div>#}
 
-{#<div class="card product-label border-dark">#}
-{#    <div class="card-header">#}
-{#        <div class="row">#}
-{#            <div class="col-9">#}
-{#                {{ product.name }}#}
-{#                {% if product.weight %}#}
-{#                    , {{ product.weight }}#}
-{#                {% endif %}#}
-{#            </div>#}
-{#            <div class="col-3">#}
-{#                <div class="badge badge-pill badge-success">#}
-{#                    <div>{{ product.get_discount_percentage|floatformat:0 }}% OFF</div></div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#    <div class="card-body my-3">#}
-{#        <div class="row">#}
-{#            <div class="col-9">#}
-{#                <div class="text-center align-middle"><svg id="barcode" class="div.a"></svg></div>#}
-{#            </div>#}
-{#            <div class="col-3 rotated">#}
-{#                    <div class="text-left">#}
-{#                        <h5 class="font-weight-bold">MRP: ₹{{ product.mrp|price_format }}</h5>#}
-{#                        <div>OUR PRICE</div>#}
-{#                        <h3 class="font-weight-bold">₹{{ product.discount_price|price_format }} </h3>#}
-{#                    </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#    <div class="card-footer text-muted text-center" style="max-height: 20px;">SHOPRIGHT SUPERMARKET  <span class="font-italic">(Prices Inclusive of all Taxes)</span></div>#}
-{#    </div>#}
-
-{#    asda#}
+    {#    asda#}
 
 
     <button id="btnPrint" class="hidden-print">Print</button>
 
     <script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>
     <script type="text/javascript">
-        JsBarcode("#barcode", '1234', {
+        JsBarcode("#barcode", {{ product.product_code }}, {
             format: "CODE128",
             font: "monospace",
             textPosition: "bottom",
@@ -104,7 +108,7 @@
             {#lineColor: "#0aa",#}
             width: 1,
             textMargin: 0,
-            height: 30,
+            height: 35,
             {#displayValue: false#}
         });
     </script>
