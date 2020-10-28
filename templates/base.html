@@ -29,7 +29,7 @@
 <body class="fixed-sn white-skin">
 
 <!--Main Navigation-->
-<header>
+    <header>
 
     <!-- Sidebar navigation -->
     <div id="slide-out" class="side-nav sn-bg-4 fixed">
@@ -54,10 +54,13 @@
             <!-- Side navigation links -->
             <li>
                 <ul class="collapsible collapsible-accordion">
-                    <li><a href="{% url 'pos-home' %}" class="collapsible-header waves-effect"><i class="fas fa-rupee-sign"></i>POS</a></li>
-                    <li><a href="{% url 'products' %}" class="collapsible-header waves-effect"><i class="fas fa-warehouse"></i>Inventory</a></li>
+                    <li><a href="{% url 'pos-home' %}" class="collapsible-header waves-effect"><i
+                            class="fas fa-rupee-sign"></i>POS</a></li>
+                    <li><a href="{% url 'products' %}" class="collapsible-header waves-effect"><i
+                            class="fas fa-warehouse"></i>Inventory</a></li>
                     <li>
-                        <a class="collapsible-header waves-effect arrow-r"><i class="fas fa-user-cog"></i>Maintenance<i class="fas fa-angle-down rotate-icon"></i></a>
+                        <a class="collapsible-header waves-effect arrow-r"><i class="fas fa-user-cog"></i>Maintenance<i
+                                class="fas fa-angle-down rotate-icon"></i></a>
                         <div class="collapsible-body">
                             <ul>
                                 <li><a href="#" class="waves-effect">Add Product</a>
@@ -66,7 +69,8 @@
                             </ul>
                         </div>
                     </li>
-                    <li><a href="#" class="collapsible-header waves-effect"><i class="fas fa-th-large"></i>Sections</a></li>
+                    <li><a href="#" class="collapsible-header waves-effect"><i class="fas fa-th-large"></i>Sections</a>
+                    </li>
                 </ul>
             </li>
             <!--/. Side navigation links -->
@@ -90,74 +94,77 @@
 
         </div>
 
-          <div class="d-flex change-mode">
+        <div class="d-flex change-mode">
 
-        <div class="ml-auto mb-0 mr-3 change-mode-wrapper">
-          <button class="btn btn-outline-black btn-sm" id="dark-mode">Change Mode</button>
-        </div>
+            <div class="ml-auto mb-0 mr-3 change-mode-wrapper">
+                <button class="btn btn-outline-black btn-sm" id="dark-mode">Change Mode</button>
+            </div>
 
-        <!--Navbar links-->
-        <ul class="nav navbar-nav nav-flex-icons ml-auto">
+            <!--Navbar links-->
+            <ul class="nav navbar-nav nav-flex-icons ml-auto">
 
-            <!-- Dropdown -->
-            <li class="nav-item dropdown notifications-nav">
-                <a class="nav-link dropdown-toggle waves-effect" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    <span class="badge red">3</span> <i class="fas fa-bell"></i>
-                    <span class="d-none d-md-inline-block">Notifications</span>
-                </a>
-                <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-money mr-2" aria-hidden="true"></i>
-                        <span>New order received</span>
-                        <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 13 min</span>
+                <!-- Dropdown -->
+                <li class="nav-item dropdown notifications-nav">
+                    <a class="nav-link dropdown-toggle waves-effect" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <span class="badge red">3</span> <i class="fas fa-bell"></i>
+                        <span class="d-none d-md-inline-block">Notifications</span>
                     </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-money mr-2" aria-hidden="true"></i>
-                        <span>New order received</span>
-                        <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 33 min</span>
-                    </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-line-chart mr-2" aria-hidden="true"></i>
-                        <span>Your campaign is about to end</span>
-                        <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 53 min</span>
-                    </a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link waves-effect"><i class="fas fa-envelope"></i> <span
-                        class="clearfix d-none d-sm-inline-block">Contact</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link waves-effect"><i class="far fa-comments"></i> <span
-                        class="clearfix d-none d-sm-inline-block">Support</span></a>
-            </li>
-            <li class="nav-item dropdown">
-                {% if user.is_authenticated %}
-                                <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">{{ user.username }}</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-money mr-2" aria-hidden="true"></i>
+                            <span>New order received</span>
+                            <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 13 min</span>
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-money mr-2" aria-hidden="true"></i>
+                            <span>New order received</span>
+                            <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 33 min</span>
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-line-chart mr-2" aria-hidden="true"></i>
+                            <span>Your campaign is about to end</span>
+                            <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 53 min</span>
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect"><i class="fas fa-envelope"></i> <span
+                            class="clearfix d-none d-sm-inline-block">Contact</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect"><i class="far fa-comments"></i> <span
+                            class="clearfix d-none d-sm-inline-block">Support</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> <span
+                                class="clearfix d-none d-sm-inline-block">{{ user.username }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
 
                     {% else %}
-                                <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Login</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="{% url 'login' %}">Login</a>
-                    <a class="dropdown-item" href="{% url 'register' %}">Register</a>
-                    <a class="dropdown-item" href="#">My account</a>
+                        <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Login</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+                        <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+                        <a class="dropdown-item" href="#">My account</a>
 
-                {% endif %}
-            </div>
-          </li>
+                    {% endif %}
+                    </div>
+                </li>
 
-        </ul>
-        <!--/Navbar links-->
-          </div>
+            </ul>
+            <!--/Navbar links-->
+        </div>
     </nav>
     <!-- /.Navbar -->
 
@@ -165,7 +172,7 @@
 <!--Main Navigation-->
 
 <!-- Main layout -->
-<main>
+    <main>
     <div class="container-fluid">
 
         {% block content %}
@@ -224,27 +231,28 @@
 
 <! -- Request USER -->
 <script type="text/javascript">
-var user = '{{ request.user }}'
+    var user = '{{ request.user }}'
 </script>
 <! -- Request USER -->
 
 <! -- CSRF TOKEN -->
 <script type="text/javascript">
     function getToken(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
-    }
+
     const csrftoken = getToken('csrftoken');
 </script>
 <! -- CSRF TOKEN -->
