@@ -11423,7 +11423,7 @@ span[data-jarallax-element] {
   top: 0;
   left: 0;
   z-index: 1040;
-  width: 15rem;
+  width: 12rem;
   height: 100%;
   padding: 0;
   padding-bottom: 3.75rem;
@@ -11440,7 +11440,7 @@ span[data-jarallax-element] {
           backface-visibility: hidden;
   will-change: transform; }
   .side-nav.wide {
-    width: 15rem;
+    width: 12rem;
     transition-timing-function: linear, linear, ease;
     transition-duration: .2s, .2s, .35s;
     transition-property: top, bottom, width; }
@@ -11615,7 +11615,7 @@ span[data-jarallax-element] {
     bottom: 0;
     left: 0;
     z-index: -1;
-    width: 15rem;
+    width: 12rem;
     background-attachment: fixed; }
     .side-nav .sidenav-bg:after {
       position: absolute;
@@ -11633,7 +11633,7 @@ span[data-jarallax-element] {
     height: 8.75rem;
     border-bottom: 1px solid rgba(153, 153, 153, 0.3); }
     .side-nav .logo-wrapper a {
-      width: 15rem;
+      width: 12rem;
       height: 8.75rem;
       padding: 0; }
     .side-nav .logo-wrapper img {
@@ -17218,7 +17218,7 @@ button.md-toast-close-button {
 .fixed-sn .double-nav,
 .fixed-sn main,
 .fixed-sn footer {
-  padding-left: 15rem; }
+  padding-left: 12rem; }
 
 .fixed-sn main {
   padding-top: 5.5rem; }
@@ -17232,20 +17232,20 @@ button.md-toast-close-button {
 @media (min-width: 600px) {
   .fixed-sn main,
   .fixed-sn .page-footer .container-fluid {
-    margin-right: 2%;
-    margin-left: 2%; } }
+    margin-right: 1%;
+    margin-left: 1%; } }
 
 @media (min-width: 992px) {
   .fixed-sn main,
   .fixed-sn .page-footer .container-fluid {
-    margin-right: 5%;
-    margin-left: 5%; } }
+    margin-right: 1%;
+    margin-left: 1%; } }
 
 @media (min-width: 1200px) {
   .fixed-sn main,
   .fixed-sn .page-footer .container-fluid {
-    margin-right: 6%;
-    margin-left: 6%; } }
+    margin-right: 1%;
+    margin-left: 1%; } }
 
 .hidden-sn main {
   padding-top: 5.5rem; }
