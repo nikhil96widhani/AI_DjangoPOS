@@ -126,15 +126,18 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Categories</span>
                                 </div>
-                                <select class="mdb-select pl-3" id="product_categories" multiple
+                                <select class="mdb-select pl-3 align-middle" id="product_categories" multiple
                                         searchable="Search here.." name="category">
                                     <option value="" disabled selected>Select Categories</option>
                                     {% for k,v in categories %}
                                         <option value="{{ k }}">{{ v }}</option>
                                     {% endfor %}
                                 </select>
-                                <a href="#" class="btn btn-rounded ml-4" data-toggle="modal"
-                                   data-target="#addCategoryPrompt">Add New Category</a>
+{#                                <a href="#" class="btn btn-rounded btn-sm ml-4" data-toggle="modal"#}
+{#                                   data-target="#addCategoryPrompt">Add New Category</a>#}
+                            <button type="button" class="btn btn-rounded btn-outline-elegant btn-sm ml-4"
+                            data-toggle="modal"
+                                   data-target="#addCategoryPrompt">Add New Category</button>
                             </div>
                             {#                            <a href="#" class="btn btn-sm btn-rounded ml-0">Add New Category</a>#}
                             <div class="input-group mt-3">
@@ -146,7 +149,7 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-outline-elegant btn-rounded my-4 waves-effect z-depth-0"
+                    <button class="btn btn-outline-elegant btn-rounded my-4 waves-effect z-depth-0 float-right"
                             id="add-product-form-submit-button" type="submit">Add Product
                     </button>
                 </form>
@@ -168,7 +171,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body py-5">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Category Name</span>
