@@ -20,10 +20,9 @@
                     <h3 class="pt-2">Products Details</h3>
                 </div>
                 <div class="col-4">
-                    <button class="float-right btn btn-outline-dark btn-rounded waves-effect waves-light"
-                            data-toggle="modal" data-target="#addProductModalForm"><i
-                            class="fas fa-plus mr-3"></i>Add Product
-                    </button>
+                    <a class="float-right btn btn-outline-dark btn-rounded waves-effect waves-light" href="{% url 'add-product' %}">
+                        <i class="fas fa-plus mr-3"></i>Add Product
+                    </a>
                 </div>
             </div>
             <table id="products-data-table" class="table" cellspacing="0" width="100%">
@@ -36,6 +35,7 @@
                     <th class="th-sm">Discount Price</th>
                     <th class="th-sm">Quantity</th>
                     <th class="th-sm">Weight</th>
+                    <th class="th-sm">Expiry Date</th>
                     <th class="th-sm">Category</th>
                     <th class="th-sm">Edit</th>
                 </tr>

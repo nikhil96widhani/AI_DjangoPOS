@@ -23,6 +23,7 @@ function loadProductsData() {
                     <td>${item.discount_price}</td>
                     <td>${item.quantity}</td>
                     <td>${item.weight}</td>
+                    <td>${item.expiry_date}</td>
                     <td>${category_array.join(", ")}</td>
                     <td>
                     <a class="pr-3" href="/pos/product-label/${item.product_code}"><i class="fa fa-print" aria-hidden="true"></i></a>
@@ -51,7 +52,7 @@ function tablePagination(dataTable) {
         "aaSorting": [],
         columnDefs: [{
             orderable: false,
-            targets: [7, 8]
+            targets: [8, 9]
         }]
     });
 }
