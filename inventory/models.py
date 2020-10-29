@@ -96,6 +96,12 @@ class Order(models.Model):
         return total
 
     @property
+    def get_cart_cost_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_cost_total for item in orderitems])
+        return total
+
+    @property
     def get_cart_mrp_total(self):
         orderitems = self.orderitem_set.all()
         total = sum([item.get_mrp_total for item in orderitems])
@@ -132,6 +138,11 @@ class OrderItem(models.Model):
     @property
     def get_total(self):
         total = self.quantity * self.product.discount_price
+        return total
+
+    @property
+    def get_cost_total(self):
+        total = self.quantity * self.product.cost
         return total
 
     @property
