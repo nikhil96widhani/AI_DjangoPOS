@@ -171,51 +171,91 @@
                                 <li class="step active">
                                     <div class="step-title waves-effect waves-dark">Cart Details</div>
                                     <div class="step-new-content">
-                                        <div class="row">
-                                            <div class="col-sm">
-                                                <h4 class="mt-1 ml-3 text-center" id="cart_details">
-                                                </h4>
-                                            </div>
-                                            <div class="col-sm">
-                                                <!-- Money Received -->
-                                                <!-- Material input -->
-                                                <div class="input-group input-group-sm mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text" id="CashReceived">- ₹</span>
-                                                    </div>
-                                                    <input id="CashReceivedValue" type="number" class="form-control"
-                                                           aria-label="Small"
-                                                           aria-describedby="CashReceived" min="0" max="10000000"
-                                                           onkeyup="CalculateRefund(value)">
-                                                </div>
 
-                                                <small id="emailHelp" class="form-text text-muted">Cash received</small>
-                                            </div>
-                                            <div class="col-sm text-center">
-                                                <span class="h5 text-center font-weight-bold mt-2"
-                                                      id="RefundAmount"></span>
-                                            </div>
-                                        </div>
-                                        <div class="step-actions">
-                                            <button class="waves-effect waves-dark btn btn-primary next-step btn-rounded update-cart"
+
+<div class="row">
+    <div class="col-sm-4">
+        <h4 class="mt-2 ml-3 text-center" id="cart_details"></h4>
+    </div>
+    <div class="col-sm-3">
+        <!-- Money Received -->
+        <!-- Material input -->
+        <div class="input-group input-group-sm mb-3 mt-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="CashReceived">- ₹</span>
+            </div>
+            <input id="CashReceivedValue" type="number" class="form-control"
+                   aria-label="Small"
+                   aria-describedby="CashReceived" min="0" max="10000000"
+                   onkeyup="CalculateRefund(value)">
+        </div>
+        <small id="emailHelp" class="form-text text-muted">Cash received</small>
+
+
+    </div>
+    <div class="col-sm-2">
+                    <!-- REFUND AMOUNT -->
+        <h5 class="text-center font-weight-bold mt-2"
+                                                      id="RefundAmount"></h5>
+</div>
+    <div class="col-sm-3 text-center">
+<button class="waves-effect waves-dark btn btn-md btn-primary next-step btn-rounded update-cart"
                                                     onclick="updateUserOrder(1, 'complete')"
                                                     data-feedback="someFunction21">COMPLETE ORDER
                                             </button>
-                                        </div>
+    </div>
+  </div>
+
+
+
+
+
+
+{#                                        <div class="row">#}
+{#                                            <div class="col-sm">#}
+{#                                                <h4 class="mt-1 ml-3 text-center" id="cart_details">#}
+{#                                                </h4>#}
+{#                                            </div>#}
+{#                                            <div class="col-sm">#}
+{#                                                <!-- Money Received -->#}
+{#                                                <!-- Material input -->#}
+{#                                                <div class="input-group input-group-sm mb-3">#}
+{#                                                    <div class="input-group-prepend">#}
+{#                                                        <span class="input-group-text" id="CashReceived">- ₹</span>#}
+{#                                                    </div>#}
+{#                                                    <input id="CashReceivedValue" type="number" class="form-control"#}
+{#                                                           aria-label="Small"#}
+{#                                                           aria-describedby="CashReceived" min="0" max="10000000"#}
+{#                                                           onkeyup="CalculateRefund(value)">#}
+{#                                                </div>#}
+{##}
+{#                                                <small id="emailHelp" class="form-text text-muted">Cash received</small>#}
+{#                                            </div>#}
+{#                                            <div class="col-sm text-center">#}
+{#                                                <span class="h5 text-center font-weight-bold mt-2"#}
+{#                                                      id="RefundAmount"></span>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                        <div class="step-actions">#}
+{#                                            <button class="waves-effect waves-dark btn btn-primary next-step btn-rounded update-cart"#}
+{#                                                    onclick="updateUserOrder(1, 'complete')"#}
+{#                                                    data-feedback="someFunction21">COMPLETE ORDER#}
+{#                                            </button>#}
+{#                                        </div>#}
                                     </div>
                                 </li>
                                 <li class="step">
-                                    <div class="step-title waves-effect waves-dark">Step 2</div>
+                                    <div class="step-title waves-effect waves-dark">Order Receipt</div>
                                     <div class="step-new-content">
                                         <div class="form-row align-items-center">
                                             <!-- Default auto-sizing form -->
 
 
                                             <!-- Grid column -->
-                                            <div class="col-sm">
+                                            <div class="col-sm-4">
                                                 <!-- Default input -->
                                                 <label class="sr-only" for="phone_number">Phone Number</label>
-                                                <div class="input-group mb-2">
+                                                <div class="input-group mb-2 mt-2">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">+91</div>
                                                     </div>
@@ -226,18 +266,29 @@
                                             <!-- Grid column -->
 
                                             <!-- Grid column -->
-                                            <div class="col-sm">
-                                                <button type="button" class="btn btn-sm btn-success btn-md mt-0"
+                                            <div class="col-sm-2 text-center">
+                                                <button type="button" class="btn btn-sm btn-success btn-md mt-1"
                                                 onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp Receipt
                                                 </button>
                                             </div>
                                             <!-- SUBMIT COl-->
                                             <!-- Print recipt column -->
-                                            <div class="col-sm">
+                                            <div class="col-sm-2 text-center">
                                                 <a href="{% url 'receipt' order.id %}" target="_blank"
-                                                   class="waves-effect waves-dark btn btn-sm btn-secondary float-right">
+                                                   class="waves-effect waves-dark btn btn-sm btn-secondary">
                                                     Print Receipt
                                                 </a>
+                                            </div>
+                                            <div class="col-sm-4 text-center">
+{#                                                <div class="step-actions">#}
+                                            <button onClick="window.location.reload();"
+                                                    class="waves-effect waves-dark btn btn-md btn-rounded btn-primary"
+                                                    data-feedback="someFunction21">Finish
+                                            </button>
+                                            {#                                            <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">#}
+                                            {#                                                BACK#}
+                                            {#                                            </button>#}
+{#                                        </div>#}
                                             </div>
                                             <!-- Print recipt col -->
                                             <!-- Default auto-sizing form -->
@@ -249,27 +300,19 @@
                                             {#                                            </a>#}
 
                                         </div>
-                                        <div class="step-actions">
-                                            <button class="waves-effect waves-dark btn btn-sm btn-primary next-step"
-                                                    data-feedback="someFunction21">CONTINUE
-                                            </button>
-                                            {#                                            <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">#}
-                                            {#                                                BACK#}
-                                            {#                                            </button>#}
-                                        </div>
                                     </div>
                                 </li>
-                                <li class="step">
-                                    <div class="step-title waves-effect waves-dark">Step 3</div>
-                                    <div class="step-new-content">
-                                        Finish!
-                                        <div class="step-actions">
-                                            <button class="waves-effect waves-dark btn-sm btn btn-primary m-0 mt-4"
-                                                    type="button">SUBMIT
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
+{#                                <li class="step">#}
+{#                                    <div class="step-title waves-effect waves-dark">Step 3</div>#}
+{#                                    <div class="step-new-content">#}
+{#                                        Finish!#}
+{#                                        <div class="step-actions">#}
+{#                                            <button class="waves-effect waves-dark btn-sm btn btn-primary m-0 mt-4"#}
+{#                                                    type="button">SUBMIT#}
+{#                                            </button>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </li>#}
                             </ul>
 
                         </div>

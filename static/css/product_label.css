@@ -84,6 +84,21 @@ hr {
   width: 37%;
 }
 
+.row2{
+    height: auto;
+}
+.column2 {
+  float: left;
+}
+
+.left2 {
+  width: 80%;
+    /*background-color: #0b51c5;*/
+}
+
+.right2 {
+  width: 20%;
+}
 p.footer-text {
     line-height: normal;
     font-size : 5px;

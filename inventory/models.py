@@ -40,7 +40,7 @@ class Product(models.Model):
         $ python manage.py migrate
         
     """
-    product_code = models.CharField(primary_key=True, max_length=20)
+    product_code = models.CharField(primary_key=True, max_length=30)
 
     name = models.CharField(max_length=100)
     cost = models.FloatField()
