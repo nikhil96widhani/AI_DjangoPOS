@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from api.pos_views import ProductCategoryList
+from api.pos_views import ProductCategoryList, ProductListView
 from api.serializers import ProductSerializer, ProductCategorySerializer
 
 # Create your views here.
@@ -12,7 +12,8 @@ def homeView(request):
 
 
 def products_view(request):
-    return render(request, 'inventory/products.html', {})
+    products = ProductListView.as_view()(request=request).data
+    return render(request, 'inventory/products-datatable.html', {'products': products})
 
 
 def add_product_view(request):
