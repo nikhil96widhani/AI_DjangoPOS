@@ -1,8 +1,10 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.utils.crypto import get_random_string
 from django.views.generic import View
 from rest_framework.decorators import api_view
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -101,6 +103,8 @@ class ProductList(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = None
+
+
 #
 #
 # class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -153,3 +157,13 @@ class ProductCodeGeneratorView(APIView):
     def get(self, request):
         unique_product_code = get_random_string(6, '0123456789')
         return Response({'unique_product_code': unique_product_code})
+
+
+class ProductListView(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+
+class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer

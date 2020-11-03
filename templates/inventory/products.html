@@ -13,6 +13,12 @@
 {% endblock %}
 
 {% block content %}
+{#    <script>console.log({{ products }})</script>#}
+    {% if paginator %}
+        <nav style="float: right">
+            {% get_pagination_html paginator %}
+        </nav>
+    {% endif %}
     <div class="card">
         <div class="card-body">
             <div class="row justify-content-between mt-1 mb-3">
@@ -20,7 +26,8 @@
                     <h3 class="pt-2">Products Details</h3>
                 </div>
                 <div class="col-4">
-                    <a class="float-right btn btn-outline-dark btn-rounded waves-effect waves-light" href="{% url 'add-product' %}">
+                    <a class="float-right btn btn-outline-dark btn-rounded waves-effect waves-light"
+                       href="{% url 'add-product' %}">
                         <i class="fas fa-plus mr-3"></i>Add Product
                     </a>
                 </div>
@@ -63,7 +70,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Product (Code - <span class="text-warning" id="static-product-code-delete"></span> | Name - <span class="text-warning" id="static-product-name-delete"></span>) will be deleted.
+                    Product (Code - <span class="text-warning" id="static-product-code-delete"></span> | Name - <span
+                        class="text-warning" id="static-product-name-delete"></span>) will be deleted.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="product-delete-yes">Yes</button>

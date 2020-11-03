@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block page-title %}
+    Products Datatable
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card p-2 py-4">
+                <table id="products-datatable" class="table table-striped table-bordered" style="width:100%"
+                       data-server-side="true" data-ajax="/api/products/?format=datatables">
+                    <thead>
+                    <tr>
+                        <th data-data="product_code">Product Code</th>
+                        <th data-data="name">Product Name</th>
+                        <th data-data="cost">Cost</th>
+                        <th data-data="mrp">MRP</th>
+                        <th data-data="discount_price">Discounted Price</th>
+                        <th data-data="quantity">Quantity</th>
+                        <th data-data="weight">Weight</th>
+                        <th data-data="company">Company</th>
+                        <th data-data="rack_number">Rack</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#products-datatable').DataTable();
+        });
+    </script>
+{% endblock %}
