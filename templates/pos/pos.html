@@ -13,6 +13,7 @@
             100% {background-color: white;}
         }
     </style>
+    <link rel="stylesheet" href="{% static 'css/pos-style.css' %}">
 {% endblock %}
 
 {% block page-title %}
@@ -59,8 +60,7 @@
                                             <label for="AllProductList">All Products</label>
                                         </div>
                                         <br>
-                                        <ul class="list-group list-group-flush overflow-auto " id="AllProductListLi"
-                                            style="max-height: 600px;">
+                                        <ul class="list-group list-group-flush overflow-auto my-custom-scrollbar-product-list" id="AllProductListLi">
                                             {% for p in all_products %}
                                                 <li class="list-group-item">
                                                     <div class="row pt-2 ">
@@ -122,7 +122,7 @@
                         <div class="view view-cascade gradient-card-header white">
                             <h5 class="text-black-50"> CART </h5>
                             <!-- Shopping Cart table -->
-                            <div class="table-responsive">
+                            <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar-cart">
 
                                 <table class="table product-table table-cart-v-2">
 

@@ -1,13 +1,13 @@
 $(function () {
       $('#dark-mode').on('click', function (e) {
 
-        e.preventDefault();
+        // e.preventDefault();
         $('h4, button').not('.check').toggleClass('dark-grey-text text-white');
         $('.list-panel a').toggleClass('dark-grey-text');
 
         $('footer, .card').toggleClass('dark-card-admin');
         $('body, .navbar').toggleClass('white-skin navy-blue-skin');
-        $(this).toggleClass('white text-dark btn-outline-black');
+        // $(this).toggleClass('white text-dark btn-outline-black');
         $('body').toggleClass('dark-bg-admin');
         $('h6, .card, p, td, th, i, li a, h4, input, label').not(
           '#slide-out i, #slide-out a, .dropdown-item i, .dropdown-item').toggleClass('text-white');

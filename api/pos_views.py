@@ -10,9 +10,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, generics, status
 from .serializers import *
+from django.db.models import Q
 
 from accounts.models import User
 from inventory.models import *
+
 
 
 class Cart(APIView):
@@ -167,3 +169,22 @@ class ProductListView(generics.ListCreateAPIView):
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+@api_view(['GET'])
+def search_products(request):
+    if request.method == 'GET':
+        """
+            This is an Temporary search fix until we use POSTGRES database for final build. 
+            Once we start using postgres we can use full text search function feature with weights.   
+        """
+        search_term = request.GET.get("search_term")
+        if search_term:
+            products_contains = Product.objects.filter(name__contains=search_term)[:10]
+            products_starts = Product.objects.filter(name__startswith=search_term)[:3]
+            products = (products_starts | products_contains)[:10]
+        else:
+            products = Product.objects.all()[:10]
+
+        product_serializer = ProductSerializer(products, many=True)
+        return Response({'products': product_serializer.data})

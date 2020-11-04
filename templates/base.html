@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <!-- Material Design Bootstrap -->
     <link rel="stylesheet" href="{% static 'css/mdb.css' %}">
-    <link rel="stylesheet" href="{% static 'css/steppers.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stepper.css' %}">
 
     {% block css %}
 
@@ -98,9 +98,9 @@
 
         <div class="d-flex change-mode">
 
-            <div class="ml-auto mb-0 mr-3 change-mode-wrapper">
-                <button class="btn btn-outline-black btn-sm" id="dark-mode">Change Mode</button>
-            </div>
+{#            <div class="ml-auto mb-0 mr-3 change-mode-wrapper">#}
+{#                <button class="btn btn-outline-black btn-sm" id="dark-mode">Change Mode</button>#}
+{#            </div>#}
 
             <!--Navbar links-->
             <ul class="nav navbar-nav nav-flex-icons ml-auto">
@@ -138,6 +138,14 @@
                     <a class="nav-link waves-effect"><i class="far fa-comments"></i> <span
                             class="clearfix d-none d-sm-inline-block">Support</span></a>
                 </li>
+            <li class="nav-item">
+            <a class="nav-link">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="customSwitches">
+                    <label class="custom-control-label" for="customSwitches" id="dark-mode"><i class="far fa-lightbulb"></i></label>
+                </div>
+            </a>
+          </li>
                 <li class="nav-item dropdown">
                     {% if user.is_authenticated %}
                         <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown"
