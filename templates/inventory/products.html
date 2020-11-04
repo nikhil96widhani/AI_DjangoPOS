@@ -14,11 +14,6 @@
 
 {% block content %}
 {#    <script>console.log({{ products }})</script>#}
-    {% if paginator %}
-        <nav style="float: right">
-            {% get_pagination_html paginator %}
-        </nav>
-    {% endif %}
     <div class="card">
         <div class="card-body">
             <div class="row justify-content-between mt-1 mb-3">
