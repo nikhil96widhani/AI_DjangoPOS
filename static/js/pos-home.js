@@ -1,14 +1,56 @@
 $(document).ready(function () {
     $("#AllProductList").on("keyup", function () {
         var value = $(this).val().toLowerCase();
-        $("#AllProductListLi li").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
+        product_search(value)
+        // $("#AllProductListLi li").filter(function () {
+        //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        // });
     });
     loadTable();
     $('.stepper').mdbStepper();
 
 });
+
+function product_search(value) {
+    let url = '/api/search-products';
+
+    $.getJSON(url, {'search_term': value}, function (response) {
+        // $("#AllProductListLi").empty();
+        var trHTML = '';
+        if (response.products === undefined || response.products.length === 0) {
+            trHTML += `<li><div class="alert alert-secondary" role="alert">  No Products Found</div></li>`
+        }
+        else{
+            $.each(response.products, function (e, item) {
+                trHTML += '<li class="list-group-item">\n' +
+                    '                                                    <div class="row pt-2 ">' +
+                    '                                                        <div class="col">' +
+                    '                                                            <div>' + item.name +
+                    '                                                            </div>' +
+                    '                                                            <div class="row">' +
+                    '                                                                <div class="col">' +
+                    '                                                                    <span class="align-middle text-muted small">Code: ' + item.product_code +'</span>' +
+                    '                                                                </div>' +
+                    '                                                                <div class="col-auto">' +
+                    '                                                                <span class="align-middle text-muted small float-right"> ₹' + item.discount_price +
+                    '                                                                </span>' +
+                    '                                                                </div>' +
+                    '                                                            </div>' +
+                    '                                                        </div>' +
+                    '                                                        <div class="col-auto">' +
+                    '                                                            <button type="button"' +
+                    '                                                                    onclick="updateUserOrder(' + item.product_code+ ', \'add\')"' +
+                    '                                                                    class="btn btn-primary btn-sm mr-1"><i' +
+                    '                                                                    class="fas fa-shopping-cart"></i>' +
+                    '                                                            </button>' +
+                    '                                                        </div>' +
+                    '                                                    </div>' +
+                    '                                                </li>'
+            })
+        }
+        $("#AllProductListLi").empty().append(trHTML);
+    });
+}
 
 
 function someFunction21() {
@@ -85,11 +127,11 @@ function loadTable(product_code) {
             var trHTML = '';
             $.each(data.items.reverse(), function (e, item) {
                 if(item.product.product_code === product_code) {
-                    trHTML += `<tr class="clicked"><td><div class="font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"ß                                        data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
+                    trHTML += `<tr class="clicked"><td><div class="text-left font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"ß                                        data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
 
                 }
                 else {
-                    trHTML += `<tr><td><div class="font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"ß                                        data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
+                    trHTML += `<tr><td><div class="text-left font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"ß                                        data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
 
                 }
             });

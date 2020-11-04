@@ -8,7 +8,7 @@ from inventory.models import *
 
 @login_required
 def pos_homeView(request):
-    all_products = Product.objects.all()
+    all_products = Product.objects.all()[:10]
     if request.user.is_authenticated:
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
