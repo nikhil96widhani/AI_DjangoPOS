@@ -1,16 +1,20 @@
 const product_categories = {}
 let product_code_to_update, product_code_to_delete;
+const dataTable = $("#products-datatable");
 
 function loadProductsData() {
-    // getProductCategoriesInDictionary();
-
-    let dataTable = $("#products-datatable");
-    let initial_page = dataTable.DataTable().page();
-    console.log(initial_page)
-    dataTable.DataTable().destroy();
-    dataTable.DataTable({
+    var table = dataTable.DataTable({
         'serverSide': true,
         'ajax': '/api/products/?format=datatables',
+        responsive: true,
+        keys: true,
+        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-2'><'col-sm-12 col-md-5'p>>" +
+            "<'row'<'col text-right pt-2'B>>",
+        buttons: [
+            'copy', 'excel', 'pdf', 'print'
+        ],
         'columns': [
             {'data': 'product_code'},
             {'data': 'name'},
@@ -25,11 +29,12 @@ function loadProductsData() {
                 'data': 'product_code', render: function (data, type, row, meta) {
                     return `<a class="pr-3" href="/pos/product-label/${data}"><i class="fa fa-print" aria-hidden="true"></i></a>
                             <a class="pr-3"><i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal" data-target="#editProductModalForm" onclick="editProductDetails(${data})"></i></a>
-                            <a class="pr-3"><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${data}')"></i></a>`;
+                            <a class=""><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${data}')"></i></a>`;
                 }
             }
         ]
     });
+    table.buttons().container().appendTo($('.col-sm-6:eq(0)', table.table().container()));
     addProductCategoriesInSelect($('#edit_product_category'));
 }
 
@@ -69,7 +74,7 @@ function updateProductDetails(form) {
     }).done(function () {
         toastr.info('Product details were successfully updated.');
         $('.close').click();
-        loadProductsData();
+        dataTable.DataTable().draw(false);
     }).fail(function () {
         toastr.error('Product details were not updated! Please try again.');
     })
@@ -92,20 +97,11 @@ function deleteProduct() {
     }).done(function () {
         toastr.info('Product was deleted successfully.');
         $('.close').click();
-        loadProductsData();
+        dataTable.DataTable().draw(false);
     }).fail(function () {
         toastr.error('Unable to delete product! Please try again.');
     })
 }
-
-// function getProductCategoriesInDictionary() {
-//     let url = '/api/product-categories/'
-//     $.getJSON(url, {}, function (category_data) {
-//         $.map(category_data, function (n, i) {
-//             product_categories[n['id']] = n['name'];
-//         });
-//     });
-// }
 
 function addProductCategoriesInSelect(selector) {
     let product_category_selector = selector;
