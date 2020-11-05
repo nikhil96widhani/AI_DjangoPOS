@@ -1,0 +1,144 @@
+<!-- Modal -->
+<div class="modal fade" id="editProductModalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header text-center">
+                <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-2" id="myModalLabel">
+                    <strong>Edit Product Details</strong>
+                </h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+{#            <h6 class="text-center">Product Code - <span id="static-product-code"></span></h6>#}
+            <!--Body-->
+            <div class="modal-body mx-4">
+                <form id="edit-product-form">
+                    <div class="row">
+                        <div class="col pr-5 pt-3 border-right">
+                            <div class="mb-3 pb-2 h5">Product Code - <span id="static-product-code"></span></div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Product Name</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Name"
+                                       aria-describedby="basic-addon1" name="name">
+                            </div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Cost</span>
+                                    <span class="input-group-text">₹</span>
+                                </div>
+                                <input type="number" class="form-control" aria-label="cost" name="cost">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">MRP</span>
+                                    <span class="input-group-text">₹</span>
+                                </div>
+                                <input type="number" class="form-control" aria-label="mrp" name="mrp" id="mrp">
+                            </div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Discounted Price</span>
+                                    <span class="input-group-text">₹</span>
+                                </div>
+                                <input type="number" class="form-control" aria-label="discount" name="discount_price"
+                                       id="discount_price">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Discount</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="discount_percent"
+                                       id="discount_percent">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="quantity-units">Quantity</label>
+                                </div>
+                                <input type="number" class="form-control" aria-label="quantity">
+                                <div class="input-group-append">
+                                    <select class="browser-default custom-select" id="quantity-units"
+                                            name="quantity_unit">
+                                        {% for k,v in quantity_unit %}
+                                            <option value="{{ k }}"
+                                                    {% if k == 'PCS' %}selected{% endif %}>{{ v }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="weight-units">Weight</label>
+                                </div>
+                                <input type="number" class="form-control" aria-label="weight">
+                                <div class="input-group-append">
+                                    <select class="browser-default custom-select" id="weight-units" name="weight_unit">
+                                        {% for k,v in weight_unit %}
+                                            <option value="{{ k }}"
+                                                    {% if k == 'g' %}selected{% endif %}>{{ v }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col pl-5 pt-3">
+                            <div class="mb-3 h4 grey-ic">Additional Fields</div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Company</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="company"
+                                       aria-describedby="basic-addon1" name="company">
+                            </div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Rack Number</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="rack"
+                                       aria-describedby="basic-addon1" name="rack_number">
+                            </div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Expiry Date</span>
+                                </div>
+                                <input type="date" class="form-control" aria-label="expiry"
+                                       aria-describedby="basic-addon1" name="expiry_date" id="expiry_date">
+                            </div>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Categories</span>
+                                </div>
+                                <select class="mdb-select pl-3 align-middle" id="product_categories" multiple
+                                        searchable="Search here.." name="category">
+                                    <option value="" disabled selected>Select Categories</option>
+                                    {% for k,v in categories %}
+                                        <option value="{{ k }}">{{ v }}</option>
+                                    {% endfor %}
+                                </select>
+                            <button type="button" class="btn btn-rounded btn-outline-elegant btn-sm ml-4 px-1"
+                            data-toggle="modal" data-target="#addCategoryPrompt">Add New Category</button>
+                            </div>
+                            {#                            <a href="#" class="btn btn-sm btn-rounded ml-0">Add New Category</a>#}
+                            <div class="input-group mt-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Description</span>
+                                </div>
+                                <textarea class="form-control" aria-label="description" name="description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-info btn-rounded my-2 ml-0 waves-effect z-depth-0"
+                            id="update-product-form-submit-button" type="submit">Update
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
