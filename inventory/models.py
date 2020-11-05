@@ -75,7 +75,7 @@ class Product(models.Model):
 
 
 class ProductCategories(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, primary_key=True)
 
     class Meta:
         verbose_name_plural = "ProductCategories"
