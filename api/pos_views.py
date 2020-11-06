@@ -84,9 +84,16 @@ class Cart(APIView):
             if orderItem.quantity <= 0 or action == 'delete':
                 orderItem.delete()
 
-            return Response("Item was added/updated")
+            return Response(
+                {"response_type": "updated",
+                 "response_text":  "Item was added/updated"}
+            )
 
-        return Response("Order Completed")
+        # return Response("Order Completed please click finish to refresh page")
+        return Response(
+            {"response_type": "completed",
+             "response_text": "Order Completed, Please print the Receipt or click Finish to refresh page"}
+        )
 
 
 class ProductCategoryList(generics.ListCreateAPIView):

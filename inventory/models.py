@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from .helpers import *
+from django.utils.timezone import now
 
 
 # Create your models here.
@@ -86,8 +87,12 @@ class ProductCategories(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    date_order = models.DateField(auto_now_add=True)
+    date_order = models.DateTimeField(default=now, editable=False)
     complete = models.BooleanField(default=False, null=True, blank=False)
+
+    # def save(self, *args, **kwargs):
+    #     self.date_order = now
+    #     super(Order, self).save(*args, **kwargs)
 
     @property
     def get_cart_total(self):
