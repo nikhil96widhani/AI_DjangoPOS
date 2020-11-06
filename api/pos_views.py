@@ -69,9 +69,7 @@ class Cart(APIView):
             order.save()
         else:
             product_code = request.data['product_code']
-            print(product_code)
             product = Product.objects.get(product_code=product_code)
-            print(product.name)
             orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
 
             if action == 'add':
