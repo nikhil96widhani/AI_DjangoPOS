@@ -129,8 +129,8 @@
                                 <select class="mdb-select pl-3 align-middle" id="product_categories" multiple
                                         searchable="Search here.." name="category">
                                     <option value="" disabled selected>Select Categories</option>
-                                    {% for k,v in categories %}
-                                        <option value="{{ k }}">{{ v }}</option>
+                                    {% for n in categories %}
+                                        <option value="{{ n }}">{{ n }}</option>
                                     {% endfor %}
                                 </select>
 {#                                <a href="#" class="btn btn-rounded btn-sm ml-4" data-toggle="modal"#}

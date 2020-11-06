@@ -7,7 +7,9 @@ function addProductDetails(form) {
     formData["product_code"] = $('#product_code').val();
     formData["category"] = $('#product_categories').val();
     formData["expiry_date"] = $('#expiry_date').val();
-
+    if (formData["expiry_date"] === ""){
+        formData["expiry_date"] = null;
+    }
     console.log(formData);
     let url = "/api/products/"
 
