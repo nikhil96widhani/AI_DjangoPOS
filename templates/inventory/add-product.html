@@ -6,6 +6,10 @@
     <i class="fas fa-angle-right align-middle fa-xs"></i> Products
 {% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fm.tagator.jquery.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="flex-center">
         <div class="card">
@@ -122,22 +126,26 @@
                                 <input type="date" class="form-control" aria-label="expiry"
                                        aria-describedby="basic-addon1" name="expiry_date" id="expiry_date">
                             </div>
-                            <div class="input-group mb-2">
+                            <div class="input-group mb-4">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Categories</span>
                                 </div>
-                                <select class="mdb-select pl-3 align-middle" id="product_categories" multiple
-                                        searchable="Search here.." name="category">
-                                    <option value="" disabled selected>Select Categories</option>
-                                    {% for n in categories %}
-                                        <option value="{{ n }}">{{ n }}</option>
-                                    {% endfor %}
-                                </select>
-{#                                <a href="#" class="btn btn-rounded btn-sm ml-4" data-toggle="modal"#}
-{#                                   data-target="#addCategoryPrompt">Add New Category</a>#}
-                            <button type="button" class="btn btn-rounded btn-outline-elegant btn-sm ml-4"
-                            data-toggle="modal"
-                                   data-target="#addCategoryPrompt">Add New Category</button>
+                                <input type="text" class="tagator form-control" aria-label="categories"
+                                       name="category"
+                                       id="product_categories">
+                                {#                                <select class="mdb-select pl-3 align-middle" id="product_categories" multiple#}
+                                {#                                        searchable="Search here.." name="category">#}
+                                {#                                    <option value="" disabled selected>Select Categories</option>#}
+                                {#                                    {% for n in categories %}#}
+                                {#                                        <option value="{{ n }}">{{ n }}</option>#}
+                                {#                                    {% endfor %}#}
+                                {#                                </select>#}
+                                {#                                <a href="#" class="btn btn-rounded btn-sm ml-4" data-toggle="modal"#}
+                                {#                                   data-target="#addCategoryPrompt">Add New Category</a>#}
+                                {#                                <button type="button" class="btn btn-rounded btn-outline-elegant btn-sm ml-4"#}
+                                {#                                        data-toggle="modal"#}
+                                {#                                        data-target="#addCategoryPrompt">Add New Category#}
+                                {#                                </button>#}
                             </div>
                             {#                            <a href="#" class="btn btn-sm btn-rounded ml-0">Add New Category</a>#}
                             <div class="input-group mt-3">
@@ -158,36 +166,37 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="addCategoryPrompt" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalCenterTitle"
-         aria-hidden="true">
-
-        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Add New Category</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body py-5">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Category Name</span>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Category Name"
-                               aria-describedby="basic-addon1" id="category_name">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="add-category-button">Add</button>
-                </div>
-            </div>
-        </div>
-    </div>
+{#    <div class="modal fade" id="addCategoryPrompt" tabindex="-1" role="dialog"#}
+{#         aria-labelledby="exampleModalCenterTitle"#}
+{#         aria-hidden="true">#}
+{##}
+{#        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->#}
+{#        <div class="modal-dialog modal-dialog-centered" role="document">#}
+{#            <div class="modal-content">#}
+{#                <div class="modal-header">#}
+{#                    <h5 class="modal-title" id="exampleModalLongTitle">Add New Category</h5>#}
+{#                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                        <span aria-hidden="true">&times;</span>#}
+{#                    </button>#}
+{#                </div>#}
+{#                <div class="modal-body py-5">#}
+{#                    <div class="input-group">#}
+{#                        <div class="input-group-prepend">#}
+{#                            <span class="input-group-text" id="basic-addon1">Category Name</span>#}
+{#                        </div>#}
+{#                        <input type="text" class="form-control" aria-label="Category Name"#}
+{#                               aria-describedby="basic-addon1" id="category_name">#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="modal-footer">#}
+{#                    <button type="button" class="btn btn-primary" id="add-category-button">Add</button>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 {% endblock %}
 
 {% block javascript %}
+    <script type="text/javascript" src="{% static 'js/fm.tagator.jquery.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/add-product.js' %}"></script>
 {% endblock %}
