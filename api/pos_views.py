@@ -16,7 +16,6 @@ from accounts.models import User
 from inventory.models import *
 
 
-
 class Cart(APIView):
     def get(self, request, format=None):
         order_id = request.GET.get("order_id")
@@ -84,7 +83,7 @@ class Cart(APIView):
 
             return Response(
                 {"response_type": "updated",
-                 "response_text":  "Item was added/updated"}
+                 "response_text": "Item was added/updated"}
             )
 
         # return Response("Order Completed please click finish to refresh page")
@@ -94,78 +93,24 @@ class Cart(APIView):
         )
 
 
-class ProductCategoryList(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = ProductCategories.objects.all()
-    serializer_class = ProductCategorySerializer
-    pagination_class = None
+class ProductCategoryList(APIView):
+    @staticmethod
+    def get(request):
+        categories = ProductCategories.objects.all()
+        category_serializer = ProductCategorySerializer(categories, many=True)
+        categories_data = [cat['name'] for cat in category_serializer.data]
+        return Response({'categories': categories_data})
+
+    @staticmethod
+    def post(request):
+        ProductCategories.objects.get_or_create(name=request.data['name'])
+        return Response(request.data, status=status.HTTP_201_CREATED)
 
 
 class ProductCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = ProductCategories.objects.all()
     serializer_class = ProductCategorySerializer
-
-
-class ProductList(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    pagination_class = None
-
-
-#
-#
-# class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-#     permission_classes = [IsAuthenticated]
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-
-
-@api_view(['GET', 'POST'])
-def product_list(request):
-    if request.method == 'GET':
-        products = Product.objects.all()
-        categories = ProductCategories.objects.all()
-        product_serializer = ProductSerializer(products, many=True)
-        category_serializer = ProductCategorySerializer(categories, many=True)
-        return Response({'products': product_serializer.data, 'product_categories': category_serializer.data})
-
-    elif request.method == 'POST':
-        product_serializer = ProductSerializer(data=request.data)
-        if product_serializer.is_valid():
-            product_serializer.save()
-            return Response(product_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(product_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def product_detail(request, pk):
-    try:
-        product = Product.objects.get(pk=pk)
-    except Product.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = ProductSerializer(product)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = ProductSerializer(product, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class ProductCodeGeneratorView(APIView):
-    def get(self, request):
-        unique_product_code = get_random_string(6, '0123456789')
-        return Response({'unique_product_code': unique_product_code})
 
 
 class ProductListView(generics.ListCreateAPIView):
@@ -176,6 +121,35 @@ class ProductListView(generics.ListCreateAPIView):
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+# @api_view(['GET', 'PUT', 'DELETE'])
+# def product_detail(request, pk):
+#     try:
+#         product = Product.objects.get(pk=pk)
+#     except Product.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+#
+#     if request.method == 'GET':
+#         serializer = ProductSerializer(product)
+#         return Response(serializer.data)
+#
+#     elif request.method == 'PUT':
+#         serializer = ProductSerializer(product, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     elif request.method == 'DELETE':
+#         product.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProductCodeGeneratorView(APIView):
+    def get(self, request):
+        unique_product_code = get_random_string(6, '0123456789')
+        return Response({'unique_product_code': unique_product_code})
 
 
 @api_view(['GET'])

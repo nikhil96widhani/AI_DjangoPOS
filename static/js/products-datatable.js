@@ -3,7 +3,7 @@ let product_code_to_update, product_code_to_delete;
 const dataTable = $("#products-datatable");
 
 function loadProductsData() {
-    var table = dataTable.DataTable({
+    const table = dataTable.DataTable({
         'serverSide': true,
         'ajax': '/api/products/?format=datatables',
         responsive: true,
@@ -26,7 +26,7 @@ function loadProductsData() {
             {'data': 'company'},
             {'data': 'rack_number'},
             {
-                'data': 'product_code', render: function (data, type, row, meta) {
+                'data': 'product_code', sortable: false, render: function (data, type, row) {
                     return `<a class="pr-3" href="/pos/product-label/${data}"><i class="fa fa-print" aria-hidden="true"></i></a>
                             <a class="pr-3"><i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal" data-target="#editProductModalForm" onclick="editProductDetails(${data})"></i></a>
                             <a class=""><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${data}')"></i></a>`;

@@ -24,12 +24,14 @@ class ProductSerializer(serializers.ModelSerializer):
     # def get_category(self, product):
     #     return ', '.join([str(cat) for cat in product.category.all()])
 
-    def get_quantity(self, product):
+    @staticmethod
+    def get_quantity(product):
         if product.quantity_unit is not None:
             return f'{product.quantity} {product.quantity_unit}'
         return product.quantity
 
-    def get_weight(self, product):
+    @staticmethod
+    def get_weight(product):
         if product.weight is not None:
             return f'{product.weight} {product.weight_unit}'
         return product.weight
