@@ -183,3 +183,13 @@ function deleteProduct() {
     })
 }
 
+/*Common Events for Both Pages*/
+discount_price_selector.keyup(function () {
+    discount_percent_selector.val(((mrp_selector.val() - discount_price_selector.val()) * 100) / mrp_selector.val())
+});
+
+$('#discount_percent, #mrp').keyup(function () {
+    discount_price_selector.val(mrp_selector.val() * (1 - discount_percent_selector.val() / 100))
+});
+
+
