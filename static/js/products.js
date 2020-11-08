@@ -1,76 +1,17 @@
-const product_categories = {}
 let product_code_to_update, product_code_to_delete;
-
-function loadProductsData() {
-    let url = '/api/products/';
-    let html;
-    $.getJSON(url, {}, function (response) {
-        console.log(response)
-        let dataTable = $("#products-data-table");
-
-        getProductCategoriesInDictionary(response.product_categories);
-
-        $.each(response.products, function (i, item) {
-            const category_array = [];
-            $.each(item.category, function (index, category) {
-                category_array.push(product_categories[category]);
-            })
-            html = `${html}<tr>
-                    <td>${item.product_code}</td>
-                    <td>${item.name}</td>
-                    <td>${item.cost}</td>
-                    <td>${item.mrp}</td>
-                    <td>${item.discount_price}</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.weight}</td>
-                    <td>${item.expiry_date}</td>
-                    <td>${category_array.join(", ")}</td>
-                    <td>
-                    <a class="pr-3" href="/pos/product-label/${item.product_code}"><i class="fa fa-print" aria-hidden="true"></i></a>
-                    <a class="pr-3"><i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal" data-target="#editProductModalForm" onclick="editProductDetails('${item.product_code}')"></i></a>
-                    <a class="pr-3"><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${item.product_code}', '${item.name}')"></i></a>
-                    </td>
-                </tr>`
-        })
-        dataTable.DataTable().destroy();
-        $('#products-table-body').empty().append(html);
-        tablePagination(dataTable);
-        addProductCategoriesInSelect($('#product_category'), response.product_categories);
-        addProductCategoriesInSelect($('#edit_product_category'), response.product_categories);
-    });
-}
-
-function getProductCategoriesInDictionary(category_data) {
-    $.map(category_data, function (n, i) {
-        product_categories[n['id']] = n['name'];
-    });
-}
-
-function tablePagination(dataTable) {
-    dataTable.DataTable({
-        "pagingType": "full_numbers",
-        "aaSorting": [],
-        columnDefs: [{
-            orderable: false,
-            targets: [8, 9]
-        }]
-    });
-}
-
-function addProductCategoriesInSelect(selector, category_data) {
-    let product_category_selector = selector;
-    product_category_selector.empty();
-    product_category_selector.append('<option value="" disabled selected>Select Categories</option>');
-    $.each(category_data, function (i, item) {
-        product_category_selector.append(new Option(item.name, item.id))
-    });
-}
+const dataTable = $("#products-datatable");
+const discount_price_selector = $('#discount_price')
+const discount_percent_selector = $('#discount_percent')
+const mrp_selector = $('#mrp')
+const product_category_selector = $('#product_categories');
 
 function addProductDetails(form) {
     const formData = getFormData($(form));
     formData["product_code"] = $('#product_code').val();
-    formData["category"] = $('#product_category').val();
-
+    formData["category"] = product_category_selector.val().split(",");
+    if (formData["expiry_date"] === "") {
+        formData["expiry_date"] = null;
+    }
     console.log(formData);
     let url = "/api/products/"
 
@@ -84,10 +25,11 @@ function addProductDetails(form) {
     }).done(function () {
         toastr.info('Product was successfully added.');
         $('#add-product-form').trigger('reset');
-        loadProductsData();
+        $('#product_code').removeAttr('disabled');
+        product_category_selector.tagator('refresh');
     }).fail(function () {
         toastr.error('Product was not saved! Please try again.');
-    })
+    }).always(addCategoriesToInput(product_category_selector))
 }
 
 function generateProductCode(checkbox) {
@@ -97,17 +39,81 @@ function generateProductCode(checkbox) {
 
         $.getJSON(url, {}, function (response) {
             console.log(response.unique_product_code);
-            $("label[for='" + product_code_text_field.attr('id') + "']").addClass('active');
             product_code_text_field.val(response.unique_product_code);
-            product_code_text_field.addClass('valid');
             product_code_text_field.attr('disabled', 'disabled');
         });
     } else {
-        $("label[for='" + product_code_text_field.attr('id') + "']").removeClass('active');
-        product_code_text_field.removeClass('valid');
         product_code_text_field.val('');
         product_code_text_field.removeAttr('disabled');
     }
+}
+
+function addCategoriesToInput(input_selector) {
+    let url = '/api/product-categories/'
+    $.getJSON(url, {}, function (category_data) {
+        console.log(category_data);
+        if (input_selector.data('tagator') !== undefined) {
+            input_selector.tagator('destroy');
+        }
+        input_selector.tagator({
+            autocomplete: category_data.categories,
+            useDimmer: true,
+            showAllOptionsOnFocus: true
+        });
+    });
+}
+
+async function postCategories(category_array) {
+    let url = "/api/product-categories/"
+
+    $.each(category_array, function (i, category_name) {
+        $.ajax(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            data: JSON.stringify({'name': category_name})
+        }).done(function () {
+            console.log('New category was successfully added.');
+        }).fail(function () {
+            toastr.error(`New Category (${category_name}) was not added! Please try again.`);
+        })
+    });
+}
+
+function loadProductsData() {
+    const table = dataTable.DataTable({
+        'serverSide': true,
+        'ajax': '/api/products/?format=datatables',
+        responsive: true,
+        keys: true,
+        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-2'><'col-sm-12 col-md-5'p>>" +
+            "<'row'<'col text-right pt-2'B>>",
+        buttons: [
+            'copy', 'excel', 'pdf', 'print'
+        ],
+        'columns': [
+            {'data': 'product_code'},
+            {'data': 'name'},
+            {'data': 'cost'},
+            {'data': 'mrp'},
+            {'data': 'discount_price'},
+            {'data': 'quantity'},
+            {'data': 'weight'},
+            {'data': 'company'},
+            {'data': 'rack_number'},
+            {
+                'data': 'product_code', sortable: false, render: function (data, type, row) {
+                    return `<a class="pr-3" href="/pos/product-label/${data}"><i class="fa fa-print" aria-hidden="true"></i></a>
+                            <a class="pr-3"><i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal" data-target="#editProductModalForm" onclick="editProductDetails('${data}')"></i></a>
+                            <a class=""><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${data}')"></i></a>`;
+                }
+            }
+        ]
+    });
 }
 
 function editProductDetails(product_code) {
@@ -119,19 +125,21 @@ function editProductDetails(product_code) {
         console.log(response);
         $.each(response, function (key, value) {
             let field_selector = $(`#edit-product-form [name="${key}"]`);
-            if (value) {
-                $("label[for='" + field_selector.attr('id') + "']").addClass('active');
-                field_selector.val(value);
-                field_selector.addClass('valid');
-            }
+            field_selector.val(value);
         })
+        console.log(response.category.join())
+        product_category_selector.val(response.category.join())
+        product_category_selector.tagator('refresh');
     });
 }
 
 function updateProductDetails(form) {
     const formData = getFormData($(form));
     formData["product_code"] = product_code_to_update;
-    formData["category"] = $('#edit_product_category').val();
+    formData["category"] = product_category_selector.val().split(",");
+    if (formData["expiry_date"] === "") {
+        formData["expiry_date"] = null;
+    }
 
     console.log(formData);
     let url = "/api/products/" + product_code_to_update + "/";
@@ -146,18 +154,15 @@ function updateProductDetails(form) {
     }).done(function () {
         toastr.info('Product details were successfully updated.');
         $('.close').click();
-        loadProductsData();
+        dataTable.DataTable().draw(false);
     }).fail(function () {
         toastr.error('Product details were not updated! Please try again.');
     })
 }
 
-function deleteProductConfirmation(product_code, product_name='test'){
+function deleteProductConfirmation(product_code) {
     product_code_to_delete = product_code;
-    let url = '/api/products/' + product_code_to_delete + '/';
-
     $('#static-product-code-delete').empty().html(product_code_to_delete);
-    $('#static-product-name-delete').empty().html(product_name);
 }
 
 function deleteProduct() {
@@ -172,35 +177,9 @@ function deleteProduct() {
     }).done(function () {
         toastr.info('Product was deleted successfully.');
         $('.close').click();
-        loadProductsData();
+        dataTable.DataTable().draw(false);
     }).fail(function () {
         toastr.error('Unable to delete product! Please try again.');
     })
 }
-
-/*---------------------Events---------------------*/
-$(document).ready(function () {
-    loadProductsData();
-    $('.mdb-select').materialSelect();
-});
-
-$('#add-product-form').on('submit', function (e) {
-    e.preventDefault();
-    addProductDetails(this);
-});
-
-$('#edit-product-form').on('submit', function (e) {
-    e.preventDefault();
-    updateProductDetails(this);
-});
-
-$('#product-delete-yes').on('click', function (e) {
-    deleteProduct();
-});
-
-$('#generate_product_code_checkbox').change(function () {
-    generateProductCode(this);
-});
-
-
 

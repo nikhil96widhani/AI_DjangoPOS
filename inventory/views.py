@@ -12,7 +12,10 @@ def homeView(request):
 
 
 def products_view(request):
-    return render(request, 'inventory/products-datatable.html', {})
+    weight_unit = Weight_unit
+    quantity_unit = Quantity_unit
+    return render(request, 'inventory/products-datatable.html',
+                  {'weight_unit': weight_unit, 'quantity_unit': quantity_unit})
 
 
 def add_product_view(request):
