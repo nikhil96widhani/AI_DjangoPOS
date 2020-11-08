@@ -84,11 +84,11 @@
 				'flex-grow': $source_element.css('flex-grow'),
 				position:    'relative'
 			});
-			if (parseInt($source_element.css('width')) !== 0) {
-				$tagator_element.css({
-					width: $source_element.css('width')
-				});
-			}
+			// if (parseInt($source_element.css('width')) !== 0) {
+			// 	$tagator_element.css({
+			// 		width: $source_element.css('width')
+			// 	});
+			// }
 			if (self.settings.height === 'element') {
 				$tagator_element.css({
 					height: $source_element.outerHeight + 'px'

@@ -13,7 +13,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-{#            <h6 class="text-center">Product Code - <span id="static-product-code"></span></h6>#}
+            {#            <h6 class="text-center">Product Code - <span id="static-product-code"></span></h6>#}
             <!--Body-->
             <div class="modal-body mx-4">
                 <form id="edit-product-form">
@@ -60,7 +60,7 @@
                                 <div class="input-group-prepend">
                                     <label class="input-group-text" for="quantity-units">Quantity</label>
                                 </div>
-                                <input type="number" class="form-control" aria-label="quantity">
+                                <input type="number" class="form-control" aria-label="quantity" name="quantity">
                                 <div class="input-group-append">
                                     <select class="browser-default custom-select" id="quantity-units"
                                             name="quantity_unit">
@@ -75,7 +75,7 @@
                                 <div class="input-group-prepend">
                                     <label class="input-group-text" for="weight-units">Weight</label>
                                 </div>
-                                <input type="number" class="form-control" aria-label="weight">
+                                <input type="number" class="form-control" aria-label="weight" name="weight">
                                 <div class="input-group-append">
                                     <select class="browser-default custom-select" id="weight-units" name="weight_unit">
                                         {% for k,v in weight_unit %}
@@ -109,20 +109,28 @@
                                 <input type="date" class="form-control" aria-label="expiry"
                                        aria-describedby="basic-addon1" name="expiry_date" id="expiry_date">
                             </div>
-                            <div class="input-group mb-2">
+                            <div class="input-group mb-4">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Categories</span>
                                 </div>
-                                <select class="mdb-select pl-3 align-middle" id="product_categories" multiple
-                                        searchable="Search here.." name="category">
-                                    <option value="" disabled selected>Select Categories</option>
-                                    {% for k,v in categories %}
-                                        <option value="{{ k }}">{{ v }}</option>
-                                    {% endfor %}
-                                </select>
-                            <button type="button" class="btn btn-rounded btn-outline-elegant btn-sm ml-4 px-1"
-                            data-toggle="modal" data-target="#addCategoryPrompt">Add New Category</button>
+                                <input type="text" class="tagator form-control" aria-label="categories" name="category"
+                                       id="product_categories">
                             </div>
+{#                            <div class="input-group mb-2">#}
+{#                                <div class="input-group-prepend">#}
+{#                                    <span class="input-group-text">Categories</span>#}
+{#                                </div>#}
+{#                                <select class="mdb-select pl-3 align-middle" id="product_categories" multiple#}
+{#                                        searchable="Search here.." name="category">#}
+{#                                    <option value="" disabled selected>Select Categories</option>#}
+{#                                    {% for k,v in categories %}#}
+{#                                        <option value="{{ k }}">{{ v }}</option>#}
+{#                                    {% endfor %}#}
+{#                                </select>#}
+{#                                <button type="button" class="btn btn-rounded btn-outline-elegant btn-sm ml-4 px-1"#}
+{#                                        data-toggle="modal" data-target="#addCategoryPrompt">Add New Category#}
+{#                                </button>#}
+{#                            </div>#}
                             {#                            <a href="#" class="btn btn-sm btn-rounded ml-0">Add New Category</a>#}
                             <div class="input-group mt-3">
                                 <div class="input-group-prepend">

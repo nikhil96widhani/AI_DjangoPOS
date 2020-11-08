@@ -18,24 +18,23 @@ class ProductCategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     # category = serializers.SerializerMethodField()
-    quantity = serializers.SerializerMethodField()
-    weight = serializers.SerializerMethodField()
+    # quantity = serializers.SerializerMethodField()
+    # weight = serializers.SerializerMethodField()
 
     # def get_category(self, product):
     #     return ', '.join([str(cat) for cat in product.category.all()])
 
-    @staticmethod
-    def get_quantity(product):
-        if product.quantity_unit is not None:
-            return f'{product.quantity} {product.quantity_unit}'
-        return product.quantity
-
-    @staticmethod
-    def get_weight(product):
-        if product.weight is not None:
-            return f'{product.weight} {product.weight_unit}'
-        return product.weight
-
+    # @staticmethod
+    # def get_quantity(product):
+    #     if product.quantity_unit is not None:
+    #         return f'{product.quantity} {product.quantity_unit}'
+    #     return product.quantity
+    #
+    # @staticmethod
+    # def get_weight(product):
+    #     if product.weight is not None:
+    #         return f'{product.weight} {product.weight_unit}'
+    #     return product.weight
 
     class Meta:
         model = Product
