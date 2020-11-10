@@ -145,14 +145,17 @@ function loadTable(product_code, response) {
         //on return, add here
         var len_cart = document.getElementById('datatable-ajax').getElementsByTagName('tr').length
         console.log(response, len_cart)
-        var check_order_empty_html = `<div class="alert alert-primary" role="alert">No products in the cart. Start by adding some products!</div>`;
+        var check_order_empty_html = `<div class="alert alert-primary text-center" role="alert">No products in the cart. Start by adding some products!</div>`;
         if (response != null){
             if (response.response_type === "completed"){
-                check_order_empty_html = `<div class="alert alert-primary" role="alert">${response.response_text} <i class="fas fa-long-arrow-alt-down"></i></div>`
+                check_order_empty_html = `<div class="alert alert-primary text-center" role="alert">${response.response_text} <i class="fas fa-long-arrow-alt-down"></i></div>`;
             }
             else if (response.response_type === "updated" && len_cart >= 1 ) {
-                check_order_empty_html = ``
+                check_order_empty_html = ``;
             }
+        }
+        else if (response == null && len_cart >= 1 ) {
+            check_order_empty_html = ``;
         }
         $('#check-order-empty').empty().append(check_order_empty_html);
 

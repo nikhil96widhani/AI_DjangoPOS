@@ -4,13 +4,17 @@
 
 {% block css %}
     <style>
-        tr.clicked{
-          animation: fadeOut 2s forwards;
+        tr.clicked {
+            animation: fadeOut 2s forwards;
         }
 
         @keyframes fadeOut {
-            0%   {background-color: dodgerblue;}
-            100% {background-color: white;}
+            0% {
+                background-color: dodgerblue;
+            }
+            100% {
+                background-color: white;
+            }
         }
     </style>
     <link rel="stylesheet" href="{% static 'css/pos-style.css' %}">
@@ -40,7 +44,7 @@
 
                         <!-- Card Title -->
                         <div class="view view-cascade gradient-card-header blue-gradient lighten-1">
-                            <h4 class="h4-responsive mb-0 font-weight-bold">POS - SALE</h4>
+                            <h4 class="h4 mb-0 font-white">POS - SALE</h4>
                         </div>
                         <!-- Card Title -->
 
@@ -60,7 +64,8 @@
                                             <label for="AllProductList">All Products</label>
                                         </div>
                                         <br>
-                                        <ul class="list-group list-group-flush overflow-auto my-custom-scrollbar-product-list" id="AllProductListLi">
+                                        <ul class="list-group list-group-flush overflow-auto my-custom-scrollbar-product-list"
+                                            id="AllProductListLi">
                                             {% for p in all_products %}
                                                 <li class="list-group-item">
                                                     <div class="row pt-2 ">
@@ -116,11 +121,11 @@
                     <!-- Grid column -->
 
                     <!-- Grid column -->
-                    <div class="col-xl-8 col-md-12 mb-4">
+                    <div class="col-xl-8 col-md-12">
 
                         <!-- Card image -->
-                        <div class="view view-cascade gradient-card-header white">
-                            <h5 class="text-black-50"> CART </h5>
+                        <div class="view view-cascade card-header white">
+                            <h5 class="text-center"> CART </h5>
                             <!-- Shopping Cart table -->
                             <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar-cart">
 
@@ -156,7 +161,7 @@
                                     <!-- Table body -->
 
                                 </table>
-<div id="check-order-empty"></div>
+                                <div id="check-order-empty"></div>
                             </div>
                             <!-- Shopping Cart table -->
 
@@ -173,75 +178,71 @@
                                     <div class="step-new-content">
 
 
-<div class="row">
-    <div class="col-sm-4">
-        <h4 class="mt-2 ml-3 text-center" id="cart_details"></h4>
-    </div>
-    <div class="col-sm-3">
-        <!-- Money Received -->
-        <!-- Material input -->
-        <div class="input-group input-group-sm mb-3 mt-2">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="CashReceived">- ₹</span>
-            </div>
-            <input id="CashReceivedValue" type="number" class="form-control"
-                   aria-label="Small"
-                   aria-describedby="CashReceived" min="0" max="10000000"
-                   onkeyup="CalculateRefund(value)">
-        </div>
-        <small id="emailHelp" class="form-text text-muted">Cash received</small>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <h4 class="mt-2 ml-3 text-center" id="cart_details"></h4>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <!-- Money Received -->
+                                                <!-- Material input -->
+                                                <div class="input-group input-group-sm mb-3 mt-2">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="CashReceived">- ₹</span>
+                                                    </div>
+                                                    <input id="CashReceivedValue" type="number" class="form-control"
+                                                           aria-label="Small"
+                                                           aria-describedby="CashReceived" min="0" max="10000000"
+                                                           onkeyup="CalculateRefund(value)">
+                                                </div>
+                                                <small id="emailHelp" class="form-text text-muted">Cash received</small>
 
 
-    </div>
-    <div class="col-sm-2">
-                    <!-- REFUND AMOUNT -->
-        <h5 class="text-center font-weight-bold mt-2"
-                                                      id="RefundAmount"></h5>
-</div>
-    <div class="col-sm-3 text-center">
-<button class="waves-effect waves-dark btn btn-md btn-primary next-step btn-rounded update-cart"
-                                                    onclick="updateUserOrder(1, 'complete')"
-                                                    data-feedback="someFunction21">COMPLETE ORDER
-                                            </button>
-    </div>
-  </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <!-- REFUND AMOUNT -->
+                                                <h5 class="text-center font-weight-bold mt-2"
+                                                    id="RefundAmount"></h5>
+                                            </div>
+                                            <div class="col-sm-3 text-center">
+                                                <button class="waves-effect waves-dark btn btn-md btn-primary next-step btn-rounded update-cart"
+                                                        onclick="updateUserOrder(1, 'complete')"
+                                                        data-feedback="someFunction21">COMPLETE ORDER
+                                                </button>
+                                            </div>
+                                        </div>
 
 
-
-
-
-
-{#                                        <div class="row">#}
-{#                                            <div class="col-sm">#}
-{#                                                <h4 class="mt-1 ml-3 text-center" id="cart_details">#}
-{#                                                </h4>#}
-{#                                            </div>#}
-{#                                            <div class="col-sm">#}
-{#                                                <!-- Money Received -->#}
-{#                                                <!-- Material input -->#}
-{#                                                <div class="input-group input-group-sm mb-3">#}
-{#                                                    <div class="input-group-prepend">#}
-{#                                                        <span class="input-group-text" id="CashReceived">- ₹</span>#}
-{#                                                    </div>#}
-{#                                                    <input id="CashReceivedValue" type="number" class="form-control"#}
-{#                                                           aria-label="Small"#}
-{#                                                           aria-describedby="CashReceived" min="0" max="10000000"#}
-{#                                                           onkeyup="CalculateRefund(value)">#}
-{#                                                </div>#}
-{##}
-{#                                                <small id="emailHelp" class="form-text text-muted">Cash received</small>#}
-{#                                            </div>#}
-{#                                            <div class="col-sm text-center">#}
-{#                                                <span class="h5 text-center font-weight-bold mt-2"#}
-{#                                                      id="RefundAmount"></span>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                        <div class="step-actions">#}
-{#                                            <button class="waves-effect waves-dark btn btn-primary next-step btn-rounded update-cart"#}
-{#                                                    onclick="updateUserOrder(1, 'complete')"#}
-{#                                                    data-feedback="someFunction21">COMPLETE ORDER#}
-{#                                            </button>#}
-{#                                        </div>#}
+                                        {#                                        <div class="row">#}
+                                        {#                                            <div class="col-sm">#}
+                                        {#                                                <h4 class="mt-1 ml-3 text-center" id="cart_details">#}
+                                        {#                                                </h4>#}
+                                        {#                                            </div>#}
+                                        {#                                            <div class="col-sm">#}
+                                        {#                                                <!-- Money Received -->#}
+                                        {#                                                <!-- Material input -->#}
+                                        {#                                                <div class="input-group input-group-sm mb-3">#}
+                                        {#                                                    <div class="input-group-prepend">#}
+                                        {#                                                        <span class="input-group-text" id="CashReceived">- ₹</span>#}
+                                        {#                                                    </div>#}
+                                        {#                                                    <input id="CashReceivedValue" type="number" class="form-control"#}
+                                        {#                                                           aria-label="Small"#}
+                                        {#                                                           aria-describedby="CashReceived" min="0" max="10000000"#}
+                                        {#                                                           onkeyup="CalculateRefund(value)">#}
+                                        {#                                                </div>#}
+                                        {##}
+                                        {#                                                <small id="emailHelp" class="form-text text-muted">Cash received</small>#}
+                                        {#                                            </div>#}
+                                        {#                                            <div class="col-sm text-center">#}
+                                        {#                                                <span class="h5 text-center font-weight-bold mt-2"#}
+                                        {#                                                      id="RefundAmount"></span>#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
+                                        {#                                        <div class="step-actions">#}
+                                        {#                                            <button class="waves-effect waves-dark btn btn-primary next-step btn-rounded update-cart"#}
+                                        {#                                                    onclick="updateUserOrder(1, 'complete')"#}
+                                        {#                                                    data-feedback="someFunction21">COMPLETE ORDER#}
+                                        {#                                            </button>#}
+                                        {#                                        </div>#}
                                     </div>
                                 </li>
                                 <li class="step">
@@ -268,7 +269,7 @@
                                             <!-- Grid column -->
                                             <div class="col-sm-2 text-center">
                                                 <button type="button" class="btn btn-sm btn-success btn-md mt-1"
-                                                onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp Receipt
+                                                        onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp Receipt
                                                 </button>
                                             </div>
                                             <!-- SUBMIT COl-->
@@ -280,15 +281,15 @@
                                                 </a>
                                             </div>
                                             <div class="col-sm-4 text-center">
-{#                                                <div class="step-actions">#}
-                                            <button onClick="window.location.reload();"
-                                                    class="waves-effect waves-dark btn btn-md btn-rounded btn-primary"
-                                                    data-feedback="someFunction21">Finish
-                                            </button>
-                                            {#                                            <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">#}
-                                            {#                                                BACK#}
-                                            {#                                            </button>#}
-{#                                        </div>#}
+                                                {#                                                <div class="step-actions">#}
+                                                <button onClick="window.location.reload();"
+                                                        class="waves-effect waves-dark btn btn-md btn-rounded btn-primary"
+                                                        data-feedback="someFunction21">Finish
+                                                </button>
+                                                {#                                            <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">#}
+                                                {#                                                BACK#}
+                                                {#                                            </button>#}
+                                                {#                                        </div>#}
                                             </div>
                                             <!-- Print recipt col -->
                                             <!-- Default auto-sizing form -->
@@ -302,17 +303,17 @@
                                         </div>
                                     </div>
                                 </li>
-{#                                <li class="step">#}
-{#                                    <div class="step-title waves-effect waves-dark">Step 3</div>#}
-{#                                    <div class="step-new-content">#}
-{#                                        Finish!#}
-{#                                        <div class="step-actions">#}
-{#                                            <button class="waves-effect waves-dark btn-sm btn btn-primary m-0 mt-4"#}
-{#                                                    type="button">SUBMIT#}
-{#                                            </button>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </li>#}
+                                {#                                <li class="step">#}
+                                {#                                    <div class="step-title waves-effect waves-dark">Step 3</div>#}
+                                {#                                    <div class="step-new-content">#}
+                                {#                                        Finish!#}
+                                {#                                        <div class="step-actions">#}
+                                {#                                            <button class="waves-effect waves-dark btn-sm btn btn-primary m-0 mt-4"#}
+                                {#                                                    type="button">SUBMIT#}
+                                {#                                            </button>#}
+                                {#                                        </div>#}
+                                {#                                    </div>#}
+                                {#                                </li>#}
                             </ul>
 
                         </div>
