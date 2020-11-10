@@ -11,3 +11,7 @@ function getFormData($form) {
 
     return indexed_array;
 }
+
+function roundToTwoDecimal(num) {
+    return Math.round((num + Number.EPSILON) * 100) / 100
+}

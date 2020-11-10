@@ -114,7 +114,7 @@ class ProductCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.all().reverse()
+    queryset = Product.objects.all().order_by('modified_time').reverse()
     serializer_class = ProductSerializer
 
 
@@ -123,9 +123,10 @@ def add_product(request):
     if request.method == 'POST':
         product_serializer = ProductSerializer(data=request.data)
         for cat in request.data['category']:
-            category_object, created = ProductCategories.objects.get_or_create(name=cat)
-            if created:
-                print(f'Category - {cat} was added.')
+            if cat != "":
+                category_object, created = ProductCategories.objects.get_or_create(name=cat)
+                if created:
+                    print(f'Category - {cat} was added.')
         if product_serializer.is_valid():
             product_serializer.save()
             return Response(product_serializer.data, status=status.HTTP_201_CREATED)
@@ -146,9 +147,10 @@ def product_detail(request, pk):
     elif request.method == 'PUT':
         serializer = ProductSerializer(product, data=request.data)
         for cat in request.data['category']:
-            category_object, created = ProductCategories.objects.get_or_create(name=cat)
-            if created:
-                print(f'Category - {cat} was added.')
+            if cat != "":
+                category_object, created = ProductCategories.objects.get_or_create(name=cat)
+                if created:
+                    print(f'Category - {cat} was added.')
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
