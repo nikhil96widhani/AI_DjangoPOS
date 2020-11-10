@@ -5,15 +5,15 @@ const discount_percent_selector = $('#discount_percent')
 const mrp_selector = $('#mrp')
 const product_category_selector = $('#product_categories');
 
-function addProductDetails(form) {
+const addProductDetails = function (form) {
+    console.log('Add product started')
     const formData = getFormData($(form));
     formData["product_code"] = $('#product_code').val();
-    formData["category"] = product_category_selector.val().split(",");
-    if (formData["expiry_date"] === "") {
-        formData["expiry_date"] = null;
-    }
+    if (formData["category"] === null) {
+        formData["category"] = [];
+    } else formData["category"] = product_category_selector.val().split(",");
     console.log(formData);
-    let url = "/api/products/"
+    let url = "/api/add-product/"
 
     $.ajax(url, {
         method: 'POST',
@@ -21,15 +21,21 @@ function addProductDetails(form) {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        data: JSON.stringify(formData)
-    }).done(function () {
-        toastr.info('Product was successfully added.');
-        $('#add-product-form').trigger('reset');
-        $('#product_code').removeAttr('disabled');
-        product_category_selector.tagator('refresh');
-    }).fail(function () {
-        toastr.error('Product was not saved! Please try again.');
-    }).always(addCategoriesToInput(product_category_selector))
+        data: JSON.stringify(formData),
+        success: function (data) {
+            console.log(data);
+            toastr.info('Product was successfully added.');
+            $('#add-product-form').trigger('reset');
+            $('#product_code').removeAttr('disabled');
+            product_category_selector.tagator('refresh');
+        },
+        error: function () {
+            toastr.error('Product was not saved! Please try again.');
+        },
+        complete: function () {
+            addCategoriesToInput(product_category_selector);
+        }
+    });
 }
 
 function generateProductCode(checkbox) {
@@ -63,7 +69,10 @@ function addCategoriesToInput(input_selector) {
     });
 }
 
-async function postCategories(category_array) {
+
+const postCategories = function (category_array) {
+    const r = $.Deferred();
+    console.log('Category add started.')
     let url = "/api/product-categories/"
 
     $.each(category_array, function (i, category_name) {
@@ -80,7 +89,11 @@ async function postCategories(category_array) {
             toastr.error(`New Category (${category_name}) was not added! Please try again.`);
         })
     });
-}
+    setTimeout(function () {
+        r.resolve();
+    }, 100);
+    return r;
+};
 
 function loadProductsData() {
     const table = dataTable.DataTable({

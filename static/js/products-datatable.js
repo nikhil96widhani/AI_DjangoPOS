@@ -1,6 +1,6 @@
 $(document).ready(function () {
     loadProductsData();
-    // addCategoriesToInput(product_category_selector);
+    addCategoriesToInput(product_category_selector);
     // $('.mdb-select').materialSelect();
 });
 
