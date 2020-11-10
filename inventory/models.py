@@ -3,7 +3,6 @@ from accounts.models import User
 from .helpers import *
 from django.utils.timezone import now
 
-
 # Create your models here.
 
 Quantity_unit = (
@@ -57,19 +56,30 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
     category = models.ManyToManyField('ProductCategories', blank=True)
     rack_number = models.CharField(max_length=100, blank=True, null=True)
+    modified_time = models.DateTimeField(default=now, blank=True, null=True, editable=False)
 
     def save(self, *args, **kwargs):
+        # Sets discount price of product
         if self.discount_price is None:
             self.discount_price = self.mrp
-            super(Product, self).save(*args, **kwargs)
-        else:
-            self.discount_price = self.discount_price
-            super(Product, self).save(*args, **kwargs)
 
-    @property
-    def get_discount_percentage(self):
-        discount = (1 - self.discount_price / self.mrp) * 100
-        return discount
+        # # Discount percentage
+        if self.discount_percentage is None:
+            try:
+                discount = (1 - self.discount_price / self.mrp) * 100
+                discount = "{:.2f}".format(discount)
+            except:
+                discount = None
+            self.discount_percentage = discount
+
+        # Updates Modified time of the product
+        self.modified_time = now()
+
+        super(Product, self).save(*args, **kwargs)
+
+    # @property
+    # def somefunction(self):
+    #     return ''
 
     def __str__(self):
         return self.name
@@ -118,13 +128,18 @@ class Order(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
+    @property
+    def get_today_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total
     def __str__(self):
         return str(self.id)
 
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateField(auto_now_add=True)
     amount = models.FloatField(null=True, blank=True)

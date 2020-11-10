@@ -31,7 +31,13 @@
                     </div>
                 </div>
                 <div class="column right">
-                    <div class="numberCircle">{{ product.get_discount_percentage|floatformat:0 }}% OFF</div>
+                    <div class="numberCircle">
+                        {% if product.discount_percentage %}
+                            {{ product.discount_percentage|floatformat:0 }}% OFF
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 {#            <hr>#}
@@ -93,10 +99,9 @@
 
 
     <button id="btnPrint" class="hidden-print">Print</button>
-
     <script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>
     <script type="text/javascript">
-        JsBarcode("#barcode", {{ product.product_code }}, {
+        JsBarcode("#barcode", '{{ product.product_code }}', {
             format: "CODE128",
             font: "monospace",
             textPosition: "bottom",
@@ -116,7 +121,7 @@
     <script type="text/javascript">
         window.print();
         window.open('', '_parent', '');
-        window.close()
+        {#window.close()#}
     </script>
     </body>
     </html>
