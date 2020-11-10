@@ -1,0 +1,21 @@
+{% extends 'components/base-form-modal.html.html' %}
+
+{% block modal_id %}editProductModalForm{% endblock %}
+
+{% block modal-title %}Edit Product Details{% endblock %}
+
+{% block form_id %}edit-product-form{% endblock %}
+
+{% block form %}
+    {% with element_id='edit' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block product_code_wrapper %}
+    {% with addProduct=False %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock product_code_wrapper %}
+
+{% block submit-button-name %}Update{% endblock %}
