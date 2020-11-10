@@ -39,3 +39,10 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+
+class order_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        # depth = 1
+        fields = ('id', 'date_order', 'complete', 'get_cart_items_quantity', 'get_cart_total', 'get_cart_mrp_total')
