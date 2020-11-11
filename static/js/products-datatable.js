@@ -69,11 +69,19 @@ function addCategoriesToInput(input_selector) {
 }
 
 function loadProductsData() {
-    const table = dataTable.DataTable({
+    return dataTable.DataTable({
         'serverSide': true,
         'ajax': '/api/products/?format=datatables',
-        responsive: true,
+        "fnInitComplete": function () {
+            const myCustomScrollbar = document.querySelector('#products-datatable_wrapper .dataTables_scrollBody');
+            const ps = new PerfectScrollbar(myCustomScrollbar);
+        },
+        orderCellsTop: true,
+        fixedHeader: true,
+        // responsive: true,
+        "scrollX": true,
         keys: true,
+        lengthMenu: [[10, 50, 100, 500, 1000, -1], [10, 50, 100, 500, 1000, "All"]],
         order: [],
         dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -83,7 +91,7 @@ function loadProductsData() {
             'copy', 'excel', 'pdf', 'print'
         ],
         'columns': [
-            {'data': 'product_code'},
+            {'data': 'product_code',},
             {'data': 'name'},
             {'data': 'cost'},
             {'data': 'mrp'},
@@ -99,7 +107,7 @@ function loadProductsData() {
                             <a class=""><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${data}')"></i></a>`;
                 }
             }
-        ]
+        ],
     });
 }
 
@@ -185,7 +193,24 @@ function changeDiscountPrice(discount_price_selector, discount_percent_selector,
 
 /**************************Events**************************/
 $(document).ready(function () {
-    loadProductsData();
+    $('#products-datatable thead tr').clone(true).appendTo('#products-datatable thead');
+    $('#products-datatable thead tr:eq(1) th').each(function (i) {
+        const title = $(this).text();
+        $(this).html(`<input type="text" class="form-control form-control-sm mb-2"/>`);
+        if (i === 9) {
+            $(this).html("");
+        }
+        $('input', this).on('keyup change', function () {
+            if (table.column(i).search() !== this.value) {
+                if (i>=5 && i<=6 && this.value !== "") {
+                    table.column(i).search("^" + $(this).val() + "$", true, false, true).draw();
+                } else {
+                    table.column(i).search(this.value).draw();
+                }
+            }
+        });
+    });
+    const table = loadProductsData();
     addCategoriesToInput(common_product_category_selector)
 });
 
