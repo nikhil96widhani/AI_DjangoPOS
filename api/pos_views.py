@@ -114,7 +114,7 @@ class ProductCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.all().order_by('modified_time').reverse()
+    queryset = Product.objects.all().order_by('-modified_time')
     serializer_class = ProductSerializer
 
 
@@ -162,7 +162,8 @@ def product_detail(request, pk):
 
 
 class ProductCodeGeneratorView(APIView):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         unique_product_code = get_random_string(6, '0123456789')
         return Response({'unique_product_code': unique_product_code})
 
