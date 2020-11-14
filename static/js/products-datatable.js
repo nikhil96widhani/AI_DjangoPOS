@@ -76,9 +76,8 @@ function loadProductsData() {
             const myCustomScrollbar = document.querySelector('#products-datatable_wrapper .dataTables_scrollBody');
             const ps = new PerfectScrollbar(myCustomScrollbar);
         },
+        select: true,
         orderCellsTop: true,
-        fixedHeader: true,
-        // responsive: true,
         "scrollX": true,
         keys: true,
         lengthMenu: [[10, 50, 100, 500, 1000, -1], [10, 50, 100, 500, 1000, "All"]],
@@ -88,7 +87,7 @@ function loadProductsData() {
             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-2'><'col-sm-12 col-md-5'p>>" +
             "<'row'<'col text-right pt-2'B>>",
         buttons: [
-            'copy', 'excel', 'pdf', 'print'
+            'copy', 'excel', 'pdf', 'print', 'colvis'
         ],
         'columns': [
             {'data': 'product_code',},
@@ -96,8 +95,20 @@ function loadProductsData() {
             {'data': 'cost'},
             {'data': 'mrp'},
             {'data': 'discount_price'},
-            {'data': 'quantity'},
-            {'data': 'weight'},
+            {
+                'data': 'quantity', render: function (data, type, full) {
+                    if (data === null) return "";
+                    if (full['quantity_unit'] === null) return data;
+                    return data + " " + full['quantity_unit'];
+                }
+            },
+            {
+                'data': 'weight', render: function (data, type, full) {
+                    if (data === null) return "";
+                    if (full['weight_unit'] === null) return data;
+                    return data + " " + full['weight_unit'];
+                }
+            },
             {'data': 'company'},
             {'data': 'rack_number'},
             {
@@ -106,7 +117,9 @@ function loadProductsData() {
                             <a class="pr-3"><i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal" data-target="#editProductModalForm" onclick="editProductDetails('${data}')"></i></a>
                             <a class=""><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${data}')"></i></a>`;
                 }
-            }
+            },
+            {'data': 'quantity_unit', "visible": false},
+            {'data': 'weight_unit', "visible": false}
         ],
     });
 }
@@ -193,16 +206,16 @@ function changeDiscountPrice(discount_price_selector, discount_percent_selector,
 
 /**************************Events**************************/
 $(document).ready(function () {
-    $('#products-datatable thead tr').clone(true).appendTo('#products-datatable thead');
+    $('#products-datatable thead tr').clone(true).appendTo('#products-datatable thead').attr("id", "advance-search-bar").addClass("d-none");
     $('#products-datatable thead tr:eq(1) th').each(function (i) {
         const title = $(this).text();
-        $(this).html(`<input type="text" class="form-control form-control-sm mb-2"/>`);
+        $(this).html(`<input type="text" class="form-control form-control-sm my-2"/>`);
         if (i === 9) {
             $(this).html("");
         }
         $('input', this).on('keyup change', function () {
             if (table.column(i).search() !== this.value) {
-                if (i>=5 && i<=6 && this.value !== "") {
+                if (i >= 5 && i <= 6 && this.value !== "") {
                     table.column(i).search("^" + $(this).val() + "$", true, false, true).draw();
                 } else {
                     table.column(i).search(this.value).draw();
@@ -257,3 +270,7 @@ edit_discount_price_selector.on('input', function () {
 $('#edit_discount_percent, #edit_mrp').on('input', function () {
     changeDiscountPrice(edit_discount_price_selector, edit_discount_percent_selector, edit_mrp_selector)
 });
+
+$('#toggle-advance-search-button').click(function () {
+    $('#advance-search-bar').toggleClass('d-none');
+})
