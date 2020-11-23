@@ -10,6 +10,10 @@ from rest_framework.response import Response
 from inventory.models import Order
 
 
+def dashboard_view(request):
+    return render(request, 'reports/dashboard.html', {})
+
+
 def orders_view(request):
     return render(request, 'reports/orders.html', {})
 
