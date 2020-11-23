@@ -54,12 +54,17 @@ class OrdersView(APIView):
             orders = Order.objects.filter(complete=True)
 
         elif request.GET.get("all_orders") == 'False' and request.GET.get("date1") and request.GET.get("date2"):
-            date1 = timezone.datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
-            date2 = timezone.datetime.strptime(request.GET.get("date2"), '%Y-%m-%d')
-            orders = Order.objects.filter(
-                date_order__range=[date1.replace(hour=0, minute=0, second=0),
-                                   date2.replace(hour=0, minute=0, second=0)
-                                   ], complete=True)
+            if request.GET.get("date1") == request.GET.get("date2"):
+                date1 = timezone.datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
+                orders = Order.objects.filter(date_order__year=date1.year, date_order__day=date1.day,
+                                              date_order__month=date1.month, complete=True)
+            else:
+                date1 = timezone.datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
+                date2 = timezone.datetime.strptime(request.GET.get("date2"), '%Y-%m-%d')
+                orders = Order.objects.filter(
+                    date_order__range=[date1.replace(hour=0, minute=0, second=0),
+                                       date2.replace(hour=0, minute=0, second=0)
+                                       ], complete=True)
 
         elif request.GET.get("all_orders") == 'False' and request.GET.get("date1"):
             date1 = timezone.datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
