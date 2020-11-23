@@ -128,11 +128,17 @@ class Order(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
+    # @property
+    # def get_today_total(self):
+    #     orderitems = self.orderitem_set.all()
+    #     total = sum([item.quantity for item in orderitems])
+    #     return total
+
+    # REVENUE is sales price - purchase profit and PROFIT is revenue - expenses
     @property
-    def get_today_total(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.quantity for item in orderitems])
-        return total
+    def get_cart_revenue(self):
+        revenue = self.get_cart_total - self.get_cart_cost_total
+        return revenue
 
     def __str__(self):
         return str(self.id)
