@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load rest_framework %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+{% endblock %}
+
+{% block page-title %}
+    <i class="fas fa-angle-right align-middle fa-xs"></i> Dashboard
+{% endblock %}
+
+
+
+{% block content %}
+
+    <nav class="navbar justify-content-between">
+      <a class="navbar-brand text-dark " href="#">Dashboard</a>
+      <div class="form-inline my-1">
+        <div id="reportrange" style="background: #fff; cursor: pointer;
+                {#padding: 5px 10px;#}
+                {#border: 1px solid #ccc; #}
+                width: 100%">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span></span> <i class="fa fa-caret-down"></i>
+        </div>
+
+      </div>
+    </nav>
+
+
+
+     <!--Grid row-->
+        <div class="row pt-3">
+
+          <!--Grid column-->
+          <div class="col-md-3 col-sm-12 mb-4">
+
+            <!-- Card -->
+            <div class="card">
+
+              <div class="card-body">
+
+                <p class="text-uppercase small mb-2"><strong>Items Sold</strong></p>
+                <h5 class="font-weight-bold mb-0">
+                  14 567
+                  <small class="text-success ml-2">
+                    <i class="fas fa-arrow-up fa-sm pr-1"></i>13,48%</small>
+                </h5>
+
+                <hr>
+
+                <p class="text-uppercase text-muted small mb-2"><strong>Previous period</strong></p>
+                <h5 class="font-weight-bold text-muted mb-0">
+                  11 467
+                </h5>
+
+              </div>
+
+            </div>
+            <!-- Card -->
+
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-md-3 col-sm-12 mb-4">
+
+            <!-- Card -->
+            <div class="card">
+
+              <div class="card-body">
+
+                <p class="text-uppercase small mb-2"><strong>Today's Sale</strong></p>
+                <h5 class="font-weight-bold mb-0">
+                  51 354
+                  <small class="text-success ml-2">
+                    <i class="fas fa-arrow-up fa-sm pr-1"></i>23,58%</small>
+                </h5>
+
+                <hr>
+
+                <p class="text-uppercase text-muted small mb-2"><strong>Previous period</strong></p>
+                <h5 class="font-weight-bold text-muted mb-0">
+                  38 454
+                </h5>
+
+              </div>
+
+            </div>
+            <!-- Card -->
+
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-md-3 col-sm-12 mb-4">
+
+            <!-- Card -->
+            <div class="card">
+
+              <div class="card-body">
+
+                <p class="text-uppercase small mb-2"><strong>Today's Revenue</strong></p>
+                <h5 class="font-weight-bold mb-0">
+                  00:04:20
+                  <small class="text-danger ml-2">
+                    <i class="fas fa-arrow-down fa-sm pr-1"></i>23,58%</small>
+                </h5>
+
+                <hr>
+
+                <p class="text-uppercase text-muted small mb-2"><strong>Previous period</strong></p>
+                <h5 class="font-weight-bold text-muted mb-0">
+                  00:05:20
+                </h5>
+
+              </div>
+
+            </div>
+            <!-- Card -->
+
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-md-3 col-sm-12 mb-4">
+
+            <!-- Card -->
+            <div class="card">
+
+              <div class="card-body">
+
+                <p class="text-uppercase small mb-2"><strong>Something useful</strong></p>
+                <h5 class="font-weight-bold mb-0">
+                  32.35%
+                  <small class="text-danger ml-2">
+                    <i class="fas fa-arrow-down fa-sm pr-1"></i>23,58%</small>
+                </h5>
+
+                <hr>
+
+                <p class="text-uppercase text-muted small mb-2"><strong>Previous period</strong></p>
+                <h5 class="font-weight-bold text-muted mb-0">
+                  24.35%
+                </h5>
+
+              </div>
+
+            </div>
+            <!-- Card -->
+
+          </div>
+          <!--Grid column-->
+
+        </div>
+        <!--Grid row-->
+
+
+     <div class="card mt-3">
+        <div class="card-body">
+
+
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/daterangepicker.js' %}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+{% endblock %}

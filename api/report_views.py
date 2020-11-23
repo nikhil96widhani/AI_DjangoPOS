@@ -13,6 +13,8 @@ def summary_orders(orders):
         'total_items': 0,
         'total_amount': 0,
         'total_mrp': 0,
+        'total_cost': 0,
+        'total_revenue': 0,
     }
 
     for order in orders:
@@ -20,6 +22,8 @@ def summary_orders(orders):
             total_items=orders_summary['total_items'] + order.get_cart_items_quantity,
             total_amount=orders_summary['total_amount'] + order.get_cart_total,
             total_mrp=orders_summary['total_amount'] + order.get_cart_mrp_total,
+            total_cost=orders_summary['total_cost'] + order.get_cart_cost_total,
+            total_revenue=orders_summary['total_revenue'] + order.get_cart_revenue,
         )
 
     return orders_summary
