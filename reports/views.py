@@ -18,6 +18,10 @@ def orders_view(request):
     return render(request, 'reports/orders.html', {})
 
 
+def orders_datatable_view(request):
+    return render(request, 'reports/orders-datatable.html', {})
+
+
 @api_view(['GET'])
 def daily_stats(request):
     date = datetime.today().strftime('%Y-%m-%d')

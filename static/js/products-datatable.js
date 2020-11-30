@@ -92,9 +92,9 @@ function loadProductsData() {
         'columns': [
             {'data': 'product_code',},
             {'data': 'name'},
-            {'data': 'cost'},
-            {'data': 'mrp'},
-            {'data': 'discount_price'},
+            {'data': 'cost', render: attachRupeeSymbol},
+            {'data': 'mrp', render: attachRupeeSymbol},
+            {'data': 'discount_price', render: attachRupeeSymbol},
             {
                 'data': 'quantity', render: function (data, type, full) {
                     if (data === null) return "";
@@ -206,12 +206,12 @@ function changeDiscountPrice(discount_price_selector, discount_percent_selector,
 
 /**************************Events**************************/
 $(document).ready(function () {
-    $('#products-datatable thead tr').clone(true).appendTo('#products-datatable thead').attr("id", "advance-search-bar").addClass("d-none");
+    $('#products-datatable thead tr').clone(true).appendTo('#products-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2");
     $('#products-datatable thead tr:eq(1) th').each(function (i) {
         const title = $(this).text();
-        $(this).html(`<input type="text" class="form-control form-control-sm my-2"/>`);
+        $(this).html(`<input type="text" class="form-control form-control-sm"/>`);
         if (i === 9) {
-            $(this).html("");
+            $(this).html('<span class="form-control form-control-sm text-center border-0"><i class="fa fa-search" aria-hidden="true"></i></span>');
         }
         $('input', this).on('keyup change', function () {
             if (table.column(i).search() !== this.value) {
@@ -271,6 +271,11 @@ $('#edit_discount_percent, #edit_mrp').on('input', function () {
     changeDiscountPrice(edit_discount_price_selector, edit_discount_percent_selector, edit_mrp_selector)
 });
 
-$('#toggle-advance-search-button').click(function () {
-    $('#advance-search-bar').toggleClass('d-none');
-})
+$('#toggle-advance-search-button').change(function () {
+    if (this.checked) {
+        $('#advance-search-bar').removeClass('d-none');
+    }
+    else{
+        $('#advance-search-bar').addClass('d-none');
+    }
+});

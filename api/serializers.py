@@ -17,25 +17,6 @@ class ProductCategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    # category = serializers.SerializerMethodField()
-    # quantity = serializers.SerializerMethodField()
-    # weight = serializers.SerializerMethodField()
-
-    # def get_category(self, product):
-    #     return ', '.join([str(cat) for cat in product.category.all()])
-
-    # @staticmethod
-    # def get_quantity(product):
-    #     if product.quantity_unit is not None:
-    #         return f'{product.quantity} {product.quantity_unit}'
-    #     return product.quantity
-    #
-    # @staticmethod
-    # def get_weight(product):
-    #     if product.weight is not None:
-    #         return f'{product.weight} {product.weight_unit}'
-    #     return product.weight
-
     class Meta:
         model = Product
         fields = '__all__'
@@ -47,3 +28,10 @@ class order_serializer(serializers.ModelSerializer):
         # depth = 1
         fields = ('id', 'date_order', 'complete', 'get_cart_items_quantity', 'get_cart_cost_total',
                   'get_cart_total', 'get_cart_mrp_total', 'get_cart_revenue')
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        depth = 1
+        fields = '__all__'
