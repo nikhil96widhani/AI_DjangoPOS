@@ -10,6 +10,7 @@ from inventory.models import *
 from django.utils import timezone
 from django.db.models import Sum
 import json
+from dateutil import parser
 
 from .serializers import order_serializer
 
@@ -47,7 +48,7 @@ class OrdersView(APIView):
             - if True (returns all orders if True and ignores all other arguments)
 
             - if False
-                4. date1: Start Date, format Y-M-D                                                  //REQUIRED
+                4. date1: Start Date, format Y-M-D or with time eg: 2020-11-05T23:29              //REQUIRED
                 5. date2: End Date, format Y-M-D
                             (can be used as range from date1-2
                             if date 2 is empty all records after 1 will be sent)
@@ -61,24 +62,23 @@ class OrdersView(APIView):
 
         elif request.GET.get("all_orders") == 'False' and request.GET.get("date1") and request.GET.get("date2"):
             if request.GET.get("date1") == request.GET.get("date2"):
-                date1 = timezone.datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
+                date1 = parser.parse(request.GET.get("date1"))
                 orders = Order.objects.filter(date_order__year=date1.year, date_order__day=date1.day,
                                               date_order__month=date1.month, complete=True)
             else:
-                date1 = timezone.datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
-                date2 = timezone.datetime.strptime(request.GET.get("date2"), '%Y-%m-%d')
+                date1 = parser.parse(request.GET.get("date1"))
+                date2 = parser.parse(request.GET.get("date2"))
+                print(date1, date2)
                 orders = Order.objects.filter(
-                    date_order__range=[date1.replace(hour=0, minute=0, second=0),
-                                       date2.replace(hour=0, minute=0, second=0)
-                                       ], complete=True)
+                    date_order__range=[date1, date2], complete=True)
 
         elif request.GET.get("all_orders") == 'False' and request.GET.get("date1"):
-            date1 = timezone.datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
+            date1 = parser.parse(request.GET.get("date1"))
             orders = Order.objects.filter(
-                date_order__gt=date1.replace(hour=0, minute=0, second=0), complete=True)
+                date_order__gt=date1, complete=True)
 
         else:
-            orders = Order.objects.filter(date_order__gt=now().replace(hour=0, minute=0, second=0), complete=True)
+            orders = Order.objects.filter(date_order__gt=now(), complete=True)
 
         # Form Data to return
         orders_serialized = order_serializer(orders, many=True)
