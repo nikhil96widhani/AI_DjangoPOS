@@ -4,10 +4,6 @@ const common_product_category_selector = $('.product_categories');
 const edit_product_category_selector = $('#edit_product_categories');
 const add_product_category_selector = $('#add_product_categories');
 
-function attachRupeeSymbol(data) {
-    return "₹" + data;
-}
-
 const addProductDetails = function (form) {
     const formData = getFormData($(form));
     formData["product_code"] = $('#product_code').val();

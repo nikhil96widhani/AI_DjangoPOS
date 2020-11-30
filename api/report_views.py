@@ -1,11 +1,17 @@
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import generics, status
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from inventory.models import Order
 from .serializers import *
 from inventory.models import *
 from django.utils import timezone
 from django.db.models import Sum
 import json
+
+from .serializers import order_serializer
 
 
 def summary_orders(orders):
@@ -91,3 +97,32 @@ class OrdersView(APIView):
     # @staticmethod
     # def post(request):
     #     return Response({"request": request.GET.get("damn")})
+
+
+@api_view(['GET', 'DELETE'])
+def order_detail(request, pk):
+    try:
+        order = Order.objects.get(pk=pk)
+    except Order.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = order_serializer(order)
+        return Response(serializer.data)
+
+    elif request.method == 'DELETE':
+        order.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class OrdersListView(generics.ListAPIView):
+    queryset = Order.objects.filter(complete=True).order_by('-date_order')
+    serializer_class = order_serializer
+
+
+class OrderItemsView(APIView):
+    @staticmethod
+    def get(request):
+        order_items = OrderItem.objects.filter(order=request.GET.get("order_id"))
+        order_item_serializer = OrderItemSerializer(order_items, many=True)
+        return Response({'order_items': order_item_serializer.data})

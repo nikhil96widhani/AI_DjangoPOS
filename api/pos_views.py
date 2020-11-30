@@ -1,18 +1,12 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render
 from django.utils.crypto import get_random_string
-from django.views.generic import View
 from rest_framework.decorators import api_view
-from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions, generics, status
+from rest_framework import generics, status
 from .serializers import *
-from django.db.models import Q
 
-from accounts.models import User
 from inventory.models import *
 
 

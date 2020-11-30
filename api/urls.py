@@ -1,6 +1,7 @@
 from django.urls import path
 from .pos_views import *
 from .report_views import *
+from .report_views import OrdersListView
 
 urlpatterns = [
     path('cart/', Cart.as_view(), name='cart'),
@@ -12,4 +13,7 @@ urlpatterns = [
     path('product-code-generator/', ProductCodeGeneratorView.as_view(), name='product-code-generator'),
     path('search-products/', search_products, name='search-products'),
     path('orders/', OrdersView.as_view(), name='api-orders'),
+    path('orders/<int:pk>/', order_detail, name='api-order-detail'),
+    path('orders-datatable/', OrdersListView.as_view(), name='api-orders-datatable'),
+    path('order-items/', OrderItemsView.as_view(), name='api-orders-items'),
 ]
