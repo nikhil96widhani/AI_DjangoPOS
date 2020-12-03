@@ -102,7 +102,7 @@ function loadOrdersData() {
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
                     return `<a class="pr-3"><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" onclick="deleteOrderConfirmation('${data}')"></i></a>
-                            <a class="" href="/pos/product-label/${data}"><i class="fa fa-print" aria-hidden="true"></i></a>`;
+                            <a class="" href="/pos/receipt/${data}"><i class="fa fa-print" aria-hidden="true"></i></a>`;
                 }
             },
         ],
