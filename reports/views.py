@@ -32,8 +32,8 @@ def daily_stats(request):
         total_cost = 0
         for x in completed_orders:
             total_quantity += x.get_cart_items_quantity
-            total_revenue += x.get_cart_total
-            total_cost += x.get_cart_cost_total
+            total_revenue += x.get_cart_revenue
+            total_cost += x.get_cart_cost
         total_profit = total_revenue - total_cost
         return Response({'date': date, 'quantity': total_quantity, 'revenue': total_revenue, 'cost': total_cost,
                          'profit': total_profit, 'orders': len(completed_orders)})

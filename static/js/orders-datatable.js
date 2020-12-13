@@ -38,7 +38,7 @@ function loadOrderDetails(order_id, selector) {
                           <td>${attachRupeeSymbol(value.product.cost)}</td>
                           <td>${attachRupeeSymbol(value.product.mrp)}</td>
                           <td>${attachRupeeSymbol(value.product.discount_price)}</td>
-                          <td>${attachRupeeSymbol(value.product.cost - value.product.discount_price)}</td>
+                          <td>${attachRupeeSymbol(value.product.discount_price - value.product.cost)}</td>
                         </tr>`;
                 count++;
             })
@@ -95,10 +95,10 @@ function loadOrdersData() {
                 }
             },
             {'data': 'get_cart_items_quantity'},
-            {'data': 'get_cart_cost_total', render: attachRupeeSymbol},
-            {'data': 'get_cart_mrp_total', render: attachRupeeSymbol},
-            {'data': 'get_cart_total', render: attachRupeeSymbol},
+            {'data': 'get_cart_cost', render: attachRupeeSymbol},
+            {'data': 'get_cart_mrp', render: attachRupeeSymbol},
             {'data': 'get_cart_revenue', render: attachRupeeSymbol},
+            {'data': 'get_cart_profit', render: attachRupeeSymbol},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
                     return `<a class="pr-3"><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" onclick="deleteOrderConfirmation('${data}')"></i></a>
