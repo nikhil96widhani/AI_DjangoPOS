@@ -8,6 +8,7 @@ $(function() {
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
         console.log("date is" , start.format('Y-M-D'), end.format('Y-M-D'));
         UpdateStats(start.format('Y-M-D'), end.format('Y-M-D'))
+        toggleChartCard(start.format('Y-M-D'), end.format('Y-M-D'));
     }
 
     $('#reportrange').daterangepicker({
@@ -49,11 +50,11 @@ function UpdateStatsCards (response){
             "                  <small class=\"text-success ml-2\">" +
             "                    <i class=\"fas fa-arrow-up fa-sm pr-1\"></i>13,4%</small>";
 1
-        document.getElementById("sold_item_amount").innerHTML = response.orders_summary.total_amount +
+        document.getElementById("sold_item_revenue").innerHTML = response.orders_summary.total_revenue +
             "                  <small class=\"text-success ml-2\">" +
             "                    <i class=\"fas fa-arrow-up fa-sm pr-1\"></i>13,4%</small>";
 
-        document.getElementById("sold_item_revenue").innerHTML = response.orders_summary.total_revenue +
+        document.getElementById("sold_item_profit").innerHTML = response.orders_summary.total_profit +
             "                  <small class=\"text-danger ml-2\">" +
             "                    <i class=\"fas fa-arrow-down fa-sm pr-1\"></i>13,4%</small>";
 

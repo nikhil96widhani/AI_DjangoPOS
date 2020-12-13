@@ -26,8 +26,8 @@ class order_serializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         # depth = 1
-        fields = ('id', 'date_order', 'complete', 'get_cart_items_quantity', 'get_cart_cost_total',
-                  'get_cart_total', 'get_cart_mrp_total', 'get_cart_revenue')
+        fields = ('id', 'date_order', 'complete', 'get_cart_items_quantity', 'get_cart_cost',
+                  'get_cart_revenue', 'get_cart_mrp', 'get_cart_profit')
 
 
 class OrderItemSerializer(serializers.ModelSerializer):

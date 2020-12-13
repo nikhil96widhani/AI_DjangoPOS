@@ -105,27 +105,27 @@ class Order(models.Model):
     #     super(Order, self).save(*args, **kwargs)
 
     @property
-    def get_cart_total(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.get_total for item in orderitems])
-        return total
+    def get_cart_revenue(self):
+        order_items = self.orderitem_set.all()
+        revenue_total = sum([item.get_revenue for item in order_items])
+        return revenue_total
 
     @property
-    def get_cart_cost_total(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.get_cost_total for item in orderitems])
-        return total
+    def get_cart_cost(self):
+        order_items = self.orderitem_set.all()
+        cost_total = sum([item.get_cost for item in order_items])
+        return cost_total
 
     @property
-    def get_cart_mrp_total(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.get_mrp_total for item in orderitems])
-        return total
+    def get_cart_mrp(self):
+        order_items = self.orderitem_set.all()
+        mrp_total = sum([item.get_mrp for item in order_items])
+        return mrp_total
 
     @property
     def get_cart_items_quantity(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.quantity for item in orderitems])
+        order_items = self.orderitem_set.all()
+        total = sum([item.quantity for item in order_items])
         return total
 
     # @property
@@ -134,11 +134,11 @@ class Order(models.Model):
     #     total = sum([item.quantity for item in orderitems])
     #     return total
 
-    # REVENUE is sales price - purchase profit and PROFIT is revenue - expenses
+    # REVENUE is sales price and PROFIT is sales price - cost price
     @property
-    def get_cart_revenue(self):
-        revenue = self.get_cart_total - self.get_cart_cost_total
-        return revenue
+    def get_cart_profit(self):
+        profit_total = self.get_cart_revenue - self.get_cart_cost
+        return profit_total
 
     def __str__(self):
         return str(self.id)
@@ -163,17 +163,17 @@ class OrderItem(models.Model):
             super(OrderItem, self).save(*args, **kwargs)
 
     @property
-    def get_total(self):
+    def get_revenue(self):
         total = self.quantity * self.product.discount_price
         return total
 
     @property
-    def get_cost_total(self):
+    def get_cost(self):
         total = self.quantity * self.product.cost
         return total
 
     @property
-    def get_mrp_total(self):
+    def get_mrp(self):
         total = self.quantity * self.product.mrp
         return total
 

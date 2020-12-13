@@ -16,4 +16,5 @@ urlpatterns = [
     path('orders/<int:pk>/', order_detail, name='api-order-detail'),
     path('orders-datatable/', OrdersListView.as_view(), name='api-orders-datatable'),
     path('order-items/', OrderItemsView.as_view(), name='api-orders-items'),
+    path('orders-chart-data/', OrdersChartDataView.as_view(), name='api-orders-chart-data'),
 ]

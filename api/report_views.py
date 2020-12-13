@@ -1,3 +1,5 @@
+from datetime import timedelta, datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
@@ -18,22 +20,30 @@ from .serializers import order_serializer
 def summary_orders(orders):
     orders_summary = {
         'total_items': 0,
-        'total_amount': 0,
+        'total_revenue': 0,
         'total_mrp': 0,
         'total_cost': 0,
-        'total_revenue': 0,
+        'total_profit': 0,
     }
 
     for order in orders:
         orders_summary.update(
             total_items=orders_summary['total_items'] + order.get_cart_items_quantity,
-            total_amount=orders_summary['total_amount'] + order.get_cart_total,
-            total_mrp=orders_summary['total_amount'] + order.get_cart_mrp_total,
-            total_cost=orders_summary['total_cost'] + order.get_cart_cost_total,
             total_revenue=orders_summary['total_revenue'] + order.get_cart_revenue,
+            total_mrp=orders_summary['total_mrp'] + order.get_cart_mrp,
+            total_cost=orders_summary['total_cost'] + order.get_cart_cost,
+            total_profit=orders_summary['total_profit'] + order.get_cart_profit,
         )
 
     return orders_summary
+
+
+def dateRange(start_date, end_date, inclusive=False):
+    iteration_range = int((end_date - start_date).days)
+    if inclusive is True:
+        iteration_range += 1
+    for n in range(iteration_range):
+        yield start_date + timedelta(n)
 
 
 class OrdersView(APIView):
@@ -126,3 +136,19 @@ class OrderItemsView(APIView):
         order_items = OrderItem.objects.filter(order=request.GET.get("order_id"))
         order_item_serializer = OrderItemSerializer(order_items, many=True)
         return Response({'order_items': order_item_serializer.data})
+
+
+class OrdersChartDataView(APIView):
+    @staticmethod
+    def get(request):
+        if request.GET.get("date1") and request.GET.get("date2"):
+            dates, revenue, profit = [], [], []
+            for date in dateRange(datetime.strptime(request.GET.get("date1"), '%Y-%m-%d'),
+                                  datetime.strptime(request.GET.get("date2"), '%Y-%m-%d'),
+                                  inclusive=True):
+                orders = Order.objects.filter(date_order__year=date.year, date_order__day=date.day,
+                                              date_order__month=date.month, complete=True)
+                order_summary = summary_orders(orders)
+                dates.append(date), revenue.append(round(order_summary['total_revenue'], 2))
+                profit.append(round(order_summary['total_profit'], 2))
+            return Response({'dates': dates, 'revenue': revenue, 'profit': profit})
