@@ -16,7 +16,6 @@ from dateutil import parser
 
 from .serializers import order_serializer
 
-
 def summary_orders(orders):
     orders_summary = {
         'total_items': 0,
