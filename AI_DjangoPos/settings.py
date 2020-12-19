@@ -26,6 +26,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -132,12 +133,13 @@ REST_FRAMEWORK = {
 #
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
+# For Docker prod uncomment this line
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
-
 # Account MODEL
 # Property for the custom user model. <app.model>
 LOGIN_REDIRECT_URL = 'user-redirect'
