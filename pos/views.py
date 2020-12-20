@@ -29,7 +29,7 @@ def pos_homeView(request):
 
 def receiptView(request, pk):
     try:
-        order = Order.objects.get(pk=pk, complete=True)
+        order = Order.objects.get(pk=pk)
         cart_items = order.orderitem_set.all()
         context = {
             'order': order,
