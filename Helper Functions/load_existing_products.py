@@ -47,3 +47,4 @@ for index, row in df.iterrows():
         print('done{}'.format(index))
     except:
         error_items.append(row['code'])
+

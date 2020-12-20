@@ -146,9 +146,11 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
+    product_name = models.CharField(max_length=100, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateField(auto_now_add=True)
+    cost = models.FloatField(null=True, blank=True)
     mrp = models.FloatField(null=True, blank=True)
     discount_price = models.FloatField(null=True, blank=True)
     amount = models.FloatField(null=True, blank=True)
@@ -156,6 +158,8 @@ class OrderItem(models.Model):
     def save(self, *args, **kwargs):
         self.discount_price = self.product.discount_price
         self.mrp = self.product.mrp
+        self.cost = self.product.cost
+        self.product_name = self.product.name
         if self.product.discount_price and self.quantity:
             self.amount = self.quantity * self.product.discount_price
             super(OrderItem, self).save(*args, **kwargs)
@@ -168,18 +172,19 @@ class OrderItem(models.Model):
 
     @property
     def get_revenue(self):
-        total = self.quantity * self.product.discount_price
+        total = self.quantity * self.discount_price
         return total
 
     @property
     def get_cost(self):
-        total = self.quantity * self.product.cost
+        total = self.quantity * self.cost
         return total
 
     @property
     def get_mrp(self):
-        total = self.quantity * self.product.mrp
+        total = self.quantity * self.mrp
         return total
 
     def __str__(self):
         return str(self.id)
+

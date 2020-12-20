@@ -5,7 +5,7 @@ function send_receipt_whatsapp(id) {
 
     $.ajax({
         method: "GET",
-        data: {'order_id': id},
+        data: {'order_id': id, 'whatsapp': 'True'},
         url: cart,
         success: function (data) {
             $.each(data.items, function (i, item) {

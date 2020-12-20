@@ -13,7 +13,24 @@ from inventory.models import *
 class Cart(APIView):
     def get(self, request, format=None):
         order_id = request.GET.get("order_id")
-        if order_id is None and request.user.is_authenticated:
+        whatsapp = request.GET.get("whatsapp")
+        if whatsapp == 'True' and request.user.is_authenticated:
+            try:
+                order = Order.objects.get(pk=order_id)
+                items = order.orderitem_set.all()
+                item_serializer = cart_items_serializer(items, many=True)
+                content = {
+                    'items': item_serializer.data,
+                    'cart_items_quantity': order.get_cart_items_quantity,
+                    'cart_total': order.get_cart_revenue,
+                    'cart_mrp_total': order.get_cart_mrp,
+                    'order_id': order.id
+                }
+                return Response(content)
+            except ObjectDoesNotExist:
+                return Response({'error': "no such order or an error occurred"})
+
+        elif order_id is None and request.user.is_authenticated:
             customer = request.user
             order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
@@ -51,7 +68,7 @@ class Cart(APIView):
                 'cart_mrp_total': '',
                 'order_id': ''
             }
-        return Response(content)
+            return Response(content)
 
     def post(self, request, format=None):
         action = request.data['action']
@@ -59,7 +76,18 @@ class Cart(APIView):
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         if action == 'complete':
             order.complete = True
+            order.date_order = now()
             order.save()
+            return Response(
+                {"response_type": "completed",
+                 "response_text": "Order Completed, Please print the Receipt or click Finish to refresh page"}
+            )
+        elif action == 'clear':
+            OrderItem.objects.filter(order=request.data['product_code']).delete()
+            return Response(
+                {"response_type": "completed",
+                 "response_text": "All Cart items removed. Start adding products"}
+            )
         else:
             product_code = request.data['product_code']
             product = Product.objects.get(product_code=product_code)
@@ -79,12 +107,6 @@ class Cart(APIView):
                 {"response_type": "updated",
                  "response_text": "Item was added/updated"}
             )
-
-        # return Response("Order Completed please click finish to refresh page")
-        return Response(
-            {"response_type": "completed",
-             "response_text": "Order Completed, Please print the Receipt or click Finish to refresh page"}
-        )
 
 
 class ProductCategoryList(APIView):
@@ -173,7 +195,8 @@ def search_products(request):
         if search_term:
             products_contains = Product.objects.filter(name__contains=search_term)[:10]
             products_starts = Product.objects.filter(name__startswith=search_term)[:3]
-            products = (products_starts | products_contains)[:10]
+            products_code_starts = Product.objects.filter(product_code__startswith=search_term)[:3]
+            products = (products_starts | products_contains | products_code_starts)[:10]
         else:
             products = Product.objects.all()[:10]
 
