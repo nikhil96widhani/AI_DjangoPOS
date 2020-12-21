@@ -101,8 +101,8 @@ function loadOrdersData() {
             {'data': 'get_cart_profit', render: attachRupeeSymbol},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
-                    return `<a class="pr-3"><i class="fa fa-trash-o" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" onclick="deleteOrderConfirmation('${data}')"></i></a>
-                            <a class="" href="/pos/receipt/${data}"><i class="fa fa-print" aria-hidden="true"></i></a>`;
+                    return `<a class="pr-3"><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" onclick="deleteOrderConfirmation('${data}')"></i></a>
+                            <a class="" href="/pos/receipt/${data}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>`;
                 }
             },
         ],
