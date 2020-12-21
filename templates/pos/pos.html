@@ -149,7 +149,12 @@
                                         <th class="font-weight-bold">
                                             <strong>Amount</strong>
                                         </th>
-                                        <th></th>
+                                        <th style="width:  10%">
+                                            <a type="button"
+                                                onclick="updateUserOrder({{ order.id }}, 'clear')"
+                                                class="btn btn-danger btn-sm">Clear Cart
+                                            </a>
+                                        </th>
                                     </tr>
                                     </thead>
                                     <!-- Table head -->
@@ -205,8 +210,7 @@
                                             </div>
                                             <div class="col-sm-3 text-center">
                                                 <button class="waves-effect waves-dark btn btn-md btn-primary next-step btn-rounded update-cart"
-                                                        onclick="updateUserOrder(1, 'complete')"
-                                                        data-feedback="someFunction21">COMPLETE ORDER
+                                                        data-feedback="nextPos">Next >>
                                                 </button>
                                             </div>
                                         </div>
@@ -282,9 +286,9 @@
                                             </div>
                                             <div class="col-sm-4 text-center">
                                                 {#                                                <div class="step-actions">#}
-                                                <button onClick="window.location.reload();"
-                                                        class="waves-effect waves-dark btn btn-md btn-rounded btn-primary"
-                                                        data-feedback="someFunction21">Finish
+                                                <button class="waves-effect waves-dark btn btn-md btn-primary next-step btn-rounded update-cart float-right"
+                                                        onclick="CompleteOrder()"
+                                                        data-feedback="completePos">COMPLETE ORDER
                                                 </button>
                                                 {#                                            <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">#}
                                                 {#                                                BACK#}

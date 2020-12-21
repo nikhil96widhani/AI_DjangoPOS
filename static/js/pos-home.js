@@ -53,11 +53,20 @@ function product_search(value) {
 }
 
 
-function someFunction21() {
+function nextPos() {
     setTimeout(function () {
         $('#horizontal-stepper').nextStep();
-    }, 2000);
+    }, 200);
+    // window.location.reload();
 }
+
+function completePos() {
+    setTimeout(function () {
+        window.location.reload();
+    }, 1000);
+
+}
+
 
 // SCANNER INPUT
 $(function(){
@@ -127,10 +136,10 @@ function loadTable(product_code, response) {
             var trHTML = '';
             $.each(data.items.reverse(), function (e, item) {
                     if (item.product.product_code === product_code) {
-                        trHTML += `<tr class="clicked"><td><div class="text-left font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"ß                                        data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
+                        trHTML += `<tr class="clicked"><td><div class="text-left font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"                                    data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
 
                     } else {
-                        trHTML += `<tr><td><div class="text-left font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"ß                                        data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
+                        trHTML += `<tr><td><div class="text-left font-weight-bold">${item.product.name}        </div>    </td>    <td>${item.product.weight}    </td>    <td>₹${item.product.discount_price}</td>    <td class="text-center text-md-center">        <span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons">                                <button type="button"                                        data-product="1001"                                        data-action="remove"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i                                        class="fas fa-minus"></i>                                </button>                                <button type="button"                                        data-product="1001"                                     data-action="add"                                        class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i                                        class="fas fa-plus"></i>                                </button>                            </div>    </td>    <td class="font-weight-bold">        <strong>₹${item.amount}</strong>    </td>    <td>        <button type="button"                                        data-product="1001"                                        data-action="add"                                        class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
 
                     }
                 });
@@ -225,3 +234,16 @@ function CalculateRefund(cash) {
 
 }
 
+
+function CompleteOrder() {
+    var url = "/api/cart/"
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({'product_code': null, 'action': 'complete'})
+    })
+}
