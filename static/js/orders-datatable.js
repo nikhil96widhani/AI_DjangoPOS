@@ -140,11 +140,15 @@ $(document).ready(function () {
         $(this).html(`<input type="text" class="form-control form-control-sm"/>`);
         if (i === 8) {
             $(this).html('<span class="form-control form-control-sm text-center border-0"><i class="fa fa-search" aria-hidden="true"></i></span>');
+        } else if (i === 0){
+            $(this).html('');
         }
         $('input', this).on('keyup change', function () {
             if (table.column(i).search() !== this.value) {
-                if (i !== 2 && this.value !== "") {
+                if ((i === 1 || i === 3) && this.value !== "") {
                     table.column(i).search("^" + $(this).val() + "$", true, false, true).draw();
+                } else if (i !== 2 && this.value !== "") {
+                    table.column(i).search("^₹" + $(this).val() + "$", true, false, true).draw();
                 } else {
                     table.column(i).search(this.value).draw();
                 }
