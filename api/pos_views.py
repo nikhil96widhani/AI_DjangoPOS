@@ -74,7 +74,12 @@ class Cart(APIView):
         action = request.data['action']
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        if action == 'complete':
+        if action == 'complete' and len(order.orderitem_set.all()) <= 0:
+            return Response(
+                {"response_type": "toast",
+                 "response_text": "No items to complete order. Please add items"}
+            )
+        elif action == 'complete' and len(order.orderitem_set.all()) > 0:
             order.complete = True
             order.date_order = now()
             order.save()

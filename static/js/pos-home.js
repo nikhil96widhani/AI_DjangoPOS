@@ -56,12 +56,24 @@ function product_search(value) {
 function nextPos() {
     setTimeout(function () {
         $('#horizontal-stepper').nextStep();
+        var len_cart = document.getElementById('datatable-ajax').getElementsByTagName('tr').length
+        if (len_cart <= 0 ) {
+            toastr.info('No items to complete order. Please add items');
+            document.getElementById("stepper-complete-order").classList.remove("next-step");
+            document.getElementById("stepper-complete-order").classList.add("previous-step");
+            }
+        else {
+            document.getElementById("stepper-complete-order").classList.remove("next-step");
+            document.getElementById("stepper-complete-order").classList.remove("previous-step");
+            document.getElementById("stepper-complete-order").classList.add("next-step");
+        }
     }, 200);
     // window.location.reload();
 }
 
 function completePos() {
     setTimeout(function () {
+        $('#horizontal-stepper').nextStep();
         window.location.reload();
     }, 1000);
 
