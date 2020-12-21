@@ -58,7 +58,7 @@ function nextPos() {
         $('#horizontal-stepper').nextStep();
         var len_cart = document.getElementById('datatable-ajax').getElementsByTagName('tr').length
         if (len_cart <= 0 ) {
-            toastr.info('No items to complete order. Please add items');
+            toastr.error('No items to complete order. Please add items to the Cart');
             document.getElementById("stepper-complete-order").classList.remove("next-step");
             document.getElementById("stepper-complete-order").classList.add("previous-step");
             }
@@ -68,7 +68,6 @@ function nextPos() {
             document.getElementById("stepper-complete-order").classList.add("next-step");
         }
     }, 200);
-    // window.location.reload();
 }
 
 function completePos() {
