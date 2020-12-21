@@ -146,6 +146,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
+    product_code = models.CharField(max_length=30, blank=True, null=True)
     product_name = models.CharField(max_length=100, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
@@ -156,10 +157,12 @@ class OrderItem(models.Model):
     amount = models.FloatField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
+        self.product_code = self.product.product_code
+        self.product_name = self.product.name
         self.discount_price = self.product.discount_price
         self.mrp = self.product.mrp
         self.cost = self.product.cost
-        self.product_name = self.product.name
+
         if self.product.discount_price and self.quantity:
             self.amount = self.quantity * self.product.discount_price
             super(OrderItem, self).save(*args, **kwargs)
