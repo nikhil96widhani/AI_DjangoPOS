@@ -33,5 +33,5 @@ class order_serializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        depth = 1
+        # depth = 1
         fields = '__all__'
