@@ -135,7 +135,7 @@ $(document).pos(options);
 
 // Generate DataTable
 function loadTable(product_code, response) {
-
+    $('#pos-next-button').attr('disabled', true);
     var cart_data = "/api/cart";
 
     $.ajax({
@@ -172,13 +172,14 @@ function loadTable(product_code, response) {
             }
             else if (response.response_type === "updated" && len_cart >= 1 ) {
                 check_order_empty_html = ``;
+                $('#pos-next-button').attr('disabled', false);
             }
         }
         else if (response == null && len_cart >= 1 ) {
             check_order_empty_html = ``;
+            $('#pos-next-button').attr('disabled', false);
         }
         $('#check-order-empty').empty().append(check_order_empty_html);
-
     });
 }
 

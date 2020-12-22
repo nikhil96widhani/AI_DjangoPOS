@@ -5,13 +5,14 @@ var revenue_profit_chart_options = {
     },
     chart: {
         type: 'bar',
-        height: 300
+        height: 300,
+        // stacked: true,
     },
     plotOptions: {
         bar: {
             horizontal: false,
             columnWidth: '55%',
-            endingShape: 'rounded'
+            // endingShape: 'rounded'
         },
     },
     dataLabels: {

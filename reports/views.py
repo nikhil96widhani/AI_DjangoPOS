@@ -19,7 +19,7 @@ def orders_view(request):
 
 
 def orders_datatable_view(request):
-    return render(request, 'reports/orders-datatable.html', {})
+    return render(request, 'reports/orders-datatable-page.html', {})
 
 
 @api_view(['GET'])

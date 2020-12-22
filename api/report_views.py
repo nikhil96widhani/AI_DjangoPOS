@@ -129,6 +129,16 @@ class OrdersListView(generics.ListAPIView):
     queryset = Order.objects.filter(complete=True).order_by('-date_order')
     serializer_class = order_serializer
 
+    def list(self, request, **kwargs):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        if request.GET.get("date1") and request.GET.get("date2"):
+            date1 = datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
+            date2 = datetime.strptime(request.GET.get("date2"), '%Y-%m-%d') + timedelta(days=1)
+            queryset = Order.objects.filter(date_order__range=[date1, date2]).order_by('-date_order')
+        serializer = order_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class OrderItemsView(APIView):
     @staticmethod

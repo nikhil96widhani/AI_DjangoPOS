@@ -32,13 +32,13 @@ function loadOrderDetails(order_id, selector) {
             $.each(data["order_items"], function (key, value) {
                 html += `<tr>
                           <td>${count}</td>
-                          <td>${value.product.product_code}</td>
-                          <td>${value.product.name}</td>
+                          <td>${value.product_code}</td>
+                          <td>${value.product_name}</td>
                           <td>${value.quantity}</td>
-                          <td>${attachRupeeSymbol(value.product.cost)}</td>
-                          <td>${attachRupeeSymbol(value.product.mrp)}</td>
-                          <td>${attachRupeeSymbol(value.product.discount_price)}</td>
-                          <td>${attachRupeeSymbol(value.product.discount_price - value.product.cost)}</td>
+                          <td>${attachRupeeSymbol(value.cost)}</td>
+                          <td>${attachRupeeSymbol(value.mrp)}</td>
+                          <td>${attachRupeeSymbol(value.discount_price)}</td>
+                          <td>${attachRupeeSymbol(value.discount_price - value.cost)}</td>
                         </tr>`;
                 count++;
             })
@@ -57,10 +57,18 @@ function format() {
     return '<div class="slider text-center" style="display: none">Loading...</div>';
 }
 
-function loadOrdersData() {
+function loadOrdersData(date1, date2) {
+    let url = '/api/orders-datatable/?format=datatables';
+    if (date1 !== null && date2 !== null) {
+        url = `/api/orders-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
+    }
     return dataTable.DataTable({
         'serverSide': false,
-        'ajax': '/api/orders-datatable/?format=datatables',
+        'processing': true,
+        "language": {
+            processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>'
+        },
+        'ajax': url,
         "fnInitComplete": function () {
             const myCustomScrollbar = document.querySelector('#orders-datatable_wrapper .dataTables_scrollBody');
             const ps = new PerfectScrollbar(myCustomScrollbar);
@@ -90,15 +98,16 @@ function loadOrdersData() {
             },
             {'data': 'id',},
             {
-                'data': 'date_order', render: function (data, type, row) {
+                'data': 'date_order', type: 'date', render: function (data, type, row) {
                     return dateFormat(data, "d mmm yyyy (HH:MM)");
+                    // return type === 'sort' ? data : dateFormat(data, "d mmm yyyy (HH:MM)");
                 }
             },
             {'data': 'get_cart_items_quantity'},
-            {'data': 'get_cart_cost', render: attachRupeeSymbol},
-            {'data': 'get_cart_mrp', render: attachRupeeSymbol},
-            {'data': 'get_cart_revenue', render: attachRupeeSymbol},
-            {'data': 'get_cart_profit', render: attachRupeeSymbol},
+            {'data': 'get_cart_cost'},
+            {'data': 'get_cart_mrp'},
+            {'data': 'get_cart_revenue'},
+            {'data': 'get_cart_profit'},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
                     return `<a class="pr-3"><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" onclick="deleteOrderConfirmation('${data}')"></i></a>
@@ -133,17 +142,21 @@ function deleteOrder() {
     })
 }
 
-$(document).ready(function () {
+function loadOrdersDatatable(date1 = null, date2 = null) {
     $('#orders-datatable thead tr').clone(true).appendTo('#orders-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2");
     $('#orders-datatable thead tr:eq(1) th').each(function (i) {
         const title = $(this).text();
         $(this).html(`<input type="text" class="form-control form-control-sm"/>`);
         if (i === 8) {
             $(this).html('<span class="form-control form-control-sm text-center border-0"><i class="fa fa-search" aria-hidden="true"></i></span>');
+        } else if (i === 0) {
+            $(this).html('');
         }
         $('input', this).on('keyup change', function () {
             if (table.column(i).search() !== this.value) {
-                if (i !== 2 && this.value !== "") {
+                if (i === 2 && this.value !== "") {
+                    table.column(i).search("^" + $(this).val(), true, false, true).draw();
+                } else if (this.value !== "") {
                     table.column(i).search("^" + $(this).val() + "$", true, false, true).draw();
                 } else {
                     table.column(i).search(this.value).draw();
@@ -151,7 +164,7 @@ $(document).ready(function () {
             }
         });
     });
-    const table = loadOrdersData();
+    const table = loadOrdersData(date1, date2);
 
     $('#orders-datatable tbody').on('click', 'td.details-control', function () {
         let tr = $(this).closest('tr');
@@ -184,7 +197,7 @@ $(document).ready(function () {
             loadOrderDetails(row.data().id, $('div.slider', row.child()));
         }
     });
-});
+}
 
 $('#toggle-advance-search-button').change(function () {
     if (this.checked) {
@@ -198,3 +211,9 @@ $('#order-delete-yes').on('click', function (e) {
     deleteOrder();
 });
 
+function updateOrdersDatatableRows(date1, date2) {
+    let url = `/api/orders-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
+    let datatable = dataTable.DataTable();
+    datatable.clear().draw();
+    datatable.ajax.url(url).load();
+}
