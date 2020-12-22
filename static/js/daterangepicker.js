@@ -5,8 +5,11 @@ $(function () {
     var end = moment();
 
     function cb(start, end) {
+        const dates = {'start': start, 'end': end};
+        localStorage.setItem("dates", JSON.stringify(dates));
+
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        console.log("date is", start.format('Y-M-D'), end.format('Y-M-D'));
+        // console.log("date is", start.format('Y-M-D'), end.format('Y-M-D'));
         UpdateStats(start.format('Y-M-D'), end.format('Y-M-D'))
         toggleChartCard(start.format('Y-M-D'), end.format('Y-M-D'));
         if (!$.fn.DataTable.isDataTable('#orders-datatable')) {
@@ -14,6 +17,7 @@ $(function () {
         } else {
             updateOrdersDatatableRows(start.format('Y-M-D'), end.format('Y-M-D'));
         }
+
     }
 
     $('#reportrange').daterangepicker({
@@ -28,8 +32,9 @@ $(function () {
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         }
     }, cb);
-
     cb(start, end);
+
+
 
 });
 
@@ -65,3 +70,8 @@ function UpdateStatsCards(response) {
 
     // console.log(response)
 }
+
+function printDate() {
+    console.log(JSON.parse(localStorage.getItem("dates")))
+}
+
