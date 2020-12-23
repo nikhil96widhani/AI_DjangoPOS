@@ -17,6 +17,13 @@ Weight_unit = (
     ("kg", "kg")
 )
 
+Payment_mode = (
+    ("Cash", "Cash"),
+    ("Card", "Card"),
+    ("Paytm", "Paytm"),
+    ("UPI", "UPI"),
+    ("Other", "Other")
+)
 
 class Product(models.Model):
     """
@@ -98,11 +105,13 @@ class ProductCategories(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     date_order = models.DateTimeField(default=now, editable=False)
+    payment_mode = models.CharField(max_length=10, choices=Payment_mode, default="Cash", blank=True, null=True)
+    cart_revenue = models.FloatField(null=True, blank=True)
+    cart_profit = models.FloatField(null=True, blank=True)
+    cart_cost = models.FloatField(null=True, blank=True)
+    cart_mrp = models.FloatField(null=True, blank=True)
+    cart_quantity = models.IntegerField(default=0, null=True, blank=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
-
-    # def save(self, *args, **kwargs):
-    #     self.date_order = now
-    #     super(Order, self).save(*args, **kwargs)
 
     @property
     def get_cart_revenue(self):
@@ -128,17 +137,18 @@ class Order(models.Model):
         total = sum([item.quantity for item in order_items])
         return total
 
-    # @property
-    # def get_today_total(self):
-    #     orderitems = self.orderitem_set.all()
-    #     total = sum([item.quantity for item in orderitems])
-    #     return total
-
-    # REVENUE is sales price and PROFIT is sales price - cost price
     @property
     def get_cart_profit(self):
         profit_total = self.get_cart_revenue - self.get_cart_cost
         return profit_total
+
+    def save(self, *args, **kwargs):
+        self.cart_revenue = self.get_cart_revenue
+        self.cart_profit = self.get_cart_profit
+        self.cart_cost = self.get_cart_cost
+        self.cart_mrp = self.get_cart_mrp
+        self.cart_quantity = self.get_cart_items_quantity
+        super(Order, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.id)

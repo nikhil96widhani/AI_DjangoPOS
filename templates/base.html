@@ -9,7 +9,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>AI-POS</title>
     <!-- FontAwsome Icons -->
-{#    <script src="https://kit.fontawesome.com/ad14bd368c.js" crossorigin="anonymous"></script>#}
+    {#    <script src="https://kit.fontawesome.com/ad14bd368c.js" crossorigin="anonymous"></script>#}
     <script type="text/javascript" src="{% static 'js/fa-all.js' %}"></script>
     <link href="{% static 'css/fontawesome.css' %}" rel="stylesheet">
     <!-- Pace CSS-->
@@ -41,7 +41,9 @@
             <!-- Logo -->
             <li class="logo-sn waves-effect py-3">
                 <div class="text-center">
-                    <a href="{% url 'pos-home' %}" class="pl-0"><img class="img-fluid px-2" src="{% static 'images/receipt-logo.png' %}" alt="logo"></a>
+                    <a href="{% url 'pos-home' %}" class="pl-0"><img class="img-fluid px-2"
+                                                                     src="{% static 'images/receipt-logo.png' %}"
+                                                                     alt="logo"></a>
                 </div>
             </li>
             <!--/. Logo -->
@@ -72,20 +74,20 @@
                                 </li>
                             </ul>
                         </div>
-            </li>
-                    <li>
-                        <a class="collapsible-header waves-effect arrow-r"><i class="fas fa-user-cog mr-2"></i>Maintenance<i
-                                class="fas fa-angle-down rotate-icon"></i></a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="{% url 'add-product' %}" class="waves-effect">Add Product</a>
-                                <li><a href="#" class="waves-effect">Add Product Category</a>
-                                </li>
-                            </ul>
-                        </div>
                     </li>
-                    <li><a href="#" class="collapsible-header waves-effect"><i class="fas fa-th-large mr-2"></i>Sections</a>
-                    </li>
+                    {#                    <li>#}
+                    {#                        <a class="collapsible-header waves-effect arrow-r"><i class="fas fa-user-cog mr-2"></i>Maintenance<i#}
+                    {#                                class="fas fa-angle-down rotate-icon"></i></a>#}
+                    {#                        <div class="collapsible-body">#}
+                    {#                            <ul>#}
+                    {#                                <li><a href="{% url 'add-product' %}" class="waves-effect">Add Product</a>#}
+                    {#                                <li><a href="#" class="waves-effect">Add Product Category</a>#}
+                    {#                                </li>#}
+                    {#                            </ul>#}
+                    {#                        </div>#}
+                    {#                    </li>#}
+                    {#                    <li><a href="#" class="collapsible-header waves-effect"><i class="fas fa-th-large mr-2"></i>Sections</a>#}
+                    {#                    </li>#}
                 </ul>
             </li>
             <!--/. Side navigation links -->
@@ -119,47 +121,47 @@
             <ul class="nav navbar-nav nav-flex-icons ml-auto">
 
                 <!-- Dropdown -->
-                <li class="nav-item dropdown notifications-nav">
-                    <a class="nav-link dropdown-toggle waves-effect" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        <span class="badge red">3</span> <i class="fas fa-bell"></i>
-                        <span class="d-none d-md-inline-block">Notifications</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-money mr-2" aria-hidden="true"></i>
-                            <span>New order received</span>
-                            <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 13 min</span>
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-money mr-2" aria-hidden="true"></i>
-                            <span>New order received</span>
-                            <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 33 min</span>
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-line-chart mr-2" aria-hidden="true"></i>
-                            <span>Your campaign is about to end</span>
-                            <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 53 min</span>
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link waves-effect"><i class="fas fa-envelope"></i> <span
-                            class="clearfix d-none d-sm-inline-block">Contact</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link waves-effect"><i class="far fa-comments"></i> <span
-                            class="clearfix d-none d-sm-inline-block">Support</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link">
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="customSwitches">
-                            <label class="custom-control-label" for="customSwitches" id="dark-mode"><i
-                                    class="far fa-lightbulb"></i></label>
-                        </div>
-                    </a>
-                </li>
+                {#                <li class="nav-item dropdown notifications-nav">#}
+                {#                    <a class="nav-link dropdown-toggle waves-effect" id="navbarDropdownMenuLink" data-toggle="dropdown"#}
+                {#                       aria-haspopup="true" aria-expanded="false">#}
+                {#                        <span class="badge red">3</span> <i class="fas fa-bell"></i>#}
+                {#                        <span class="d-none d-md-inline-block">Notifications</span>#}
+                {#                    </a>#}
+                {#                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">#}
+                {#                        <a class="dropdown-item" href="#">#}
+                {#                            <i class="fas fa-money mr-2" aria-hidden="true"></i>#}
+                {#                            <span>New order received</span>#}
+                {#                            <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 13 min</span>#}
+                {#                        </a>#}
+                {#                        <a class="dropdown-item" href="#">#}
+                {#                            <i class="fas fa-money mr-2" aria-hidden="true"></i>#}
+                {#                            <span>New order received</span>#}
+                {#                            <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 33 min</span>#}
+                {#                        </a>#}
+                {#                        <a class="dropdown-item" href="#">#}
+                {#                            <i class="fas fa-line-chart mr-2" aria-hidden="true"></i>#}
+                {#                            <span>Your campaign is about to end</span>#}
+                {#                            <span class="float-right"><i class="far  fa-clock" aria-hidden="true"></i> 53 min</span>#}
+                {#                        </a>#}
+                {#                    </div>#}
+                {#                </li>#}
+                {#                <li class="nav-item">#}
+                {#                    <a class="nav-link waves-effect"><i class="fas fa-envelope"></i> <span#}
+                {#                            class="clearfix d-none d-sm-inline-block">Contact</span></a>#}
+                {#                </li>#}
+                {#                <li class="nav-item">#}
+                {#                    <a class="nav-link waves-effect"><i class="far fa-comments"></i> <span#}
+                {#                            class="clearfix d-none d-sm-inline-block">Support</span></a>#}
+                {#                </li>#}
+                {#                <li class="nav-item">#}
+                {#                    <a class="nav-link">#}
+                {#                        <div class="custom-control custom-switch">#}
+                {#                            <input type="checkbox" class="custom-control-input" id="customSwitches">#}
+                {#                            <label class="custom-control-label" for="customSwitches" id="dark-mode"><i#}
+                {#                                    class="far fa-lightbulb"></i></label>#}
+                {#                        </div>#}
+                {#                    </a>#}
+                {#                </li>#}
                 <li class="nav-item dropdown">
                     {% if user.is_authenticated %}
                         <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown"
