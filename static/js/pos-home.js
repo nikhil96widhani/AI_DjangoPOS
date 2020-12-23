@@ -56,25 +56,25 @@ function product_search(value) {
 function nextPos() {
     setTimeout(function () {
         $('#horizontal-stepper').nextStep();
-        var len_cart = document.getElementById('datatable-ajax').getElementsByTagName('tr').length
-        if (len_cart <= 0 ) {
-            toastr.info('No items to complete order. Please add items');
-            document.getElementById("stepper-complete-order").classList.remove("next-step");
-            document.getElementById("stepper-complete-order").classList.add("previous-step");
-            }
-        else {
-            document.getElementById("stepper-complete-order").classList.remove("next-step");
-            document.getElementById("stepper-complete-order").classList.remove("previous-step");
-            document.getElementById("stepper-complete-order").classList.add("next-step");
-        }
+        // var len_cart = document.getElementById('datatable-ajax').getElementsByTagName('tr').length
+        // if (len_cart <= 0 ) {
+        //     toastr.error('No items to complete order. Please add items to the Cart');
+        //     document.getElementById("stepper-complete-order").classList.remove("next-step");
+        //     document.getElementById("stepper-complete-order").classList.add("previous-step");
+        //     }
+        // else {
+        //     document.getElementById("stepper-complete-order").classList.remove("next-step");
+        //     document.getElementById("stepper-complete-order").classList.remove("previous-step");
+        //     document.getElementById("stepper-complete-order").classList.add("next-step");
+        // }
     }, 200);
-    // window.location.reload();
 }
 
 function completePos() {
     setTimeout(function () {
-        $('#horizontal-stepper').nextStep();
+        // $('#horizontal-stepper').nextStep();
         window.location.reload();
+        $('#horizontal-stepper').nextStep();
     }, 1000);
 
 }
@@ -136,7 +136,11 @@ $(document).pos(options);
 
 // Generate DataTable
 function loadTable(product_code, response) {
-    $('#pos-next-button').attr('disabled', true);
+
+    var len_cart = document.getElementById('datatable-ajax').getElementsByTagName('tr').length
+    if (len_cart <= 0 ) {
+        $('#pos-next-button').attr('disabled', true);
+    }
     var cart_data = "/api/cart";
 
     $.ajax({
@@ -165,7 +169,7 @@ function loadTable(product_code, response) {
     }).done(function () {
         //on return, add here
         var len_cart = document.getElementById('datatable-ajax').getElementsByTagName('tr').length
-        console.log(response, len_cart)
+        // console.log(response, len_cart)
         var check_order_empty_html = `<div class="alert alert-primary text-center" role="alert">No products in the cart. Start by adding some products!</div>`;
         if (response != null){
             if (response.response_type === "completed"){
@@ -173,14 +177,23 @@ function loadTable(product_code, response) {
             }
             else if (response.response_type === "updated" && len_cart >= 1 ) {
                 check_order_empty_html = ``;
-                $('#pos-next-button').attr('disabled', false);
+
             }
         }
         else if (response == null && len_cart >= 1 ) {
             check_order_empty_html = ``;
-            $('#pos-next-button').attr('disabled', false);
         }
         $('#check-order-empty').empty().append(check_order_empty_html);
+
+        if (len_cart > 0 ) {
+            $('#pos-next-button').attr('disabled', false);
+        }
+        else if (len_cart <= 0) {
+            $('#pos-next-button').attr('disabled', true);
+        }
+        else {
+            $('#pos-next-button').attr('disabled', false);
+        }
     });
 }
 

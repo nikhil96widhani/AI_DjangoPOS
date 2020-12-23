@@ -76,7 +76,7 @@ class Cart(APIView):
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         if action == 'complete' and len(order.orderitem_set.all()) <= 0:
             return Response(
-                {"response_type": "toast",
+                {"response_type": "completed",
                  "response_text": "No items to complete order. Please add items"}
             )
         elif action == 'complete' and len(order.orderitem_set.all()) > 0:
@@ -90,7 +90,7 @@ class Cart(APIView):
         elif action == 'clear':
             OrderItem.objects.filter(order=request.data['product_code']).delete()
             return Response(
-                {"response_type": "completed",
+                {"response_type": "updated",
                  "response_text": "All Cart items removed. Start adding products"}
             )
         else:
