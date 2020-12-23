@@ -14,7 +14,13 @@
 
 {% block content %}
     <div class="navbar justify-content-between">
-        <a class="navbar-brand text-dark " href="#">Dashboard</a>
+        <div class="form-inline">
+{#            <a class="navbar-brand text-dark " href="#">Dashboard</a>#}
+            <div class="custom-control custom-switch text-right">
+                <input type="checkbox" class="custom-control-input" id="advanced-dashboard-toggle">
+                <label class="custom-control-label" for="advanced-dashboard-toggle">Advanced Dashboard</label>
+            </div>
+        </div>
         <div class="form-inline my-1">
             <div id="reportrange" style="background: #fff; cursor: pointer;
                     {#padding: 5px 10px;#}
@@ -140,22 +146,13 @@
     </div>
     <!--Grid row-->
     <div class="card mb-3" style="display: none" id="revenue-profit-chart-card">
-
-
         <div class="card-body">
             <div id="revenue-profit-chart"></div>
         </div>
     </div>
 
 
-    <!-- Default checked -->
-    <div class="custom-control custom-switch text-right">
-      <input type="checkbox" class="custom-control-input" id="customSwitch1" onchange="printDate()">
-      <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
-    </div>
-
-
-    <div class="" id="orders-datatable-div">
+    <div style="display: none" id="orders-datatable-div">
         {% include 'components/orders-datatable.html' %}
     </div>
 {% endblock %}
@@ -170,13 +167,13 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript"
-    src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/fc-3.3.1/fh-3.1.7/kt-2.5.3/sc-2.0.3/sb-1.0.0/sp-1.2.1/sl-1.3.1/datatables.min.js"></script>
+            src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/fc-3.3.1/fh-3.1.7/kt-2.5.3/sc-2.0.3/sb-1.0.0/sp-1.2.1/sl-1.3.1/datatables.min.js"></script>
     <script type="text/javascript" src="{% static 'js/orders-datatable.js' %}"></script>
 
     <script type="text/javascript" src="{% static 'js/daterangepicker.js' %}"></script>
-{#    <script>#}
-{#        $(document).ready(function () {#}
-{#            loadOrdersDatatable();#}
-{#        });#}
-{#    </script>#}
+    {#    <script>#}
+    {#        $(document).ready(function () {#}
+    {#            loadOrdersDatatable();#}
+    {#        });#}
+    {#    </script>#}
 {% endblock %}

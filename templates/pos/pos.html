@@ -24,8 +24,6 @@
     <i class="fas fa-angle-right align-middle fa-xs"></i> POS - Sale
 {% endblock %}
 
-
-
 {% block content %}
     <!-- Section: Sale -->
     <section class="mb-5">
@@ -197,7 +195,7 @@
                                                     <input id="CashReceivedValue" type="number" class="form-control"
                                                            aria-label="Small"
                                                            aria-describedby="CashReceived" min="0" max="10000000"
-                                                           onkeyup="CalculateRefund(value)">
+                                                           onchange="CalculateRefund(value)">
                                                 </div>
                                                 <small id="emailHelp" class="form-text text-muted">Cash received</small>
 
