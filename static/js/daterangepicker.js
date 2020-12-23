@@ -12,12 +12,9 @@ $(function () {
         // console.log("date is", start.format('Y-M-D'), end.format('Y-M-D'));
         UpdateStats(start.format('Y-M-D'), end.format('Y-M-D'))
         toggleChartCard(start.format('Y-M-D'), end.format('Y-M-D'));
-        if (!$.fn.DataTable.isDataTable('#orders-datatable')) {
-            loadOrdersDatatable(start.format('Y-M-D'), end.format('Y-M-D'));
-        } else {
-            updateOrdersDatatableRows(start.format('Y-M-D'), end.format('Y-M-D'));
+        if ($('#advanced-dashboard-toggle').is(":checked")){
+            loadOrUpdateOrdersDatatable(start.format('Y-M-D'), end.format('Y-M-D'));
         }
-
     }
 
     $('#reportrange').daterangepicker({
@@ -33,7 +30,6 @@ $(function () {
         }
     }, cb);
     cb(start, end);
-
 
 
 });
@@ -71,7 +67,22 @@ function UpdateStatsCards(response) {
     // console.log(response)
 }
 
-function printDate() {
-    console.log(JSON.parse(localStorage.getItem("dates")))
+function loadOrUpdateOrdersDatatable(start, end) {
+    if (!$.fn.DataTable.isDataTable('#orders-datatable')) {
+        loadOrdersDatatable(start, end);
+    } else {
+        updateOrdersDatatableRows(start, end);
+    }
 }
 
+$('#advanced-dashboard-toggle').change(function () {
+    if (this.checked) {
+        $('#orders-datatable-div').slideDown(200);
+        let start = dateFormat((JSON.parse(localStorage.getItem("dates"))).start, "yyyy-m-d");
+        let end = dateFormat((JSON.parse(localStorage.getItem("dates"))).end, "yyyy-m-d");
+        console.log(start, end);
+        loadOrUpdateOrdersDatatable(start, end);
+    } else {
+        $('#orders-datatable-div').slideUp();
+    }
+});
