@@ -16,7 +16,8 @@ def pos_homeView(request):
         context = {
             'all_products': all_products,
             'order': order,
-            'cart_items': cart_items
+            'cart_items': cart_items,
+            'payment_mode': Payment_mode
         }
     else:
         context = {

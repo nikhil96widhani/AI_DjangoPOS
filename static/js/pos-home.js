@@ -88,16 +88,16 @@ $(function(){
 
 		//access `event.code` - barcode data
 	});
-	$(document).on('swipe.pos.card', function(event){
-		//access following:
-		// `event.card_number` - card number only
-		// `event.card_holder_first_name` - card holder first name only
-		// `event.card_holder_last_name` - card holder last name only
-		// `event.card_exp_date_month` - card expiration month - 2 digits
-		// `event.card_exp_date_year_2` - card expiration year - 2 digits
-		// `event.card_exp_date_year_4` - card expiration year - 4 digits
-		// `event.swipe_data` - original swipe data from raw processing or sending to a 3rd party service
-	});
+	// $(document).on('swipe.pos.card', function(event){
+	// 	//access following:
+	// 	// `event.card_number` - card number only
+	// 	// `event.card_holder_first_name` - card holder first name only
+	// 	// `event.card_holder_last_name` - card holder last name only
+	// 	// `event.card_exp_date_month` - card expiration month - 2 digits
+	// 	// `event.card_exp_date_year_2` - card expiration year - 2 digits
+	// 	// `event.card_exp_date_year_4` - card expiration year - 4 digits
+	// 	// `event.swipe_data` - original swipe data from raw processing or sending to a 3rd party service
+	// });
 });
 var options = {
     scan: true, //enable scan event
@@ -130,7 +130,7 @@ var options = {
     }
 };
 
-$(document).pos(options);
+// $(document).pos(options);
 // END SCANNER INPUT
 
 
@@ -262,6 +262,7 @@ function CalculateRefund(cash) {
 
 
 function CompleteOrder() {
+    var payment_mode = document.getElementById("payment-mode")
     var url = "/api/cart/"
 
     fetch(url, {
@@ -270,6 +271,6 @@ function CompleteOrder() {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({'product_code': null, 'action': 'complete'})
+        body: JSON.stringify({'product_code': null, 'action': 'complete', 'payment-mode': payment_mode.value})
     })
 }

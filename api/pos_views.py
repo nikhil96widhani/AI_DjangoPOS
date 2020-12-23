@@ -81,6 +81,7 @@ class Cart(APIView):
             )
         elif action == 'complete' and len(order.orderitem_set.all()) > 0:
             order.complete = True
+            order.payment_mode = request.data['payment-mode']
             order.date_order = now()
             order.save()
             return Response(

@@ -13,25 +13,22 @@
 {% endblock %}
 
 {% block content %}
-    <div class="navbar justify-content-between">
+    <div class="navbar justify-content-between my-1">
         <div class="form-inline">
-{#            <a class="navbar-brand text-dark " href="#">Dashboard</a>#}
-            <div class="custom-control custom-switch text-right">
-                <input type="checkbox" class="custom-control-input" id="advanced-dashboard-toggle">
-                <label class="custom-control-label" for="advanced-dashboard-toggle">Advanced Dashboard</label>
-            </div>
+            <h4>Dashboard</h4>
         </div>
-        <div class="form-inline my-1">
-            <div id="reportrange" style="background: #fff; cursor: pointer;
-                    {#padding: 5px 10px;#}
-                    {#border: 1px solid #ccc; #}
-                    width: 100%">
+        <div class="form-inline">
+            <div class="custom-control custom-switch text-right pr-2 mr-2 border-right">
+                <input type="checkbox" class="custom-control-input" id="advanced-dashboard-toggle">
+                <label class="custom-control-label" for="advanced-dashboard-toggle">Show Orders</label>
+            </div>
+            <div id="reportrange" style="background: #fff; cursor: pointer;">
                 <i class="fa fa-calendar"></i>&nbsp;
                 <span></span> <i class="fa fa-caret-down"></i>
             </div>
-
         </div>
     </div>
+
 
     <!--Grid row-->
     <div class="row pt-3">
