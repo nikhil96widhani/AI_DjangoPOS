@@ -15,5 +15,6 @@ class OrderItemList(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Product, ProductList)
 admin.site.register(ProductCategories)
+admin.site.register(ProductCompany)
 admin.site.register(Order)
 admin.site.register(OrderItem, OrderItemList)
