@@ -195,7 +195,8 @@
                                                            onkeyup="CalculateRefund(value)" autocomplete="off">
 
                                                     <div class="input-group-append">
-                                                        <select id="payment-mode" class="custom-select custom-select" autocomplete="off">
+                                                        <select id="payment-mode" class="custom-select custom-select"
+                                                                autocomplete="off">
                                                             {% for x,y in payment_mode %}
                                                                 <option value="{{ x }}"{% if x == 'Cash' %}
                                                                         selected{% endif %}>{{ y }}</option>
@@ -226,42 +227,77 @@
                                         <div class="form-row align-items-center">
                                             <!-- Default auto-sizing form -->
 
-
-                                            <!-- Grid column -->
-                                            <div class="col-sm-4">
-                                                <!-- Default input -->
-                                                <label class="sr-only" for="phone_number">Phone Number</label>
-                                                <div class="input-group mb-2 mt-2">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">+91</div>
-                                                    </div>
-                                                    <input type="text" class="form-control py-0"
-                                                           id="phone_number" placeholder="Phone Number">
+                                            <div class="input-group col-sm">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">+91</div>
+                                                </div>
+                                                <input type="text" class="form-control py-0"
+                                                       id="phone_number" placeholder="Phone Number"
+                                                       style="max-width: 250px">
+                                                <div class="input-group-append" id="button-addon4">
+                                                    <button class="btn btn-md btn-success m-0 px-3 py-2 z-depth-0 waves-effect"
+                                                            type="button"
+                                                            onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp
+                                                        Receipt
+                                                    </button>
+                                                    <button class="btn btn-md btn-secondary m-0 px-3 py-2 z-depth-0 waves-effect"
+                                                            type="button"
+                                                            onclick=" window.open('{% url 'receipt' order.id %}','_blank')">
+                                                        Print Receipt
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <!-- Grid column -->
 
                                             <!-- Grid column -->
-                                            <div class="col-sm-2 text-center">
-                                                <button type="button" class="btn btn-sm btn-success btn-md mt-1"
-                                                        onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp Receipt
-                                                </button>
-                                            </div>
-                                            <!-- SUBMIT COl-->
-                                            <!-- Print recipt column -->
-                                            <div class="col-sm-2 text-center">
-                                                <a href="{% url 'receipt' order.id %}" target="_blank"
-                                                   class="waves-effect waves-dark btn btn-sm btn-secondary">
-                                                    Print Receipt
-                                                </a>
-                                            </div>
-                                            <div class="col-sm-4 text-center">
+                                            {#                                            <div class="col-sm-4">#}
+                                            {#                                                <!-- Default input -->#}
+                                            {#                                                <label class="sr-only" for="phone_number">Phone Number</label>#}
+                                            {#                                                <div class="input-group mb-2 mt-2">#}
+                                            {#                                                    <div class="input-group-prepend">#}
+                                            {#                                                        <div class="input-group-text">+91</div>#}
+                                            {#                                                    </div>#}
+                                            {#                                                    <input type="text" class="form-control py-0"#}
+                                            {#                                                           id="phone_number" placeholder="Phone Number">#}
+                                            {#                                                </div>#}
+                                            {#                                            </div>#}
+                                            {#                                            <!-- Grid column -->#}
+                                            {##}
+                                            {#                                            <!-- Grid column -->#}
+                                            {#                                            <div class="col-sm-2 text-center">#}
+                                            {#                                                <button type="button" class="btn btn-sm btn-success btn-md mt-1"#}
+                                            {#                                                        onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp Receipt#}
+                                            {#                                                </button>#}
+                                            {#                                            </div>#}
+                                            {#                                            <!-- SUBMIT COl-->#}
+                                            {#                                            <!-- Print recipt column -->#}
+                                            {#                                            <div class="col-sm-2 text-center">#}
+                                            {#                                                <a href="{% url 'receipt' order.id %}" target="_blank"#}
+                                            {#                                                   class="waves-effect waves-dark btn btn-sm btn-secondary">#}
+                                            {#                                                    Print Receipt#}
+                                            {#                                                </a>#}
+                                            {#                                            </div>#}
+
+                                            <div class="col-sm-3 text-center">
+                                                <div class="btn-group radio-group ml-2" data-toggle="buttons">
+                                                    <button type="button" data-product="1001" data-action="remove"
+                                                            class="btn btn-primary btn-md mr-1 btn-rounded previous-step"
+                                                            > < Back
+                                                        <!-- <i class="fas fa-minus"></i> Font Awesome fontawesome.com -->
+                                                    </button>
+                                                    <button id="stepper-complete-order" type="button"
+                                                            class="btn btn-success btn-md mr-1 btn-rounded next-step"
+                                                            onclick="CompleteOrder()" data-feedback="completePos">
+                                                        Complete Order
+                                                        <!-- <i class="fas fa-plus"></i> Font Awesome fontawesome.com -->
+                                                    </button>
+                                                </div>
+                                                {#                                                </div>#}
                                                 {#                                                <div class="step-actions">#}
-                                                <button id="stepper-complete-order"
-                                                        class="waves-effect waves-dark btn btn-md btn-primary next-step btn-rounded update-cart float-right"
-                                                        onclick="CompleteOrder()"
-                                                        data-feedback="completePos">COMPLETE ORDER
-                                                </button>
+                                                {#                                                <button id="stepper-complete-order"#}
+                                                {#                                                        class="waves-effect waves-dark btn btn-md btn-primary next-step btn-rounded update-cart float-right"#}
+                                                {#                                                        onclick="CompleteOrder()"#}
+                                                {#                                                        data-feedback="completePos">COMPLETE ORDER#}
+                                                {#                                                </button>#}
                                                 {#                                            <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">#}
                                                 {#                                                BACK#}
                                                 {#                                            </button>#}

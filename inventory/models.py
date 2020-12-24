@@ -25,6 +25,17 @@ Payment_mode = (
     ("Other", "Other")
 )
 
+
+class ProductCompany(models.Model):
+    name = models.CharField(max_length=200, primary_key=True)
+
+    class Meta:
+        verbose_name_plural = "ProductCompany"
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     """
     New Fields Added :
@@ -60,6 +71,7 @@ class Product(models.Model):
     weight_unit = models.CharField(max_length=9, choices=Weight_unit, default="", blank=True, null=True)
     expiry_date = models.DateField(blank=True, null=True)
     company = models.CharField(max_length=100, blank=True, null=True)
+    brand = models.ForeignKey(ProductCompany, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     category = models.ManyToManyField('ProductCategories', blank=True)
     rack_number = models.CharField(max_length=100, blank=True, null=True)
@@ -143,9 +155,9 @@ class Order(models.Model):
         return profit_total
 
     def save(self, *args, **kwargs):
-        self.cart_revenue = self.get_cart_revenue
-        self.cart_profit = self.get_cart_profit
-        self.cart_cost = self.get_cart_cost
+        self.cart_revenue = "{:.2f}".format(self.get_cart_revenue)
+        self.cart_profit = "{:.2f}".format(self.get_cart_profit)
+        self.cart_cost = "{:.2f}".format(self.get_cart_cost)
         self.cart_mrp = self.get_cart_mrp
         self.cart_quantity = self.get_cart_items_quantity
         super(Order, self).save(*args, **kwargs)
@@ -200,4 +212,3 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return str(self.id)
-
