@@ -5,14 +5,15 @@
 {% block css %}
     <style>
         tr.clicked {
-            animation: fadeOut 2s forwards;
+            animation-name: product-animation;
+            animation-duration: 1.5s;
         }
 
-        @keyframes fadeOut {
+        @keyframes product-animation {
             0% {
-                background-color: dodgerblue;
+                background-color: lightskyblue;
             }
-            100% {
+            80% {
                 background-color: white;
             }
         }
@@ -277,7 +278,7 @@
                                             {#                                                </a>#}
                                             {#                                            </div>#}
 
-                                            <div class="col-sm-3 text-center">
+                                            <div class="col-sm-auto text-center">
                                                 <div class="btn-group radio-group ml-2" data-toggle="buttons">
                                                     <button type="button" data-product="1001" data-action="remove"
                                                             class="btn btn-primary btn-md mr-1 btn-rounded previous-step"

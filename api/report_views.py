@@ -14,7 +14,7 @@ from django.db.models import Sum
 import json
 from dateutil import parser
 
-from .serializers import order_serializer
+from .serializers import OrderSerializer
 
 
 def summary_orders(orders):
@@ -91,7 +91,7 @@ class OrdersView(APIView):
             orders = Order.objects.filter(date_order__gt=now(), complete=True)
 
         # Form Data to return
-        orders_serialized = order_serializer(orders, many=True)
+        orders_serialized = OrderSerializer(orders, many=True)
 
         if request.GET.get("only_summary") == 'True':
             return Response(
@@ -117,7 +117,7 @@ def order_detail(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = order_serializer(order)
+        serializer = OrderSerializer(order)
         return Response(serializer.data)
 
     elif request.method == 'DELETE':
@@ -127,7 +127,7 @@ def order_detail(request, pk):
 
 class OrdersListView(generics.ListAPIView):
     queryset = Order.objects.filter(complete=True).order_by('-date_order')
-    serializer_class = order_serializer
+    serializer_class = OrderSerializer
 
     def list(self, request, **kwargs):
         # Note the use of `get_queryset()` instead of `self.queryset`
@@ -137,7 +137,7 @@ class OrdersListView(generics.ListAPIView):
             date2 = datetime.strptime(request.GET.get("date2"), '%Y-%m-%d') + timedelta(days=1)
             queryset = Order.objects.filter(complete=True).filter(date_order__range=[date1, date2]).order_by(
                 '-date_order')
-        serializer = order_serializer(queryset, many=True)
+        serializer = OrderSerializer(queryset, many=True)
         return Response(serializer.data)
 
 

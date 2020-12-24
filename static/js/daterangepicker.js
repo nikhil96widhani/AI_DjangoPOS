@@ -60,7 +60,7 @@ function UpdateStatsCards(response) {
         "                  <small class=\"text-success ml-2\">" +
         "                    <i class=\"fas fa-arrow-up fa-sm pr-1\"></i>13,4%</small>";
 
-    document.getElementById("sold_item_profit").innerHTML = response.orders_summary.total_profit +
+    document.getElementById("sold_item_profit").innerHTML = roundToTwoDecimal(response.orders_summary.total_profit) +
         "                  <small class=\"text-danger ml-2\">" +
         "                    <i class=\"fas fa-arrow-down fa-sm pr-1\"></i>13,4%</small>";
 

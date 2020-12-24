@@ -22,12 +22,11 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class order_serializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         # depth = 1
-        fields = ('id', 'date_order', 'complete', 'get_cart_items_quantity', 'get_cart_cost',
-                  'get_cart_revenue', 'get_cart_mrp', 'get_cart_profit')
+        fields = '__all__'
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
