@@ -206,15 +206,15 @@ ul.stepper .md-form .validate {
      ul.stepper.horizontal .step.active .step-title:before {
       background-color: #4285f4; }
      ul.stepper.horizontal .step.done .step-title:before {
-      /*content: '\f00c';*/
-      /*font-family: FontAwesome;*/
-      content: '✓';
+      content: '\f00c';
+      font-family: FontAwesome;
+      /*content: '✓';*/
       font-size: 1rem;
       background: #00c851; }
      ul.stepper.horizontal .step.wrong .step-title:before {
-      /*content: '\f071';*/
-      /*font-family: FontAwesome;*/
-      content: '!';
+      content: '\f071';
+      font-family: FontAwesome;
+      /*content: '!';*/
       font-size: 1.1rem;
       background-color: #ff3547; }
      ul.stepper.horizontal .step-title {
@@ -252,8 +252,7 @@ ul.stepper .md-form .validate {
       top: 0.9375rem; }
      ul.stepper.horizontal .step-new-content {
       position: absolute;
-      height: -webkit-calc(100% - 130px);
-      height: calc(100% - 130px);
+      height: 100%;
       top: 6rem;
       left: 0;
       width: 100%;

@@ -3,7 +3,6 @@
     height: calc(100vh - 40vh);
     width: 100%;
     overflow: auto;
-
 }
 
 .table-wrapper-scroll-y {
@@ -15,9 +14,8 @@
     height: calc(100vh - 40vh);
     width: 100%;
     overflow: auto;
-
 }
 
-.font-white{
+.font-white {
     color: white !important;
 }

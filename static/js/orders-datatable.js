@@ -38,7 +38,7 @@ function loadOrderDetails(order_id, selector) {
                           <td>${attachRupeeSymbol(value.cost)}</td>
                           <td>${attachRupeeSymbol(value.mrp)}</td>
                           <td>${attachRupeeSymbol(value.discount_price)}</td>
-                          <td>${attachRupeeSymbol(value.discount_price - value.cost)}</td>
+                          <td>${attachRupeeSymbol(roundToTwoDecimal(value.discount_price - value.cost))}</td>
                         </tr>`;
                 count++;
             })
@@ -92,22 +92,22 @@ function loadOrdersData(date1, date2) {
                 "orderable": false,
                 "data": null,
                 "defaultContent": '',
-                "render": function (data, type, row) {
+                "render": function () {
                     return '<span class="badge badge-pill badge-info py-1" type="button"><i class="fas fa-plus"></i></span>'
                 }
             },
             {'data': 'id',},
             {
-                'data': 'date_order', type: 'date', render: function (data, type, row) {
+                'data': 'date_order', render: function (data) {
                     return dateFormat(data, "d mmm yyyy (HH:MM)");
-                    // return type === 'sort' ? data : dateFormat(data, "d mmm yyyy (HH:MM)");
                 }
             },
-            {'data': 'get_cart_items_quantity'},
-            {'data': 'get_cart_cost'},
-            {'data': 'get_cart_mrp'},
-            {'data': 'get_cart_revenue'},
-            {'data': 'get_cart_profit'},
+            {'data': 'cart_quantity'},
+            {'data': 'payment_mode'},
+            {'data': 'cart_cost'},
+            {'data': 'cart_mrp'},
+            {'data': 'cart_revenue'},
+            {'data': 'cart_profit'},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
                     return `<a class="pr-3"><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" onclick="deleteOrderConfirmation('${data}')"></i></a>
