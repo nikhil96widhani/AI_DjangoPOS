@@ -63,7 +63,7 @@ function loadOrdersData(date1, date2) {
         url = `/api/orders-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
     }
     return dataTable.DataTable({
-        'serverSide': false,
+        'serverSide': true,
         'processing': true,
         "language": {
             processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>'
@@ -98,7 +98,8 @@ function loadOrdersData(date1, date2) {
             },
             {'data': 'id',},
             {
-                'data': 'date_order', render: function (data) {
+                'data': 'date_order',
+                render: function (data) {
                     return dateFormat(data, "d mmm yyyy (HH:MM)");
                 }
             },
@@ -147,17 +148,17 @@ function loadOrdersDatatable(date1 = null, date2 = null) {
     $('#orders-datatable thead tr:eq(1) th').each(function (i) {
         const title = $(this).text();
         $(this).html(`<input type="text" class="form-control form-control-sm"/>`);
-        if (i === 8) {
+        if (i === 9) {
             $(this).html('<span class="form-control form-control-sm text-center border-0"><i class="fa fa-search" aria-hidden="true"></i></span>');
+        } else if (i === 2) {
+            $(this).html(`<input type="date" class="form-control form-control-sm"/>`);
         } else if (i === 0) {
             $(this).html('');
         }
         $('input', this).on('keyup change', function () {
             if (table.column(i).search() !== this.value) {
-                if (i === 2 && this.value !== "") {
+                if (this.value !== "") {
                     table.column(i).search("^" + $(this).val(), true, false, true).draw();
-                } else if (this.value !== "") {
-                    table.column(i).search("^" + $(this).val() + "$", true, false, true).draw();
                 } else {
                     table.column(i).search(this.value).draw();
                 }

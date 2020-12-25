@@ -129,15 +129,21 @@ class OrdersListView(generics.ListAPIView):
     queryset = Order.objects.filter(complete=True).order_by('-date_order')
     serializer_class = OrderSerializer
 
-    def list(self, request, **kwargs):
-        # Note the use of `get_queryset()` instead of `self.queryset`
-        queryset = self.get_queryset()
+    def list(self, request, *args, **kwargs):
+        temp_queryset = self.get_queryset()
         if request.GET.get("date1") and request.GET.get("date2"):
             date1 = datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
             date2 = datetime.strptime(request.GET.get("date2"), '%Y-%m-%d') + timedelta(days=1)
-            queryset = Order.objects.filter(complete=True).filter(date_order__range=[date1, date2]).order_by(
+            temp_queryset = Order.objects.filter(complete=True).filter(date_order__range=[date1, date2]).order_by(
                 '-date_order')
-        serializer = OrderSerializer(queryset, many=True)
+
+        queryset = self.filter_queryset(temp_queryset)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
