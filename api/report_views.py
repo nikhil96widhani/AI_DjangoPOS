@@ -169,3 +169,11 @@ class OrdersChartDataView(APIView):
                 dates.append(date), revenue.append(round(order_summary['total_revenue'], 2))
                 profit.append(round(order_summary['total_profit'], 2))
             return Response({'dates': dates, 'revenue': revenue, 'profit': profit})
+
+
+class ProductCompaniesView(APIView):
+    @staticmethod
+    def get(request):
+        search_term = request.GET.get("query")
+        product_companies = ProductCompany.objects.filter(name__contains=search_term)[:10].values_list(flat=True)
+        return Response({'suggestions': product_companies})

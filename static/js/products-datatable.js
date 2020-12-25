@@ -274,8 +274,19 @@ $('#edit_discount_percent, #edit_mrp').on('input', function () {
 $('#toggle-advance-search-button').change(function () {
     if (this.checked) {
         $('#advance-search-bar').removeClass('d-none');
-    }
-    else{
+    } else {
         $('#advance-search-bar').addClass('d-none');
     }
 });
+
+// var countries = [
+//    { value: 'Andorra', data: 'AD' },
+//    // ...
+//    { value: 'Zimbabwe', data: 'ZZ' }
+// ];
+
+$('.product_companies').autocomplete(
+    {
+        serviceUrl: '/api/product-companies',
+    }
+);

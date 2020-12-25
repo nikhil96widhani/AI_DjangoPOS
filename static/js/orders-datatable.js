@@ -12,10 +12,10 @@ function loadOrderDetails(order_id, selector) {
                       <th scope="col" class="font-weight-bolder">Product Code</th>
                       <th scope="col" class="font-weight-bolder">Product Name</th>
                       <th scope="col" class="font-weight-bolder">Quantity</th>
-                      <th scope="col" class="font-weight-bolder">Cost</th>
-                      <th scope="col" class="font-weight-bolder">MRP</th>
-                      <th scope="col" class="font-weight-bolder">Final Price</th>
-                      <th scope="col" class="font-weight-bolder">Profit</th>
+                      <th scope="col" class="font-weight-bolder">Cost (₹)</th>
+                      <th scope="col" class="font-weight-bolder">MRP (₹)</th>
+                      <th scope="col" class="font-weight-bolder">Final Price (₹)</th>
+                      <th scope="col" class="font-weight-bolder">Profit (₹)</th>
                     </tr>
                   </thead>
                 <tbody>`;
@@ -35,10 +35,10 @@ function loadOrderDetails(order_id, selector) {
                           <td>${value.product_code}</td>
                           <td>${value.product_name}</td>
                           <td>${value.quantity}</td>
-                          <td>${attachRupeeSymbol(value.cost)}</td>
-                          <td>${attachRupeeSymbol(value.mrp)}</td>
-                          <td>${attachRupeeSymbol(value.discount_price)}</td>
-                          <td>${attachRupeeSymbol(roundToTwoDecimal(value.discount_price - value.cost))}</td>
+                          <td>${value.cost}</td>
+                          <td>${value.mrp}</td>
+                          <td>${value.discount_price}</td>
+                          <td>${roundToTwoDecimal(value.discount_price - value.cost)}</td>
                         </tr>`;
                 count++;
             })
@@ -147,11 +147,11 @@ function loadOrdersDatatable(date1 = null, date2 = null) {
     $('#orders-datatable thead tr').clone(true).appendTo('#orders-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2");
     $('#orders-datatable thead tr:eq(1) th').each(function (i) {
         const title = $(this).text();
-        $(this).html(`<input type="text" class="form-control form-control-sm"/>`);
+        $(this).html(`<input type="text" class="form-control form-control-sm ml-1"/>`);
         if (i === 9) {
-            $(this).html('<span class="form-control form-control-sm text-center border-0"><i class="fa fa-search" aria-hidden="true"></i></span>');
+            $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button"><i class="fa fa-close" style="font-size: larger" aria-hidden="true"></i></div>');
         } else if (i === 2) {
-            $(this).html(`<input type="date" class="form-control form-control-sm"/>`);
+            $(this).html(`<input type="date" class="form-control form-control-sm ml-1"/>`);
         } else if (i === 0) {
             $(this).html('');
         }
@@ -198,6 +198,25 @@ function loadOrdersDatatable(date1 = null, date2 = null) {
             loadOrderDetails(row.data().id, $('div.slider', row.child()));
         }
     });
+
+    $('#advance-search-clear-button').click(function (e) {
+        resetAdvanceSearch(table);
+    })
+}
+
+function resetAdvanceSearch(table) {
+    // console.log($('#advance-search-bar th input'))
+    for (x of $('#advance-search-bar th input')) {
+        $(x).val('');
+    }
+    table.search('').columns().search('').draw();
+}
+
+function updateOrdersDatatableRows(date1, date2) {
+    let url = `/api/orders-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
+    let datatable = dataTable.DataTable();
+    datatable.clear().draw();
+    datatable.ajax.url(url).load();
 }
 
 $('#toggle-advance-search-button').change(function () {
@@ -212,9 +231,3 @@ $('#order-delete-yes').on('click', function (e) {
     deleteOrder();
 });
 
-function updateOrdersDatatableRows(date1, date2) {
-    let url = `/api/orders-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
-    let datatable = dataTable.DataTable();
-    datatable.clear().draw();
-    datatable.ajax.url(url).load();
-}
