@@ -48,6 +48,63 @@ for index, row in df.iterrows():
     except:
         error_items.append(row['code'])
 
+# %%  xml parser
+from xlrd import open_workbook
+from inventory.models import *
+
+error_items = []
+wb = open_workbook('Helper Functions/stock_1.xls', 'r')
+sheet_names = wb.sheet_names()
+xl_sheet = wb.sheet_by_name(sheet_names[0])
+
+for row in range(4, xl_sheet.nrows):
+    barcode = xl_sheet.row(row)[-1].value
+    name = xl_sheet.row(row)[1].value
+    quantity_unit = xl_sheet.row(row)[2].value
+    cost = xl_sheet.row(row)[10].value if xl_sheet.row(row)[10].value else 0
+    mrp = xl_sheet.row(row)[9].value if xl_sheet.row(row)[9].value else 0
+    discount_price = xl_sheet.row(row)[11].value
+    stock = xl_sheet.row(row)[3].value
+    company = xl_sheet.row(row)[12].value
+
+    print(barcode, name, quantity_unit, cost, mrp, discount_price, stock, company)
+    if barcode:
+        try:
+            product, created = Product.objects.get_or_create(
+                product_code=str(barcode),
+            )
+
+            product.name = name
+            product.cost = cost
+            product.mrp = mrp
+            product.discount_price = discount_price
+            product.company = company
+
+            company, created2 = ProductCompany.objects.get_or_create(
+                name=company,
+            )
+            product.brand = company
+
+            if quantity_unit == 'PCS' or quantity_unit == 'PACK':
+                product.quantity_unit = quantity_unit
+            else:
+                product.quantity_unit = None
+
+            if int(stock) < 0:
+                product.quantity = 0
+            else:
+                product.quantity = int(stock)
+
+            product.save()
+            print('done{}'.format(row))
+        except:
+            error_items.append(barcode)
+    # print(product.product_code. product.quantity_unit, product.cost, product.mrp, product.discount_price,
+    #       product.quantity, product.brand.name)
+
+
+    # print(xl_sheet.row(row)[-1].value, xl_sheet.row(row)[1].value)
+
 # %%  ASSIGN Company
 from inventory.models import *
 

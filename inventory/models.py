@@ -61,8 +61,8 @@ class Product(models.Model):
     product_code = models.CharField(primary_key=True, max_length=30)
 
     name = models.CharField(max_length=100)
-    cost = models.FloatField()
-    mrp = models.FloatField()
+    cost = models.FloatField(blank=True, null=True)
+    mrp = models.FloatField(blank=True, null=True)
     discount_price = models.FloatField(blank=True, null=True)
     discount_percentage = models.FloatField(blank=True, null=True)
     quantity_unit = models.CharField(max_length=9, choices=Quantity_unit, default="PCS", blank=True, null=True)
