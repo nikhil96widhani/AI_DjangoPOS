@@ -92,9 +92,9 @@ function loadProductsData() {
         'columns': [
             {'data': 'product_code',},
             {'data': 'name'},
-            {'data': 'cost', render: attachRupeeSymbol},
-            {'data': 'mrp', render: attachRupeeSymbol},
-            {'data': 'discount_price', render: attachRupeeSymbol},
+            {'data': 'cost'},
+            {'data': 'mrp'},
+            {'data': 'discount_price'},
             {
                 'data': 'quantity', render: function (data, type, full) {
                     if (data === null) return "";
