@@ -18,7 +18,7 @@ def updateInventoryView(request):
     if xls_file:
         filename = xls_file.name
         if filename.endswith('.xls'):
-            context = parseSaveXls(xls_file)
+            context = parseSaveXlsFst(xls_file)
         else:
             context = {'message': 'please upload file ending with .xls',
                        'class': 'alert-danger'}
