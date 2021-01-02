@@ -94,11 +94,21 @@ class Cart(APIView):
                 {"response_type": "updated",
                  "response_text": "All Cart items removed. Start adding products"}
             )
+        elif action == 'quick_add':
+            name = request.data['name']
+            discount_price = request.data['discount_price']
+            quantity = request.data['quantity']
+            a = OrderItem.objects.create(order=order, product=None, quantity=int(quantity), product_name=name,
+                                         discount_price=float(discount_price))
+            a.save()
+            return Response(
+                {"response_type": "Added",
+                 "response_text": "Item was added/updated"}
+            )
         else:
             product_code = request.data['product_code']
             product = Product.objects.get(product_code=product_code)
             orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
-
             if action == 'add':
                 orderItem.quantity = (orderItem.quantity + 1)
             elif action == 'remove':

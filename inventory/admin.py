@@ -8,7 +8,7 @@ class ProductList(admin.ModelAdmin):
 
 
 class OrderItemList(admin.ModelAdmin):
-    list_display = ('product', 'order', 'quantity', 'amount')
+    list_display = ('product_name', 'order', 'quantity', 'amount')
     exclude = ('amount',)
 
 

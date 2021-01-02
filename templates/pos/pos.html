@@ -19,6 +19,9 @@
         }
     </style>
     <link rel="stylesheet" href="{% static 'css/pos-style.css' %}">
+
+
+
 {% endblock %}
 
 {% block page-title %}
@@ -26,6 +29,7 @@
 {% endblock %}
 
 {% block content %}
+
     <!-- Section: Sale -->
     <section class="py-2">
 
@@ -39,7 +43,7 @@
                 <div class="row">
 
                     <!-- Grid column -->
-                    <div class="col-xl-4 col-md-12 mr-0">
+                    <div class="col-xl-4 col-md-12 pr-0">
 
                         <!-- Card Title -->
                         <div class="view view-cascade gradient-card-header blue-gradient lighten-1">
@@ -59,8 +63,8 @@
                                     <!-- All Products -->
                                     <div class="">
                                         <div class="md-form mt-1">
-                                            <input type="text" id="AllProductList" class="form-control">
-                                            <label for="AllProductList">All Products</label>
+                                            <input type="search" id="AllProductList" class="form-control">
+                                            <label for="AllProductList">Search Products</label>
                                         </div>
                                         <br>
                                         <ul class="list-group list-group-flush overflow-auto my-custom-scrollbar-product-list"
@@ -107,12 +111,38 @@
                                     </div>
                                     <!-- All Products -->
 
+                                    <!-- Buttons -->
+                                    <div class="row text-center pt-4">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
+                                                    data-toggle="modal" data-target="#calculator-modal">Calculator
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
+                                                    data-toggle="modal" data-target="#quick-add-modal">Quick Add Item
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row text-center">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
+                                            data-toggle="modal" data-target="#discount-modal">Apply Discount
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500" disabled>
+                                                Print Last Receipt
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Buttons -->
                                 </div>
+
                                 <!-- First column -->
 
                             </div>
                             <!-- Panel data -->
-
                         </div>
                         <!-- Card content -->
 
@@ -120,7 +150,7 @@
                     <!-- Grid column -->
 
                     <!-- Grid column -->
-                    <div class="col-xl-8 col-md-12">
+                    <div class="col-xl-8 col-md-12 pl-0">
 
                         <!-- Card image -->
                         <div class="view view-cascade card-header white">
@@ -134,7 +164,13 @@
                                     <thead class="mdb-color lighten-5">
                                     <tr>
                                         <th class="font-weight-bold">
-                                            <strong>Product</strong>
+                                            <div class="form-inline">
+                                                <div class="font-weight-bold pr-3">Product</div>
+                                                <form>
+                                                    <input name='scan' type='text' data-barcode-scanner-target/>
+                                                </form>
+                                            </div>
+
                                         </th>
                                         <th class="font-weight-bold">
                                             <strong>Weight</strong>
@@ -282,7 +318,7 @@
                                                 <div class="btn-group radio-group ml-2" data-toggle="buttons">
                                                     <button type="button" data-product="1001" data-action="remove"
                                                             class="btn btn-primary btn-md mr-1 btn-rounded previous-step"
-                                                            > < Back
+                                                    > < Back
                                                         <!-- <i class="fas fa-minus"></i> Font Awesome fontawesome.com -->
                                                     </button>
                                                     <button id="stepper-complete-order" type="button"
@@ -347,9 +383,14 @@
 
     </section>
     <!-- Section: Analytical panel -->
+    {% include 'pos/pos-modal-calculator.html' %}
+    {% include 'pos/pos-modal-quick-add.html' %}
+    {% include 'pos/pos-modal-discount.html' %}
 {% endblock %}
 
+
 {% block javascript %}
+    <script src="{% static 'js/barcode-scanner-new.js' %}"></script>
     <script src="{% static 'js/pos-home.js' %}"></script>
     <script src="{% static 'js/jquery.pos.js' %}"></script>
     <script src="{% static 'js/whatsapp_receipt.js' %}"></script>

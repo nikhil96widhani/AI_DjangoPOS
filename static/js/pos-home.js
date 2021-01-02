@@ -11,6 +11,19 @@ $(document).ready(function () {
 
 });
 
+// BARCODE NEW
+jQuery(function(){
+  $('form').on('submit', function(e){
+    e.preventDefault();
+    var $input = $(this).find('input');
+    updateUserOrder($input.val(), 'add')
+    $(this).value($input.val());
+    // $(this).after("<div class='scan'>"+$input.val()+"</div>");
+    $input.val('');
+    $input.blur();
+  });
+});
+
 function product_search(value) {
     let url = '/api/search-products';
 
@@ -80,54 +93,60 @@ function completePos() {
 
 
 // SCANNER INPUT
-$(function () {
-    $(document).pos();
-    $(document).on('scan.pos.barcode', function (event) {
-        updateUserOrder(event.code, 'add')
+// $(function () {
+//     $(document).pos();
+//     $(document).on('scan.pos.barcode', function (event) {
+//         console.log(event.code)
+//         let barcode = String(event.code)
+//         console.log(barcode)
+//         updateUserOrder(barcode, 'add')
+//
+//         //access `event.code` - barcode data
+//     });
+//
+//     // $(document).on('swipe.pos.card', function(event){
+//     // 	//access following:
+//     // 	// `event.card_number` - card number only
+//     // 	// `event.card_holder_first_name` - card holder first name only
+//     // 	// `event.card_holder_last_name` - card holder last name only
+//     // 	// `event.card_exp_date_month` - card expiration month - 2 digits
+//     // 	// `event.card_exp_date_year_2` - card expiration year - 2 digits
+//     // 	// `event.card_exp_date_year_4` - card expiration year - 4 digits
+//     // 	// `event.swipe_data` - original swipe data from raw processing or sending to a 3rd party service
+//     // });
+// });
 
-        //access `event.code` - barcode data
-    });
-    // $(document).on('swipe.pos.card', function(event){
-    // 	//access following:
-    // 	// `event.card_number` - card number only
-    // 	// `event.card_holder_first_name` - card holder first name only
-    // 	// `event.card_holder_last_name` - card holder last name only
-    // 	// `event.card_exp_date_month` - card expiration month - 2 digits
-    // 	// `event.card_exp_date_year_2` - card expiration year - 2 digits
-    // 	// `event.card_exp_date_year_4` - card expiration year - 4 digits
-    // 	// `event.swipe_data` - original swipe data from raw processing or sending to a 3rd party service
-    // });
-});
-var options = {
-    scan: true, //enable scan event
-    submit_on_scan: false, //allow the keycode 13 event to continue on scan
-    swipe: true, //enable swipe event
-    submit_on_swipe: false, //allow the keycode 13 event to continue on swipe
-    events: {
-        scan: {
-            barcode: 'scan.pos.barcode' //event name for successfully scanned barcode
-        },
-        swipe: {
-            card: 'swipe.pos.card' //event name for successfully scanned card
-        }
-    },
-    regexp: {
-        scan: {
-            barcode: '\\d+' //regexp for barcode validation
-        },
-        swipe: {
-            card: '\\%B(\\d+)\\^(\\w+)\\/(\\w+)\\^\\d+\\?;\\d+=(\\d\\d)(\\d\\d)\\d+\\?' //regexp for credit card validation
-        }
-    },
-    prefix: {
-        scan: {
-            barcode: '*' //prefix for barcode - will be added to regexp
-        },
-        swipe: {
-            card: '' //prefix for credit card - will be added to regexp
-        }
-    }
-};
+
+// var options = {
+//     scan: true, //enable scan event
+//     submit_on_scan: false, //allow the keycode 13 event to continue on scan
+//     swipe: true, //enable swipe event
+//     submit_on_swipe: false, //allow the keycode 13 event to continue on swipe
+//     events: {
+//         scan: {
+//             barcode: 'scan.pos.barcode' //event name for successfully scanned barcode
+//         },
+//         swipe: {
+//             card: 'swipe.pos.card' //event name for successfully scanned card
+//         }
+//     },
+//     regexp: {
+//         scan: {
+//             barcode: '\\d+' //regexp for barcode validation
+//         },
+//         swipe: {
+//             card: '\\%B(\\d+)\\^(\\w+)\\/(\\w+)\\^\\d+\\?;\\d+=(\\d\\d)(\\d\\d)\\d+\\?' //regexp for credit card validation
+//         }
+//     },
+//     prefix: {
+//         scan: {
+//             barcode: '*' //prefix for barcode - will be added to regexp
+//         },
+//         swipe: {
+//             card: '' //prefix for credit card - will be added to regexp
+//         }
+//     }
+// };
 
 // $(document).pos(options);
 // END SCANNER INPUT
@@ -151,9 +170,9 @@ function loadTable(product_code, response) {
             var trHTML = '';
             $.each(data.items.reverse(), function (e, item) {
                 if (item.product.product_code === product_code) {
-                    trHTML += `<tr class="clicked"><td><div class="text-left font-weight-bold">${item.product.name}</div></td><td>${item.product.weight}</td><td>₹${item.product.discount_price}</td><td class="text-center text-md-center"><span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons"><button type="button" data-product="1001" data-action="remove" class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i class="fas fa-minus"></i></button><button type="button" data-product="1001" data-action="add" class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i class="fas fa-plus"></i></button></div></td><td class="font-weight-bold"><strong>₹${item.amount}</strong></td><td><button type="button" data-product="1001" data-action="add" class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
+                    trHTML += `<tr class="clicked"><td><div class="text-left font-weight-bold">${item.product.name}</div></td><td>${item.product.weight}</td><td>₹${item.product.discount_price}</td><td class="text-center text-md-center"><span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons"><button type="button" class="btn btn-primary btn-sm mr-1 btn-rounded update-quantity-cart" onclick="updateUserOrder('${item.product.product_code}', 'remove')" onmousedown="setInter('${item.product.product_code}', 'remove', ${item.quantity})" onmouseup="unsetInter()"><i class="fas fa-minus"></i></button><button type="button" class="btn btn-primary btn-sm mr-1 btn-rounded update-quantity-cart" onclick="updateUserOrder('${item.product.product_code}', 'add')" onmousedown="setInter('${item.product.product_code}', 'add')" onmouseup="unsetInter()"><i class="fas fa-plus"></i></button></div></td><td class="font-weight-bold"><strong>₹${item.amount}</strong></td><td><button type="button" data-product="1001" data-action="add" class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder('${item.product.product_code}', 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
                 } else {
-                    trHTML += `<tr><td><div class="text-left font-weight-bold">${item.product.name}</div></td><td>${item.product.weight}</td><td>₹${item.product.discount_price}</td><td class="text-center text-md-center"><span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons"><button type="button" data-product="1001" data-action="remove" class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'remove')"><i class="fas fa-minus"></i></button><button type="button" data-product="1001" data-action="add" class="btn btn-primary btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'add')"><i class="fas fa-plus"></i></button></div></td><td class="font-weight-bold"><strong>₹${item.amount}</strong></td><td><button type="button" data-product="1001" data-action="add" class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder(${item.product.product_code}, 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
+                    trHTML += `<tr><td><div class="text-left font-weight-bold">${item.product.name}</div></td><td>${item.product.weight}</td><td>₹${item.product.discount_price}</td><td class="text-center text-md-center"><span class="qty">${item.quantity} </span><div class="btn-group radio-group ml-2" data-toggle="buttons"><button type="button" class="btn btn-primary btn-sm mr-1 btn-rounded update-quantity-cart" onclick="updateUserOrder('${item.product.product_code}', 'remove')" onmousedown="setInter('${item.product.product_code}', 'remove', ${item.quantity})" onmouseup="unsetInter()"><i class="fas fa-minus"></i></button><button type="button" class="btn btn-primary btn-sm mr-1 btn-rounded update-quantity-cart" onclick="updateUserOrder('${item.product.product_code}', 'add')" onmousedown="setInter('${item.product.product_code}', 'add')" onmouseup="unsetInter()"><i class="fas fa-plus"></i></button></div></td><td class="font-weight-bold"><strong>₹${item.amount}</strong></td><td><button type="button" data-product="1001" data-action="add" class="btn btn-danger btn-sm mr-1 btn-rounded" onclick="updateUserOrder('${item.product.product_code}', 'delete')"><i class="fas fa-trash"></i></button></button></td></tr>`;
                 }
             });
             $('#datatable-ajax').empty().append(trHTML);
@@ -266,4 +285,50 @@ function CompleteOrder() {
         },
         body: JSON.stringify({'product_code': null, 'action': 'complete', 'payment-mode': payment_mode.value})
     })
+}
+
+
+// INCREMENT ORDERS STEPPER
+var inter = null;
+
+function setInter(code, action, quantity = 0) {
+    inter = setInterval(function () {
+        if (quantity === 1) {
+            clearInterval(inter)
+        } else {
+            updateUserOrder(code, action)
+            quantity--
+        }
+    }, 100);
+}
+
+
+function unsetInter() {
+    clearInterval(inter);
+}
+
+
+function quickAddProduct() {
+    let url = "/api/cart/"
+    let name = document.getElementById('qa_name').value
+    let quantity = document.getElementById('qa_quantity').value
+    let discount_price = document.getElementById('qa_discount_price').value
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({'name': name , 'discount_price':discount_price, 'quantity':quantity, 'action': 'quick_add'})
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data)
+            // location.reload()
+            loadTable(null, data);
+
+        });
 }

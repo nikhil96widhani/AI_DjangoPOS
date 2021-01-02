@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from solo.models import SingletonModel
+from ckeditor.fields import RichTextField
 
 
 # Create your models here.
@@ -79,6 +81,31 @@ class User(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         return self.is_admin
 
-    def has_module_perms(self, app_label):
+    @staticmethod
+    def has_module_perms(app_label):
         return True
 
+
+# https://github.com/lazybird/django-solo
+class SiteConfiguration(SingletonModel):
+    # Shop Fields
+    shop_name = models.CharField(max_length=255, blank=True, null=True, default='Shop Name')
+    address = models.CharField(max_length=100, blank=True, null=True, default='Bhopal, India')
+    country_located = models.CharField(max_length=20, blank=True, null=True, default='India')
+    email = models.EmailField(blank=True, null=True, default='admin@site.com')
+    phone_number = models.IntegerField(blank=True, null=True, default='1111111111')
+    whatsapp_number = models.IntegerField(blank=True, null=True, default='1111111111')
+
+    # Payment Fields
+    currency = models.CharField(max_length=5, blank=True, null=True, default='₹')
+
+    # Receipt Fields
+    # tnc = models.CharField(max_length=5, null=True)
+    receipt_message = models.CharField(max_length=100, blank=True, null=True, default='Thank you for shopping')
+    receipt_tnc = RichTextField(blank=True, null=True, default='<li>No Return on goods sold</li>')
+
+    def __str__(self):
+        return "Site Configuration"
+
+    class Meta:
+        verbose_name = "Site Configuration"
