@@ -2,6 +2,11 @@ from xlrd import open_workbook
 import inventory.models
 
 
+def calculateDiscountPrice(value, percentage):
+    discount = value - (value * percentage / 100.0)
+    return round(discount, 2)
+
+
 def parseSaveXls(file):
     error_items = []
     message = ''

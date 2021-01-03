@@ -1,10 +1,12 @@
 from django.db import models
 from accounts.models import User
-from .helpers import *
+from inventory.helpers import calculateDiscountPrice
 from django.utils.timezone import now
+from coupons_discounts.models import Discount
 
 # Create your models here.
-
+# Discounts
+# https://github.com/Wolfterro/django-simple-coupons
 Quantity_unit = (
     ("PCS", "PCS"),
     ("PACK", "PACK")
@@ -14,7 +16,9 @@ Weight_unit = (
     ("", ""),
     ("mg", "mg"),
     ("g", "g"),
-    ("kg", "kg")
+    ("kg", "kg"),
+    ("ml", "ml"),
+    ("L", "L")
 )
 
 Payment_mode = (
@@ -124,11 +128,17 @@ class Order(models.Model):
     cart_mrp = models.FloatField(null=True, blank=True)
     cart_quantity = models.IntegerField(default=0, null=True, blank=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
+    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def get_cart_revenue(self):
         order_items = self.orderitem_set.all()
         revenue_total = sum([item.get_revenue for item in order_items])
+        if self.discount:
+            if self.discount.is_percentage:
+                revenue_total = calculateDiscountPrice(revenue_total, self.discount.value)
+            else:
+                revenue_total = revenue_total - self.discount.value
         return revenue_total
 
     @property
@@ -172,28 +182,47 @@ class OrderItem(models.Model):
     product_name = models.CharField(max_length=100, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
+    weight = models.IntegerField(blank=True, null=True)
+    weight_unit = models.CharField(max_length=9, blank=True, null=True)
     date_added = models.DateField(auto_now_add=True)
     cost = models.FloatField(null=True, blank=True)
     mrp = models.FloatField(null=True, blank=True)
     discount_price = models.FloatField(null=True, blank=True)
     amount = models.FloatField(null=True, blank=True)
+    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.product_code = self.product.product_code
-        self.product_name = self.product.name
-        self.discount_price = self.product.discount_price
-        self.mrp = self.product.mrp
-        self.cost = self.product.cost
+        if self.product is not None:
+            self.product_code = self.product.product_code
+            self.product_name = self.product.name
+            self.discount_price = self.product.discount_price
+            self.mrp = self.product.mrp
+            self.cost = self.product.cost
+            self.weight = self.product.weight
+            self.weight_unit = self.product.weight_unit
 
-        if self.product.discount_price and self.quantity:
-            self.amount = self.quantity * self.product.discount_price
-            super(OrderItem, self).save(*args, **kwargs)
-        elif self.product.mrp and self.quantity:
-            self.amount = self.quantity * self.product.mrp
-            super(OrderItem, self).save(*args, **kwargs)
+            if self.product.discount_price and self.quantity:
+                self.amount = round(self.quantity * self.product.discount_price, 2)
+                super(OrderItem, self).save(*args, **kwargs)
+            elif self.product.mrp and self.quantity:
+                self.amount = round(self.quantity * self.product.mrp, 2)
+                super(OrderItem, self).save(*args, **kwargs)
+            else:
+                self.amount = None
+                super(OrderItem, self).save(*args, **kwargs)
         else:
-            self.amount = None
-            super(OrderItem, self).save(*args, **kwargs)
+            self.product_code = None
+            self.mrp = self.discount_price
+            self.cost = self.discount_price
+            if self.discount_price and self.quantity:
+                self.amount = round(self.quantity * self.discount_price, 2)
+                super(OrderItem, self).save(*args, **kwargs)
+            elif self.mrp and self.quantity:
+                self.amount = round(self.quantity * self.mrp, 2)
+                super(OrderItem, self).save(*args, **kwargs)
+            else:
+                self.amount = None
+                super(OrderItem, self).save(*args, **kwargs)
 
     @property
     def get_revenue(self):

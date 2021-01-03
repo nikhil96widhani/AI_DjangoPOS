@@ -11,7 +11,7 @@
 
 .my-custom-scrollbar-product-list {
     position: relative;
-    height: calc(100vh - 40vh);
+    /*height: calc(100vh - 45vh);*/
     width: 100%;
     overflow: auto;
 }
