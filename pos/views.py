@@ -60,6 +60,7 @@ def productLabelView(request, pk):
                                                                    "Product not found with that product id"})
 
 
+@login_required
 def cart_datatable_view(request):
     all_products = Product.objects.all()[:10]
     if request.user.is_authenticated:

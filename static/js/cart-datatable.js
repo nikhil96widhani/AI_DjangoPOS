@@ -7,13 +7,13 @@ function loadCartData() {
         'ajax': url,
         "fnInitComplete": function () {
             const myCustomScrollbar = document.querySelector('#cart-datatable_wrapper .dataTables_scrollBody');
-            const ps = new PerfectScrollbar(myCustomScrollbar);
+            new PerfectScrollbar(myCustomScrollbar);
         },
         "language": {
             "emptyTable": '<div class="alert alert-primary text-center" role="alert">No products in the cart. Start by adding some products!</div>'
         },
-        "scrollY": "60vh",
-        "scrollCollapse": true,
+        "scrollY": "55vh",
+        // "scrollCollapse": true,
         "paging": false,
         'dom': "t",
         'fixedHeader': true,
@@ -56,6 +56,7 @@ function updateCartDetails(quantity, total) {
 }
 
 function updateUserOrder(product_code, action) {
+    console.log('Function called')
     let url = "/api/cart/"
     let method = 'POST'
     if (action === 'clear') {
@@ -222,4 +223,6 @@ $(document).ready(function () {
     });
     loadCartData();
     $('.stepper').mdbStepper();
+    // const myCustomScrollbar = document.querySelector('#AllProductListLi');
+    // const ps = new PerfectScrollbar(myCustomScrollbar);
 });
