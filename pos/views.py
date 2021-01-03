@@ -58,3 +58,24 @@ def productLabelView(request, pk):
     except ObjectDoesNotExist:
         return render(request, 'pos/product-label.html', {'error': "ERROR REASON: "
                                                                    "Product not found with that product id"})
+
+
+def cart_datatable_view(request):
+    all_products = Product.objects.all()[:10]
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cart_items = order.orderitem_set.all()
+        context = {
+            'all_products': all_products,
+            'order': order,
+            'cart_items': cart_items,
+            'payment_mode': Payment_mode
+        }
+    else:
+        context = {
+            'all_products': all_products,
+            'order': [],
+            'cart_items': []
+        }
+    return render(request, 'pos/cart-datatable.html', context)

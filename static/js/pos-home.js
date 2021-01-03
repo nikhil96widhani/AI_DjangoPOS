@@ -216,9 +216,13 @@ function updateCartDetails(data) {
 
 function updateUserOrder(product_code, action) {
     var url = "/api/cart/"
+    let method = 'POST'
+    if (action === 'complete' || action === 'clear'){
+        method = 'PUT'
+    }
 
     fetch(url, {
-        method: 'POST',
+        method: method,
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
@@ -259,7 +263,7 @@ function CompleteOrder() {
     var url = "/api/cart/"
 
     fetch(url, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,

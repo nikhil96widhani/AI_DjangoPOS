@@ -6,7 +6,7 @@
     <style>
         tr.clicked {
             animation-name: product-animation;
-            animation-duration: 1.5s;
+            animation-duration: 1s;
         }
 
         @keyframes product-animation {
@@ -19,6 +19,8 @@
         }
     </style>
     <link rel="stylesheet" href="{% static 'css/pos-style.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/fc-3.3.1/fh-3.1.7/kt-2.5.3/sc-2.0.3/sb-1.0.0/sp-1.2.1/sl-1.3.1/datatables.min.css"/>
 {% endblock %}
 
 {% block page-title %}
@@ -26,7 +28,7 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Section: Sale -->
+
     <section class="py-2">
 
         <!-- Card -->
@@ -121,58 +123,31 @@
 
                     <!-- Grid column -->
                     <div class="col-xl-8 col-md-12">
-
-                        <!-- Card image -->
-                        <div class="view view-cascade card-header white">
-                            <h5 class="text-center"> CART </h5>
-                            <!-- Shopping Cart table -->
-                            <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar-cart">
-
-                                <table class="table product-table table-cart-v-2">
-
-                                    <!-- Table head -->
-                                    <thead class="mdb-color lighten-5">
+                        <div class="card mr-4 mt-n4">
+                            <h4 class="text-center font-weight-bold py-3 mb-0">Cart</h4>
+                            <div class="card-body py-0 pr-0">
+                                <table id="cart-datatable" class="table text-center product-table table-cart-v-2"
+                                       style="width:100%">
+                                    <thead class="bg-light">
                                     <tr>
-                                        <th class="font-weight-bold">
-                                            <strong>Product</strong>
-                                        </th>
-                                        <th class="font-weight-bold">
-                                            <strong>Weight</strong>
-                                        </th>
-                                        <th class="font-weight-bold">
-                                            <strong>Price</strong>
-                                        </th>
-                                        <th class="font-weight-bold">
-                                            <strong>QTY</strong>
-                                        </th>
-                                        <th class="font-weight-bold">
-                                            <strong>Amount</strong>
-                                        </th>
-                                        <th style="width:  10%">
-                                            <a type="button"
-                                               onclick="updateUserOrder({{ order.id }}, 'clear')"
-                                               class="btn btn-danger btn-sm">Clear Cart
-                                            </a>
+                                        <th>Product</th>
+                                        <th>Weight</th>
+                                        <th>Price (₹)</th>
+                                        <th>Quantity</th>
+                                        <th>Amount (₹)</th>
+                                        <th>
+{#                                            <a type="button"#}
+                                            {#                                               onclick="updateUserOrder({{ order.id }}, 'clear')"#}
+                                            {#                                               class="btn btn-danger btn-sm">Clear Cart#}
+                                            {#                                            </a>#}
+                                            <button class="btn btn-danger btn-sm btn-rounded mr-4" title="Clear Cart"
+                                                    onclick="updateUserOrder({{ order.id }}, 'clear')"><i class="fas fa-shopping-cart"></i></button>
                                         </th>
                                     </tr>
                                     </thead>
-                                    <!-- Table head -->
-
-                                    <!-- Table body -->
-                                    <tbody id="datatable-ajax">
-
-                                    </tbody>
-                                    <!-- Table body -->
-
                                 </table>
-                                <div id="check-order-empty"></div>
                             </div>
-                            <!-- Shopping Cart table -->
-
-
                         </div>
-                        <!-- Card image -->
-
 
                         <!-- STEPPER -->
                         <div class="container pt-4 px-4">
@@ -188,16 +163,16 @@
                                             <div class="col-sm-4">
                                                 <div class="input-group mb-4">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text" id="CashReceived">- ₹</span>
+                                                        <span class="input-group-text" id="CashReceived">₹</span>
                                                     </div>
                                                     <input id="CashReceivedValue" type="number" class="form-control"
                                                            aria-label="Small"
                                                            aria-describedby="CashReceived" min="0" max="10000000"
-                                                           onkeyup="calculateRefund(value)" autocomplete="off">
+                                                           autocomplete="off">
 
                                                     <div class="input-group-append">
                                                         <select id="payment-mode" class="custom-select custom-select"
-                                                                autocomplete="off">
+                                                                autocomplete="off" aria-label="payment-mode">
                                                             {% for x,y in payment_mode %}
                                                                 <option value="{{ x }}"{% if x == 'Cash' %}
                                                                         selected{% endif %}>{{ y }}</option>
@@ -232,7 +207,7 @@
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">+91</div>
                                                 </div>
-                                                <input type="text" class="form-control py-0"
+                                                <input type="text" class="form-control py-0" aria-label="phone-number"
                                                        id="phone_number" placeholder="Phone Number"
                                                        style="max-width: 250px">
                                                 <div class="input-group-append" id="button-addon4">
@@ -249,40 +224,11 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Grid column -->
-                                            {#                                            <div class="col-sm-4">#}
-                                            {#                                                <!-- Default input -->#}
-                                            {#                                                <label class="sr-only" for="phone_number">Phone Number</label>#}
-                                            {#                                                <div class="input-group mb-2 mt-2">#}
-                                            {#                                                    <div class="input-group-prepend">#}
-                                            {#                                                        <div class="input-group-text">+91</div>#}
-                                            {#                                                    </div>#}
-                                            {#                                                    <input type="text" class="form-control py-0"#}
-                                            {#                                                           id="phone_number" placeholder="Phone Number">#}
-                                            {#                                                </div>#}
-                                            {#                                            </div>#}
-                                            {#                                            <!-- Grid column -->#}
-                                            {##}
-                                            {#                                            <!-- Grid column -->#}
-                                            {#                                            <div class="col-sm-2 text-center">#}
-                                            {#                                                <button type="button" class="btn btn-sm btn-success btn-md mt-1"#}
-                                            {#                                                        onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp Receipt#}
-                                            {#                                                </button>#}
-                                            {#                                            </div>#}
-                                            {#                                            <!-- SUBMIT COl-->#}
-                                            {#                                            <!-- Print recipt column -->#}
-                                            {#                                            <div class="col-sm-2 text-center">#}
-                                            {#                                                <a href="{% url 'receipt' order.id %}" target="_blank"#}
-                                            {#                                                   class="waves-effect waves-dark btn btn-sm btn-secondary">#}
-                                            {#                                                    Print Receipt#}
-                                            {#                                                </a>#}
-                                            {#                                            </div>#}
-
                                             <div class="col-sm-auto text-center">
                                                 <div class="btn-group radio-group ml-2" data-toggle="buttons">
                                                     <button type="button" data-product="1001" data-action="remove"
                                                             class="btn btn-primary btn-md mr-1 btn-rounded previous-step"
-                                                            > < Back
+                                                    > < Back
                                                         <!-- <i class="fas fa-minus"></i> Font Awesome fontawesome.com -->
                                                     </button>
                                                     <button id="stepper-complete-order" type="button"
@@ -292,66 +238,30 @@
                                                         <!-- <i class="fas fa-plus"></i> Font Awesome fontawesome.com -->
                                                     </button>
                                                 </div>
-                                                {#                                                </div>#}
-                                                {#                                                <div class="step-actions">#}
-                                                {#                                                <button id="stepper-complete-order"#}
-                                                {#                                                        class="waves-effect waves-dark btn btn-md btn-primary next-step btn-rounded update-cart float-right"#}
-                                                {#                                                        onclick="CompleteOrder()"#}
-                                                {#                                                        data-feedback="completePos">COMPLETE ORDER#}
-                                                {#                                                </button>#}
-                                                {#                                            <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">#}
-                                                {#                                                BACK#}
-                                                {#                                            </button>#}
-                                                {#                                        </div>#}
                                             </div>
-                                            <!-- Print recipt col -->
-                                            <!-- Default auto-sizing form -->
-
-                                            {#                                            <a href="https://web.whatsapp.com/send?text=your_message&phone=918982400180"#}
-                                            {#                                               target="_blank"#}
-                                            {#                                               class="waves-effect waves-dark btn btn-sm btn-success">#}
-                                            {#                                                WhatsApp Receipt#}
-                                            {#                                            </a>#}
-
                                         </div>
                                     </div>
                                 </li>
-                                {#                                <li class="step">#}
-                                {#                                    <div class="step-title waves-effect waves-dark">Step 3</div>#}
-                                {#                                    <div class="step-new-content">#}
-                                {#                                        Finish!#}
-                                {#                                        <div class="step-actions">#}
-                                {#                                            <button class="waves-effect waves-dark btn-sm btn btn-primary m-0 mt-4"#}
-                                {#                                                    type="button">SUBMIT#}
-                                {#                                            </button>#}
-                                {#                                        </div>#}
-                                {#                                    </div>#}
-                                {#                                </li>#}
                             </ul>
-
                         </div>
                         <!-- STEPPER -->
-
-
                     </div>
                     <!-- Grid column -->
-
                 </div>
                 <!-- Grid row -->
-
             </section>
             <!-- Section: CART -->
-
         </div>
         <!-- Card -->
-
     </section>
-    <!-- Section: Analytical panel -->
 {% endblock %}
 
 {% block javascript %}
-    <script src="{% static 'js/pos-home.js' %}"></script>
+    {#    <script src="{% static 'js/pos-home.js' %}"></script>#}
     <script src="{% static 'js/jquery.pos.js' %}"></script>
     <script src="{% static 'js/whatsapp_receipt.js' %}"></script>
-
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/fc-3.3.1/fh-3.1.7/kt-2.5.3/sc-2.0.3/sb-1.0.0/sp-1.2.1/sl-1.3.1/datatables.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/datatable-common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/cart-datatable.js' %}"></script>
 {% endblock %}

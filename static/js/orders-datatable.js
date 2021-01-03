@@ -63,29 +63,11 @@ function loadOrdersData(date1, date2) {
         url = `/api/orders-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
     }
     return dataTable.DataTable({
-        'serverSide': true,
-        'processing': true,
-        "language": {
-            processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>'
-        },
         'ajax': url,
         "fnInitComplete": function () {
             const myCustomScrollbar = document.querySelector('#orders-datatable_wrapper .dataTables_scrollBody');
             const ps = new PerfectScrollbar(myCustomScrollbar);
         },
-        // select: true,
-        orderCellsTop: true,
-        "scrollX": true,
-        // keys: true,
-        lengthMenu: [[10, 50, 100, 500, 1000, -1], [10, 50, 100, 500, 1000, "All"]],
-        order: [],
-        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-2'><'col-sm-12 col-md-5'p>>" +
-            "<'row'<'col text-right pt-2'B>>",
-        buttons: [
-            'copy', 'excel', 'pdf', 'print', 'colvis'
-        ],
         'columns': [
             {
                 "class": 'details-control',
@@ -134,7 +116,6 @@ function deleteOrder() {
             'X-CSRFToken': csrftoken,
         },
     }).done(function () {
-        dataTable.DataTable().ajax.reload();
         dataTable.DataTable().draw(false);
         toastr.info('Order was deleted successfully.');
         $('.close').click();
@@ -149,7 +130,7 @@ function loadOrdersDatatable(date1 = null, date2 = null) {
         const title = $(this).text();
         $(this).html(`<input type="text" class="form-control form-control-sm ml-1"/>`);
         if (i === 9) {
-            $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button"><i class="fa fa-close" style="font-size: larger" aria-hidden="true"></i></div>');
+            $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button" onclick="resetAdvanceSearch()"><i class="fa fa-close" style="font-size: larger" aria-hidden="true"></i></div>');
         } else if (i === 2) {
             $(this).html(`<input type="date" class="form-control form-control-sm ml-1"/>`);
         } else if (i === 0) {
@@ -198,18 +179,6 @@ function loadOrdersDatatable(date1 = null, date2 = null) {
             loadOrderDetails(row.data().id, $('div.slider', row.child()));
         }
     });
-
-    $('#advance-search-clear-button').click(function (e) {
-        resetAdvanceSearch(table);
-    })
-}
-
-function resetAdvanceSearch(table) {
-    // console.log($('#advance-search-bar th input'))
-    for (x of $('#advance-search-bar th input')) {
-        $(x).val('');
-    }
-    table.search('').columns().search('').draw();
 }
 
 function updateOrdersDatatableRows(date1, date2) {
@@ -218,14 +187,6 @@ function updateOrdersDatatableRows(date1, date2) {
     datatable.clear().draw();
     datatable.ajax.url(url).load();
 }
-
-$('#toggle-advance-search-button').change(function () {
-    if (this.checked) {
-        $('#advance-search-bar').removeClass('d-none');
-    } else {
-        $('#advance-search-bar').addClass('d-none');
-    }
-});
 
 $('#order-delete-yes').on('click', function (e) {
     deleteOrder();

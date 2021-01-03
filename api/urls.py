@@ -5,6 +5,7 @@ from .report_views import OrdersListView
 
 urlpatterns = [
     path('cart/', Cart.as_view(), name='cart'),
+    path('cart-datatable/', CartListView.as_view(), name='api-cart-datatable'),
     path('product-categories/', ProductCategoryList.as_view(), name='product-category-get-post'),
     path('product-categories/<int:pk>/', ProductCategoryDetail.as_view(), name='product-category-update-delete'),
     path('products/', ProductListView.as_view(), name='product-list'),

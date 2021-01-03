@@ -20,6 +20,13 @@ function attachRupeeSymbol(data) {
     return "₹" + data;
 }
 
+function handleBlankData(data) {
+	if (data === null){
+		return "-";
+	}
+	return data;
+}
+
 var dateFormat = function () {
 	var	token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
 		timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,

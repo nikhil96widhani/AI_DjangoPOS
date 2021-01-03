@@ -1,7 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.crypto import get_random_string
 from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -70,10 +71,38 @@ class Cart(APIView):
             }
             return Response(content)
 
-    def post(self, request, format=None):
+    @staticmethod
+    def post(request):
         action = request.data['action']
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
+
+        product_code = request.data['product_code']
+        product = Product.objects.get(product_code=product_code)
+        order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
+
+        response = {"response_type": action,
+                    "response_text": f"{str(action).title()} product was successful."}
+        if action == 'add':
+            order_item.quantity = (order_item.quantity + 1)
+        elif action == 'remove':
+            order_item.quantity = (order_item.quantity - 1)
+            if order_item.quantity <= 0:
+                order_item.delete()
+                return Response(response)
+        elif action == 'delete':
+            order_item.delete()
+            return Response(response)
+        order_item.save()
+        return Response(response)
+
+    @staticmethod
+    def put(request):
+        print(request.data)
+        action = request.data['action']
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+
         if action == 'complete' and len(order.orderitem_set.all()) <= 0:
             return Response(
                 {"response_type": "completed",
@@ -94,25 +123,20 @@ class Cart(APIView):
                 {"response_type": "updated",
                  "response_text": "All Cart items removed. Start adding products"}
             )
-        else:
-            product_code = request.data['product_code']
-            product = Product.objects.get(product_code=product_code)
-            orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
 
-            if action == 'add':
-                orderItem.quantity = (orderItem.quantity + 1)
-            elif action == 'remove':
-                orderItem.quantity = (orderItem.quantity - 1)
 
-            orderItem.save()
+class CartListView(generics.ListAPIView):
+    queryset = Order.objects.none()
+    serializer_class = cart_items_serializer
+    permission_classes = [IsAuthenticated]
 
-            if orderItem.quantity <= 0 or action == 'delete':
-                orderItem.delete()
-
-            return Response(
-                {"response_type": "updated",
-                 "response_text": "Item was added/updated"}
-            )
+    def list(self, request, *args, **kwargs):
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order_items = order.orderitem_set.all()
+        queryset = self.filter_queryset(order_items)
+        serializer = self.get_serializer(reversed(queryset), many=True)
+        return Response(serializer.data)
 
 
 class ProductCategoryList(APIView):

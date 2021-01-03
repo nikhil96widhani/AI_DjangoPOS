@@ -70,25 +70,12 @@ function addCategoriesToInput(input_selector) {
 
 function loadProductsData() {
     return dataTable.DataTable({
-        'serverSide': true,
         'ajax': '/api/products/?format=datatables',
         "fnInitComplete": function () {
             const myCustomScrollbar = document.querySelector('#products-datatable_wrapper .dataTables_scrollBody');
             const ps = new PerfectScrollbar(myCustomScrollbar);
         },
         select: true,
-        orderCellsTop: true,
-        "scrollX": true,
-        keys: true,
-        lengthMenu: [[10, 50, 100, 500, 1000, -1], [10, 50, 100, 500, 1000, "All"]],
-        order: [],
-        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-2'><'col-sm-12 col-md-5'p>>" +
-            "<'row'<'col text-right pt-2'B>>",
-        buttons: [
-            'copy', 'excel', 'pdf', 'print', 'colvis'
-        ],
         'columns': [
             {'data': 'product_code',},
             {'data': 'name'},
@@ -97,20 +84,20 @@ function loadProductsData() {
             {'data': 'discount_price'},
             {
                 'data': 'quantity', render: function (data, type, full) {
-                    if (data === null) return "";
+                    if (data === null) return "-";
                     if (full['quantity_unit'] === null) return data;
                     return data + " " + full['quantity_unit'];
                 }
             },
             {
                 'data': 'weight', render: function (data, type, full) {
-                    if (data === null) return "";
+                    if (data === null) return "-";
                     if (full['weight_unit'] === null) return data;
                     return data + " " + full['weight_unit'];
                 }
             },
-            {'data': 'company'},
-            {'data': 'rack_number'},
+            {'data': 'company', render: handleBlankData},
+            {'data': 'rack_number', render: handleBlankData},
             {
                 'data': 'product_code', sortable: false, render: function (data, type, row) {
                     return `<a class="pr-3" href="/pos/product-label/${data}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
@@ -209,14 +196,14 @@ $(document).ready(function () {
     $('#products-datatable thead tr').clone(true).appendTo('#products-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2");
     $('#products-datatable thead tr:eq(1) th').each(function (i) {
         const title = $(this).text();
-        $(this).html(`<input type="text" class="form-control form-control-sm"/>`);
+        $(this).html(`<input type="text" class="form-control form-control-sm ml-1"/>`);
         if (i === 9) {
-            $(this).html('<span class="form-control form-control-sm text-center border-0"><i class="fa fa-search" aria-hidden="true"></i></span>');
+            $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button" onclick="resetAdvanceSearch()"><i class="fa fa-close" style="font-size: larger" aria-hidden="true"></i></div>');
         }
         $('input', this).on('keyup change', function () {
             if (table.column(i).search() !== this.value) {
-                if (i >= 5 && i <= 6 && this.value !== "") {
-                    table.column(i).search("^" + $(this).val() + "$", true, false, true).draw();
+                if (this.value !== "") {
+                    table.column(i).search("^" + $(this).val(), true, false, true).draw();
                 } else {
                     table.column(i).search(this.value).draw();
                 }
@@ -270,20 +257,6 @@ edit_discount_price_selector.on('input', function () {
 $('#edit_discount_percent, #edit_mrp').on('input', function () {
     changeDiscountPrice(edit_discount_price_selector, edit_discount_percent_selector, edit_mrp_selector)
 });
-
-$('#toggle-advance-search-button').change(function () {
-    if (this.checked) {
-        $('#advance-search-bar').removeClass('d-none');
-    } else {
-        $('#advance-search-bar').addClass('d-none');
-    }
-});
-
-// var countries = [
-//    { value: 'Andorra', data: 'AD' },
-//    // ...
-//    { value: 'Zimbabwe', data: 'ZZ' }
-// ];
 
 $('.product_companies').autocomplete(
     {
