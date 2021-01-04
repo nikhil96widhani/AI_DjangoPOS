@@ -12,16 +12,16 @@ $(document).ready(function () {
 });
 
 // BARCODE NEW
-jQuery(function(){
-  $('form').on('submit', function(e){
-    e.preventDefault();
-    var $input = $(this).find('input');
-    updateUserOrder($input.val(), 'add')
-    $(this).value($input.val());
-    // $(this).after("<div class='scan'>"+$input.val()+"</div>");
-    $input.val('');
-    $input.blur();
-  });
+jQuery(function () {
+    $('form').on('submit', function (e) {
+        e.preventDefault();
+        var $input = $(this).find('input');
+        updateUserOrder($input.val(), 'add')
+        $(this).value($input.val());
+        // $(this).after("<div class='scan'>"+$input.val()+"</div>");
+        $input.val('');
+        $input.blur();
+    });
 });
 
 function product_search(value) {
@@ -236,7 +236,7 @@ function updateCartDetails(data) {
 function updateUserOrder(product_code, action) {
     var url = "/api/cart/"
     let method = 'POST'
-    if (action === 'complete' || action === 'clear'){
+    if (action === 'clear') {
         method = 'PUT'
     }
 
@@ -319,12 +319,17 @@ function quickAddProduct() {
     let discount_price = document.getElementById('qa_discount_price').value
 
     fetch(url, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({'name': name , 'discount_price':discount_price, 'quantity':quantity, 'action': 'quick_add'})
+        body: JSON.stringify({
+            'name': name,
+            'discount_price': discount_price,
+            'quantity': quantity,
+            'action': 'quick_add'
+        })
     })
         .then((response) => {
             return response.json();

@@ -202,7 +202,10 @@ $(document).ready(function () {
         }
         $('input', this).on('keyup change', function () {
             if (table.column(i).search() !== this.value) {
-                if (this.value !== "") {
+                if (i === 1 && this.value !== ""){
+                    table.column(i).search(this.value).draw();
+                }
+                else if (this.value !== "") {
                     table.column(i).search("^" + $(this).val(), true, false, true).draw();
                 } else {
                     table.column(i).search(this.value).draw();

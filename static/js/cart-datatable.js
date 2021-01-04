@@ -21,10 +21,11 @@ function loadCartData() {
             if (data.product_code === updated_product_code) {
                 $(row).addClass('clicked');
             }
+            updated_product_code = null;
         },
         'columns': [
             {'data': 'product_name', 'class': 'text-left font-weight-bold'},
-            {'data': 'product.weight', render: handleBlankData},
+            {'data': 'weight', render: handleBlankData},
             {'data': 'discount_price'},
             {
                 'data': 'quantity', render: function (data, type, row) {
@@ -78,6 +79,9 @@ function updateUserOrder(product_code, action) {
         error: function () {
             toastr.error('Could not update cart! Please Try Again.');
         },
+        complete: function () {
+
+        }
     })
 }
 
