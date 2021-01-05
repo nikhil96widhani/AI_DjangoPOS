@@ -1,22 +1,29 @@
 const dataTable = $("#cart-datatable");
 let updated_product_code = null;
+let total_cart_value = 0;
 
 function loadCartData() {
     let url = '/api/cart-datatable/?format=datatables';
     return dataTable.DataTable({
-        'ajax': url,
-        "fnInitComplete": function () {
-            const myCustomScrollbar = document.querySelector('#cart-datatable_wrapper .dataTables_scrollBody');
-            new PerfectScrollbar(myCustomScrollbar);
+        // 'ajax': url,
+        ajax: {
+            'url': url,
+            'dataSrc': 'data.order_items',
         },
         "language": {
             "emptyTable": '<div class="alert alert-primary text-center" role="alert">No products in the cart. Start by adding some products!</div>'
         },
+        "initComplete": function () {
+            const myCustomScrollbar = document.querySelector('#cart-datatable_wrapper .dataTables_scrollBody');
+            new PerfectScrollbar(myCustomScrollbar);
+        },
         "scrollY": "55vh",
-        // "scrollCollapse": true,
         "paging": false,
         'dom': "t",
-        'fixedHeader': true,
+        'fixedHeader': {
+            header: true,
+            footer: true
+        },
         "rowCallback": function (row, data, dataIndex) {
             if (data.product_code === updated_product_code) {
                 $(row).addClass('clicked');
@@ -24,7 +31,7 @@ function loadCartData() {
             updated_product_code = null;
         },
         'columns': [
-            {'data': 'product_name', 'class': 'text-left font-weight-bold'},
+            {'data': 'product_name', 'class': 'text-left font-weight-bold', 'width': '15%'},
             {'data': 'weight', render: handleBlankData},
             {'data': 'discount_price'},
             {
@@ -43,11 +50,22 @@ function loadCartData() {
                 "orderable": false,
             },
         ],
-        'drawCallback': function (row, data, index) {
-            let quantity = dataTable.DataTable().column(3).data().reduce((a, b) => a + b, 0)
-            let amount = dataTable.DataTable().column(4).data().reduce((a, b) => a + b, 0)
-            updateCartDetails(quantity, amount)
-        }
+        'drawCallback': function () {
+            let api = this.api();
+            let json = api.ajax.json();
+            console.log(json)
+
+            let discount = json.data.order.discount;
+            if (discount.is_percentage === true) discount = discount.value + '%'
+            else discount = '₹' + discount.value
+
+            let html = `<tr><th class="table-info font-weight-bold h6">Total Quantity - ${json.data.order.get_cart_items_quantity}</th>
+                            <th class="table-warning font-weight-bold h6">Total Amount - ₹${json.data.order.get_cart_revenue}</th>
+                            <th class="table-success font-weight-bold h6">Cart Discount - ${discount}</th>
+                        </tr>`
+            total_cart_value = json.data.order.get_cart_revenue;
+            $(dataTable.DataTable().table().footer()).html(html);
+        },
     });
 }
 
@@ -57,7 +75,6 @@ function updateCartDetails(quantity, total) {
 }
 
 function updateUserOrder(product_code, action) {
-    console.log('Function called')
     let url = "/api/cart/"
     let method = 'POST'
     if (action === 'clear') {
@@ -186,9 +203,9 @@ let options = {
 
 // Refund Calculator
 function calculateRefund(cash) {
-    let cart_total_amount = document.getElementById('cart-total-amount');
-    cart_total_amount = parseInt(cart_total_amount.innerText)
-    cash = parseInt(cash)
+    let cart_total_amount = total_cart_value
+    // cart_total_amount = parseInt(cart_total_amount.innerText)
+    // cash = parseInt(cash)
     console.log(cart_total_amount - cash)
     if (cash < cart_total_amount) {
         document.getElementById('RefundAmount').innerHTML = "Less Cash Received";

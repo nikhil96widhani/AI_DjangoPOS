@@ -25,7 +25,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        # depth = 1
+        depth = 1
         fields = '__all__'
 
 
@@ -34,3 +34,10 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         # depth = 1
         fields = '__all__'
+
+
+class CartOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        depth = 1
+        fields = ('get_cart_items_quantity', 'get_cart_revenue', 'discount')

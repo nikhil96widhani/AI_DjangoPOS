@@ -137,7 +137,7 @@ class Cart(APIView):
 
 class CartListView(generics.ListAPIView):
     queryset = Order.objects.none()
-    serializer_class = cart_items_serializer
+    serializer_class = OrderItemSerializer
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
@@ -146,7 +146,7 @@ class CartListView(generics.ListAPIView):
         order_items = order.orderitem_set.all()
         queryset = self.filter_queryset(order_items)
         serializer = self.get_serializer(reversed(queryset), many=True)
-        return Response(serializer.data)
+        return Response({'order_items': serializer.data, 'order': CartOrderSerializer(order).data})
 
 
 class ProductCategoryList(APIView):
