@@ -40,4 +40,4 @@ class CartOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         depth = 1
-        fields = ('get_cart_items_quantity', 'get_cart_revenue', 'discount')
+        fields = ('id', 'get_cart_items_quantity', 'get_cart_revenue', 'discount')

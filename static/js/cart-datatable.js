@@ -17,7 +17,7 @@ function loadCartData() {
             const myCustomScrollbar = document.querySelector('#cart-datatable_wrapper .dataTables_scrollBody');
             new PerfectScrollbar(myCustomScrollbar);
         },
-        "scrollY": "55vh",
+        "scrollY": "52vh",
         "paging": false,
         'dom': "t",
         'fixedHeader': {
@@ -45,6 +45,7 @@ function loadCartData() {
             {'data': 'amount'},
             {
                 'data': 'product_code', render: function (data) {
+                    console.log(data);
                     return `<button class="btn btn-danger btn-sm btn-rounded mr-4" title="Delete Product" onclick="updateUserOrder('${data}', 'delete')"><i class="fas fa-trash"></i></button>`
                 },
                 "orderable": false,
@@ -55,13 +56,23 @@ function loadCartData() {
             let json = api.ajax.json();
             console.log(json)
 
-            let discount = json.data.order.discount;
-            if (discount.is_percentage === true) discount = discount.value + '%'
-            else discount = '₹' + discount.value
+            let discount = 'NA'
+            let remove_discount = ''
+            if (json.data.order.discount != null) {
+                discount = json.data.order.discount
+                remove_discount = `<button class="btn btn-sm btn-danger btn-rounded ml-3 py-0 my-0" 
+                                    onclick="updateUserOrder('${json.data.order.id}', 'remove_order_discount')">
+                                    <i class="fas fa-times"></i></button>`
+                if (discount.is_percentage === true) discount = discount.value + '%'
+                else discount = '₹' + discount.value
+            }
 
-            let html = `<tr><th class="table-info font-weight-bold h6">Total Quantity - ${json.data.order.get_cart_items_quantity}</th>
-                            <th class="table-warning font-weight-bold h6">Total Amount - ₹${json.data.order.get_cart_revenue}</th>
-                            <th class="table-success font-weight-bold h6">Cart Discount - ${discount}</th>
+            let html = `<tr><th class="table-info font-weight-500 h6">Total Quantity -  
+                            <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></th>
+                            <th class="table-warning font-weight-500 h6">Total Amount - 
+                            <span class="font-weight-bold">₹${json.data.order.get_cart_revenue}</span></th>
+                            <th class="table-success font-weight-500 h6">Cart Discount -  
+                            <span class="font-weight-bold">${discount}</span>${remove_discount}</th>
                         </tr>`
             total_cart_value = json.data.order.get_cart_revenue;
             $(dataTable.DataTable().table().footer()).html(html);
@@ -77,7 +88,7 @@ function updateCartDetails(quantity, total) {
 function updateUserOrder(product_code, action) {
     let url = "/api/cart/"
     let method = 'POST'
-    if (action === 'clear') {
+    if (action === 'clear' || action === 'remove_order_discount') {
         method = 'PUT'
     }
 
@@ -237,11 +248,88 @@ $('#CashReceivedValue').on('input', function () {
     calculateRefund($(this).val())
 });
 
+function quickAddProduct() {
+    let url = "/api/cart/"
+    let name = document.getElementById('qa_name').value
+    let quantity = document.getElementById('qa_quantity').value
+    let discount_price = document.getElementById('qa_discount_price').value
+
+    fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({
+            'name': name,
+            'discount_price': discount_price,
+            'quantity': quantity,
+            'action': 'quick_add'
+        })
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            // console.log(data)
+            dataTable.DataTable().draw('page');
+            toastr.success(data.response_text)
+        }).catch(error => {
+        //Here is still promise
+        // console.log(error);
+        toastr.error('An error occurred please check the values entered')
+    })
+}
+
+
+function discountOrder() {
+    let url = "/api/cart/"
+    let value = document.getElementById('discount_value').value
+    let is_percentage = document.getElementById("discount_value_checkbox").checked
+
+    fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({
+            'action': 'apply_discount',
+            'value': value,
+            'is_percentage': is_percentage,
+        })
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            // console.log(data)
+            dataTable.DataTable().draw('page');
+            toastr.success(data.response_text)
+        }).catch(error => {
+        //Here is still promise
+        // console.log(error);
+        toastr.error('An error occurred please check the value entered')
+    })
+}
+
+function open_receipt_and_reload(url) {
+    //Open in new tab
+    window.open(url, '_blank');
+    //focus to thet window
+    window.focus();
+    //reload current page
+    CompleteOrder()
+    location.reload();
+}
+
+
 $(document).ready(function () {
     $("#AllProductList").on("keyup", function () {
         let value = $(this).val().toLowerCase();
         product_search(value)
     });
+    product_search(null)
     loadCartData();
     $('.stepper').mdbStepper();
     // const myCustomScrollbar = document.querySelector('#AllProductListLi');

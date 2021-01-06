@@ -11,15 +11,14 @@ function send_receipt_whatsapp(id) {
             $.each(data.items, function (i, item) {
                 // console.log(item.product.name)
                 message = message.concat(
-                    `${item.quantity}x${item.product.name}=₹${item.amount}%0a`);
+                    `${item.quantity}x${item.name}=₹${item.amount}%0a`);
             }
-
             );
             console.log(data.cart_items_quantity)
             message = message.concat(`%0a*Total Quantity=${data.cart_items_quantity}*%0a*Total Bill Amount=₹${data.cart_total}*`)
             let url = "https://web.whatsapp.com/send?text=" + message + "&phone="+ '91' + phone_number
             // var win = window.open(`https://wa.me/${num}?text=I%27m%20api%20msg%20hello%20${name}%20friend%20${msg}`, '_blank');
-            console.log(url)
+            // console.log(url)
             const win = window.open(url, '_blank');
             win.focus();
         },

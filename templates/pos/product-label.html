@@ -43,10 +43,10 @@
                     <span class="our-rate pl-1">(Inclusive of all taxes)</span></div>
 
                 <div class="row">
-                    <div class="col-7 py-0">
+                    <div class="col-6 py-0">
                         <div class="price pl-1 font-weight-bold text-center">&#x20b9;{{ product.discount_price|price_format }}/-</div>
                     </div>
-                    <div class="col-5 p-0">
+                    <div class="col-6 p-0">
                         <div class="mrp font-weight-500 text-left">MRP: &#x20b9;{{ product.mrp|price_format }}/-</div>
                     </div>
                 </div>
@@ -70,15 +70,15 @@
     <script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>
     <script type="text/javascript">
         JsBarcode("#barcode-text", '{{ product.product_code }}', {
-  format: "CODE128B",
-  ean128: true,
+            format: "CODE128",
+            {#ean128: true,#}
             font: "monospace",
             marginLeft: 2,
             marginTop: 5,
             marginBottom: 2,
             marginRight: 2,
             fontSize: 8,
-            width: 1,
+            width: 1.5,
             textMargin: 1,
             height: 60,
             {#displayValue: false#}

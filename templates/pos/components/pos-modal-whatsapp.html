@@ -1,0 +1,39 @@
+{% extends 'pos/components/pos-buttons-modal-base.html' %}
+{% load static %}
+
+{% block modal-css %}
+    {#    <link rel="stylesheet" href="{% static 'css/calculator-styles.css' %}">#}
+{% endblock %}
+
+{% block modal-title %}Whatsapp Receipt{% endblock %}
+
+{% block modal-id %}whatsapp-add-modal{% endblock %}
+
+
+{% block modal-body %}
+    <div class="input-group col-sm py-5">
+        <div class="input-group-prepend">
+            <div class="input-group-text">+91</div>
+        </div>
+        <input type="text" class="form-control py-0" aria-label="phone-number"
+               id="phone_number" placeholder="Phone Number">
+
+    </div>
+
+{% endblock %}
+
+{% block modal-footer %}
+    {% with load_footer=True %}
+        {{ block.super }}
+    {% endwith %}
+
+
+{% endblock %}
+
+{% block modal-buttons %}
+    <button type="submit" class="btn btn-primary " data-dismiss="modal"
+            onclick="send_receipt_whatsapp({{ order.id }})">Send Receipt</button>
+{% endblock %}
+
+{% block modal-javascript %}
+{% endblock %}

@@ -133,6 +133,24 @@ class Cart(APIView):
                 {"response_type": "Added",
                  "response_text": "Item was added/updated"}
             )
+        elif action == 'apply_discount':
+            value = request.data['value']
+            is_percentage = request.data['is_percentage']
+
+            discount, created = Discount.objects.get_or_create(value=int(value), is_percentage=is_percentage)
+            order.discount = discount
+            order.save()
+            return Response(
+                {"response_type": "Applied",
+                 "response_text": "Discount Applied"}
+            )
+        elif action == 'remove_order_discount':
+            order.discount = None
+            order.save()
+            return Response(
+                {"response_type": "Applied",
+                 "response_text": "Discount Applied"}
+            )
 
 
 class CartListView(generics.ListAPIView):
@@ -233,12 +251,12 @@ def search_products(request):
         """
         search_term = request.GET.get("search_term")
         if search_term:
-            products_contains = Product.objects.filter(name__contains=search_term)[:10]
+            products_contains = Product.objects.filter(name__contains=search_term)[:8]
             products_starts = Product.objects.filter(name__startswith=search_term)[:3]
             products_code_starts = Product.objects.filter(product_code__startswith=search_term)[:3]
-            products = (products_starts | products_contains | products_code_starts)[:10]
+            products = (products_starts | products_contains | products_code_starts)[:8]
         else:
-            products = Product.objects.all()[:10]
+            products = Product.objects.all()[:8]
 
         product_serializer = ProductSerializer(products, many=True)
         return Response({'products': product_serializer.data})

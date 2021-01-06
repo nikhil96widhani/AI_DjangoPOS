@@ -8,24 +8,30 @@ from inventory.models import *
 
 @login_required
 def pos_homeView(request):
-    all_products = Product.objects.all()[:10]
     if request.user.is_authenticated:
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        try:
+            last_order_id = int(order.id) - 1
+        except:
+            last_order_id = 0
+
         cart_items = order.orderitem_set.all()
         context = {
-            'all_products': all_products,
+            # 'all_products': all_products,
             'order': order,
             'cart_items': cart_items,
-            'payment_mode': Payment_mode
+            'payment_mode': Payment_mode,
+            'last_order_id': last_order_id
         }
     else:
         context = {
-            'all_products': all_products,
+            # 'all_products': all_products,
             'order': [],
-            'cart_items': []
+            'cart_items': [],
+            'last_order_id': 0
         }
-    return render(request, 'pos/pos.html', context)
+    return render(request, 'pos/cart-datatable.html', context)
 
 
 def receiptView(request, pk):
@@ -79,4 +85,4 @@ def cart_datatable_view(request):
             'order': [],
             'cart_items': []
         }
-    return render(request, 'pos/cart-datatable.html', context)
+    return render(request, 'pos/pos.html', context)

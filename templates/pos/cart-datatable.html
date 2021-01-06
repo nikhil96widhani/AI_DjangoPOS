@@ -56,10 +56,10 @@
                             <div class="row card-body pt-3">
 
                                 <!-- First column -->
-                                <div class="col-md-12">
+                                <div class="col-md-12 pr-0">
 
                                     <!-- All Products -->
-                                    <div class="">
+                                    <div class="pb-5">
                                         <div class="md-form mt-1">
                                             <input type="text" id="AllProductList" class="form-control">
                                             <label for="AllProductList">All Products</label>
@@ -67,47 +67,51 @@
                                         <br>
                                         <ul class="list-group list-group-flush overflow-auto my-custom-scrollbar-product-list mn-custom-scrollbar"
                                             id="AllProductListLi">
-                                            {% for p in all_products %}
-                                                <li class="list-group-item">
-                                                    <div class="row pt-2 ">
-                                                        <div class="col">
-                                                            <div>{{ p.name|truncatechars:25 }}
-                                                                {% if p.weight %}, {{ p.weight }}
-                                                                {% endif %}
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <span class="align-middle text-muted small">Code: {{ p.product_code }}</span>
-                                                                </div>
-                                                                <div class="col-auto">
-                                                                <span class="align-middle text-muted small float-right">
-                                                                    {% if p.discount_price < p.mrp %}
-                                                                        <span class="text-success">
-                                                                            ₹{{ p.discount_price|price_format }}
-                                                                        </span>
-                                                                    {% else %}
-                                                                        <span>
-                                                                            ₹{{ p.discount_price|price_format }}
-                                                                        </span>
-                                                                    {% endif %}
-                                                                </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <button type="button"
-                                                                    onclick="updateUserOrder({{ p.product_code }}, 'add')"
-                                                                    class="btn btn-primary btn-sm mr-1"><i
-                                                                    class="fas fa-shopping-cart"></i> +
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                </li>
-                                            {% endfor %}
                                         </ul>
                                     </div>
                                     <!-- All Products -->
+
+                                    <!-- Buttons -->
+                                    <div class="row text-center pt-4">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
+                                                    data-toggle="modal" data-target="#calculator-modal">Calculator
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
+                                                    data-toggle="modal" data-target="#quick-add-modal">Quick Add Item
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row text-center">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
+                                                    data-toggle="modal" data-target="#discount-modal">Apply Discount
+                                            </button>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
+                                                    data-toggle="modal" data-target="#whts-add-modal" disabled>Add Customer
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row text-center">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
+                                                    onclick="window.open('{% url 'receipt' last_order_id %}','_blank')">
+                                                Print Last Receipt
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
+                                                    data-toggle="modal" data-target="#whatsapp-add-modal">
+                                                <i class="fab fa-whatsapp font-weight-bold"></i> Whatsapp Receipt
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Buttons -->
 
                                 </div>
                                 <!-- First column -->
@@ -122,7 +126,7 @@
                     <!-- Grid column -->
 
                     <!-- Grid column -->
-                    <div class="col-xl-8 col-md-12">
+                    <div class="col-xl-8 col-md-12 ml-0">
                         <div class="card mr-4 mt-n4">
                             <h4 class="text-center font-weight-bold pt-3 pb-2 mb-0">Cart</h4>
                             <div class="card-body py-0">
@@ -158,11 +162,8 @@
                                     <div class="step-new-content">
 
                                         <div class="row">
-                                            <div class="col-sm-4">
-                                                <h4 class="mt-2 text-center" id="cart_details"></h4>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="input-group mb-4">
+                                            <div class="col-sm-5">
+                                                <div class="input-group mb-4 w-75 ml-5">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="CashReceived">₹</span>
                                                     </div>
@@ -184,56 +185,21 @@
                                                 <small id="emailHelp" class="form-text text-muted text-center">
                                                     Input Cash received and Mode of Payment</small>
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <!-- REFUND AMOUNT -->
-                                                <h5 class="text-center font-weight-bold mt-2"
+                                                <h5 class="text-left font-weight-bold mt-2"
                                                     id="RefundAmount"></h5>
                                             </div>
-                                            <div class="col-sm-2 text-center">
-                                                <button class="waves-effect waves-dark btn btn-md btn-primary
-                                                next-step btn-rounded update-cart"
-                                                        data-feedback="nextPos" id="pos-next-button">Next >
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="step">
-                                    <div class="step-title waves-effect waves-dark">Order Receipt</div>
-                                    <div class="step-new-content">
-                                        <div class="form-row align-items-center">
-                                            <!-- Default auto-sizing form -->
-
-                                            <div class="input-group col-sm">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">+91</div>
-                                                </div>
-                                                <input type="text" class="form-control py-0" aria-label="phone-number"
-                                                       id="phone_number" placeholder="Phone Number"
-                                                       style="max-width: 250px">
-                                                <div class="input-group-append" id="button-addon4">
-                                                    <button class="btn btn-md btn-success m-0 px-3 py-2 z-depth-0 waves-effect"
-                                                            type="button"
-                                                            onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp
-                                                        Receipt
-                                                    </button>
-                                                    <button class="btn btn-md btn-secondary m-0 px-3 py-2 z-depth-0 waves-effect"
-                                                            type="button"
-                                                            onclick=" window.open('{% url 'receipt' order.id %}','_blank')">
-                                                        Print Receipt
-                                                    </button>
-                                                </div>
-                                            </div>
-
                                             <div class="col-sm-auto text-center">
                                                 <div class="btn-group radio-group ml-2" data-toggle="buttons">
-                                                    <button type="button" data-product="1001" data-action="remove"
-                                                            class="btn btn-primary btn-md mr-1 btn-rounded previous-step"
-                                                    > < Back
-                                                        <!-- <i class="fas fa-minus"></i> Font Awesome fontawesome.com -->
+                                                    <button type="button"
+                                                            class="btn btn-primary btn-md mr-1 btn-rounded font-weight-500"
+                                                            onclick = open_receipt_and_reload('{% url 'receipt' order.id %}')
+{#                                                            onclick="window.open('{% url 'receipt' order.id %}','_blank')"#}
+                                                    > Print Receipt & Complete
                                                     </button>
                                                     <button id="stepper-complete-order" type="button"
-                                                            class="btn btn-success btn-md mr-1 btn-rounded next-step"
+                                                            class="btn btn-success btn-md mr-1 btn-rounded next-step font-weight-500"
                                                             onclick="CompleteOrder()" data-feedback="completePos">
                                                         Complete Order
                                                         <!-- <i class="fas fa-plus"></i> Font Awesome fontawesome.com -->
@@ -243,6 +209,51 @@
                                         </div>
                                     </div>
                                 </li>
+                                {#                                <li class="step">#}
+                                {#                                    <div class="step-title waves-effect waves-dark">Order Receipt</div>#}
+                                {#                                    <div class="step-new-content">#}
+                                {#                                        <div class="form-row align-items-center">#}
+                                {#                                            <!-- Default auto-sizing form -->#}
+                                {##}
+                                {#                                            <div class="input-group col-sm">#}
+                                {#                                                <div class="input-group-prepend">#}
+                                {#                                                    <div class="input-group-text">+91</div>#}
+                                {#                                                </div>#}
+                                {#                                                <input type="text" class="form-control py-0" aria-label="phone-number"#}
+                                {#                                                       id="phone_number" placeholder="Phone Number"#}
+                                {#                                                       style="max-width: 250px">#}
+                                {#                                                <div class="input-group-append" id="button-addon4">#}
+                                {#                                                    <button class="btn btn-md btn-success m-0 px-3 py-2 z-depth-0 waves-effect"#}
+                                {#                                                            type="button"#}
+                                {#                                                            onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp#}
+                                {#                                                        Receipt#}
+                                {#                                                    </button>#}
+                                {#                                                    <button class="btn btn-md btn-secondary m-0 px-3 py-2 z-depth-0 waves-effect"#}
+                                {#                                                            type="button"#}
+                                {#                                                            onclick=" window.open('{% url 'receipt' order.id %}','_blank')">#}
+                                {#                                                        Print Receipt#}
+                                {#                                                    </button>#}
+                                {#                                                </div>#}
+                                {#                                            </div>#}
+                                {##}
+                                {#                                            <div class="col-sm-auto text-center">#}
+                                {#                                                <div class="btn-group radio-group ml-2" data-toggle="buttons">#}
+                                {#                                                    <button type="button" data-product="1001" data-action="remove"#}
+                                {#                                                            class="btn btn-primary btn-md mr-1 btn-rounded previous-step"#}
+                                {#                                                    > < Back#}
+                                {#                                                        <!-- <i class="fas fa-minus"></i> Font Awesome fontawesome.com -->#}
+                                {#                                                    </button>#}
+                                {#                                                    <button id="stepper-complete-order" type="button"#}
+                                {#                                                            class="btn btn-success btn-md mr-1 btn-rounded next-step"#}
+                                {#                                                            onclick="CompleteOrder()" data-feedback="completePos">#}
+                                {#                                                        Complete Order#}
+                                {#                                                        <!-- <i class="fas fa-plus"></i> Font Awesome fontawesome.com -->#}
+                                {#                                                    </button>#}
+                                {#                                                </div>#}
+                                {#                                            </div>#}
+                                {#                                        </div>#}
+                                {#                                    </div>#}
+                                {#                                </li>#}
                             </ul>
                         </div>
                         <!-- STEPPER -->
@@ -255,6 +266,13 @@
         </div>
         <!-- Card -->
     </section>
+    <!-- Buttons -->
+    {% include 'pos/components/pos-modal-whatsapp.html' %}
+    {% include 'pos/components/pos-modal-calculator.html' %}
+    {% include 'pos/components/pos-modal-quick-add.html' %}
+    {% include 'pos/components/pos-modal-discount.html' %}
+
+
 {% endblock %}
 
 {% block javascript %}

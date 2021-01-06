@@ -136,9 +136,9 @@ class Order(models.Model):
         revenue_total = sum([item.get_revenue for item in order_items])
         if self.discount:
             if self.discount.is_percentage:
-                revenue_total = calculateDiscountPrice(revenue_total, self.discount.value)
+                revenue_total = calculateDiscountPrice(revenue_total, int(self.discount.value))
             else:
-                revenue_total = revenue_total - self.discount.value
+                revenue_total = revenue_total - int(self.discount.value)
         return revenue_total
 
     @property
