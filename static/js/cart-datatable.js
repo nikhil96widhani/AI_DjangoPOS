@@ -45,7 +45,7 @@ function loadCartData() {
             {'data': 'amount'},
             {
                 'data': 'product_code', render: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     return `<button class="btn btn-danger btn-sm btn-rounded mr-4" title="Delete Product" onclick="updateUserOrder('${data}', 'delete')"><i class="fas fa-trash"></i></button>`
                 },
                 "orderable": false,
@@ -54,7 +54,7 @@ function loadCartData() {
         'drawCallback': function () {
             let api = this.api();
             let json = api.ajax.json();
-            console.log(json)
+            // console.log(json)
 
             let discount = 'NA'
             let remove_discount = ''
@@ -100,7 +100,7 @@ function updateUserOrder(product_code, action) {
         },
         data: JSON.stringify({'product_code': String(product_code), 'action': action}),
         success: function (data) {
-            console.log(data)
+            // console.log(data)
             updated_product_code = product_code;
             dataTable.DataTable().draw('page');
         },
@@ -163,6 +163,8 @@ function completePos() {
 $(function () {
     $(document).pos();
     $(document).on('scan.pos.barcode', function (event) {
+        // console.log('this is code', event.code)
+
         updateUserOrder(event.code, 'add')
 
         //access `event.code` - barcode data
@@ -178,38 +180,6 @@ $(function () {
     // 	// `event.swipe_data` - original swipe data from raw processing or sending to a 3rd party service
     // });
 });
-let options = {
-    scan: true, //enable scan event
-    submit_on_scan: false, //allow the keycode 13 event to continue on scan
-    swipe: true, //enable swipe event
-    submit_on_swipe: false, //allow the keycode 13 event to continue on swipe
-    events: {
-        scan: {
-            barcode: 'scan.pos.barcode' //event name for successfully scanned barcode
-        },
-        swipe: {
-            card: 'swipe.pos.card' //event name for successfully scanned card
-        }
-    },
-    regexp: {
-        scan: {
-            barcode: '\\d+' //regexp for barcode validation
-        },
-        swipe: {
-            card: '\\%B(\\d+)\\^(\\w+)\\/(\\w+)\\^\\d+\\?;\\d+=(\\d\\d)(\\d\\d)\\d+\\?' //regexp for credit card validation
-        }
-    },
-    prefix: {
-        scan: {
-            barcode: '*' //prefix for barcode - will be added to regexp
-        },
-        swipe: {
-            card: '' //prefix for credit card - will be added to regexp
-        }
-    }
-};
-
-// $(document).pos(options);
 // END SCANNER INPUT
 
 // Refund Calculator
@@ -217,7 +187,7 @@ function calculateRefund(cash) {
     let cart_total_amount = total_cart_value
     // cart_total_amount = parseInt(cart_total_amount.innerText)
     // cash = parseInt(cash)
-    console.log(cart_total_amount - cash)
+    // console.log(cart_total_amount - cash)
     if (cash < cart_total_amount) {
         document.getElementById('RefundAmount').innerHTML = "Less Cash Received";
     } else if (cash >= cart_total_amount) {
@@ -239,7 +209,7 @@ function CompleteOrder() {
         },
         data: JSON.stringify({'product_code': null, 'action': 'complete', 'payment-mode': payment_mode.value}),
         success: function (data) {
-            console.log(data)
+            // console.log(data)
         }
     })
 }
