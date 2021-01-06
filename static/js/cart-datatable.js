@@ -5,7 +5,6 @@ let total_cart_value = 0;
 function loadCartData() {
     let url = '/api/cart-datatable/?format=datatables';
     return dataTable.DataTable({
-        // 'ajax': url,
         ajax: {
             'url': url,
             'dataSrc': 'data.order_items',
@@ -17,7 +16,7 @@ function loadCartData() {
             const myCustomScrollbar = document.querySelector('#cart-datatable_wrapper .dataTables_scrollBody');
             new PerfectScrollbar(myCustomScrollbar);
         },
-        "scrollY": "52vh",
+        "scrollY": "48vh",
         "paging": false,
         'dom': "t",
         'fixedHeader': {
@@ -27,8 +26,8 @@ function loadCartData() {
         "rowCallback": function (row, data, dataIndex) {
             if (data.product_code === updated_product_code) {
                 $(row).addClass('clicked');
+                updated_product_code = null;
             }
-            updated_product_code = null;
         },
         'columns': [
             {'data': 'product_name', 'class': 'text-left font-weight-bold', 'width': '15%'},
@@ -45,7 +44,7 @@ function loadCartData() {
             {'data': 'amount'},
             {
                 'data': 'product_code', render: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     return `<button class="btn btn-danger btn-sm btn-rounded mr-4" title="Delete Product" onclick="updateUserOrder('${data}', 'delete')"><i class="fas fa-trash"></i></button>`
                 },
                 "orderable": false,
@@ -54,7 +53,6 @@ function loadCartData() {
         'drawCallback': function () {
             let api = this.api();
             let json = api.ajax.json();
-            console.log(json)
 
             let discount = 'NA'
             let remove_discount = ''
@@ -67,15 +65,24 @@ function loadCartData() {
                 else discount = '₹' + discount.value
             }
 
-            let html = `<tr><th class="table-info font-weight-500 h6">Total Quantity -  
-                            <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></th>
-                            <th class="table-warning font-weight-500 h6">Total Amount - 
-                            <span class="font-weight-bold">₹${json.data.order.get_cart_revenue}</span></th>
-                            <th class="table-success font-weight-500 h6">Cart Discount -  
-                            <span class="font-weight-bold">${discount}</span>${remove_discount}</th>
-                        </tr>`
+            // let html = `<tr><th class="table-info font-weight-500 h6">Total Quantity -
+            //                 <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></th>
+            //                 <th class="table-warning font-weight-500 h6">Total Amount -
+            //                 <span class="font-weight-bold">₹${json.data.order.get_cart_revenue}</span></th>
+            //                 <th class="table-success font-weight-500 h6">Cart Discount -
+            //                 <span class="font-weight-bold">${discount}</span>${remove_discount}</th>
+            //             </tr>`
+            let html = `<div class="col-sm-4 table-info font-weight-500 text-center py-3 h6">Total Quantity -  <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></div>
+                        <div class="col-sm-4 table-warning font-weight-500 text-center py-3 h6">Total Amount -  <span class="font-weight-bold">₹${json.data.order.get_cart_revenue}</span></div>
+                        <div class="col-sm-4 table-success font-weight-500 text-center py-3 h6">Cart Discount -  <span class="font-weight-bold">${discount}</span>${remove_discount}</div>`
             total_cart_value = json.data.order.get_cart_revenue;
-            $(dataTable.DataTable().table().footer()).html(html);
+            // $(dataTable.DataTable().table().footer()).html(html);
+            $('#total-values-div').html(html);
+
+            let cash_received = $('#CashReceivedValue').val()
+            if (cash_received !== ""){
+                calculateRefund(cash_received)
+            }
         },
     });
 }
