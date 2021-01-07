@@ -1,5 +1,6 @@
 const dataTable = $("#cart-datatable");
 let updated_product_code = null;
+let updated_product_id = null;
 let total_cart_value = 0;
 
 function loadCartData() {
@@ -24,28 +25,30 @@ function loadCartData() {
             footer: true
         },
         "rowCallback": function (row, data, dataIndex) {
-            if (data.product_code === updated_product_code) {
+            console.log(data.id, updated_product_id)
+            if (data.product_code === updated_product_code || data.id === updated_product_id) {
                 $(row).addClass('clicked');
                 updated_product_code = null;
+                updated_product_id = null;
             }
         },
         'columns': [
-            {'data': 'product_name', 'class': 'text-left font-weight-bold', 'width': '15%'},
+            {'data': 'product_name', 'class': 'text-left font-weight-bold', 'width': '30%'},
             {'data': 'weight', render: handleBlankData},
             {'data': 'discount_price'},
             {
                 'data': 'quantity', render: function (data, type, row) {
                     return `${data}<div class="btn-group ml-3" data-toggle="buttons">
-                                <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrder('${row.product_code}', 'remove')"><i class="fas fa-minus"></i></button>
-                                <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrder('${row.product_code}', 'add')"><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrderById('${row.id}', 'remove_quantity')"><i class="fas fa-minus"></i></button>
+                                <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrderById('${row.id}', 'add_quantity')"><i class="fas fa-plus"></i></button>
                             </div>`
                 }
             },
             {'data': 'amount'},
             {
-                'data': 'product_code', render: function (data) {
+                'data': 'id', render: function (data) {
                     // console.log(data);
-                    return `<button class="btn btn-danger btn-sm btn-rounded mr-4" title="Delete Product" onclick="updateUserOrder('${data}', 'delete')"><i class="fas fa-trash"></i></button>`
+                    return `<button class="btn btn-danger btn-sm btn-rounded mr-4" title="Delete Product" onclick="updateUserOrderById('${data}', 'delete_byId')"><i class="fas fa-trash"></i></button>`
                 },
                 "orderable": false,
             },
@@ -58,7 +61,7 @@ function loadCartData() {
             let remove_discount = ''
             if (json.data.order.discount != null) {
                 discount = json.data.order.discount
-                remove_discount = `<button class="btn btn-sm btn-danger btn-rounded ml-3 py-0 my-0" 
+                remove_discount = `<button class="btn btn-sm btn-danger btn-rounded ml-3 py-0 px-2 my-0" 
                                     onclick="updateUserOrder('${json.data.order.id}', 'remove_order_discount')">
                                     <i class="fas fa-times"></i></button>`
                 if (discount.is_percentage === true) discount = discount.value + '%'
@@ -120,6 +123,30 @@ function updateUserOrder(product_code, action) {
     })
 }
 
+function updateUserOrderById(orderitem_id, action) {
+    let url = "/api/cart/"
+    let method = 'POST'
+
+    $.ajax(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        data: JSON.stringify({'orderitem_id': orderitem_id, 'action': action}),
+        success: function (data) {
+            console.log(data)
+            updated_product_id = Number(orderitem_id);
+            dataTable.DataTable().draw('page');
+        },
+        error: function () {
+            toastr.error('Could not update cart! Please Try Again.');
+        },
+        complete: function () {
+
+        }
+    })
+}
 
 function product_search(value) {
     let url = '/api/search-products';
@@ -185,38 +212,6 @@ $(function () {
     // 	// `event.swipe_data` - original swipe data from raw processing or sending to a 3rd party service
     // });
 });
-let options = {
-    scan: true, //enable scan event
-    submit_on_scan: false, //allow the keycode 13 event to continue on scan
-    swipe: true, //enable swipe event
-    submit_on_swipe: false, //allow the keycode 13 event to continue on swipe
-    events: {
-        scan: {
-            barcode: 'scan.pos.barcode' //event name for successfully scanned barcode
-        },
-        swipe: {
-            card: 'swipe.pos.card' //event name for successfully scanned card
-        }
-    },
-    regexp: {
-        scan: {
-            barcode: '\\d+' //regexp for barcode validation
-        },
-        swipe: {
-            card: '\\%B(\\d+)\\^(\\w+)\\/(\\w+)\\^\\d+\\?;\\d+=(\\d\\d)(\\d\\d)\\d+\\?' //regexp for credit card validation
-        }
-    },
-    prefix: {
-        scan: {
-            barcode: '*' //prefix for barcode - will be added to regexp
-        },
-        swipe: {
-            card: '' //prefix for credit card - will be added to regexp
-        }
-    }
-};
-
-// $(document).pos(options);
 // END SCANNER INPUT
 
 // Refund Calculator
@@ -224,7 +219,7 @@ function calculateRefund(cash) {
     let cart_total_amount = total_cart_value
     // cart_total_amount = parseInt(cart_total_amount.innerText)
     // cash = parseInt(cash)
-    console.log(cart_total_amount - cash)
+    // console.log(cart_total_amount - cash)
     if (cash < cart_total_amount) {
         document.getElementById('RefundAmount').innerHTML = "Less Cash Received";
     } else if (cash >= cart_total_amount) {
@@ -246,7 +241,7 @@ function CompleteOrder() {
         },
         data: JSON.stringify({'product_code': null, 'action': 'complete', 'payment-mode': payment_mode.value}),
         success: function (data) {
-            console.log(data)
+            // console.log(data)
         }
     })
 }
@@ -262,7 +257,7 @@ function quickAddProduct() {
     let discount_price = document.getElementById('qa_discount_price').value
 
     fetch(url, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
@@ -278,7 +273,8 @@ function quickAddProduct() {
             return response.json();
         })
         .then((data) => {
-            // console.log(data)
+            console.log(data)
+            // updated_product_id = data.id;
             dataTable.DataTable().draw('page');
             toastr.success(data.response_text)
         }).catch(error => {

@@ -11,7 +11,7 @@ function send_receipt_whatsapp(id) {
             $.each(data.items, function (i, item) {
                 // console.log(item.product.name)
                 message = message.concat(
-                    `${item.quantity}x${item.name}=₹${item.amount}%0a`);
+                    `${item.quantity}x${item.product_name}=₹${item.amount}%0a`);
             }
             );
             console.log(data.cart_items_quantity)

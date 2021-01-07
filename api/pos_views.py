@@ -76,28 +76,63 @@ class Cart(APIView):
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
-        product_code = request.data['product_code']
-        product = Product.objects.get(product_code=product_code)
-        order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
-
         response = {"response_type": action,
                     "response_text": f"{str(action).title()} product was successful."}
-        if action == 'add':
-            order_item.quantity = (order_item.quantity + 1)
-        elif action == 'remove':
-            order_item.quantity = (order_item.quantity - 1)
-            if order_item.quantity <= 0:
+
+        try:
+            product_code = request.data['product_code']
+        except KeyError:
+            product_code = None
+
+        if product_code:
+            product = Product.objects.get(product_code=product_code)
+            order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
+            if action == 'add':
+                order_item.quantity = (order_item.quantity + 1)
+            elif action == 'remove':
+                order_item.quantity = (order_item.quantity - 1)
+                if order_item.quantity <= 0:
+                    order_item.delete()
+                    return Response(response)
+            elif action == 'delete':
                 order_item.delete()
                 return Response(response)
-        elif action == 'delete':
-            order_item.delete()
+            order_item.save()
             return Response(response)
-        order_item.save()
-        return Response(response)
+        else:
+            if action == 'add_quantity':
+                orderitem_id = request.data['orderitem_id']
+                order_item = OrderItem.objects.get(id=orderitem_id)
+                order_item.quantity = (order_item.quantity + 1)
+                order_item.save()
+                return Response(response)
+            if action == 'remove_quantity':
+                orderitem_id = request.data['orderitem_id']
+                order_item = OrderItem.objects.get(id=orderitem_id)
+                order_item.quantity = (order_item.quantity - 1)
+                if order_item.quantity <= 0:
+                    order_item.delete()
+                    return Response(response)
+                order_item.save()
+                return Response(response)
+            if action == 'delete_byId':
+                orderitem_id = request.data['orderitem_id']
+                order_item = OrderItem.objects.get(id=orderitem_id)
+                order_item.delete()
+                return Response(response)
+            if action == 'quick_add':
+                name = request.data['name']
+                discount_price = request.data['discount_price']
+                quantity = request.data['quantity']
+                a = OrderItem.objects.create(order=order, product=None, quantity=int(quantity), product_name=name,
+                                             discount_price=float(discount_price))
+                a.save()
+                return Response(response)
+
 
     @staticmethod
     def put(request):
-        print(request.data)
+        # print(request.data)
         action = request.data['action']
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
@@ -121,17 +156,6 @@ class Cart(APIView):
             return Response(
                 {"response_type": "updated",
                  "response_text": "All Cart items removed. Start adding products"}
-            )
-        elif action == 'quick_add':
-            name = request.data['name']
-            discount_price = request.data['discount_price']
-            quantity = request.data['quantity']
-            a = OrderItem.objects.create(order=order, product=None, quantity=int(quantity), product_name=name,
-                                         discount_price=float(discount_price))
-            a.save()
-            return Response(
-                {"response_type": "Added",
-                 "response_text": "Item was added/updated"}
             )
         elif action == 'apply_discount':
             value = request.data['value']
