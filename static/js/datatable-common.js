@@ -13,7 +13,7 @@ $.extend($.fn.dataTable.defaults, {
         "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-2'><'col-sm-12 col-md-5'p>>" +
         "<'row'<'col text-right pt-2'B>>",
     buttons: [
-        'copy', 'excel', 'pdf', 'print', 'colvis'
+        'copy', 'excel', 'print', 'colvis'
     ],
 });
 
