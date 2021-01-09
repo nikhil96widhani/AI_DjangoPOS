@@ -129,7 +129,6 @@ class Cart(APIView):
                 a.save()
                 return Response(response)
 
-
     @staticmethod
     def put(request):
         # print(request.data)

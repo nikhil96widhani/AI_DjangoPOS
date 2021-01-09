@@ -25,7 +25,7 @@ function loadCartData() {
             footer: true
         },
         "rowCallback": function (row, data, dataIndex) {
-            console.log(data.id, updated_product_id)
+            // console.log(data.id, updated_product_id)
             if (data.product_code === updated_product_code || data.id === updated_product_id) {
                 $(row).addClass('clicked');
                 updated_product_code = null;
@@ -90,10 +90,7 @@ function loadCartData() {
     });
 }
 
-function updateCartDetails(quantity, total) {
-    document.getElementById("cart_details").innerHTML = 'Total ' + quantity + ' items, ₹' +
-        '<span id="cart-total-amount">' + total + '</span>';
-}
+
 
 function updateUserOrder(product_code, action) {
     let url = "/api/cart/"
@@ -177,18 +174,13 @@ function product_search(value) {
     });
 }
 
-function nextPos() {
-    setTimeout(function () {
-        $('#horizontal-stepper').nextStep();
-    }, 200);
-}
 
 function completePos() {
     setTimeout(function () {
         // $('#horizontal-stepper').nextStep();
         window.location.reload();
         $('#horizontal-stepper').nextStep();
-    }, 1000);
+    }, 500);
 
 }
 
@@ -289,7 +281,7 @@ function discountOrder() {
     let url = "/api/cart/"
     let value = document.getElementById('discount_value').value
     let is_percentage = document.getElementById("discount_value_checkbox").checked
-
+    // console.log(value, is_percentage)
     fetch(url, {
         method: 'PUT',
         headers: {

@@ -42,7 +42,7 @@
                 <div class="row">
 
                     <!-- Grid column -->
-                    <div class="col-xl-4 col-md-12 mr-0">
+                    <div class="col-xl-4 col-md-12 mx-0">
 
                         <!-- Card Title -->
                         <div class="view view-cascade gradient-card-header blue-gradient lighten-1">
@@ -54,10 +54,10 @@
                         <div class="card-body card-body-cascade pb-0">
 
                             <!-- Panel data -->
-                            <div class="row card-body pt-3">
+                            <div class="row card-body pt-2">
 
                                 <!-- First column -->
-                                <div class="col-md-12 pr-0">
+                                <div class="col-md-12 px-0">
 
                                     <!-- All Products -->
                                     <div class="pb-4">
@@ -67,14 +67,14 @@
                                         </div>
 {#                                        <br>#}
                                         <ul class="list-group list-group-flush overflow-auto my-custom-scrollbar-product-list mn-custom-scrollbar"
-                                            style="height: 46vh"
+                                            style="height: 45vh"
                                             id="AllProductListLi">
                                         </ul>
                                     </div>
                                     <!-- All Products -->
 
                                     <!-- Buttons -->
-                                    <div class="row text-center pt-4">
+                                    <div class="row text-center pt-2">
                                         <div class="col-sm-6">
                                             <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
                                                     data-toggle="modal" data-target="#calculator-modal">Calculator
@@ -129,7 +129,7 @@
                     <!-- Grid column -->
 
                     <!-- Grid column -->
-                    <div class="col-xl-8 col-md-12 ml-0">
+                    <div class="col-xl-8 col-md-12 mx-0">
                         <div class="card mr-4 mt-n4">
                             <h4 class="text-center font-weight-bold pt-3 pb-2 mb-0">Cart</h4>
                             <div class="card-body py-0">
@@ -156,12 +156,10 @@
                         </div>
 
                         <!-- STEPPER -->
-                        <div class="container pt-4 px-4">
+                        <div class="container px-4 pt-5">
                             <ul class="stepper horizontal" id="horizontal-stepper">
                                 <li class="step active">
-                                    <div class="step-title waves-effect waves-dark">Cart Details</div>
                                     <div class="step-new-content">
-
                                         <div class="row">
                                             <div class="col-sm-5">
                                                 <div class="input-group mb-4 w-75 ml-5">
@@ -210,51 +208,6 @@
                                         </div>
                                     </div>
                                 </li>
-                                {#                                <li class="step">#}
-                                {#                                    <div class="step-title waves-effect waves-dark">Order Receipt</div>#}
-                                {#                                    <div class="step-new-content">#}
-                                {#                                        <div class="form-row align-items-center">#}
-                                {#                                            <!-- Default auto-sizing form -->#}
-                                {##}
-                                {#                                            <div class="input-group col-sm">#}
-                                {#                                                <div class="input-group-prepend">#}
-                                {#                                                    <div class="input-group-text">+91</div>#}
-                                {#                                                </div>#}
-                                {#                                                <input type="text" class="form-control py-0" aria-label="phone-number"#}
-                                {#                                                       id="phone_number" placeholder="Phone Number"#}
-                                {#                                                       style="max-width: 250px">#}
-                                {#                                                <div class="input-group-append" id="button-addon4">#}
-                                {#                                                    <button class="btn btn-md btn-success m-0 px-3 py-2 z-depth-0 waves-effect"#}
-                                {#                                                            type="button"#}
-                                {#                                                            onclick="send_receipt_whatsapp({{ order.id }})">Whatsapp#}
-                                {#                                                        Receipt#}
-                                {#                                                    </button>#}
-                                {#                                                    <button class="btn btn-md btn-secondary m-0 px-3 py-2 z-depth-0 waves-effect"#}
-                                {#                                                            type="button"#}
-                                {#                                                            onclick=" window.open('{% url 'receipt' order.id %}','_blank')">#}
-                                {#                                                        Print Receipt#}
-                                {#                                                    </button>#}
-                                {#                                                </div>#}
-                                {#                                            </div>#}
-                                {##}
-                                {#                                            <div class="col-sm-auto text-center">#}
-                                {#                                                <div class="btn-group radio-group ml-2" data-toggle="buttons">#}
-                                {#                                                    <button type="button" data-product="1001" data-action="remove"#}
-                                {#                                                            class="btn btn-primary btn-md mr-1 btn-rounded previous-step"#}
-                                {#                                                    > < Back#}
-                                {#                                                        <!-- <i class="fas fa-minus"></i> Font Awesome fontawesome.com -->#}
-                                {#                                                    </button>#}
-                                {#                                                    <button id="stepper-complete-order" type="button"#}
-                                {#                                                            class="btn btn-success btn-md mr-1 btn-rounded next-step"#}
-                                {#                                                            onclick="CompleteOrder()" data-feedback="completePos">#}
-                                {#                                                        Complete Order#}
-                                {#                                                        <!-- <i class="fas fa-plus"></i> Font Awesome fontawesome.com -->#}
-                                {#                                                    </button>#}
-                                {#                                                </div>#}
-                                {#                                            </div>#}
-                                {#                                        </div>#}
-                                {#                                    </div>#}
-                                {#                                </li>#}
                             </ul>
                         </div>
                         <!-- STEPPER -->
