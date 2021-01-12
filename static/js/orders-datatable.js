@@ -93,8 +93,9 @@ function loadOrdersData(date1, date2) {
             {'data': 'cart_profit'},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
-                    return `<a class="pr-3"><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" onclick="deleteOrderConfirmation('${data}')"></i></a>
-                            <a class="" href="/pos/receipt/${data}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>`;
+                    return `<a class="pr-3" href="/pos/receipt/${data}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
+                            <a class=""><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" 
+                                onclick="deleteOrderConfirmation('${data}')"></i></a>`;
                 }
             },
         ],

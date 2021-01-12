@@ -34,7 +34,13 @@ function loadCartData() {
         },
         'columns': [
             {'data': 'product_name', 'class': 'text-left font-weight-bold', 'width': '30%'},
-            {'data': 'weight', render: handleBlankData},
+            {
+                'data': 'weight', render: function (data, type, full) {
+                    if (data === null) return "-";
+                    if (full['weight_unit'] === null) return data;
+                    return data + " " + full['weight_unit'];
+                }
+            },
             {'data': 'discount_price'},
             {
                 'data': 'quantity', render: function (data, type, row) {
@@ -68,18 +74,10 @@ function loadCartData() {
                 else discount = '₹' + discount.value
             }
 
-            // let html = `<tr><th class="table-info font-weight-500 h6">Total Quantity -
-            //                 <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></th>
-            //                 <th class="table-warning font-weight-500 h6">Total Amount -
-            //                 <span class="font-weight-bold">₹${json.data.order.get_cart_revenue}</span></th>
-            //                 <th class="table-success font-weight-500 h6">Cart Discount -
-            //                 <span class="font-weight-bold">${discount}</span>${remove_discount}</th>
-            //             </tr>`
             let html = `<div class="col-sm-4 table-info font-weight-500 text-center py-3 h6">Total Quantity -  <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></div>
                         <div class="col-sm-4 table-warning font-weight-500 text-center py-3 h6">Total Amount -  <span class="font-weight-bold">₹${json.data.order.get_cart_revenue}</span></div>
                         <div class="col-sm-4 table-success font-weight-500 text-center py-3 h6">Cart Discount -  <span class="font-weight-bold">${discount}</span>${remove_discount}</div>`
             total_cart_value = json.data.order.get_cart_revenue;
-            // $(dataTable.DataTable().table().footer()).html(html);
             $('#total-values-div').html(html);
 
             let cash_received = $('#CashReceivedValue').val()
@@ -88,11 +86,6 @@ function loadCartData() {
             }
         },
     });
-}
-
-function updateCartDetails(quantity, total) {
-    document.getElementById("cart_details").innerHTML = 'Total ' + quantity + ' items, ₹' +
-        '<span id="cart-total-amount">' + total + '</span>';
 }
 
 function updateUserOrder(product_code, action) {
