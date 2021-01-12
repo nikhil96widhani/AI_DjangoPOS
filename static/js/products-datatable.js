@@ -3,6 +3,7 @@ const dataTable = $("#products-datatable");
 const common_product_category_selector = $('.product_categories');
 const edit_product_category_selector = $('#edit_product_categories');
 const add_product_category_selector = $('#add_product_categories');
+let product_code_text_field_selector = $('#product_code');
 
 const addProductDetails = function (form) {
     const formData = getFormData($(form));
@@ -38,18 +39,17 @@ const addProductDetails = function (form) {
 }
 
 function generateProductCode(checkbox) {
-    let product_code_text_field = $('#product_code');
     if (checkbox.checked) {
         let url = '/api/product-code-generator/';
 
         $.getJSON(url, {}, function (response) {
             console.log(response.unique_product_code);
-            product_code_text_field.val(response.unique_product_code);
-            product_code_text_field.attr('disabled', 'disabled');
+            product_code_text_field_selector.val(response.unique_product_code);
+            product_code_text_field_selector.attr('disabled', 'disabled');
         });
     } else {
-        product_code_text_field.val('');
-        product_code_text_field.removeAttr('disabled');
+        product_code_text_field_selector.val('');
+        product_code_text_field_selector.removeAttr('disabled');
     }
 }
 
@@ -74,6 +74,11 @@ function loadProductsData() {
         "fnInitComplete": function () {
             const myCustomScrollbar = document.querySelector('#products-datatable_wrapper .dataTables_scrollBody');
             const ps = new PerfectScrollbar(myCustomScrollbar);
+        },
+        "language": {
+            "zeroRecords": `<div class="alert alert-secondary text-center" role="alert">
+                            No products found for your search! 
+                            <a href="#" class="text-primary" data-toggle="modal" data-target="#addProductModalForm">Click Here to add product.</a></div>`
         },
         select: true,
         'columns': [
@@ -202,10 +207,9 @@ $(document).ready(function () {
         }
         $('input', this).on('keyup change', function () {
             if (table.column(i).search() !== this.value) {
-                if (i === 1 && this.value !== ""){
+                if (i === 1 && this.value !== "") {
                     table.column(i).search(this.value).draw();
-                }
-                else if (this.value !== "") {
+                } else if (this.value !== "") {
                     table.column(i).search("^" + $(this).val(), true, false, true).draw();
                 } else {
                     table.column(i).search(this.value).draw();
@@ -266,3 +270,12 @@ $('.product_companies').autocomplete(
         serviceUrl: '/api/product-companies',
     }
 );
+
+$(function () {
+    $(document).pos();
+    $(document).on('scan.pos.barcode', function (event) {
+        resetAdvanceSearch();
+        $('#products-datatable_filter > label > input').html(event.code);
+        product_code_text_field_selector.val(event.code);
+    });
+});
