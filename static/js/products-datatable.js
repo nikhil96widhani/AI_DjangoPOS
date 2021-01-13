@@ -273,10 +273,8 @@ $('.product_companies').autocomplete(
 $(function () {
     $(document).pos();
     $(document).on('scan.pos.barcode', function (event) {
-        resetAdvanceSearch();
-        $('#toggle-advance-search-button').prop('checked', false).change();
-        $('#products-datatable_filter > label > input').val(event.code).trigger("input");
-        // dataTable.DataTable().search(event.code).draw();
-        // product_code_text_field_selector.val(event.code);
+        $('#toggle-advance-search-button').prop('checked', true).change();
+        $('#advance-search-bar > th:nth-child(1) > input').val(event.code);
+        dataTable.DataTable().column(0).search("^" + event.code + "$", true, false, true).draw();
     });
 });

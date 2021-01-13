@@ -193,3 +193,11 @@ $('#order-delete-yes').on('click', function (e) {
     deleteOrder();
 });
 
+$(function () {
+    $(document).pos();
+    $(document).on('scan.pos.barcode', function (event) {
+        $('#toggle-advance-search-button').prop('checked', true).change();
+        $('#advance-search-bar > th:nth-child(2) > input').val(event.code);
+        dataTable.DataTable().column(1).search("^" + event.code + "$", true, false, true).draw();
+    });
+});
