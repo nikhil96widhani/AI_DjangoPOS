@@ -34,13 +34,7 @@ function loadCartData() {
         },
         'columns': [
             {'data': 'product_name', 'class': 'text-left font-weight-bold', 'width': '30%'},
-            {
-                'data': 'weight', render: function (data, type, full) {
-                    if (data === null) return "-";
-                    if (full['weight_unit'] === null) return data;
-                    return data + " " + full['weight_unit'];
-                }
-            },
+            {'data': 'weight', render: handleBlankData},
             {'data': 'discount_price'},
             {
                 'data': 'quantity', render: function (data, type, row) {
@@ -74,10 +68,18 @@ function loadCartData() {
                 else discount = '₹' + discount.value
             }
 
+            // let html = `<tr><th class="table-info font-weight-500 h6">Total Quantity -
+            //                 <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></th>
+            //                 <th class="table-warning font-weight-500 h6">Total Amount -
+            //                 <span class="font-weight-bold">₹${json.data.order.get_cart_revenue}</span></th>
+            //                 <th class="table-success font-weight-500 h6">Cart Discount -
+            //                 <span class="font-weight-bold">${discount}</span>${remove_discount}</th>
+            //             </tr>`
             let html = `<div class="col-sm-4 table-info font-weight-500 text-center py-3 h6">Total Quantity -  <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></div>
                         <div class="col-sm-4 table-warning font-weight-500 text-center py-3 h6">Total Amount -  <span class="font-weight-bold">₹${json.data.order.get_cart_revenue}</span></div>
                         <div class="col-sm-4 table-success font-weight-500 text-center py-3 h6">Cart Discount -  <span class="font-weight-bold">${discount}</span>${remove_discount}</div>`
             total_cart_value = json.data.order.get_cart_revenue;
+            // $(dataTable.DataTable().table().footer()).html(html);
             $('#total-values-div').html(html);
 
             let cash_received = $('#CashReceivedValue').val()
@@ -87,6 +89,7 @@ function loadCartData() {
         },
     });
 }
+
 
 function updateUserOrder(product_code, action) {
     let url = "/api/cart/"
@@ -185,27 +188,15 @@ function completePos() {
 $(function () {
     $(document).pos();
     $(document).on('scan.pos.barcode', function (event) {
-        updateUserOrder(event.code, 'add')
-
-        //access `event.code` - barcode data
+         updateUserOrder(event.code, 'add')
     });
-    // $(document).on('swipe.pos.card', function(event){
-    // 	//access following:
-    // 	// `event.card_number` - card number only
-    // 	// `event.card_holder_first_name` - card holder first name only
-    // 	// `event.card_holder_last_name` - card holder last name only
-    // 	// `event.card_exp_date_month` - card expiration month - 2 digits
-    // 	// `event.card_exp_date_year_2` - card expiration year - 2 digits
-    // 	// `event.card_exp_date_year_4` - card expiration year - 4 digits
-    // 	// `event.swipe_data` - original swipe data from raw processing or sending to a 3rd party service
-    // });
 });
 // END SCANNER INPUT
 
 // Refund Calculator
 function calculateRefund(cash) {
     let cart_total_amount = total_cart_value
-    // cart_total_amount = parseInt(cart_total_amount.innerText)
+    // cart_total_amount = parseInt(cart_total_amount.innerText)inventory_orderitem
     // cash = parseInt(cash)
     // console.log(cart_total_amount - cash)
     if (cash < cart_total_amount) {
@@ -316,7 +307,7 @@ function open_receipt_and_reload(url) {
 
 
 $(document).ready(function () {
-    $("#AllProductList").on("keyup", function () {
+    $("#AllProductList").on("input", function () {
         let value = $(this).val().toLowerCase();
         product_search(value)
     });

@@ -11,8 +11,8 @@
     font-size: 15px;
     font-weight: bold;
 }
-.ml-20{
-    margin-left: 20px;
+.mr-5{
+    margin-right: 5px;
 }
 td,
 th,
@@ -41,7 +41,7 @@ div.description{
 }
 div.mrp{
     /*font-weight: bold;*/
-    font-size: 18px;
+    font-size: 15px;
 }
 div.amount{
     font-weight: bold;
@@ -50,7 +50,7 @@ div.amount{
 div.save{
     align-items: center;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 15px;
 }
 th.description {
     width: 180px;
@@ -105,6 +105,15 @@ img {
     height: 50px;
     width: 100px
     }
+
+.font-weight-500{
+    font-weight: bold;
+}
+
+.points-tnc{
+    padding-right: 3px;
+}
+
 
  @page {
   size: auto;

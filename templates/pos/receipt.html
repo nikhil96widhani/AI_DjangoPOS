@@ -25,6 +25,9 @@
         <p class="text-small centered">PHONE: 8989017745 - WHATSAPP: 9179722160
             <br>EMAIL: shoprightsupermarket@gmail.com</p>
         <p class="centered h1">CASH MEMO</p>
+        <div class="centered">
+            <svg id="barcode-text"></svg>
+        </div>
         <hr>
         <div style="text-align:left;">
             Cashier :
@@ -71,36 +74,65 @@
         <table style="width: 100%">
             <thead>
             <tr>
-                <th class="equal">{{ cart_items_quantity }}</th>
+                <th class="equal">{{ order.get_cart_items_quantity }}</th>
                 <th class="equal"></th>
                 <th class="equal"></th>
-                <th class="equal">₹{{ cart_total }}</th>
+                <th class="equal">₹{{ order.get_cart_revenue_NoDiscount }}</th>
             </tr>
             </thead>
         </table>
+        {% if order.discount %}
+            <hr>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <th class="equal" style="text-align: right">SPECIAL</th>
+                    <th class="equal" style="text-align: left">DISCOUNT</th>
+                    <th class="equal">
+
+                        {% if not order.discount.is_percentage %}
+                            ₹{{ order.discount.value }}
+                        {% else %}
+                            {{ order.discount.value }}%
+                        {% endif %}
+
+                    </th>
+                    <th class="equal">
+                        - ₹{{ discount_savings }}
+                    </th>
+                </tr>
+                </thead>
+            </table>
+            <hr>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <th class="equal" style="padding-left: 10px">SUBTOTAL</th>
+                    <th class="equal"></th>
+                    <th class="equal"></th>
+                    <th class="equal">₹{{ order.get_cart_revenue }}</th>
+                </tr>
+                </thead>
+            </table>
+        {% endif %}
         <hr>
+        <br>
         <div style="text-align: right">
-            <div class="mrp">M.R.P TOTAL: ₹{{ cart_mrp_total }} </div>
-            {% if order.discount %}
-                {% if not order.discount.is_percentage %}
-                    <div class="mrp">DISCOUNT: ₹{{ order.discount.value }}</div>
-                {% else %}
-                    <div class="mrp">DISCOUNT: {{ order.discount.value }}%</div>
-                {% endif %}
-            {% endif %}
+            <div class="mrp">M.R.P TOTAL: ₹{{ order.get_cart_mrp }} </div>
             <div class="save">YOU SAVED: ₹{{ savings }}</div>
             <br>
-            <div class="amount">NET PAYABLE: ₹{{ cart_total }} </div>
+            <div class="amount">NET PAYABLE: ₹{{ order.get_cart_revenue }} </div>
         </div>
+        <br>
         <hr>
-        <p class="centered">Terms & Conditions</p>
-        <div class="ml-20">
+        <p class="centered font-weight-500">Terms & Conditions</p>
+        <ul class="points-tnc">
             <li>No Return on goods sold</li>
-            <li>Non Discounted Goods Can be exchanged within 7 days</li>
+            <li>Non discounted goods can be exchanged within 7 days</li>
             <li>Whole grains will not be taken back</li>
             <li>This bill will be visible for only 10 days</li>
             <li>Subject to BHOPAL Jurisdiction</li>
-        </div>
+        </ul>
         <br>
         <p class="footer-receipt-text">Thank you for your purchase. Hope to see you again!</p>
     </div>
@@ -109,7 +141,23 @@
     </body>
     </html>
 {% endif %}
-
+<script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>
+<script type="text/javascript">
+        JsBarcode("#barcode-text", '{{ order.id }}', {
+            format: "CODE128",
+            {#ean128: true,#}
+            font: "monospace",
+            marginLeft: 2,
+            marginTop: 1,
+            marginBottom: 2,
+            marginRight: 2,
+            fontSize: 10,
+            width: 1.5,
+            textMargin: 1,
+            height: 35,
+            displayValue: false
+        });
+</script>
 <script type="text/javascript">
     window.print();
     window.onafterprint = function () {

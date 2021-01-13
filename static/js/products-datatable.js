@@ -4,7 +4,6 @@ const common_product_category_selector = $('.product_categories');
 const edit_product_category_selector = $('#edit_product_categories');
 const add_product_category_selector = $('#add_product_categories');
 let product_code_text_field_selector = $('#product_code');
-
 const addProductDetails = function (form) {
     const formData = getFormData($(form));
     formData["product_code"] = $('#product_code').val();
@@ -275,7 +274,8 @@ $(function () {
     $(document).pos();
     $(document).on('scan.pos.barcode', function (event) {
         resetAdvanceSearch();
-        $('#products-datatable_filter > label > input').html(event.code);
+        $('#products-datatable_filter > label > input').val(event.code).change();
+        dataTable.DataTable().search(event.code).draw();
         product_code_text_field_selector.val(event.code);
     });
 });

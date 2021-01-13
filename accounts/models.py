@@ -87,6 +87,13 @@ class User(AbstractBaseUser):
 
 
 # https://github.com/lazybird/django-solo
+currency_choice = (
+    ("₹", "₹"),
+    ("Rs", "Rs"),
+    ("$", "$")
+)
+
+
 class SiteConfiguration(SingletonModel):
     # Shop Fields
     shop_name = models.CharField(max_length=255, blank=True, null=True, default='Shop Name')
@@ -97,7 +104,7 @@ class SiteConfiguration(SingletonModel):
     whatsapp_number = models.IntegerField(blank=True, null=True, default='1111111111')
 
     # Payment Fields
-    currency = models.CharField(max_length=5, blank=True, null=True, default='₹')
+    currency = models.CharField(max_length=5, blank=True, null=True, default='₹', choices=currency_choice)
 
     # Receipt Fields
     # tnc = models.CharField(max_length=5, null=True)

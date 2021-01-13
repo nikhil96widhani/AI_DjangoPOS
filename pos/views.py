@@ -41,9 +41,7 @@ def receiptView(request, pk):
         context = {
             'order': order,
             'cart_items': cart_items,
-            'cart_items_quantity': order.get_cart_items_quantity,
-            'cart_total': order.get_cart_revenue,
-            'cart_mrp_total': order.get_cart_mrp,
+            'discount_savings': order.get_cart_revenue_NoDiscount - order.get_cart_revenue,
             'savings': order.get_cart_mrp - order.get_cart_revenue,
         }
         return render(request, 'pos/receipt.html', context)

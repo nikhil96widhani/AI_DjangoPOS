@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
+from django.http import HttpResponseRedirect
 from .models import *
 from .forms import *
 from django.contrib.auth import login
@@ -36,3 +37,12 @@ def user_redirect(request):
             return redirect("home")
     else:
         return redirect("login")
+
+
+def settingsView(request):
+    instance = SiteConfiguration.objects.get()
+    form = SettingsForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        form.save()
+        return redirect('settings')
+    return render(request, 'accounts/settings.html', {'form': form})

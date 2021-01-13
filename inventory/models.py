@@ -142,6 +142,12 @@ class Order(models.Model):
         return revenue_total
 
     @property
+    def get_cart_revenue_NoDiscount(self):
+        order_items = self.orderitem_set.all()
+        revenue_total = sum([item.get_revenue for item in order_items])
+        return revenue_total
+
+    @property
     def get_cart_cost(self):
         order_items = self.orderitem_set.all()
         cost_total = sum([item.get_cost for item in order_items])
