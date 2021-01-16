@@ -197,7 +197,7 @@ function changeDiscountPrice(discount_price_selector, discount_percent_selector,
 
 /**************************Events**************************/
 $(document).ready(function () {
-    $('#products-datatable thead tr').clone(true).appendTo('#products-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2");
+    $('#products-datatable thead tr').clone(true).appendTo('#products-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2").attr("style", "background: #f8f9fa");
     $('#products-datatable thead tr:eq(1) th').each(function (i) {
         const title = $(this).text();
         $(this).html(`<input type="text" class="form-control form-control-sm ml-1"/>`);

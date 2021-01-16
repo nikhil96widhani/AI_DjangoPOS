@@ -126,7 +126,7 @@ function deleteOrder() {
 }
 
 function loadOrdersDatatable(date1 = null, date2 = null) {
-    $('#orders-datatable thead tr').clone(true).appendTo('#orders-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2");
+    $('#orders-datatable thead tr').clone(true).appendTo('#orders-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2").attr("style", "background: #f8f9fa");
     $('#orders-datatable thead tr:eq(1) th').each(function (i) {
         const title = $(this).text();
         $(this).html(`<input type="text" class="form-control form-control-sm ml-1"/>`);
