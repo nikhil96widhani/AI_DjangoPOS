@@ -83,7 +83,7 @@ function loadCartData() {
             $('#total-values-div').html(html);
 
             let cash_received = $('#CashReceivedValue').val()
-            if (cash_received !== ""){
+            if (cash_received !== "") {
                 calculateRefund(cash_received)
             }
         },
@@ -188,7 +188,7 @@ function completePos() {
 $(function () {
     $(document).pos();
     $(document).on('scan.pos.barcode', function (event) {
-         updateUserOrder(event.code, 'add')
+        updateUserOrder(event.code, 'add')
     });
 });
 // END SCANNER INPUT

@@ -1,0 +1,167 @@
+{% load static %}
+{% load pos_tags %}
+
+{% if error %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <div class="alert alert-danger text-center" role="alert">
+        {{ error }} <a href="javascript:window.open('','_self').close();">Close Tab</a>
+    </div>
+
+{% else %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="{% static 'css/receipt-old.css' %}">
+        <link rel="stylesheet" href="{% static 'line_awesome/css/line-awesome.min.css' %}">
+        <title>Receipt for order-{{ order.id }}</title>
+    </head>
+    <body>
+    <div class="ticket">
+        <img src="{% static "images/receipt-logo.png" %}" alt="Logo">
+        <p class="centered">21, POOJA SHRI NAGAR, CTO, BAIRAGARH</p>
+        <p class="text-small centered">PHONE: 8989017745 - WHATSAPP: 9179722160
+            <br>EMAIL: shoprightsupermarket@gmail.com</p>
+        <p class="centered h1">CASH MEMO</p>
+        <div class="centered">
+            <svg id="barcode-text"></svg>
+        </div>
+        <hr>
+        <div style="text-align:left;">
+            Cashier :
+            <span style="float:right;">
+                {{ order.customer }}
+            </span>
+        </div>
+        <div style="text-align:left;">
+            Date
+            <span style="float:right;">
+                {{ order.date_order }}
+            </span>
+        </div>
+        <hr>
+        <div class="description centered">Description</div>
+        <table style="width: 100%">
+            <thead>
+            <tr>
+                <th class="equal">Qty</th>
+                <th class="equal">M.R.P</th>
+                <th class="equal">Our Price</th>
+                <th class="equal">Amount</th>
+            </tr>
+            </thead>
+        </table>
+        <hr>
+        <br>
+        {% for a in cart_items %}
+            <div class="product-name">{{ a.product_name }}
+                {% if a.product.weight %}, {{ a.product.weight }}{{ a.product.weight_unit }}
+                {% endif %}</div>
+            <table style="width: 100%; margin-top: 2px">
+                <thead>
+                <tr>
+                    <td class="equal">{{ a.quantity }}</td>
+                    <td class="equal"><i class="las la-rupee-sign"></i>{{ a.mrp }}</td>
+                    <td class="equal"><i class="las la-rupee-sign"></i>{{ a.discount_price }}</td>
+                    <td class="equal"><i class="las la-rupee-sign"></i>{{ a.amount }}</td>
+                </tr>
+                </thead>
+            </table>
+        {% endfor %}
+        <hr>
+        <table style="width: 100%">
+            <thead>
+            <tr>
+                <th class="equal">{{ order.get_cart_items_quantity }}</th>
+                <th class="equal"></th>
+                <th class="equal"></th>
+                <th class="equal"><i class="las la-rupee-sign"></i>{{ order.get_cart_revenue_NoDiscount }}</th>
+            </tr>
+            </thead>
+        </table>
+        {% if order.discount %}
+            <hr>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <th class="equal" style="text-align: right">SPECIAL</th>
+                    <th class="equal" style="text-align: left">DISCOUNT</th>
+                    <th class="equal">
+
+                        {% if not order.discount.is_percentage %}
+                            <i class="las la-rupee-sign"></i>{{ order.discount.value }}
+                        {% else %}
+                            {{ order.discount.value }}%
+                        {% endif %}
+
+                    </th>
+                    <th class="equal">
+                        - <i class="las la-rupee-sign"></i>{{ discount_savings }}
+                    </th>
+                </tr>
+                </thead>
+            </table>
+            <hr>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <th class="equal" style="padding-left: 10px">SUBTOTAL</th>
+                    <th class="equal"></th>
+                    <th class="equal"></th>
+                    <th class="equal"><i class="las la-rupee-sign"></i>{{ order.get_cart_revenue }}</th>
+                </tr>
+                </thead>
+            </table>
+        {% endif %}
+        <hr>
+        <br>
+        <div style="text-align: right">
+            <div class="mrp">M.R.P TOTAL: <i class="las la-rupee-sign la-1x"></i>{{ order.get_cart_mrp }} </div>
+            <div class="save">YOU SAVED: <i class="las la-rupee-sign la-1x"></i>{{ savings }}</div>
+            <br>
+            <div class="amount">NET PAYABLE: <i class="las la-rupee-sign la-lg"></i>{{ order.get_cart_revenue }} </div>
+        </div>
+        <br>
+        <hr>
+        <p class="centered font-weight-500">Terms & Conditions</p>
+        <ul class="points-tnc">
+            <li>No Return on goods sold</li>
+            <li>Non discounted goods can be exchanged within 3 days</li>
+            <li>Opened items will not be exchanged</li>
+            <li>Whole grains will not be taken back</li>
+            <li>This bill will be visible for only 10 days</li>
+            <li>Subject to BHOPAL Jurisdiction</li>
+        </ul>
+        <br>
+        <p class="footer-receipt-text">Thank you for shopping at ShpopRight supermarket Hope to see you again!</p>
+    </div>
+    <button id="btnPrint" class="hidden-print">Print</button>
+    <script type="text/javascript" src="{% static 'js/receipt.js' %}"></script>
+    </body>
+    </html>
+{% endif %}
+<script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>
+<script type="text/javascript">
+        JsBarcode("#barcode-text", '{{ order.id }}', {
+            format: "CODE128",
+            {#ean128: true,#}
+            font: "monospace",
+            marginLeft: 2,
+            marginTop: 1,
+            marginBottom: 2,
+            marginRight: 2,
+            fontSize: 10,
+            width: 1.5,
+            textMargin: 1,
+            height: 35,
+            displayValue: false
+        });
+</script>
+{#<script type="text/javascript">#}
+{#    window.print();#}
+{#    window.onafterprint = function () {#}
+{#        window.close();#}
+{#    }#}
+{#</script>#}

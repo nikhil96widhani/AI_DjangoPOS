@@ -75,7 +75,7 @@ function loadProductsData() {
             const ps = new PerfectScrollbar(myCustomScrollbar);
         },
         "language": {
-            "zeroRecords": `<div class="alert alert-secondary text-center" role="alert">
+            "zeroRecords": `<div class="alert alert-warning text-center" role="alert">
                             No products found for your search! 
                             <a href="#" class="text-primary" data-toggle="modal" data-target="#addProductModalForm">Click Here to add product.</a></div>`
         },

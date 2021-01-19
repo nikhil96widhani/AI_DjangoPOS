@@ -64,6 +64,10 @@ def productLabelView(request, pk):
                                                                    "Product not found with that product id"})
 
 
+def productExpLabelView(request):
+    return render(request, 'pos/product-expiry-label.html', {'date': now().date()})
+
+
 @login_required
 def cart_datatable_view(request):
     all_products = Product.objects.all()[:10]

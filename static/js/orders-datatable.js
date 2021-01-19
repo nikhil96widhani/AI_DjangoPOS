@@ -68,6 +68,11 @@ function loadOrdersData(date1, date2) {
             const myCustomScrollbar = document.querySelector('#orders-datatable_wrapper .dataTables_scrollBody');
             const ps = new PerfectScrollbar(myCustomScrollbar);
         },
+        "language": {
+            "zeroRecords": `<div class="alert alert-warning text-center" role="alert">
+                            No orders found for your search! 
+                           </div>`
+        },
         'columns': [
             {
                 "class": 'details-control',
@@ -195,7 +200,9 @@ $('#order-delete-yes').on('click', function (e) {
 
 $(function () {
     $(document).pos();
+
     $(document).on('scan.pos.barcode', function (event) {
+        console.log(event.code)
         $('#toggle-advance-search-button').prop('checked', true).change();
         $('#advance-search-bar > th:nth-child(2) > input').val(event.code);
         dataTable.DataTable().column(1).search("^" + event.code + "$", true, false, true).draw();

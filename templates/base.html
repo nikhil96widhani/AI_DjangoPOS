@@ -51,51 +51,58 @@
             <!--/. Logo -->
 
             <!--Search Form-->
-            <li>
-                <form class="search-form" role="search">
-                    <div class="md-form mt-0 waves-light">
-                        <input type="text" class="form-control py-2" placeholder="Search">
-                    </div>
-                </form>
-            </li>
+            {#            <li>#}
+            {#                <form class="search-form" role="search">#}
+            {#                    <div class="md-form mt-0 waves-light">#}
+            {#                        <input type="text" class="form-control py-2" placeholder="Search">#}
+            {#                    </div>#}
+            {#                </form>#}
+            {#            </li>#}
             <!--/.Search Form-->
             <!-- Side navigation links -->
+            <hr>
             <li>
                 <ul class="collapsible collapsible-accordion">
-                    <li><a href="{% url 'pos-home' %}" class="collapsible-header waves-effect"><i
+                    <li><a href="{% url 'pos-home' %}" class="waves-effect"><i
                             class="fas fa-rupee-sign"></i>POS</a></li>
-                    <li><a href="{% url 'products' %}" class="collapsible-header waves-effect"><i
+                    <li><a href="{% url 'products' %}" class="waves-effect"><i
                             class="fas fa-warehouse"></i>Inventory</a></li>
+                    {#                    <li>#}
+                    {#                        <a class="collapsible-header waves-effect arrow-r active"><i class="fas fa-border-all"></i>Reports<i#}
+                    {#                                class="fas fa-angle-down rotate-icon"></i></a>#}
+                    {#                        <div class="collapsible-body">#}
+                    {#                            <ul>#}
+                    {#                                <li><a href="{% url 'orders-datatable' %}" class="waves-effect">Orders</a>#}
+                    {#                                <li><a href="{% url 'dashboard' %}" class="waves-effect">Dashboard</a>#}
+                    {#                                </li>#}
+                    {#                            </ul>#}
+                    {#                        </div>#}
+                    {#                    </li>#}
+                    <li><a class="collapsible-header waves-effect"><i class="fas fa-border-all"></i>Reports<i
+                            class="fas fa-angle-down pl-5"></i></a></li>
                     <li>
-                        <a class="collapsible-header waves-effect arrow-r active"><i class="fas fa-border-all"></i>Reports<i
-                                class="fas fa-angle-down rotate-icon"></i></a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="{% url 'orders-datatable' %}" class="waves-effect">Orders</a>
-                                <li><a href="{% url 'dashboard' %}" class="waves-effect">Dashboard</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li><a href="{% url 'update-inventory' %}" class="collapsible-header waves-effect">
+                    <li><a href="{% url 'orders-datatable' %}" class="waves-effect pl-5">
+                        <i class="fas fa-shopping-bag"></i>Orders</a>
+                    <li><a href="{% url 'dashboard' %}" class="waves-effect pl-5">
+                        <i class="fas fa-chart-line"></i>Dashboard</a>
+                    <li><a href="{% url 'update-inventory' %}" class="waves-effect">
                         <i class="far fa-edit"></i>Update Inventory</a></li>
                     <li>
-                    <li><a href="{% url 'settings' %}" class="collapsible-header waves-effect">
+                    <li><a href="{% url 'settings' %}" class="waves-effect">
                         <i class="fas fa-cog"></i>Settings</a></li>
-                    <li>
-                        {#                    <li>#}
-                        {#                        <a class="collapsible-header waves-effect arrow-r"><i class="fas fa-user-cog mr-2"></i>Maintenance<i#}
-                        {#                                class="fas fa-angle-down rotate-icon"></i></a>#}
-                        {#                        <div class="collapsible-body">#}
-                        {#                            <ul>#}
-                        {#                                <li><a href="{% url 'add-product' %}" class="waves-effect">Add Product</a>#}
-                        {#                                <li><a href="#" class="waves-effect">Add Product Category</a>#}
-                        {#                                </li>#}
-                        {#                            </ul>#}
-                        {#                        </div>#}
-                        {#                    </li>#}
-                        {#                    <li><a href="#" class="collapsible-header waves-effect"><i class="fas fa-th-large mr-2"></i>Sections</a>#}
-                        {#                    </li>#}
+                    {#                    <li>#}
+                    {#                        <a class="collapsible-header waves-effect arrow-r"><i class="fas fa-user-cog mr-2"></i>Maintenance<i#}
+                    {#                                class="fas fa-angle-down rotate-icon"></i></a>#}
+                    {#                        <div class="collapsible-body">#}
+                    {#                            <ul>#}
+                    {#                                <li><a href="{% url 'add-product' %}" class="waves-effect">Add Product</a>#}
+                    {#                                <li><a href="#" class="waves-effect">Add Product Category</a>#}
+                    {#                                </li>#}
+                    {#                            </ul>#}
+                    {#                        </div>#}
+                    {#                    </li>#}
+                    {#                    <li><a href="#" class="collapsible-header waves-effect"><i class="fas fa-th-large mr-2"></i>Sections</a>#}
+                    {#                    </li>#}
                 </ul>
             </li>
             <!--/. Side navigation links -->
