@@ -41,7 +41,7 @@
         //extend options
         $this.options = $.extend(true, {}, defaults, options);
         $this.keypress(function (event) {
-            if ($("#AllProductList").is(":focus") === false) {
+            if ($("#AllProductList").is(":focus") === false && $(".quantity_cart").is(":focus") === false) {
                 if ($this.options.scan) {
                     if (event.which === 13) {
                         if (!$this.options.submit_on_scan) {

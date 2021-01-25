@@ -1,6 +1,6 @@
 const dataTable = $("#cart-datatable");
-let updated_product_code = null;
-let updated_product_id = null;
+let updated_product_code = 0;
+let updated_product_id = 0;
 let total_cart_value = 0;
 
 function loadCartData() {
@@ -25,28 +25,52 @@ function loadCartData() {
             footer: true
         },
         "rowCallback": function (row, data, dataIndex) {
-            // console.log(data.id, updated_product_id)
-            if (data.product_code === updated_product_code || data.id === updated_product_id) {
+            if (data.product_code === updated_product_code || data.id === updated_product_id ) {
                 $(row).addClass('clicked');
-                updated_product_code = null;
-                updated_product_id = null;
+                updated_product_code = 0;
+                updated_product_id = 0;
+
             }
         },
         'columns': [
-            {'data': 'product_name', 'class': 'text-left font-weight-bold', 'width': '30%'},
-            {'data': 'weight', render: handleBlankData},
-            {'data': 'discount_price'},
+            {'data': 'product_name', 'class': 'text-left font-weight-bold'},
+            {'data': 'weight', 'width': '10%', render: handleBlankData},
+            {'data': 'mrp', 'width': '10%', render: function (data, type, row) {
+                    return `<div class="input-group" style="width: 70px">
+                              <input class="form-control input-sm quantity cart-quant px-1 text-center quantity_cart" 
+                              min="0" name="discount_price_cart" value="${data}" type="number" onchange="updateCartByValue(${row.id}, 'edit_mrp', this.value)"></div>`
+                }},
+            {'data': 'discount_price', 'width': '12%', render: function (data, type, row) {
+                    return `<div class="input-group" style="width: 70px">
+                              <input class="form-control input-sm quantity cart-quant px-1 text-center quantity_cart" 
+                              min="0" name="discount_price_cart" value="${data}" type="number" onchange="updateCartByValue(${row.id}, 'edit_discount_price', this.value)"></div>`
+                }},
             {
-                'data': 'quantity', render: function (data, type, row) {
-                    return `${data}<div class="btn-group ml-3" data-toggle="buttons">
-                                <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrderById('${row.id}', 'remove_quantity')"><i class="fas fa-minus"></i></button>
-                                <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrderById('${row.id}', 'add_quantity')"><i class="fas fa-plus"></i></button>
+                'data': 'quantity', 'width': '10%', render: function (data, type, row) {
+                    return `<div class="input-group " style="width: 70px">
+                              <div class="input-group-prepend">
+                                <button class="btn btn-sm btn-primary btn-rounded m-0 px-2 py-0 z-depth-0 
+                                waves-effect minus decrease" onclick="updateCartByQuantityValue(this, ${row.id}, 'remove')"
+                                > <i class="fas fa-minus"></i> </button>
+                              </div>
+                              <input class="form-control input-sm quantity cart-quant px-1 text-center quantity_cart" 
+                              min="0" name="quantity_cart" value="${data}" type="number" onchange="updateCartByQuantityValue(this, ${row.id}, 'value')">
+                              <div class="input-group-append">
+                                <button class="btn btn-sm btn-primary btn-rounded m-0 px-2 py-0 z-depth-0 waves-effect 
+                                plus increase" onclick="updateCartByQuantityValue(this, ${row.id}, 'add')"
+                                ><i class="fas fa-plus"></i></button>
+                              </div>
                             </div>`
+
+                    // return `${data}<div class="btn-group ml-3" data-toggle="buttons">
+                    //             <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrderById('${row.id}', 'remove_quantity')"><i class="fas fa-minus"></i></button>
+                    //             <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrderById('${row.id}', 'add_quantity')"><i class="fas fa-plus"></i></button>
+                    //         </div>`
                 }
             },
-            {'data': 'amount'},
+            {'data': 'amount', 'width': '12%'},
             {
-                'data': 'id', render: function (data) {
+                'data': 'id', 'width': '10%', render: function (data) {
                     // console.log(data);
                     return `<button class="btn btn-danger btn-sm btn-rounded mr-4" title="Delete Product" onclick="updateUserOrderById('${data}', 'delete_byId')"><i class="fas fa-trash"></i></button>`
                 },
@@ -83,7 +107,7 @@ function loadCartData() {
             $('#total-values-div').html(html);
 
             let cash_received = $('#CashReceivedValue').val()
-            if (cash_received !== ""){
+            if (cash_received !== "") {
                 calculateRefund(cash_received)
             }
         },
@@ -106,7 +130,7 @@ function updateUserOrder(product_code, action) {
         },
         data: JSON.stringify({'product_code': String(product_code), 'action': action}),
         success: function (data) {
-            console.log(data)
+            // console.log(data)
             updated_product_code = product_code;
             dataTable.DataTable().draw('page');
         },
@@ -131,18 +155,89 @@ function updateUserOrderById(orderitem_id, action) {
         },
         data: JSON.stringify({'orderitem_id': orderitem_id, 'action': action}),
         success: function (data) {
-            console.log(data)
+            // console.log(data)
             updated_product_id = Number(orderitem_id);
             dataTable.DataTable().draw('page');
         },
         error: function () {
             toastr.error('Could not update cart! Please Try Again.');
         },
-        complete: function () {
-
-        }
+        // complete: function () {
+        //
+        // }
     })
 }
+
+function updateCartByQuantityValue(elem, id_item, action) {
+    let quantity = 1;
+    if (action ==='add'){
+        elem.parentNode.parentNode.querySelector('input[type=number]').stepUp();
+        quantity = elem.parentNode.parentNode.querySelector('input[type=number]').value
+    }
+    else if (action ==='remove'){
+        elem.parentNode.parentNode.querySelector('input[type=number]').stepDown();
+        quantity = elem.parentNode.parentNode.querySelector('input[type=number]').value
+    }
+    else {
+        quantity = elem.value;
+        elem.blur();
+    }
+    // toastr.error('Quantity' + quantity + id_item);
+
+    let url = "/api/cart/"
+
+    $.ajax(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        data: JSON.stringify({
+            'action': 'add_quantity_by_input',
+            'orderitem_id': id_item,
+            'quantity_by_id': quantity,
+        }),
+        success: function (data) {
+            // console.log(data)
+            updated_product_id = Number(id_item);
+            dataTable.DataTable().draw('page');
+        },
+        error: function () {
+            toastr.error('An error occurred please check the value entered');
+        },
+        // complete: function () {
+        // }
+    })
+}
+
+function updateCartByValue(id_item, action, value) {
+    let url = "/api/cart/"
+
+    $.ajax(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        data: JSON.stringify({
+            'action': action,
+            'value': value,
+            'orderitem_id': id_item,
+        }),
+        success: function (data) {
+            // console.log(data)
+            updated_product_id = Number(id_item);
+            dataTable.DataTable().draw('page');
+        },
+        error: function () {
+            toastr.error('An error occurred please check the value entered');
+        },
+        // complete: function () {
+        // }
+    })
+}
+
+
 
 function product_search(value) {
     let url = '/api/search-products';
@@ -188,7 +283,7 @@ function completePos() {
 $(function () {
     $(document).pos();
     $(document).on('scan.pos.barcode', function (event) {
-         updateUserOrder(event.code, 'add')
+        updateUserOrder(event.code, 'add')
     });
 });
 // END SCANNER INPUT
@@ -252,7 +347,7 @@ function quickAddProduct() {
             return response.json();
         })
         .then((data) => {
-            console.log(data)
+            // console.log(data)
             // updated_product_id = data.id;
             dataTable.DataTable().draw('page');
             toastr.success(data.response_text)
@@ -295,14 +390,40 @@ function discountOrder() {
     })
 }
 
+
+
+
 function open_receipt_and_reload(url) {
-    //Open in new tab
-    window.open(url, '_blank');
-    //focus to thet window
-    window.focus();
-    //reload current page
-    CompleteOrder()
-    location.reload();
+    // CompleteOrder()
+    // //Open in new tab
+    // window.open(url, '_blank');
+    // //focus to that window
+    // window.focus();
+    // //reload current page
+    // location.reload();
+
+
+    let payment_mode = document.getElementById("payment-mode")
+    let url2 = "/api/cart/"
+
+    $.ajax(url2, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        data: JSON.stringify({'product_code': null, 'action': 'complete', 'payment-mode': payment_mode.value}),
+        complete: function () {
+            //Open in new tab
+            window.open(url, '_blank');
+            //focus to that window
+            window.focus();
+            //reload current page
+
+            location.reload();
+        }
+    })
+
 }
 
 

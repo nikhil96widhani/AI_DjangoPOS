@@ -100,6 +100,37 @@ class Cart(APIView):
             order_item.save()
             return Response(response)
         else:
+            if action == 'add_quantity_by_input':
+                orderitem_id = request.data['orderitem_id']
+                orderitem_quantity = request.data['quantity_by_id']
+                order_item = OrderItem.objects.get(id=orderitem_id)
+                if orderitem_quantity:
+                    if int(orderitem_quantity) > 0:
+                        order_item.quantity = int(orderitem_quantity)
+                        order_item.save()
+                    else:
+                        order_item.delete()
+                else:
+                    order_item.delete()
+                return Response(response)
+            if action == 'edit_mrp':
+                orderitem_id = request.data['orderitem_id']
+                orderitem_mrp = request.data['value']
+                print(orderitem_id, orderitem_mrp)
+                order_item = OrderItem.objects.get(id=orderitem_id)
+                if orderitem_mrp:
+                    print('works')
+                    order_item.mrp = float(orderitem_mrp)
+                    order_item.save()
+                return Response(response)
+            if action == 'edit_discount_price':
+                orderitem_id = request.data['orderitem_id']
+                orderitem_dp = request.data['value']
+                order_item = OrderItem.objects.get(id=orderitem_id)
+                if orderitem_dp:
+                    order_item.discount_price = float(orderitem_dp)
+                    order_item.save()
+                return Response(response)
             if action == 'add_quantity':
                 orderitem_id = request.data['orderitem_id']
                 order_item = OrderItem.objects.get(id=orderitem_id)
