@@ -201,34 +201,26 @@ class OrderItem(models.Model):
         if self.product is not None:
             self.product_code = self.product.product_code
             self.product_name = self.product.name
-            self.discount_price = self.product.discount_price
-            self.mrp = self.product.mrp
+            self.discount_price = self.discount_price if self.discount_price else self.product.discount_price
+            self.mrp = self.mrp if self.mrp else self.product.mrp
             self.cost = self.product.cost
             self.weight = self.product.weight
             self.weight_unit = self.product.weight_unit
 
-            if self.product.discount_price and self.quantity:
-                self.amount = round(self.quantity * self.product.discount_price, 2)
-                super(OrderItem, self).save(*args, **kwargs)
-            elif self.product.mrp and self.quantity:
-                self.amount = round(self.quantity * self.product.mrp, 2)
-                super(OrderItem, self).save(*args, **kwargs)
-            else:
-                self.amount = None
-                super(OrderItem, self).save(*args, **kwargs)
         else:
             self.product_code = None
             self.mrp = self.discount_price
             self.cost = self.discount_price
-            if self.discount_price and self.quantity:
-                self.amount = round(self.quantity * self.discount_price, 2)
-                super(OrderItem, self).save(*args, **kwargs)
-            elif self.mrp and self.quantity:
-                self.amount = round(self.quantity * self.mrp, 2)
-                super(OrderItem, self).save(*args, **kwargs)
-            else:
-                self.amount = None
-                super(OrderItem, self).save(*args, **kwargs)
+
+        if self.discount_price and self.quantity:
+            self.amount = round(self.quantity * self.discount_price, 2)
+            super(OrderItem, self).save(*args, **kwargs)
+        elif self.mrp and self.quantity:
+            self.amount = round(self.quantity * self.mrp, 2)
+            super(OrderItem, self).save(*args, **kwargs)
+        else:
+            self.amount = None
+            super(OrderItem, self).save(*args, **kwargs)
 
     @property
     def get_revenue(self):

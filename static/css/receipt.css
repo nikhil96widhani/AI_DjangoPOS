@@ -24,7 +24,7 @@
 
 @page {
     size: auto;
-    margin: 1px;
+    margin: 0 0 0 5px;
 }
 
 @media print {

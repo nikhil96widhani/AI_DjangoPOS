@@ -2,6 +2,7 @@
 {% load pos_tags %}
 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/product_label.css' %}">
+<link rel="stylesheet" href="{% static 'line_awesome/css/line-awesome.min.css' %}">
 
 {% if error %}
     <div class="alert alert-danger text-center" role="alert">
@@ -18,10 +19,11 @@
         <title>Product Label</title>
     </head>
     <body>
-    <div class="card-body product-label border border-dark pt-0">
+    <div class="float-right shopright vertical-text">Shopright Supermarket</div>
+    <div class="card-body product-label pt-0">
         <div class="row pt-0">
             <div class="product-name pt-1">
-                {{ product.name|truncatechars:33 }}
+                {{ product.name|truncatechars:35 }}
             </div>
             <span class="product-name pt-1">
             {% if product.weight %}
@@ -37,33 +39,25 @@
                 <svg id="barcode-text" class="text-center"></svg>
             </div>
         </div>
-        <div class="row">
-            <div class="col col-7 p-0 border border-dark">
+        <div class="row pr-3 ml-n3">
+            <div class="col p-0 border border-dark">
                 <div class="our-rate pl-1 font-weight-bold">OUR RATE
                     <span class="our-rate pl-1">(Inclusive of all taxes)</span></div>
 
                 <div class="row">
-                    <div class="col-6 py-0">
-                        <div class="price pl-1 font-weight-bold text-center">&#x20b9;{{ product.discount_price|price_format }}/-</div>
-                    </div>
-                    <div class="col-6 p-0">
-                        <div class="mrp font-weight-500 text-left">MRP: &#x20b9;{{ product.mrp|price_format }}/-</div>
-                    </div>
+                    <div class="price font-weight-bolder pl-3 text-center"><i class="las la-rupee-sign"></i>{{ product.discount_price|price_format }}/-</div>
+                    <div class="mrp font-weight-500 pl-3 font-weight-bold">MRP: <i class="las la-rupee-sign"></i>{{ product.mrp|price_format }}/-</div>
                 </div>
             </div>
-            <div class="col col-3 p-0 border-top border-bottom border-dark">
-                <div class="text-center discount">Discount</div>
-                <div class="text-center font-weight-bold discount-percent">
-                    {% if product.discount_percentage %}
-                                {{ product.discount_percentage|floatformat:0 }}%
-                            {% else %}
-                                N/A
-                            {% endif %}
+            {% if product.discount_percentage %}
+                <div class="col col-3 p-0 border-top border-right border-bottom border-dark">
+                    <div class="text-center discount">Discount</div>
+                    <div class="text-center font-weight-bold discount-percent">
+                        {{ product.discount_percentage|floatformat:0 }}%
+
+                    </div>
                 </div>
-            </div>
-            <div class="col col-2 p-0 border border-dark">
-                <div class="text-center shopright pt-1">Shopright Supermarket</div>
-            </div>
+            {% endif %}
         </div>
     </div>
     <button id="btnPrint" class="hidden-print">Print</button>
@@ -80,7 +74,7 @@
             fontSize: 8,
             width: 1.5,
             textMargin: 1,
-            height: 60,
+            height: 55,
             {#displayValue: false#}
         });
     </script>
