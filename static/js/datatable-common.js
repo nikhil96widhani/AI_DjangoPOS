@@ -26,8 +26,7 @@ $('#toggle-advance-search-button').change(function () {
     }
 });
 
-function resetAdvanceSearch(table=$('.table').DataTable()) {
-    // console.log($('#advance-search-bar th input'))
+function resetAdvanceSearch(table = $('.custom-datatable').DataTable()) {
     for (x of $('#advance-search-bar th input')) {
         $(x).val('');
     }
