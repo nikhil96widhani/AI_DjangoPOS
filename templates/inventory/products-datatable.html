@@ -21,12 +21,12 @@
                     <h2 class="pt-2">Products Details</h2>
                 </div>
                 <div class="col-auto">
-                    <a class="btn btn btn-md btn-secondary btn-rounded waves-effect waves-light mr-5"
+                    <a class="btn btn btn-md btn-secondary btn-rounded waves-effect waves-light mr-3"
                             href="{% url 'product-expiry-label' %}" target="_blank"><i class="fas fa-print mr-1"></i>
                         Print Expiry Label
                     </a>
                     <button class="float-right btn btn btn-md btn-primary btn-rounded waves-effect waves-light"
-                            data-toggle="modal" data-target="#addProductModalForm"><i class="fas fa-plus mr-3"></i>
+                            data-toggle="modal" data-target="#addProductModalForm"><i class="fas fa-plus mr-2"></i>
                         Add Product
                     </button>
                 </div>
@@ -93,5 +93,6 @@
     <script src="{% static 'js/jquery.pos.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/datatable-common.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/products-datatable.js' %}"></script>
+{#    <script type="text/javascript" src="{% static 'js/products-datatable.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'js/products-datatable-new.js' %}"></script>
 {% endblock %}

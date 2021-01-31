@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from . import models_new
 from .models import *
 
 
@@ -18,3 +20,5 @@ admin.site.register(ProductCategories)
 admin.site.register(ProductCompany)
 admin.site.register(Order)
 admin.site.register(OrderItem, OrderItemList)
+admin.site.register(models_new.ProductNew)
+admin.site.register(models_new.ProductVariation)

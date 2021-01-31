@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F
 from django.utils.crypto import get_random_string
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
@@ -314,3 +315,95 @@ def search_products(request):
 
         product_serializer = ProductSerializer(products, many=True)
         return Response({'products': product_serializer.data})
+
+
+@api_view(['POST'])
+def add_product_with_variation(request):
+    variation_data = request.data['variation_data']
+    if request.method == 'POST':
+        # Product Save
+        if 'product_data' in request.data.keys():
+            product_data = request.data['product_data']
+            product_serializer = ProductNewSerializer(data=product_data)
+            for cat in product_data['category']:
+                if cat != "":
+                    category_object, created = ProductCategories.objects.get_or_create(name=cat)
+                    if created:
+                        print(f'Category - {cat} was added.')
+            if product_serializer.is_valid():
+                product_serializer.save()
+                variation_data['product'] = product_data['product_code']
+
+        product_variation_serializer = ProductVariationPostSerializer(data=variation_data)
+        if product_variation_serializer.is_valid():
+            try:
+                variation_obj = ProductVariation.objects.get(product=variation_data['product'],
+                                                             cost=variation_data['cost'], mrp=variation_data['mrp'])
+                variation_obj.quantity += variation_data['quantity']
+                variation_obj.save()
+                return Response(ProductVariationPostSerializer(variation_obj).data, status=status.HTTP_201_CREATED)
+            except ProductVariation.DoesNotExist:
+                product_variation_serializer.save()
+                return Response(product_variation_serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(product_variation_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def variation_detail(request, pk):
+    try:
+        variation = ProductVariation.objects.get(pk=pk)
+    except ProductVariation.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        variation_serializer = ProductVariationSerializer(variation)
+        return Response(variation_serializer.data)
+
+    elif request.method == 'PUT':
+        product_data = request.data['product_data']
+        variation_data = request.data['variation_data']
+
+        # Product Update
+        product = ProductNew.objects.get(pk=product_data['product_code'])
+        product_serializer = ProductNewSerializer(product, data=product_data)
+        for cat in product_data['category']:
+            if cat != "":
+                category_object, created = ProductCategories.objects.get_or_create(name=cat)
+                if created:
+                    print(f'Category - {cat} was added.')
+        if product_serializer.is_valid():
+            product_serializer.save()
+
+        # Variation Update
+        variation_serializer = ProductVariationPostSerializer(variation, data=variation_data, partial=True)
+        if variation_serializer.is_valid():
+            variation_serializer.save()
+            return Response(ProductVariationSerializer(variation).data)
+        return Response(variation_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        try:
+            ProductVariation.objects.get(product=variation.product.product_code)
+            product = ProductNew.objects.get(pk=variation.product.product_code)
+            product.delete()
+        except ProductVariation.MultipleObjectsReturned:
+            variation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = ProductNew.objects.all()
+    serializer_class = ProductNewSerializer
+
+
+class ProductVariationDetail(generics.RetrieveUpdateDestroyAPIView):
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = ProductVariation.objects.all()
+    serializer_class = ProductVariationSerializer
+
+
+class ProductVariationListView(generics.ListAPIView):
+    queryset = ProductVariation.objects.all()
+    serializer_class = ProductVariationSerializer

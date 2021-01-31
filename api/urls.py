@@ -19,4 +19,9 @@ urlpatterns = [
     path('order-items/', OrderItemsView.as_view(), name='api-orders-items'),
     path('orders-chart-data/', OrdersChartDataView.as_view(), name='api-orders-chart-data'),
     path('product-companies/', ProductCompaniesView.as_view(), name='api-products-companies'),
+
+    path('add-product-with-variation/', add_product_with_variation, name='post-product-with-variation'),
+    path('variations/<int:pk>/', variation_detail, name='variation-detail'),
+    path('products_new/<str:pk>/', ProductDetail.as_view(), name='product-new-detail'),
+    path('variations/', ProductVariationListView.as_view(), name='variations-list'),
 ]
