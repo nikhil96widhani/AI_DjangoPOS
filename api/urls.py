@@ -24,4 +24,5 @@ urlpatterns = [
     path('variations/<int:pk>/', variation_detail, name='variation-detail'),
     path('products_new/<str:pk>/', ProductDetail.as_view(), name='product-new-detail'),
     path('variations/', ProductVariationListView.as_view(), name='variations-list'),
+    path('product-and-variations/', variations_data_using_product_code, name='product-and-variations'),
 ]

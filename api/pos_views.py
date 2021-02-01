@@ -398,12 +398,26 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductNewSerializer
 
 
-class ProductVariationDetail(generics.RetrieveUpdateDestroyAPIView):
-    # permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = ProductVariation.objects.all()
-    serializer_class = ProductVariationSerializer
-
-
 class ProductVariationListView(generics.ListAPIView):
     queryset = ProductVariation.objects.all()
     serializer_class = ProductVariationSerializer
+
+
+@api_view(['GET'])
+def variations_data_using_product_code(request):
+    try:
+        ProductNew.objects.get(pk=request.data['product_code'])
+    except ProductNew.DoesNotExist:
+        return Response({'product_exists': False})
+
+    if request.data['action'] == 'product_check':
+        return Response({'product_exists': True})
+
+    elif request.data['action'] == 'product_variation_data':
+        variations = ProductVariation.objects.filter(product=request.data['product_code'])
+        variation_data = [ProductVariationPostSerializer(variation).data for variation in variations]
+
+        product = ProductNew.objects.get(pk=request.data['product_code'])
+        product_data = ProductNewSerializer(product).data
+
+        return Response({'product_data': product_data, 'variation_data': variation_data})
