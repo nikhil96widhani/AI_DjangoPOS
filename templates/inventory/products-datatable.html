@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-auto">
                     <a class="btn btn btn-md btn-secondary btn-rounded waves-effect waves-light mr-3"
-                            href="{% url 'product-expiry-label' %}" target="_blank"><i class="fas fa-print mr-1"></i>
+                       href="{% url 'product-expiry-label' %}" target="_blank"><i class="fas fa-print mr-1"></i>
                         Print Expiry Label
                     </a>
                     <button class="float-right btn btn btn-md btn-primary btn-rounded waves-effect waves-light"
@@ -85,6 +85,28 @@
             </div>
         </div>
     </div>
+
+    <!-- Extra Modal -->
+    <div class="modal fade" id="extraConfirmationPrompt" tabindex="-1"
+         aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="false" data-mdb-keyboard="false">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id=""></h5>
+                    {#                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+                    {#                        <span aria-hidden="true">&times;</span>#}
+                    {#                    </button>#}
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="modal-yes-button"></button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal-no-button">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascript %}
@@ -93,6 +115,6 @@
     <script src="{% static 'js/jquery.pos.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/datatable-common.js' %}"></script>
-{#    <script type="text/javascript" src="{% static 'js/products-datatable.js' %}"></script>#}
+    {#    <script type="text/javascript" src="{% static 'js/products-datatable.js' %}"></script>#}
     <script type="text/javascript" src="{% static 'js/products-datatable-new.js' %}"></script>
 {% endblock %}

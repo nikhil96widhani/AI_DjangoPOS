@@ -245,11 +245,6 @@ $('#generate_product_code_checkbox').change(function () {
     generateProductCode(this);
 });
 
-// $('#add-product-form').on('submit', function (e) {
-//     e.preventDefault();
-//     addProductDetails(this);
-// });
-
 const productFormHandler = (action) => {
     const product_form_selector = `#${action}-product-form`
     const variation_form_selector = `#${action}-variation-form`
@@ -261,10 +256,9 @@ const productFormHandler = (action) => {
     } else if (!$(variation_form_selector)[0].checkValidity()) {
         $(variation_form_selector)[0].reportValidity()
     } else {
-        if (action === 'add'){
+        if (action === 'add') {
             addProductDetails(product_form_selector, variation_form_selector);
-        }
-        else if(action === 'edit'){
+        } else if (action === 'edit') {
             updateProductDetails(product_form_selector, variation_form_selector)
         }
     }
@@ -309,6 +303,14 @@ $('.product_companies').autocomplete(
     }
 );
 
+const searchProductCodeInDatatable = (product_code) => {
+    console.log('Search')
+    $('.close').click();
+    $('#toggle-advance-search-button').prop('checked', true).change();
+    $('#advance-search-bar > th:nth-child(1) > input').val(product_code);
+    dataTable.DataTable().column(0).search("^" + product_code + "$", true, false, true).draw();
+}
+
 $(function () {
     $(document).pos();
     $(document).on('scan.pos.barcode', function (event) {
@@ -317,3 +319,46 @@ $(function () {
         dataTable.DataTable().column(0).search("^" + event.code + "$", true, false, true).draw();
     });
 });
+
+const checkProductExists = async (product_code) => {
+    let url = "/api/product-and-variations/"
+    let product_exists = false;
+    const data = {
+        'product_code': product_code,
+        'action': 'product_check'
+    }
+    console.log(data)
+    await $.ajax(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: data,
+        success: function (data) {
+            console.log(data)
+            product_exists = data.product_exists;
+        },
+        error: function () {
+            toastr.error('Could not check product code existence! Please try again.');
+        },
+        complete: function (data) {
+        }
+    });
+    return product_exists;
+}
+
+product_code_text_field_selector.focusout(async () => {
+    const product_code = product_code_text_field_selector.val()
+    if (product_code) {
+        const product_exists = await checkProductExists(product_code)
+        console.log(product_exists)
+        if (product_exists) {
+            $('#addProductModalForm').modal('hide');
+            $('#extraConfirmationPrompt h5.modal-title').html('Product Already Exists!')
+            $('#extraConfirmationPrompt div.modal-body').html(`Product Code - ${product_code} already exists! Choose From Below Options.`)
+            $('#modal-yes-button').html('Check Product Details').attr('onclick', `searchProductCodeInDatatable(${product_code}); $('#extraConfirmationPrompt').modal('hide');`);
+            $('#modal-no-button').html('Change Product Code').attr('onclick', `$('#addProductModalForm').modal('show'); product_code_text_field_selector.val('');`);
+            $('#extraConfirmationPrompt').modal('show');
+        }
+    }
+})

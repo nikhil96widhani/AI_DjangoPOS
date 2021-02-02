@@ -405,19 +405,21 @@ class ProductVariationListView(generics.ListAPIView):
 
 @api_view(['GET'])
 def variations_data_using_product_code(request):
+    print(request.GET)
+    print(request.GET.get('product_code'))
     try:
-        ProductNew.objects.get(pk=request.data['product_code'])
+        ProductNew.objects.get(pk=request.GET.get('product_code'))
     except ProductNew.DoesNotExist:
         return Response({'product_exists': False})
 
-    if request.data['action'] == 'product_check':
+    if request.GET.get('action') == 'product_check':
         return Response({'product_exists': True})
 
-    elif request.data['action'] == 'product_variation_data':
-        variations = ProductVariation.objects.filter(product=request.data['product_code'])
+    elif request.GET.get('action') == 'product_variation_data':
+        variations = ProductVariation.objects.filter(product=request.GET.get('product_code'))
         variation_data = [ProductVariationPostSerializer(variation).data for variation in variations]
 
-        product = ProductNew.objects.get(pk=request.data['product_code'])
+        product = ProductNew.objects.get(pk=request.GET.get('product_code'))
         product_data = ProductNewSerializer(product).data
 
         return Response({'product_data': product_data, 'variation_data': variation_data})
