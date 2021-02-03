@@ -304,8 +304,8 @@ $('.product_companies').autocomplete(
 );
 
 const searchProductCodeInDatatable = (product_code) => {
-    console.log('Search')
-    $('.close').click();
+    // console.log('Search')
+    // $('.close').click();
     $('#toggle-advance-search-button').prop('checked', true).change();
     $('#advance-search-bar > th:nth-child(1) > input').val(product_code);
     dataTable.DataTable().column(0).search("^" + product_code + "$", true, false, true).draw();
@@ -357,8 +357,13 @@ product_code_text_field_selector.focusout(async () => {
             $('#extraConfirmationPrompt h5.modal-title').html('Product Already Exists!')
             $('#extraConfirmationPrompt div.modal-body').html(`Product Code - ${product_code} already exists! Choose From Below Options.`)
             $('#modal-yes-button').html('Check Product Details').attr('onclick', `searchProductCodeInDatatable(${product_code}); $('#extraConfirmationPrompt').modal('hide');`);
-            $('#modal-no-button').html('Change Product Code').attr('onclick', `$('#addProductModalForm').modal('show'); product_code_text_field_selector.val('');`);
+            $('#modal-no-button').html('Change Product Code').attr('onclick', `$('#addProductModalForm').modal('show');`);
             $('#extraConfirmationPrompt').modal('show');
         }
     }
+})
+
+$('.modal').on('shown.bs.modal', () => {
+    console.log('modal')
+    $('.modal').find('input:first').trigger('focus');
 })
