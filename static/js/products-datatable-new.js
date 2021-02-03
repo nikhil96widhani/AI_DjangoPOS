@@ -112,7 +112,8 @@ function loadProductsData() {
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
                     return `<a class="pr-3" href="/pos/product-label/${data}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
-                            <a class="pr-3"><i class="fa fa-pen" aria-hidden="true" data-toggle="modal" data-target="#editProductModalForm" onclick="editProductDetails('${data}', '${row.product.product_code}')"></i></a>
+                            <a class="pr-3"><i class="fa fa-plus" aria-hidden="true" data-toggle="modal" data-target="#addVariationModalForm" onclick="addAndUpdateVariationButtonAction('add-variation', '${data}', '${row.product.product_code}')"></i></a>
+                            <a class="pr-3"><i class="fa fa-pen" aria-hidden="true" data-toggle="modal" data-target="#editProductModalForm" onclick="addAndUpdateVariationButtonAction('edit', '${data}', '${row.product.product_code}')"></i></a>
                             <a class=""><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${data}')"></i></a>`;
                 }
             },
@@ -151,7 +152,7 @@ function updateProductDetails(product_form_selector, variation_form_selector) {
     product_form_data["product_code"] = product_code_to_update;
     if (product_form_data["category"] === null) {
         product_form_data["category"] = [];
-    } else product_form_data["category"] = add_product_category_selector.val().split(",");
+    } else product_form_data["category"] = edit_product_category_selector.val().split(",");
 
     const data = {'product_data': product_form_data, 'variation_data': variation_form_data}
     console.log(data);
@@ -176,6 +177,57 @@ function updateProductDetails(product_form_selector, variation_form_selector) {
         complete: function () {
             addCategoriesToInput(common_product_category_selector);
         }
+    });
+}
+
+const addVariation = (variation_form_selector) => {
+    const variation_form_data = getFormData($(variation_form_selector));
+    variation_form_data['product'] = product_code_to_update;
+
+    const data = {'variation_data': variation_form_data}
+    console.log(data);
+
+    let url = "/api/add-product-with-variation/";
+
+    $.ajax(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        data: JSON.stringify(data),
+        success: function (data) {
+            toastr.info('Variation was successfully added.');
+            $('.close').click();
+            dataTable.DataTable().draw(false);
+        },
+        error: function () {
+            toastr.error('Variation details were not added! Please try again.');
+        },
+    });
+}
+
+function addAndUpdateVariationButtonAction(action, variation_id, product_code) {
+    variation_id_to_update = variation_id;
+    product_code_to_update = product_code;
+    let url = '/api/variations/' + variation_id_to_update;
+    $(`#${action}-static-product-code`).empty().html(product_code_to_update);
+
+    const product_category_selector = `#${action}_product_categories`
+
+    $.getJSON(url, {}, function (response) {
+        console.log(response);
+        $.each(response, function (key, value) {
+            let field_selector = $(`#${action}-variation-form [name="${key}"]`);
+            field_selector.val(value);
+        })
+        $.each(response.product, function (key, value) {
+            let field_selector = $(`#${action}-product-form [name="${key}"]`);
+            field_selector.val(value);
+        })
+        console.log(response.product.category.join())
+        $(product_category_selector).val(response.product.category.join())
+        $(product_category_selector).tagator('refresh');
     });
 }
 
@@ -249,8 +301,6 @@ const productFormHandler = (action) => {
     const product_form_selector = `#${action}-product-form`
     const variation_form_selector = `#${action}-variation-form`
 
-    console.log(product_form_selector, "-", variation_form_selector)
-
     if (!$(product_form_selector)[0].checkValidity()) {
         $(product_form_selector)[0].reportValidity();
     } else if (!$(variation_form_selector)[0].checkValidity()) {
@@ -260,6 +310,8 @@ const productFormHandler = (action) => {
             addProductDetails(product_form_selector, variation_form_selector);
         } else if (action === 'edit') {
             updateProductDetails(product_form_selector, variation_form_selector)
+        } else if (action === 'add-variation') {
+            addVariation(variation_form_selector)
         }
     }
 }
@@ -270,6 +322,10 @@ $('#add-product-form-submit').click(function () {
 
 $('#edit-product-form-submit').click(function () {
     productFormHandler('edit');
+});
+
+$('#add-variation-product-form-submit').click(function () {
+    productFormHandler('add-variation');
 });
 
 add_discount_price_selector.on('input', function () {
@@ -304,8 +360,6 @@ $('.product_companies').autocomplete(
 );
 
 const searchProductCodeInDatatable = (product_code) => {
-    // console.log('Search')
-    // $('.close').click();
     $('#toggle-advance-search-button').prop('checked', true).change();
     $('#advance-search-bar > th:nth-child(1) > input').val(product_code);
     dataTable.DataTable().column(0).search("^" + product_code + "$", true, false, true).draw();
@@ -354,16 +408,16 @@ product_code_text_field_selector.focusout(async () => {
         console.log(product_exists)
         if (product_exists) {
             $('#addProductModalForm').modal('hide');
+            product_code_text_field_selector.val('');
             $('#extraConfirmationPrompt h5.modal-title').html('Product Already Exists!')
             $('#extraConfirmationPrompt div.modal-body').html(`Product Code - ${product_code} already exists! Choose From Below Options.`)
             $('#modal-yes-button').html('Check Product Details').attr('onclick', `searchProductCodeInDatatable(${product_code}); $('#extraConfirmationPrompt').modal('hide');`);
-            $('#modal-no-button').html('Change Product Code').attr('onclick', `$('#addProductModalForm').modal('show');`);
+            $('#modal-no-button').html('Change Product Code').attr('onclick', `$('#addProductModalForm').modal('show'); `);
             $('#extraConfirmationPrompt').modal('show');
         }
     }
 })
 
 $('.modal').on('shown.bs.modal', () => {
-    console.log('modal')
     $('.modal').find('input:first').trigger('focus');
 })

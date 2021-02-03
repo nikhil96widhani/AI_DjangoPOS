@@ -339,12 +339,12 @@ def add_product_with_variation(request):
             try:
                 variation_obj = ProductVariation.objects.get(product=variation_data['product'],
                                                              cost=variation_data['cost'], mrp=variation_data['mrp'])
-                variation_obj.quantity += variation_data['quantity']
+                variation_obj.quantity += int(variation_data['quantity'])
                 variation_obj.save()
-                return Response(ProductVariationPostSerializer(variation_obj).data, status=status.HTTP_201_CREATED)
+                return Response(ProductVariationSerializer(variation_obj).data, status=status.HTTP_201_CREATED)
             except ProductVariation.DoesNotExist:
                 product_variation_serializer.save()
-                return Response(product_variation_serializer.data, status=status.HTTP_201_CREATED)
+                return Response(ProductVariationSerializer(product_variation_serializer.instance).data, status=status.HTTP_201_CREATED)
 
         return Response(product_variation_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -399,7 +399,7 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ProductVariationListView(generics.ListAPIView):
-    queryset = ProductVariation.objects.all()
+    queryset = ProductVariation.objects.all().order_by('-modified_time')
     serializer_class = ProductVariationSerializer
 
 

@@ -1,0 +1,21 @@
+{% extends 'components/base-form-modal-2.html' %}
+
+{% block modal_id %}addVariationModalForm{% endblock %}
+
+{% block modal-title %}Add Variation{% endblock %}
+
+{% block form_id %}add-variation-form{% endblock %}
+
+{% block form %}
+    {% with element_id='add-variation' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block product_code_wrapper %}
+    {% with addProduct=False %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock product_code_wrapper %}
+
+{% block submit-button-name %}Add Variation{% endblock %}
