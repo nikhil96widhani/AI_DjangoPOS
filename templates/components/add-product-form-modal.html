@@ -7,7 +7,7 @@
 {#{% block form_id %}add-product-form{% endblock %}#}
 
 {% block form %}
-    {% with element_id='add' %}
+    {% with element_id='add' variation_title_visibility='invisible' %}
         {{ block.super }}
     {% endwith %}
 {% endblock %}

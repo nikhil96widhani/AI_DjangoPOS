@@ -187,81 +187,85 @@
                     <div class="row">
                         <div class="col-lg-6 pr-lg-4">
                             <form id="{{ element_id }}-product-form">
-                                <div class="mb-3 mt-1 h4 grey-ic">Product Details</div>
-                                <div class="border rounded px-3 py-4 my-4">
-                                    {% block product_code_wrapper %}
-                                        {% if addProduct %}
-                                            <div class="input-group mb-4">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><strong>Product Code</strong></span>
-                                                </div>
-                                                <input type="text" class="form-control" aria-label="Code"
-                                                       name="product_code"
-                                                       id="product_code" required>
-                                                <div class="input-group-append">
-                                                    <div class="input-group-text">
-                                                        <input class="form-check-input" type="checkbox"
-                                                               id="generate_product_code_checkbox">
-                                                        <label class="form-check-label"
-                                                               for="generate_product_code_checkbox"></label>
+                                <fieldset {% if element_id == 'add-variation' %}disabled{% endif %}>
+                                    <div class="mb-3 mt-1 h4 grey-ic">Product Details</div>
+                                    <div class="border rounded px-3 py-4 my-4">
+                                        {% block product_code_wrapper %}
+                                            {% if addProduct %}
+                                                <div class="input-group mb-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><strong>Product Code</strong></span>
                                                     </div>
-                                                    <span class="input-group-text">Generate Product Code</span>
+                                                    <input type="text" class="form-control" aria-label="Code"
+                                                           name="product_code"
+                                                           id="product_code" required>
+                                                    <div class="input-group-append">
+                                                        <div class="input-group-text">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                   id="generate_product_code_checkbox">
+                                                            <label class="form-check-label"
+                                                                   for="generate_product_code_checkbox"></label>
+                                                        </div>
+                                                        <span class="input-group-text">Generate Product Code</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        {% else %}
-                                            <div class="mb-3 pb-2 h5">Product Code - <span
-                                                    id="{{ element_id }}-static-product-code"></span>
-                                            </div>
-                                        {% endif %}
-                                    {% endblock product_code_wrapper %}
+                                            {% else %}
+                                                <div class="mb-3 pb-2 h5">Product Code - <span
+                                                        id="{{ element_id }}-static-product-code"></span>
+                                                </div>
+                                            {% endif %}
+                                        {% endblock product_code_wrapper %}
 
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><strong>Product Name</strong></span>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><strong>Product Name</strong></span>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Name"
+                                                   name="name" required>
                                         </div>
-                                        <input type="text" class="form-control" aria-label="Name"
-                                               name="name" required>
                                     </div>
-                                </div>
 
-                                <div class="border rounded px-3 py-4 my-4">
-                                    <div class="input-group mb-4">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Company</span>
+                                    <div class="border rounded px-3 py-4 my-4">
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Company</span>
+                                            </div>
+                                            <input type="text" class="form-control product_companies"
+                                                   aria-label="company"
+                                                   name="company">
                                         </div>
-                                        <input type="text" class="form-control product_companies" aria-label="company"
-                                               name="company">
-                                    </div>
-                                    <div class="input-group mb-4">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Rack Number</span>
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Rack Number</span>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="rack"
+                                                   name="rack_number">
                                         </div>
-                                        <input type="text" class="form-control" aria-label="rack"
-                                               name="rack_number">
-                                    </div>
-                                    <div class="input-group mb-4">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Categories</span>
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Categories</span>
+                                            </div>
+                                            <input type="text" class="tagator form-control product_categories"
+                                                   aria-label="categories"
+                                                   name="category"
+                                                   id="{{ element_id }}_product_categories">
                                         </div>
-                                        <input type="text" class="tagator form-control product_categories"
-                                               aria-label="categories"
-                                               name="category"
-                                               id="{{ element_id }}_product_categories">
-                                    </div>
-                                    <div class="input-group mt-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Description</span>
+                                        <div class="input-group mt-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Description</span>
+                                            </div>
+                                            <textarea class="form-control" aria-label="description"
+                                                      name="description"></textarea>
                                         </div>
-                                        <textarea class="form-control" aria-label="description"
-                                                  name="description"></textarea>
                                     </div>
-                                </div>
+                                </fieldset>
                             </form>
                         </div>
 
                         <div class="col-lg-6 pl-lg-4 mt-3 mt-lg-0">
                             <form id="{{ element_id }}-variation-form">
-                                <div class="mb-3 mt-1 h4 grey-ic invisible">Variation Details</div>
+                                <div class="mb-3 mt-1 h4 grey-ic {{ variation_title_visibility }}">Variation Details
+                                </div>
                                 <div class="border rounded px-3 py-4 my-4">
                                     <div class="input-group mb-4">
                                         <div class="input-group-prepend">

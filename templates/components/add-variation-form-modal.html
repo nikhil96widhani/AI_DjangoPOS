@@ -7,7 +7,7 @@
 {% block form_id %}add-variation-form{% endblock %}
 
 {% block form %}
-    {% with element_id='add-variation' %}
+    {% with element_id='add-variation' variation_title_visibility='visible' %}
         {{ block.super }}
     {% endwith %}
 {% endblock %}

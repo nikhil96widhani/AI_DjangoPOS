@@ -138,7 +138,6 @@ Date.prototype.format = function (mask, utc) {
     return dateFormat(this, mask, utc);
 };
 
-
 //Scroll Bar Fix
 const eventListenerOptionsSupported = () => {
     let supported = false;
@@ -202,3 +201,4 @@ if (supportsPassive) {
     const addEvent = EventTarget.prototype.addEventListener;
     overwriteAddEvent(addEvent);
 }
+//Scroll Bar Fix End
