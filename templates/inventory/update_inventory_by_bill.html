@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fm.tagator.jquery.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.autocomplete.css' %}">
+{% endblock %}
+
+{% block page-title %}
+    <i class="fas fa-angle-right align-middle fa-xs"></i> Add Inventory
+{% endblock %}
+
+{% block content %}
+        <div class="card">
+        <div class="card-body">
+            <div class="row justify-content-between mt-1 mb-2">
+                <div class="col-4">
+                    <h2 class="pt-2">Bill Items</h2>
+                </div>
+                <div class="col-auto">
+                    <a class="btn btn btn-md btn-secondary btn-rounded waves-effect waves-light mr-3"
+                            href="{% url 'product-expiry-label' %}" target="_blank"><i class="fas fa-print mr-1"></i>
+                        Print Expiry Label
+                    </a>
+                    <button class="float-right btn btn btn-md btn-primary btn-rounded waves-effect waves-light"
+                            data-toggle="modal" data-target="#addProductModalForm"><i class="fas fa-plus mr-2"></i>
+                        Add Product
+                    </button>
+                </div>
+            </div>
+            <div class="row py-2 mb-4 mt-3">
+                <div class="col-3">
+                         <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Bill Name</span>
+                            </div>
+                            <input type="text" class="form-control product_companies" aria-label="company"
+                                   name="company">
+                    </div>
+                </div>
+                <div class="col-3">
+                         <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Vendor Name</span>
+                            </div>
+                            <input type="text" class="form-control product_companies" aria-label="company"
+                                   name="company">
+                    </div>
+                </div>
+                <div class="col-3">
+                         <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Date Ordered</span>
+                            </div>
+                            <input type="date" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <table id="products-datatable" class="table nowrap text-center custom-datatable" style="width:100%">
+                <thead>
+                <tr style="background: #e2e6ea">
+                    <th>Product Code</th>
+                    <th>Product Name</th>
+                    <th>Cost</th>
+                    <th>MRP</th>
+                    <th>Discounted Price</th>
+                    <th>Quantity</th>
+                    <th>Weight</th>
+                    <th>Company</th>
+                    <th>Rack</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/fm.tagator.jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.autocomplete.js' %}"></script>
+    <script src="{% static 'js/jquery.pos.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/datatable-common.js' %}"></script>
+    {#    <script type="text/javascript" src="{% static 'js/products-datatable.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'js/update_inventory_by_bill.js' %}"></script>
+{% endblock %}

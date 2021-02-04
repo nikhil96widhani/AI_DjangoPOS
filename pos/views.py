@@ -16,11 +16,9 @@ def pos_homeView(request):
         except:
             last_order_id = 0
 
-        cart_items = order.orderitem_set.all()
         context = {
             # 'all_products': all_products,
             'order': order,
-            'cart_items': cart_items,
             'payment_mode': Payment_mode,
             'last_order_id': last_order_id
         }
@@ -28,7 +26,6 @@ def pos_homeView(request):
         context = {
             # 'all_products': all_products,
             'order': [],
-            'cart_items': [],
             'last_order_id': 0
         }
     return render(request, 'pos/cart-datatable.html', context)

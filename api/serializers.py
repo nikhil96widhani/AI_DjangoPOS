@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from inventory.models import *
-from inventory.models_new import ProductNew, ProductVariation
+from inventory.models_new import *
 
 
 class cart_items_serializer(serializers.ModelSerializer):
@@ -44,6 +44,9 @@ class CartOrderSerializer(serializers.ModelSerializer):
         fields = ('id', 'get_cart_items_quantity', 'get_cart_revenue', 'discount')
 
 
+# --------------NEW
+
+
 class ProductNewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductNew
@@ -61,3 +64,10 @@ class ProductVariationSerializer(serializers.ModelSerializer):
         model = ProductVariation
         fields = '__all__'
         depth = 1
+
+
+class bill_items_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockBill
+        depth = 1
+        fields = '__all__'

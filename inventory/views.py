@@ -2,8 +2,9 @@ from django.shortcuts import render
 
 from api.pos_views import ProductCategoryList
 from api.serializers import ProductSerializer, ProductCategorySerializer
-
+from django.contrib.auth.decorators import login_required
 from inventory.models import Weight_unit, Quantity_unit, ProductCategories
+from inventory.models_new import *
 from inventory.helpers import *
 import os.path
 
@@ -38,3 +39,19 @@ def add_product_view(request):
     quantity_unit = Quantity_unit
     return render(request, 'inventory/add-product.html',
                   {'weight_unit': weight_unit, 'quantity_unit': quantity_unit})
+
+
+@login_required
+def updateInventoryByBill(request):
+    if request.user.is_authenticated:
+        user = request.user
+        bill, created = StockBill.objects.get_or_create(user=user, complete=False)
+
+        context = {
+            'bill': bill,
+        }
+    else:
+        context = {
+            'order': [],
+        }
+    return render(request, 'inventory/update_inventory_by_bill.html', context)

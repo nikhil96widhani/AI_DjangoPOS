@@ -1,7 +1,7 @@
 from django.urls import path
 from .pos_views import *
 from .report_views import *
-from .report_views import OrdersListView
+from .inventory_views import *
 
 urlpatterns = [
     path('cart/', Cart.as_view(), name='cart'),
@@ -25,4 +25,6 @@ urlpatterns = [
     path('products_new/<str:pk>/', ProductDetail.as_view(), name='product-new-detail'),
     path('variations/', ProductVariationListView.as_view(), name='variations-list'),
     path('product-and-variations/', variations_data_using_product_code, name='product-and-variations'),
+
+    path('stock-bill/', StockBillApiView.as_view(), name='stock-bill'),
 ]
