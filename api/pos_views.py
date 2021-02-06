@@ -340,6 +340,7 @@ def add_product_with_variation(request):
                 variation_obj = ProductVariation.objects.get(product=variation_data['product'],
                                                              cost=variation_data['cost'], mrp=variation_data['mrp'])
                 variation_obj.quantity += int(variation_data['quantity'])
+
                 variation_obj.save()
                 return Response(ProductVariationSerializer(variation_obj).data, status=status.HTTP_201_CREATED)
             except ProductVariation.DoesNotExist:

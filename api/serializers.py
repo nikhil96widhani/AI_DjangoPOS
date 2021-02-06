@@ -71,3 +71,24 @@ class bill_items_serializer(serializers.ModelSerializer):
         model = StockBill
         depth = 1
         fields = '__all__'
+
+
+class OrderNewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderNew
+        depth = 1
+        fields = '__all__'
+
+
+class OrderItemNewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItemNew
+        # depth = 1
+        fields = '__all__'
+
+
+class CartOrderNewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderNew
+        depth = 1
+        fields = ('id', 'get_cart_items_quantity', 'get_cart_revenue', 'discount')
