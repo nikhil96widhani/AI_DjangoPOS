@@ -2,63 +2,60 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
 from django.utils.crypto import get_random_string
 from rest_framework.decorators import api_view
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, status
+from rest_framework import generics, status, mixins
 from .serializers import *
+from .helper import *
 
 from inventory.models_new import *
 
 
-class StockBillApiView(APIView):
+class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
+    queryset = StockBillItems.objects.none()
+    serializer_class = bill_items_serializer
+
     def get(self, request, format=None):
         bill_id = request.GET.get("bill_id")
         if bill_id is None and request.user.is_authenticated:
             customer = request.user
             bill = StockBill.objects.get(user=customer, complete=False)
-
-            bill_items = bill.stockbillitems_set.all()
-            bill_item_serializer = bill_items_serializer(bill_items, many=True)
-
-            content = {
-                'bill_items': bill_item_serializer.data,
-                'bill_items_quantity': bill.get_bill_items_quantity,
-                'bill_total': bill.get_bill_revenue,
-                'bill_mrp_total': bill.get_bill_mrp,
-                'bill_id': bill.id
-            }
-            return Response(content)
+            context = BillData(bill, self)
+            return Response(context)
         elif bill_id:
             try:
-                order = Order.objects.get(pk=bill_id, complete=True)
-                items = order.orderitem_set.all()
-                item_serializer = bill_items_serializer(items, many=True)
-                content = {
-                    'items': item_serializer.data,
-                    'cart_items_quantity': order.get_cart_items_quantity,
-                    'cart_total': order.get_cart_revenue,
-                    'cart_mrp_total': order.get_cart_mrp,
-                    'order_id': order.id
-                }
-                return Response(content)
+                bill = StockBill.objects.get(pk=bill_id)
+                context = BillData(bill, self)
+                return Response(context)
             except ObjectDoesNotExist:
-                return Response({'error': "no such completed order"})
+                return Response({'error': "no such bill found"})
+
         else:
-            content = {
-                'items': [],
-                'cart_items_quantity': '',
-                'cart_total': '',
-                'cart_mrp_total': '',
-                'order_id': ''
-            }
-            return Response(content)
-    #
-    # @staticmethod
-    # def post(request):
-    #     action = request.data['action']
-    #     customer = request.user
-    #     order, created = Order.objects.get_or_create(customer=customer, complete=False)
+            content = {'please move along': 'nothing to see here'}
+            Response(content, status=status.HTTP_404_NOT_FOUND)
+
+    @staticmethod
+    def post(request):
+        action = request.data['action']
+        message = 'Error Updating Data'
+        customer = request.user
+        if action == 'update_bill':
+            bill = StockBill.objects.get(user=customer, complete=False)
+            serializer = BillSerializer(bill, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                message = 'Bill data successfully updated'
+
+        elif action == 'update_bill_item':
+            bill_item = StockBillItems.objects.get(id=request.data['id'])
+            serializer = bill_items_serializer(bill_item, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                message = 'Bill item was successfully updated'
+        return Response(message)
+
     #
     #     response = {"response_type": action,
     #                 "response_text": f"{str(action).title()} product was successful."}

@@ -68,6 +68,12 @@ class ProductVariationSerializer(serializers.ModelSerializer):
 
 class bill_items_serializer(serializers.ModelSerializer):
     class Meta:
+        model = StockBillItems
+        depth = 0
+        fields = '__all__'
+
+
+class BillSerializer(serializers.ModelSerializer):
+    class Meta:
         model = StockBill
-        depth = 1
         fields = '__all__'

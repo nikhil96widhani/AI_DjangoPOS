@@ -111,10 +111,10 @@ class Vendor(models.Model):
 
 
 class StockBill(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, blank=True, null=True)
-    date_ordered = models.DateTimeField(default=now, blank=True, null=True, editable=False)
+    date_ordered = models.DateField(default=now, blank=True, null=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
 
     bill_cost = models.FloatField(null=True, blank=True)
@@ -132,13 +132,13 @@ class StockBill(models.Model):
     @property
     def get_bill_cost(self):
         bill_items = self.stockbillitems_set.all()
-        cost_total = sum([item.get_cost for item in bill_items])
+        cost_total = sum([item.cost for item in bill_items])
         return cost_total
 
     @property
     def get_bill_mrp(self):
         bill_items = self.stockbillitems_set.all()
-        mrp_total = sum([item.get_mrp for item in bill_items])
+        mrp_total = sum([item.mrp for item in bill_items])
         return mrp_total
 
     @property
@@ -158,6 +158,9 @@ class StockBill(models.Model):
         self.bill_cost = "{:.2f}".format(self.get_bill_cost)
         self.bill_mrp = self.get_bill_mrp
         self.bill_quantity = self.get_bill_items_quantity
+
+        if not self.date_ordered:
+            self.expiry_date = now
         super(StockBill, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -167,7 +170,6 @@ class StockBill(models.Model):
 class StockBillItems(models.Model):
     stock_bill = models.ForeignKey(StockBill, on_delete=models.SET_NULL, blank=True, null=True)
     product_variation = models.ForeignKey(ProductVariation, on_delete=models.SET_NULL, blank=True, null=True)
-    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, blank=True, null=True)
     product_code = models.CharField(max_length=30, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     cost = models.FloatField(blank=True, null=True)
@@ -179,6 +181,7 @@ class StockBillItems(models.Model):
     weight = models.IntegerField(blank=True, null=True)
     weight_unit = models.CharField(max_length=9, choices=Weight_unit, default="", blank=True, null=True)
     expiry_date = models.DateField(blank=True, null=True)
+    is_new_variation = models.BooleanField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "StockBillItems"
@@ -189,8 +192,8 @@ class StockBillItems(models.Model):
         self.name = self.product_variation.product.name
         self.discount_price = self.discount_price if self.discount_price else self.product_variation.discount_price
         self.mrp = self.mrp if self.mrp else self.product_variation.mrp
-        self.cost = self.product_variation.cost
-        self.weight = self.product_variation.weight
+        self.cost = self.cost if self.cost else self.product_variation.cost
+        self.weight = self.weight if self.weight else self.product_variation.weight
         self.weight_unit = self.product_variation.weight_unit
 
         if not self.expiry_date:
