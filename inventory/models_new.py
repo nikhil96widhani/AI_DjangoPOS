@@ -132,13 +132,13 @@ class StockBill(models.Model):
     @property
     def get_bill_cost(self):
         bill_items = self.stockbillitems_set.all()
-        cost_total = sum([item.cost for item in bill_items])
+        cost_total = sum([item.get_cost for item in bill_items])
         return cost_total
 
     @property
     def get_bill_mrp(self):
         bill_items = self.stockbillitems_set.all()
-        mrp_total = sum([item.mrp for item in bill_items])
+        mrp_total = sum([item.get_mrp for item in bill_items])
         return mrp_total
 
     @property
