@@ -6,6 +6,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
+
+from .helper import get_variation_data
 from .serializers import *
 
 from inventory.models import *
@@ -406,8 +408,6 @@ class ProductVariationListView(generics.ListAPIView):
 
 @api_view(['GET'])
 def variations_data_using_product_code(request):
-    print(request.GET)
-    print(request.GET.get('product_code'))
     try:
         ProductNew.objects.get(pk=request.GET.get('product_code'))
     except ProductNew.DoesNotExist:
@@ -417,10 +417,5 @@ def variations_data_using_product_code(request):
         return Response({'product_exists': True})
 
     elif request.GET.get('action') == 'product_variation_data':
-        variations = ProductVariation.objects.filter(product=request.GET.get('product_code'))
-        variation_data = [ProductVariationPostSerializer(variation).data for variation in variations]
-
-        product = ProductNew.objects.get(pk=request.GET.get('product_code'))
-        product_data = ProductNewSerializer(product).data
-
-        return Response({'product_data': product_data, 'variation_data': variation_data})
+        product_code = request.GET.get('product_code')
+        return Response(get_variation_data(product_code))

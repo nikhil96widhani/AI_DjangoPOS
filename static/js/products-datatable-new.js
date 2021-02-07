@@ -417,7 +417,3 @@ product_code_text_field_selector.focusout(async () => {
         }
     }
 })
-
-$('.modal').on('shown.bs.modal', () => {
-    $('.modal').find('input:first').trigger('focus');
-})

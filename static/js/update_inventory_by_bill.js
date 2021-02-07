@@ -1,3 +1,5 @@
+let product_code_to_update, product_code_to_delete, variation_id_to_update, variation_id_to_delete, action_required;
+
 function getBillDetails() {
 
     let url = "/api/stock-bill/"
@@ -188,7 +190,7 @@ function product_variation_search(value) {
     $.getJSON(url, {'search_term': value}, function (response) {
         let trHTML = '';
         if (response === undefined || response.length === 0) {
-            trHTML += `<div class="alert alert-secondary text-center" role="alert">  No Products Found</div>`
+            trHTML += `<div class="alert alert-secondary text-center" role="alert">No Products Found</div>`
             $("#product-search-datatable").empty().append(trHTML);
         } else {
             $.each(response, function (e, item) {
@@ -200,8 +202,13 @@ function product_variation_search(value) {
                         <td>${item.discount_price}</td>
                         <td>${item.quantity}</td>
                         <td>${item.weight}</td>
-                        <td><button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"><i class="fas fa-plus"></i></button></td>
-
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"><i class="fas fa-plus"></i></button>
+                            <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2" 
+                                    data-toggle="modal" data-target="#addVariationModalForm" onclick="addAndUpdateVariationButtonAction('edit', '${item.id}', '${item.product.product_code}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
                     </tr>`
             })
             $("#product-search-datatable").empty().append(thead_code + trHTML + tfoot_code);
@@ -229,4 +236,83 @@ $("#variation-search-input").on("input", function () {
 $(document).ready(function () {
     getBillDetails();
     loadBillItemsTable();
+});
+
+const editVariationAndAddToBillItems = (variation_form_selector) => {
+    const variation_form_data = getFormData($(variation_form_selector));
+    variation_form_data['product'] = product_code_to_update;
+
+    const data = {'variation_data': variation_form_data}
+    console.log(data);
+
+    let url = "/api/add-product-with-variation/";
+
+    $.ajax(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        data: JSON.stringify(data),
+        success: function (data) {
+            toastr.info('Variation was successfully added.');
+            $('.close').click();
+            dataTable.DataTable().draw(false);
+        },
+        error: function () {
+            toastr.error('Variation details were not added! Please try again.');
+        },
+    });
+}
+
+function addAndUpdateVariationButtonAction(action, variation_id, product_code) {
+    // $('#addProductModalForm').modal('hide');
+    $('.modal').modal('hide');
+    variation_id_to_update = variation_id;
+    product_code_to_update = product_code;
+    action_required = action;
+
+    let url = '/api/variations/' + variation_id_to_update;
+    $(`#add-variation-static-product-code`).empty().html(product_code_to_update);
+
+    const product_category_selector = `#add-variation_product_categories`
+
+    $.getJSON(url, {}, function (response) {
+        console.log(response);
+        $.each(response, function (key, value) {
+            let field_selector = $(`#add-variation-variation-form [name="${key}"]`);
+            field_selector.val(value);
+        })
+        $.each(response.product, function (key, value) {
+            let field_selector = $(`#add-variation-product-form [name="${key}"]`);
+            field_selector.val(value);
+        })
+        console.log(response.product.category.join())
+        $(product_category_selector).val(response.product.category.join())
+        $(product_category_selector).tagator('refresh');
+    });
+}
+
+const productFormHandler = (action) => {
+    const product_form_selector = `#add-variation-product-form`
+    const variation_form_selector = `#add-variation-variation-form`
+
+    if (!$(product_form_selector)[0].checkValidity()) {
+        $(product_form_selector)[0].reportValidity();
+    } else if (!$(variation_form_selector)[0].checkValidity()) {
+        $(variation_form_selector)[0].reportValidity()
+    } else {
+        // if (action === 'add') {
+        //     addProductDetails(product_form_selector, variation_form_selector);
+        // } else if (action === 'edit') {
+        //     updateProductDetails(product_form_selector, variation_form_selector)
+        // } else if (action === 'add-variation') {
+        //     addVariation(variation_form_selector)
+        // }
+        console.log(action)
+    }
+}
+
+$('#add-variation-product-form-submit').click(function () {
+    productFormHandler(action_required);
 });

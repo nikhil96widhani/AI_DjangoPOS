@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block content %}
-        <div class="card">
+    <div class="card">
         <div class="card-body">
             <div class="row justify-content-between mt-1 mb-2">
                 <div class="col-4">
@@ -34,29 +34,30 @@
             </div>
             <div class="row py-2 mb-4 mt-3">
                 <div class="col-3">
-                         <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Bill Name</span>
-                            </div>
-                            <input id="bill_name" type="text" class="form-control bill-data-updater" name="name"
-                                   aria-label="bill_name">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Bill Name</span>
+                        </div>
+                        <input id="bill_name" type="text" class="form-control bill-data-updater" name="name"
+                               aria-label="bill_name">
                     </div>
                 </div>
                 <div class="col-3">
-                         <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Vendor Name</span>
-                            </div>
-                            <input id="vendor_name" type="text" class="form-control bill-data-updater" aria-label="vendor_name">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Vendor Name</span>
+                        </div>
+                        <input id="vendor_name" type="text" class="form-control bill-data-updater"
+                               aria-label="vendor_name">
                     </div>
                 </div>
                 <div class="col-3">
-                         <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Date Ordered</span>
-                            </div>
-                             <label for="date_bill"></label>
-                             <input id="date_bill" type="date" class="form-control bill-data-updater" name="date_ordered"/>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Date Ordered</span>
+                        </div>
+                        <label for="date_bill"></label>
+                        <input id="date_bill" type="date" class="form-control bill-data-updater" name="date_ordered"/>
                     </div>
                 </div>
             </div>
@@ -80,7 +81,7 @@
         </div>
     </div>
     {% include 'inventory/modal-search.html' %}
-
+    {% include 'components/add-variation-form-modal.html' %}
 
 {% endblock %}
 

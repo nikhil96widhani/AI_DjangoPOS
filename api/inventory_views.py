@@ -206,3 +206,32 @@ def searchProductVariations(request):
 
         product_serializer = ProductVariationSerializer(products, many=True)
         return Response(product_serializer.data)
+
+
+@api_view(['POST'])
+def add_bill_item(request):
+    if request.method == 'POST':
+        if request.data['product_code']:
+            # Add Variation using Product Code if only one variation is present
+            product_code = request.data['product_code']
+            stock_bill = request.data['stock_bill']
+            data = get_variation_data(product_code)
+            if len(data['variation_data']) == 1:
+                rem_list = ['id', 'quantity', 'product', 'modified_time']
+
+                # Add this variation
+                product = data['product_data']
+                variation = data['variation_data'][0]
+                variation_id = variation['id']
+
+                [variation.pop(key) for key in rem_list]
+                bill_item_data = {'stock_bill': stock_bill, 'product_variation': variation_id,
+                                  'product_code': product_code, 'name': product['name'], **variation}
+
+                serializer = bill_items_serializer(data=bill_item_data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'multiple_variation_exists': True, 'data': data})

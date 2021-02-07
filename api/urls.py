@@ -27,5 +27,6 @@ urlpatterns = [
     path('product-and-variations/', variations_data_using_product_code, name='product-and-variations'),
 
     path('stock-bill/', StockBillApiView.as_view(), name='stock-bill'),
+    path('add-bill-item/', add_bill_item, name='add-bill-item'),
     path('product-variation-search/', searchProductVariations, name='product-variation-search'),
 ]

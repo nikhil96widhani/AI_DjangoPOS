@@ -202,3 +202,8 @@ if (supportsPassive) {
     overwriteAddEvent(addEvent);
 }
 //Scroll Bar Fix End
+
+//Modal Auto Input Focus
+$('.modal').on('shown.bs.modal', () => {
+    $('.modal').find('input:first').trigger('focus');
+})

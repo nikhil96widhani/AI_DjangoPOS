@@ -18,3 +18,13 @@ def BillData(bill_object, self):
         'bill_items': bill_item_serializer.data,
     }
     return content
+
+
+def get_variation_data(product_code):
+    variations = ProductVariation.objects.filter(product=product_code)
+    variation_data = [ProductVariationPostSerializer(variation).data for variation in variations]
+
+    product = ProductNew.objects.get(pk=product_code)
+    product_data = ProductNewSerializer(product).data
+
+    return {'product_data': product_data, 'variation_data': variation_data}
