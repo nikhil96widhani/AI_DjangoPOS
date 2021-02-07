@@ -167,6 +167,49 @@ function updateBillDetails(data_json) {
     })
 }
 
+function product_variation_search(value) {
+    let url = '/api/product-variation-search/';
+    let thead_code = `<table class="table nowrap text-center custom-datatable"
+                       style="width:100%">
+                    <thead>
+                    <tr style="background: #e2e6ea">
+                        <th>Product Code</th>
+                        <th>Product Name</th>
+                        <th>Cost</th>
+                        <th>MRP</th>
+                        <th>Discounted Price</th>
+                        <th>Quantity</th>
+                        <th>Weight</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead><tbody>`
+    let tfoot_code = `</tbody></table>`
+
+    $.getJSON(url, {'search_term': value}, function (response) {
+        let trHTML = '';
+        if (response === undefined || response.length === 0) {
+            trHTML += `<div class="alert alert-secondary text-center" role="alert">  No Products Found</div>`
+            $("#product-search-datatable").empty().append(trHTML);
+        } else {
+            $.each(response, function (e, item) {
+                trHTML += `<tr>
+                        <td>${item.product.product_code}</td>
+                        <td>${item.product.name}</td>
+                        <td>${item.cost}</td>
+                        <td>${item.mrp}</td>
+                        <td>${item.discount_price}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.weight}</td>
+                        <td><button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"><i class="fas fa-plus"></i></button></td>
+
+                    </tr>`
+            })
+            $("#product-search-datatable").empty().append(thead_code + trHTML + tfoot_code);
+        }
+    });
+}
+
+// Callbacks
 $('.bill-data-updater').on('change',function() {
     let data_json = {'action':'update_bill', [this.name] : this.value}
     updateBillDetails(data_json)
@@ -176,6 +219,11 @@ $('#bill-datatable').on('change', '.bill-item-updater', function() {
     let data_json = {'action':'update_bill_item', 'id': this.alt, [this.name] : this.value  }
     updateBillDetails(data_json)
     dataTable.DataTable().draw('page');
+});
+
+$("#variation-search-input").on("input", function () {
+    let value = $(this).val().toLowerCase();
+    product_variation_search(value)
 });
 
 $(document).ready(function () {

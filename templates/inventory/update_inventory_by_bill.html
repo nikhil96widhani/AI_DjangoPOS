@@ -21,11 +21,12 @@
                     <h2 class="pt-2">Bill Items</h2>
                 </div>
                 <div class="col-auto">
-                    <a class="btn btn btn-md btn-secondary btn-rounded waves-effect waves-light mr-3"
-                            href="{% url 'product-expiry-label' %}" target="_blank"><i class="fas fa-search mr-1"></i>
+                    <button type="button" class="btn btn-md btn-secondary btn-rounded waves-effect waves-light mr-3"
+                            data-toggle="modal" data-target=".bd-example-modal-xl">
+                        <i class="fas fa-search mr-2"></i>
                         Search by product name
-                    </a>
-                    <button class="float-right btn btn btn-md btn-primary btn-rounded waves-effect waves-light"
+                    </button>
+                    <button class="float-right btn btn-md btn-primary btn-rounded waves-effect waves-light"
                             data-toggle="modal" data-target="#addProductModalForm"><i class="fas fa-plus mr-2"></i>
                         Add New Product
                     </button>
@@ -78,6 +79,9 @@
             <div id="total-values-div" class="row"></div>
         </div>
     </div>
+    {% include 'inventory/modal-search.html' %}
+
+
 {% endblock %}
 
 {% block javascript %}

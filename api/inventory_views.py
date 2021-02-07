@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import F
+from django.db.models import F, Q
 from django.utils.crypto import get_random_string
 from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView
@@ -186,3 +186,23 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
     #             {"response_type": "Applied",
     #              "response_text": "Discount Applied"}
     #         )
+
+
+@api_view(['GET'])
+def searchProductVariations(request):
+    if request.method == 'GET':
+        """
+            This is an Temporary search fix until we use POSTGRES database for final build. 
+            Once we start using postgres we can use full text search function feature with weights.   
+        """
+        search_term = request.GET.get("search_term")
+        if search_term:
+            products_contains = ProductVariation.objects.filter(product__name__contains=search_term)[:5]
+            products_starts = ProductVariation.objects.filter(product__name__startswith=search_term)[:3]
+            products_code_starts = ProductVariation.objects.filter(product__product_code__startswith=search_term)[:5]
+            products = (products_starts | products_contains | products_code_starts)[:5]
+        else:
+            products = []
+
+        product_serializer = ProductVariationSerializer(products, many=True)
+        return Response(product_serializer.data)
