@@ -316,3 +316,42 @@ const productFormHandler = (action) => {
 $('#add-variation-product-form-submit').click(function () {
     productFormHandler(action_required);
 });
+
+const addBillItemToBill = (product_code_or_variation, is_variation=false) => {
+    let url = "/api/add-bill-item/"
+    let data = {'product_code': product_code_or_variation}
+    if (is_variation){
+        data = {'variation_id': product_code_or_variation}
+    }
+
+    $.ajax(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        data: JSON.stringify(data),
+        success: function (data) {
+            if (data.multiple_variation_exists){
+                toastr.warning('Multiple Variation Exists');
+            }
+            else if (data.status === 'error'){
+                toastr.error(data.response);
+            }
+            else{
+                console.log(data);
+                dataTable.DataTable().draw(false);
+            }
+        },
+        error: function () {
+            toastr.error('Error!');
+        },
+    });
+}
+
+$(function () {
+    $(document).pos();
+    $(document).on('scan.pos.barcode', function (event) {
+        addBillItemToBill(event.code);
+    });
+});

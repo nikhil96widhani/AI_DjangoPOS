@@ -211,27 +211,42 @@ def searchProductVariations(request):
 @api_view(['POST'])
 def add_bill_item(request):
     if request.method == 'POST':
-        if request.data['product_code']:
+        if 'bill_id' not in request.data.keys() and request.user.is_authenticated:
+            customer = request.user
+            bill = StockBill.objects.get(user=customer, complete=False)
+            stock_bill = bill.id
+
+        else:
+            stock_bill = request.data['bill_id']
+            bill = StockBill.objects.get(pk=stock_bill)
+
+        if 'variation_id' in request.data.keys():
+            variation_id = request.data['variation_id']
+            variation = ProductVariation.objects.get(pk=variation_id)
+
+        else:
             # Add Variation using Product Code if only one variation is present
             product_code = request.data['product_code']
-            stock_bill = request.data['stock_bill']
-            data = get_variation_data(product_code)
-            if len(data['variation_data']) == 1:
-                rem_list = ['id', 'quantity', 'product', 'modified_time']
+            try:
+                variation = ProductVariation.objects.get(product=product_code)
+            except ProductVariation.MultipleObjectsReturned:
+                return Response({'multiple_variation_exists': True, **get_variation_data(product_code)})
 
-                # Add this variation
-                product = data['product_data']
-                variation = data['variation_data'][0]
-                variation_id = variation['id']
+        try:
+            bill.stockbillitems_set.get(product_variation=variation.id)
+            return Response({'status': 'error', 'response': 'Variation already exists!'})
+        except StockBillItems.MultipleObjectsReturned:
+            bill_items = bill.stockbillitems_set.filter(product_variation=variation.id)
+            for i in range(1, len(bill_items)):
+                bill_items[i].delete()
+            return Response({'status': 'error',
+                             'response': 'Multiple variations were present. Deleted duplicate variations.'})
+        except StockBillItems.DoesNotExist:
+            bill_item_data = {'stock_bill': stock_bill, **get_bill_item_data(variation)}
 
-                [variation.pop(key) for key in rem_list]
-                bill_item_data = {'stock_bill': stock_bill, 'product_variation': variation_id,
-                                  'product_code': product_code, 'name': product['name'], **variation}
-
-                serializer = bill_items_serializer(data=bill_item_data)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response({'multiple_variation_exists': True, 'data': data})
+            # Save bill item
+            serializer = bill_items_serializer(data=bill_item_data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
