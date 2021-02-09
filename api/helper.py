@@ -3,7 +3,7 @@ from .serializers import *
 
 
 def BillData(bill_object, self):
-    bill_items = bill_object.stockbillitems_set.all()
+    bill_items = reversed(bill_object.stockbillitems_set.all())
     queryset = self.filter_queryset(bill_items)
     bill_item_serializer = self.get_serializer(queryset, many=True)
 

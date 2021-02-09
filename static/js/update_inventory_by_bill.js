@@ -1,4 +1,5 @@
-let product_code_to_update, product_code_to_delete, variation_id_to_update, variation_id_to_delete, action_required;
+let product_code_to_update, product_code_to_delete, variation_id_to_update, variation_id_to_delete, action_required,
+    updated_variation_id;
 
 function getBillDetails() {
 
@@ -33,7 +34,6 @@ let total_cart_value = 0;
 function loadBillItemsTable() {
     let url = '/api/stock-bill/?format=datatables';
 
-
     return dataTable.DataTable({
         ajax: {
             'url': url,
@@ -54,44 +54,46 @@ function loadBillItemsTable() {
             footer: true
         },
         "rowCallback": function (row, data, dataIndex) {
-            if (data.product_code === updated_product_code || data.id === updated_product_id ) {
+            if (data.id === updated_variation_id) {
                 $(row).addClass('clicked');
-                updated_product_code = 0;
-                updated_product_id = 0;
-
+                updated_variation_id = 0;
             }
         },
         'columns': [
             {
                 'data': 'id', sortable: false, 'width': '2%', render: function (data, type, row, meta) {
-                    if (row.is_new_variation === false){
+                    if (row.is_new_variation === false) {
                         return `<span class="dot success-color text-white font-weight-bold">${meta.row + meta.settings._iDisplayStart + 1}</span>`;
-                        }
-                    else if (row.is_new_variation === true){
+                    } else if (row.is_new_variation === true) {
                         return `<span class="dot primary-color text-white font-weight-bold">${meta.row + meta.settings._iDisplayStart + 1}</span>`;
-                    }
-                    else {
+                    } else {
                         return `<span class="dot bg-light text-white font-weight-bold">${meta.row + meta.settings._iDisplayStart + 1}</span>`;
                     }
                 }
             },
             {'data': 'product_code', sortable: false, 'width': '8%'},
             {'data': 'name', 'width': '30%'},
-            {'data': 'cost', 'width': '7%', render: function (data, type, row) {
+            {
+                'data': 'cost', 'width': '7%', render: function (data, type, row) {
                     return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
                               min="0" type="number" name="cost" value="${data}" alt=${row.id}></div>`
-                }},
-            {'data': 'mrp', 'width': '7%', render: function (data, type, row) {
+                }
+            },
+            {
+                'data': 'mrp', 'width': '7%', render: function (data, type, row) {
                     return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
                               min="0" type="number" name="mrp" value="${data}" alt=${row.id}></div>`
-                }},
-            {'data': 'discount_price', 'width': '7%', render: function (data, type, row) {
+                }
+            },
+            {
+                'data': 'discount_price', 'width': '7%', render: function (data, type, row) {
                     return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
                               min="0" type="number" name="discount_price" value="${data}" alt=${row.id}></div>`
-                }},
+                }
+            },
             {
                 'data': 'stock', 'width': '8%', render: function (data, type, full) {
                     if (data === null) return "-";
@@ -116,14 +118,18 @@ function loadBillItemsTable() {
                               <span class="pl-2">${full['weight_unit']}</span></div>`;
                 }
             },
-            {'data': 'expiry_date', 'width': '7%', render: function (data, type, row) {
-                return `<input id="date_bill" type="date" class="form-control editor-table bill-item-updater" name="expiry_date" value="${data}" alt=${row.id} />`
-                }},
-            {'data': 'id', sortable: false, 'width': '7%', render: function (data, type, row) {
+            {
+                'data': 'expiry_date', 'width': '7%', render: function (data, type, row) {
+                    return `<input id="date_bill" type="date" class="form-control editor-table bill-item-updater" name="expiry_date" value="${data}" alt=${row.id} />`
+                }
+            },
+            {
+                'data': 'id', sortable: false, 'width': '7%', render: function (data, type, row) {
                     return `<button class="btn btn-danger btn-sm btn-rounded m-0 py-1 px-2" 
                                 onclick="updateBillDetails({'action':'delete_billItem', 'billItem_id' : ${data}}, true)"
                                 ><i class="fas fa-trash"></i></button>`
-                }},
+                }
+            },
         ],
         'drawCallback': function () {
             let api = this.api();
@@ -160,10 +166,10 @@ function updateBillDetails(data_json, reload_table) {
         },
         data: JSON.stringify(data_json),
         success: function (data) {
-             toastr.success(data);
-             if (reload_table === true){
-                 dataTable.DataTable().draw('page');
-             }
+            toastr.success(data);
+            if (reload_table === true) {
+                dataTable.DataTable().draw('page');
+            }
             // console.log(data)
         },
         error: function () {
@@ -174,25 +180,98 @@ function updateBillDetails(data_json, reload_table) {
     })
 }
 
+const prepareAndFillProductVariationSearchTableData = (data) => {
+    $('.product-variation-searchModal').modal('show');
+    let final_data = []
+    if (typeof data === "string") {
+        let url = '/api/product-variation-search/';
+        $.getJSON(url, {'search_term': data}, response => {
+            for (const variation of response) {
+                const temp = {
+                    'variation_id': variation.id,
+                    'product_code': variation.product.product_code,
+                    'name': variation.product.name,
+                    'cost': variation.cost,
+                    'mrp': variation.mrp,
+                    'discount_price': variation.discount_price,
+                    'quantity': variation.quantity,
+                    'weight': variation.weight
+                }
+                final_data = [...final_data, temp]
+            }
+            fillProductVariationSearchTable(final_data);
+        })
+    } else {
+        const product = data.product_data
+        for (const variation of data.variation_data) {
+            const temp = {
+                'variation_id': variation.id,
+                'product_code': variation.product,
+                'name': product.name,
+                'cost': variation.cost,
+                'mrp': variation.mrp,
+                'discount_price': variation.discount_price,
+                'quantity': variation.quantity,
+                'weight': variation.weight
+            }
+            final_data = [...final_data, temp]
+        }
+        fillProductVariationSearchTable(final_data);
+    }
+    // console.log(final_data);
+}
+
+const fillProductVariationSearchTable = final_data => {
+    console.log(final_data)
+    if (final_data === undefined || final_data.length === 0) {
+        const html = `<div class="alert alert-secondary text-center" role="alert">No Products Found</div>`
+        $("#product-search-datatable").html(html);
+    } else {
+        const th = ["Product Code", "Product Name", "Cost", "MRP", "Discounted Price", "Quantity", "Weight", "Actions",]
+        let table_header = `<table class="table nowrap text-center custom-datatable" style="width:100%">
+                        <thead>
+                            <tr style="background: #e2e6ea">
+                                ${th.map(h => `<th>${h}</th>`).join('')}
+                            </tr>
+                        </thead><tbody>`
+        let table_data = final_data.map(row => {
+            return `<tr>
+                    <td>${row.product_code}</td>
+                    <td>${row.name}</td>
+                    <td>${row.cost}</td>
+                    <td>${row.mrp}</td>
+                    <td>${row.discount_price}</td>
+                    <td>${row.quantity}</td>
+                    <td>${row.weight}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"
+                        onclick="addBillItemToBill(${row.variation_id}, true); $('.product-variation-searchModal').modal('hide');"
+                        ><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2" 
+                                data-toggle="modal" data-target="#addVariationModalForm" onclick="addAndUpdateVariationButtonAction('edit', '${row.variation_id}', '${row.product_code}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>`;
+        }).join('');
+        let table_footer = `</tbody></table>`;
+        $("#product-search-datatable").html(table_header + table_data + table_footer);
+    }
+}
+
 function product_variation_search(value) {
+    const th = ["Product Code", "Product Name", "Cost", "MRP", "Discounted Price", "Quantity", "Weight", "Actions",]
     let url = '/api/product-variation-search/';
     let thead_code = `<table class="table nowrap text-center custom-datatable"
                        style="width:100%">
-                    <thead>
-                    <tr style="background: #e2e6ea">
-                        <th>Product Code</th>
-                        <th>Product Name</th>
-                        <th>Cost</th>
-                        <th>MRP</th>
-                        <th>Discounted Price</th>
-                        <th>Quantity</th>
-                        <th>Weight</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead><tbody>`
+                        <thead>
+                        <tr style="background: #e2e6ea">
+                            ${th.map(h => `<th>${h}</th>`).join('')}
+                        </tr>
+                        </thead><tbody>`
     let tfoot_code = `</tbody></table>`
 
-    $.getJSON(url, {'search_term': value}, function (response) {
+    $.getJSON(url, {'search_term': value}, (response) => {
         let trHTML = '';
         if (response === undefined || response.length === 0) {
             trHTML += `<div class="alert alert-secondary text-center" role="alert">No Products Found</div>`
@@ -302,10 +381,10 @@ $('#add-variation-product-form-submit').click(function () {
     productFormHandler(action_required);
 });
 
-const addBillItemToBill = (product_code_or_variation, is_variation=false) => {
+const addBillItemToBill = (product_code_or_variation, is_variation = false) => {
     let url = "/api/add-bill-item/"
     let data = {'product_code': product_code_or_variation}
-    if (is_variation){
+    if (is_variation) {
         data = {'variation_id': product_code_or_variation}
     }
 
@@ -317,16 +396,13 @@ const addBillItemToBill = (product_code_or_variation, is_variation=false) => {
         },
         data: JSON.stringify(data),
         success: function (data) {
-            if (data.multiple_variation_exists){
-                toastr.warning('Multiple Variation Exists');
-                product_variation_search(product_code_or_variation)
-                $('.product-variation-searchModal').modal('show');
-
-            }
-            else if (data.status === 'error'){
+            if (data.multiple_variation_exists) {
+                toastr.info('Multiple Variation Exists');
+                // product_variation_search(product_code_or_variation)
+                prepareAndFillProductVariationSearchTableData(data)
+            } else if (data.status === 'error') {
                 toastr.error(data.response);
-            }
-            else{
+            } else {
                 console.log(data);
                 dataTable.DataTable().draw(false);
             }
@@ -345,19 +421,21 @@ $(function () {
 });
 
 // Callbacks
-$('.bill-data-updater').on('change',function() {
-    let data_json = {'action':'update_bill', [this.name] : this.value}
+$('.bill-data-updater').on('change', function () {
+    let data_json = {'action': 'update_bill', [this.name]: this.value}
     updateBillDetails(data_json, false)
 });
 
-$('#bill-datatable').on('change', '.bill-item-updater', function() {
-    let data_json = {'action':'update_bill_item', 'id': this.alt, [this.name] : this.value  }
+$('#bill-datatable').on('change', '.bill-item-updater', function () {
+    let data_json = {'action': 'update_bill_item', 'id': this.alt, [this.name]: this.value}
     updateBillDetails(data_json, true)
+    updated_variation_id = this.alt;
 });
 
 $("#variation-search-input").on("input", function () {
     let value = $(this).val().toLowerCase();
-    product_variation_search(value)
+    // product_variation_search(value)
+    prepareAndFillProductVariationSearchTableData(value)
 });
 
 $(document).ready(function () {
