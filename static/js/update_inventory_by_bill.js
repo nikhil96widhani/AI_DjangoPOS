@@ -65,9 +65,9 @@ function loadBillItemsTable() {
             {
                 'data': 'id', sortable: false, 'width': '2%', render: function (data, type, row, meta) {
                     if (row.is_new_variation === false) {
-                        return `<span class="dot success-color text-white font-weight-bold">${meta.row + meta.settings._iDisplayStart + 1}</span>`;
-                    } else if (row.is_new_variation === true) {
                         return `<span class="dot primary-color text-white font-weight-bold">${meta.row + meta.settings._iDisplayStart + 1}</span>`;
+                    } else if (row.is_new_variation === true) {
+                        return `<span class="dot success-color text-white font-weight-bold">${meta.row + meta.settings._iDisplayStart + 1}</span>`;
                     } else {
                         return `<span class="dot bg-light text-white font-weight-bold">${meta.row + meta.settings._iDisplayStart + 1}</span>`;
                     }
@@ -148,7 +148,7 @@ function loadBillItemsTable() {
 }
 
 
-function updateBillDetails(data_json, reload_table) {
+function updateBillDetails(data_json, reload_table, reload_page=false) {
     console.log(JSON.stringify(data_json))
     let url = "/api/stock-bill/"
 
@@ -163,6 +163,9 @@ function updateBillDetails(data_json, reload_table) {
             toastr.success(data);
             if (reload_table === true) {
                 dataTable.DataTable().draw('page');
+            }
+            if (reload_page === true){
+                window.location.reload();
             }
             // console.log(data)
         },
@@ -415,9 +418,22 @@ const addBillItemToBill = (product_code_or_variation, is_variation = false) => {
 //     });
 // });
 
+// Vendor Autocomplete
+$('#vendor_name').autocomplete(
+    {
+        serviceUrl: '/api/vendor-list',
+    }
+);
+
+
 // Callbacks
 $('.bill-data-updater').on('change', function () {
-    let data_json = {'action': 'update_bill', [this.name]: this.value}
+    let data_json
+    if (this.id === 'vendor_name') {
+        data_json = {'action': 'update_bill', 'update_vendor': true, 'vendor_name': this.value}
+    } else {
+        data_json = {'action': 'update_bill', [this.name]: this.value}
+    }
     updateBillDetails(data_json, false)
 });
 
@@ -434,7 +450,7 @@ $("#variation-search-input").on("input", function () {
 });
 
 $("#complete-bill").on("click", function () {
-    updateBillDetails({'action': 'complete_and_update'}, false)
+    updateBillDetails({'action': 'complete_and_update'}, false, true)
 });
 
 // Initialize with options

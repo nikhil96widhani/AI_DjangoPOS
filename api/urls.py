@@ -29,4 +29,6 @@ urlpatterns = [
     path('stock-bill/', StockBillApiView.as_view(), name='stock-bill'),
     path('add-bill-item/', add_bill_item, name='add-bill-item'),
     path('product-variation-search/', searchProductVariations, name='product-variation-search'),
+    path('vendor-list/', VendorListView.as_view(), name='api-vendor-list'),
+
 ]

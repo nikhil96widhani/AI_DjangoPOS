@@ -43,10 +43,16 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
         customer = request.user
         if action == 'update_bill':
             bill = StockBill.objects.get(user=customer, complete=False)
-            serializer = BillSerializer(bill, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                message = 'Bill data successfully updated'
+            if request.data.get('update_vendor') is True:
+                vendor_obj, created = Vendor.objects.get_or_create(name=request.data['vendor_name'])
+                bill.vendor = vendor_obj
+                bill.save()
+                message = 'Bill vendor successfully updated'
+            else:
+                serializer = BillSerializer(bill, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    message = 'Bill data successfully updated'
         elif action == 'update_bill_item':
             bill_item = StockBillItems.objects.get(id=request.data['id'])
             serializer = bill_items_serializer(bill_item, data=request.data, partial=True)
@@ -65,17 +71,17 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
                 bill = StockBill.objects.get(user=customer, complete=False)
                 bill_items = bill.stockbillitems_set.all()
                 updateProducts_fromBillItems(bill_items)
-                # bill.complete = True
-                # bill.save()
-                message = 'True'
+                bill.complete = True
+                bill.save()
+                message = 'Bill Saved'
             elif bill_id:
                 try:
                     bill = StockBill.objects.get(pk=bill_id)
                     bill_items = bill.stockbillitems_set.all()
                     updateProducts_fromBillItems(bill_items)
-                    # bill.complete = True
-                    # bill.save()
-                    message = 'True'
+                    bill.complete = True
+                    bill.save()
+                    message = 'Bill Saved'
                 except ObjectDoesNotExist:
                     message = 'an error occurred'
         return Response(message)
@@ -274,3 +280,14 @@ def add_bill_item(request):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VendorListView(APIView):
+    @staticmethod
+    def get(request):
+        search_term = request.GET.get("query")
+        if search_term:
+            vendors = Vendor.objects.filter(name__contains=search_term)[:10].values_list(flat=True)
+        else:
+            vendors = Vendor.objects.all()[:10].values_list('name', flat=True)
+        return Response({'suggestions': vendors})

@@ -10,7 +10,7 @@ def BillData(bill_object, self):
 
     content = {
         'bill_name': bill_object.name,
-        'bill_vendor': bill_object.vendor,
+        'bill_vendor': bill_object.vendor.name if bill_object.vendor else None,
         'bill_date_ordered': bill_object.date_ordered,
         'bill_items_quantity': bill_object.get_bill_items_quantity,
         'bill_total': bill_object.get_bill_cost,
