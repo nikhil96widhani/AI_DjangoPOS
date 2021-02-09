@@ -54,6 +54,8 @@ function loadBillItemsTable() {
             footer: true
         },
         "rowCallback": function (row, data, dataIndex) {
+            console.log(typeof updated_variation_id)
+            console.log(typeof data.id)
             if (data.id === updated_variation_id) {
                 $(row).addClass('clicked');
                 updated_variation_id = 0;
@@ -422,7 +424,7 @@ $('.bill-data-updater').on('change', function () {
 $('#bill-datatable').on('change', '.bill-item-updater', function() {
     let data_json = {'action':'update_bill_item', 'id': this.getAttribute('data-variation-id'), [this.name] : this.value  }
     updateBillDetails(data_json, true)
-    updated_variation_id = this.alt;
+    updated_variation_id = parseInt(this.getAttribute('data-variation-id'));
 });
 
 $("#variation-search-input").on("input", function () {

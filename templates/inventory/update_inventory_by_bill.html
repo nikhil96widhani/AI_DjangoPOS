@@ -2,6 +2,21 @@
 {% load static %}
 
 {% block css %}
+    <style>
+        tr.clicked {
+            animation-name: product-animation;
+            animation-duration: 1s;
+        }
+
+        @keyframes product-animation {
+            0% {
+                background-color: lightskyblue;
+            }
+            80% {
+                background-color: white;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="{% static 'css/bill-style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/fm.tagator.jquery.css' %}">
