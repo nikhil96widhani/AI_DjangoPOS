@@ -280,11 +280,22 @@ function completePos() {
 
 
 // SCANNER INPUT
-$(function () {
-    $(document).pos();
-    $(document).on('scan.pos.barcode', function (event) {
-        updateUserOrder(event.code, 'add')
-    });
+// $(function () {
+//     $(document).pos();
+//     $(document).on('scan.pos.barcode', function (event) {
+//         updateUserOrder(event.code, 'add')
+//     });
+// });
+
+// Initialize with options
+onScan.attachTo(document, {
+    suffixKeyCodes: [13], // enter-key expected at the end of a scan
+    reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
+    onScan: function(sCode) { // Alternative to document.addEventListener('scan')
+        console.log('abcds', sCode);
+        // addBillItemToBill(sCode);
+        updateUserOrder(sCode, 'add')
+    },
 });
 // END SCANNER INPUT
 

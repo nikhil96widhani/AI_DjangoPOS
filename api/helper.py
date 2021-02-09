@@ -1,4 +1,5 @@
 from inventory.models_new import *
+from django.db.models import F
 from .serializers import *
 
 
@@ -46,3 +47,15 @@ def get_bill_item_data(variation):
         "expiry_date": variation.expiry_date,
         "is_new_variation": False
     }
+
+
+def updateProducts_fromBillItems(bill_items):
+    for each in bill_items:
+        ProductVariation.objects.filter(id=each.product_variation.id).update(
+            cost=each.cost,
+            mrp=each.mrp,
+            discount_price=each.discount_price,
+            quantity=F('quantity') + each.stock,
+            weight=each.weight,
+            expiry_date=each.expiry_date
+        )
