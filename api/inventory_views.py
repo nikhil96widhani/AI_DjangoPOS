@@ -58,6 +58,26 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
             billItem = StockBillItems.objects.get(id=billItem_id)
             billItem.delete()
             message = 'Successfully removed item'
+        elif action == 'complete_and_update':
+            bill_id = request.GET.get("bill_id")
+            if bill_id is None and request.user.is_authenticated:
+                customer = request.user
+                bill = StockBill.objects.get(user=customer, complete=False)
+                bill_items = bill.stockbillitems_set.all()
+                updateProducts_fromBillItems(bill_items)
+                # bill.complete = True
+                # bill.save()
+                message = 'True'
+            elif bill_id:
+                try:
+                    bill = StockBill.objects.get(pk=bill_id)
+                    bill_items = bill.stockbillitems_set.all()
+                    updateProducts_fromBillItems(bill_items)
+                    # bill.complete = True
+                    # bill.save()
+                    message = 'True'
+                except ObjectDoesNotExist:
+                    message = 'an error occurred'
         return Response(message)
 
     #

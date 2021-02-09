@@ -80,27 +80,27 @@ function loadBillItemsTable() {
             {'data': 'cost', 'width': '7%', render: function (data, type, row) {
                     return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
-                              min="0" type="number" name="cost" value="${data}" alt=${row.id}></div>`
+                              min="0" type="number" name="cost" value="${data}" data-variation-id=${row.id}></div>`
                 }},
             {'data': 'mrp', 'width': '7%', render: function (data, type, row) {
                     return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
-                              min="0" type="number" name="mrp" value="${data}" alt=${row.id}></div>`
+                              min="0" type="number" name="mrp" value="${data}" data-variation-id=${row.id}></div>`
                 }},
             {'data': 'discount_price', 'width': '7%', render: function (data, type, row) {
                     return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
-                              min="0" type="number" name="discount_price" value="${data}" alt=${row.id}></div>`
+                              min="0" type="number" name="discount_price" value="${data}" data-variation-id=${row.id}></div>`
                 }},
             {
                 'data': 'stock', 'width': '8%', render: function (data, type, full) {
                     if (data === null) return "-";
                     if (full['quantity_unit'] === null) return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
-                              min="0" type="number" name="stock" value="${data}" alt=${full.id}></div>`;
+                              min="0" type="number" name="stock" value="${data}" data-variation-id=${full.id}></div>`;
                     return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
-                              min="0" type="number" name="stock" value="${data}" alt=${full.id}>
+                              min="0" type="number" name="stock" value="${data}" data-variation-id=${full.id}>
                               <span class="pl-2">${full['quantity_unit']}</span></div>`;
                 }
             },
@@ -109,15 +109,15 @@ function loadBillItemsTable() {
                     if (data === null) return "-";
                     if (full['weight_unit'] === null) return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
-                              min="0" type="number" name="weight" value="${data}" alt=${full.id}></div>`;
+                              min="0" type="number" name="weight" value="${data}" data-variation-id=${full.id}></div>`;
                     return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
-                              min="0" type="number" name="weight" value="${data}" alt=${full.id}>
+                              min="0" type="number" name="weight" value="${data}" data-variation-id=${full.id}>
                               <span class="pl-2">${full['weight_unit']}</span></div>`;
                 }
             },
             {'data': 'expiry_date', 'width': '7%', render: function (data, type, row) {
-                return `<input id="date_bill" type="date" class="form-control editor-table bill-item-updater" name="expiry_date" value="${data}" alt=${row.id} />`
+                return `<input id="date_bill" type="date" class="form-control editor-table bill-item-updater" name="expiry_date" value="${data}" data-variation-id=${row.id} />`
                 }},
             {'data': 'id', sortable: false, 'width': '7%', render: function (data, type, row) {
                     return `<button class="btn btn-danger btn-sm btn-rounded m-0 py-1 px-2" 
@@ -319,6 +319,7 @@ const addBillItemToBill = (product_code_or_variation, is_variation=false) => {
         success: function (data) {
             if (data.multiple_variation_exists){
                 toastr.warning('Multiple Variation Exists');
+                console.log(product_code_or_variation)
                 product_variation_search(product_code_or_variation)
                 $('.product-variation-searchModal').modal('show');
 
@@ -337,12 +338,13 @@ const addBillItemToBill = (product_code_or_variation, is_variation=false) => {
     });
 }
 
-$(function () {
-    $(document).pos();
-    $(document).on('scan.pos.barcode', function (event) {
-        addBillItemToBill(event.code);
-    });
-});
+// $(function () {
+//     $(document).pos();
+//     $(document).on('scan.pos.barcode', function (event) {
+//         console.log("from barcode", event.code)
+//         addBillItemToBill(event.code);
+//     });
+// });
 
 // Callbacks
 $('.bill-data-updater').on('change',function() {
@@ -351,13 +353,27 @@ $('.bill-data-updater').on('change',function() {
 });
 
 $('#bill-datatable').on('change', '.bill-item-updater', function() {
-    let data_json = {'action':'update_bill_item', 'id': this.alt, [this.name] : this.value  }
+    let data_json = {'action':'update_bill_item', 'id': this.getAttribute('data-variation-id'), [this.name] : this.value  }
     updateBillDetails(data_json, true)
 });
 
 $("#variation-search-input").on("input", function () {
     let value = $(this).val().toLowerCase();
     product_variation_search(value)
+});
+
+$("#complete-bill").on("click", function () {
+    updateBillDetails({'action': 'complete_and_update'}, false)
+});
+
+// Initialize with options
+onScan.attachTo(document, {
+    suffixKeyCodes: [13], // enter-key expected at the end of a scan
+    reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
+    onScan: function(sCode) { // Alternative to document.addEventListener('scan')
+        console.log(sCode);
+        addBillItemToBill(sCode);
+    },
 });
 
 $(document).ready(function () {

@@ -79,6 +79,11 @@
                 </thead>
             </table>
             <div id="total-values-div" class="row"></div>
+            <div class="row py-2">
+                <button id="complete-bill" class="btn btn-primary waves-effect waves-light mr-auto ml-auto"><i class="fas fa-save mr-2"></i>
+                    Save bill and update products
+                </button>
+            </div>
         </div>
     </div>
     {% include 'inventory/modal-search.html' %}
@@ -87,10 +92,14 @@
 {% endblock %}
 
 {% block javascript %}
+
     <script type="text/javascript" src="{% static 'js/fm.tagator.jquery.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery.autocomplete.js' %}"></script>
-    <script src="{% static 'js/jquery.pos.js' %}"></script>
+{#    <script src="{% static 'js/jquery.pos.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'js/onscan.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/datatable-common.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/update_inventory_by_bill.js' %}"></script>
+
+
 {% endblock %}

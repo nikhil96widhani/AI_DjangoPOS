@@ -31,7 +31,7 @@
             },
             prefix: {
                 scan: {
-                    barcode: ''
+                    barcode: '13'
                 },
                 swipe: {
                     card: ''
@@ -62,12 +62,6 @@
                     } else {
                         var barcode_char = String.fromCharCode(event.which);
                         data.scan += barcode_char;
-                        // charCode = typeof event.which === "number" ? event.which : event.data.scan;
-                        // barcode_char = String.fromCharCode(charCode);
-                        // array_codes.push(charCode)
-                        // var final_barcode = `'${String.fromCharCode.apply(null, array_codes)}'`
-                        // // data.scan = final_barcode;
-                        // console.log(barcode_char, charCode, final_barcode)
                     }
                 }
 
