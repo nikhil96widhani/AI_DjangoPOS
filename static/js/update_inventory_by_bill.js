@@ -119,8 +119,10 @@ function loadBillItemsTable() {
             {'data': 'expiry_date', 'width': '7%', render: function (data, type, row) {
                 return `<input id="date_bill" type="date" class="form-control editor-table bill-item-updater" name="expiry_date" value="${data}" alt=${row.id} />`
                 }},
-            {'data': 'weight_unit', sortable: false, 'width': '7%', render: function (data, type, row) {
-                return 'print'
+            {'data': 'id', sortable: false, 'width': '7%', render: function (data, type, row) {
+                    return `<button class="btn btn-danger btn-sm btn-rounded m-0 py-1 px-2" 
+                                onclick="updateBillDetails({'action':'delete_billItem', 'billItem_id' : ${data}}, true)"
+                                ><i class="fas fa-trash"></i></button>`
                 }},
         ],
         'drawCallback': function () {
@@ -146,7 +148,7 @@ function loadBillItemsTable() {
 }
 
 
-function updateBillDetails(data_json) {
+function updateBillDetails(data_json, reload_table) {
     console.log(JSON.stringify(data_json))
     let url = "/api/stock-bill/"
 
@@ -159,6 +161,9 @@ function updateBillDetails(data_json) {
         data: JSON.stringify(data_json),
         success: function (data) {
              toastr.success(data);
+             if (reload_table === true){
+                 dataTable.DataTable().draw('page');
+             }
             // console.log(data)
         },
         error: function () {
@@ -203,7 +208,9 @@ function product_variation_search(value) {
                         <td>${item.quantity}</td>
                         <td>${item.weight}</td>
                         <td>
-                            <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"><i class="fas fa-plus"></i></button>
+                            <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"
+                            onclick="addBillItemToBill(${item.id}, true); $('.product-variation-searchModal').modal('hide');"
+                            ><i class="fas fa-plus"></i></button>
                             <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2" 
                                     data-toggle="modal" data-target="#addVariationModalForm" onclick="addAndUpdateVariationButtonAction('edit', '${item.id}', '${item.product.product_code}')">
                                 <i class="fas fa-edit"></i>
@@ -215,28 +222,6 @@ function product_variation_search(value) {
         }
     });
 }
-
-// Callbacks
-$('.bill-data-updater').on('change',function() {
-    let data_json = {'action':'update_bill', [this.name] : this.value}
-    updateBillDetails(data_json)
-});
-
-$('#bill-datatable').on('change', '.bill-item-updater', function() {
-    let data_json = {'action':'update_bill_item', 'id': this.alt, [this.name] : this.value  }
-    updateBillDetails(data_json)
-    dataTable.DataTable().draw('page');
-});
-
-$("#variation-search-input").on("input", function () {
-    let value = $(this).val().toLowerCase();
-    product_variation_search(value)
-});
-
-$(document).ready(function () {
-    getBillDetails();
-    loadBillItemsTable();
-});
 
 const editVariationAndAddToBillItems = (variation_form_selector) => {
     const variation_form_data = getFormData($(variation_form_selector));
@@ -334,6 +319,9 @@ const addBillItemToBill = (product_code_or_variation, is_variation=false) => {
         success: function (data) {
             if (data.multiple_variation_exists){
                 toastr.warning('Multiple Variation Exists');
+                product_variation_search(product_code_or_variation)
+                $('.product-variation-searchModal').modal('show');
+
             }
             else if (data.status === 'error'){
                 toastr.error(data.response);
@@ -354,4 +342,25 @@ $(function () {
     $(document).on('scan.pos.barcode', function (event) {
         addBillItemToBill(event.code);
     });
+});
+
+// Callbacks
+$('.bill-data-updater').on('change',function() {
+    let data_json = {'action':'update_bill', [this.name] : this.value}
+    updateBillDetails(data_json, false)
+});
+
+$('#bill-datatable').on('change', '.bill-item-updater', function() {
+    let data_json = {'action':'update_bill_item', 'id': this.alt, [this.name] : this.value  }
+    updateBillDetails(data_json, true)
+});
+
+$("#variation-search-input").on("input", function () {
+    let value = $(this).val().toLowerCase();
+    product_variation_search(value)
+});
+
+$(document).ready(function () {
+    getBillDetails();
+    loadBillItemsTable();
 });

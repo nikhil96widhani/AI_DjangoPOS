@@ -47,13 +47,17 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
             if serializer.is_valid():
                 serializer.save()
                 message = 'Bill data successfully updated'
-
         elif action == 'update_bill_item':
             bill_item = StockBillItems.objects.get(id=request.data['id'])
             serializer = bill_items_serializer(bill_item, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 message = 'Bill item was successfully updated'
+        elif action == 'delete_billItem':
+            billItem_id = request.data['billItem_id']
+            billItem = StockBillItems.objects.get(id=billItem_id)
+            billItem.delete()
+            message = 'Successfully removed item'
         return Response(message)
 
     #
