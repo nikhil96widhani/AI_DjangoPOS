@@ -292,16 +292,16 @@ class OrderNew(models.Model):
 
 class OrderItemNew(models.Model):
     # References
+    order = models.ForeignKey(OrderNew, on_delete=models.CASCADE, blank=True, null=True)
     product = models.ForeignKey(ProductNew, on_delete=models.SET_NULL, blank=True, null=True)
     variation = models.ForeignKey(ProductVariation, on_delete=models.SET_NULL, blank=True, null=True)
-    order = models.ForeignKey(OrderNew, on_delete=models.CASCADE, blank=True, null=True)
     discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True)
     
     # Copied Values
     ##########################################################################
     # Product Values
     product_code = models.CharField(max_length=30, blank=True, null=True)
-    product_name = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
     
     # Variation Values
     weight = models.IntegerField(blank=True, null=True)

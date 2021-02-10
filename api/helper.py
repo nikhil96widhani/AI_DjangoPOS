@@ -49,6 +49,25 @@ def get_bill_item_data(variation):
     }
 
 
+def get_order_item_data(variation):
+    return {
+        "product": variation.product.product_code,
+        "variation": variation.id,
+        "discount": None,
+
+        "product_code": variation.product.product_code,
+        "name": variation.product.name,
+
+        "weight": variation.weight,
+        "weight_unit": variation.weight_unit,
+        "cost": variation.cost,
+        "mrp": variation.mrp,
+        "discount_price": variation.discount_price,
+
+        "quantity": variation.quantity,
+    }
+
+
 def updateProducts_fromBillItems(bill_items):
     for each in bill_items:
         ProductVariation.objects.filter(id=each.product_variation.id).update(
