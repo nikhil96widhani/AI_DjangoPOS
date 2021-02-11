@@ -3,8 +3,13 @@ let updated_product_code = 0;
 let updated_product_id = 0;
 let total_cart_value = 0;
 
+const getDatatableInput = (order_item_id, name, value) => {
+    return `<input class="form-control input-sm px-1 text-center update-order-item" type="number" min="0" 
+              name="${name}" value="${value}" data-order-item-id=${order_item_id} style="height: 20px;">`;
+}
+
 function loadCartData() {
-    let url = '/api/cart-datatable/?format=datatables';
+    let url = '/api/cart-datatable-new/?format=datatables';
     return dataTable.DataTable({
         ajax: {
             'url': url,
@@ -25,26 +30,29 @@ function loadCartData() {
             footer: true
         },
         "rowCallback": function (row, data, dataIndex) {
-            if (data.product_code === updated_product_code || data.id === updated_product_id ) {
+            if (data.product_code === updated_product_code || data.id === updated_product_id) {
                 $(row).addClass('clicked');
                 updated_product_code = 0;
                 updated_product_id = 0;
-
             }
         },
         'columns': [
-            {'data': 'product_name', 'class': 'text-left font-weight-bold'},
+            {'data': 'name', 'class': 'text-left font-weight-bold'},
             {'data': 'weight', 'width': '10%', render: handleBlankData},
-            {'data': 'mrp', 'width': '10%', render: function (data, type, row) {
+            {
+                'data': 'mrp', 'width': '10%', render: function (data, type, row) {
                     return `<div class="input-group" style="width: 70px">
-                              <input class="form-control input-sm quantity cart-quant px-1 text-center quantity_cart" 
-                              min="0" name="discount_price_cart" value="${data}" type="number" onchange="updateCartByValue(${row.id}, 'edit_mrp', this.value)"></div>`
-                }},
-            {'data': 'discount_price', 'width': '12%', render: function (data, type, row) {
+                            ${getDatatableInput(row.id, 'mrp', data)}
+                            </div>`
+                }
+            },
+            {
+                'data': 'discount_price', 'width': '12%', render: function (data, type, row) {
                     return `<div class="input-group" style="width: 70px">
-                              <input class="form-control input-sm quantity cart-quant px-1 text-center quantity_cart" 
-                              min="0" name="discount_price_cart" value="${data}" type="number" onchange="updateCartByValue(${row.id}, 'edit_discount_price', this.value)"></div>`
-                }},
+                            ${getDatatableInput(row.id, 'discount_price', data)}
+                            </div>`
+                }
+            },
             {
                 'data': 'quantity', 'width': '10%', render: function (data, type, row) {
                     return `<div class="input-group " style="width: 70px">
@@ -53,25 +61,18 @@ function loadCartData() {
                                 waves-effect minus decrease" onclick="updateCartByQuantityValue(this, ${row.id}, 'remove')"
                                 > <i class="fas fa-minus"></i> </button>
                               </div>
-                              <input class="form-control input-sm quantity cart-quant px-1 text-center quantity_cart" 
-                              min="0" name="quantity_cart" value="${data}" type="number" onchange="updateCartByQuantityValue(this, ${row.id}, 'value')">
+                              ${getDatatableInput(row.id, 'quantity', data)}
                               <div class="input-group-append">
                                 <button class="btn btn-sm btn-primary btn-rounded m-0 px-2 py-0 z-depth-0 waves-effect 
                                 plus increase" onclick="updateCartByQuantityValue(this, ${row.id}, 'add')"
                                 ><i class="fas fa-plus"></i></button>
                               </div>
                             </div>`
-
-                    // return `${data}<div class="btn-group ml-3" data-toggle="buttons">
-                    //             <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrderById('${row.id}', 'remove_quantity')"><i class="fas fa-minus"></i></button>
-                    //             <button class="btn btn-sm btn-primary btn-rounded" onclick="updateUserOrderById('${row.id}', 'add_quantity')"><i class="fas fa-plus"></i></button>
-                    //         </div>`
                 }
             },
             {'data': 'amount', 'width': '12%'},
             {
                 'data': 'id', 'width': '10%', render: function (data) {
-                    // console.log(data);
                     return `<button class="btn btn-danger btn-sm btn-rounded mr-4" title="Delete Product" onclick="updateUserOrderById('${data}', 'delete_byId')"><i class="fas fa-trash"></i></button>`
                 },
                 "orderable": false,
@@ -114,77 +115,9 @@ function loadCartData() {
     });
 }
 
-
-function updateUserOrder(product_code, action) {
-    let url = "/api/cart/"
-    let method = 'POST'
-    if (action === 'clear' || action === 'remove_order_discount') {
-        method = 'PUT'
-    }
-
-    $.ajax(url, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
-        },
-        data: JSON.stringify({'product_code': String(product_code), 'action': action}),
-        success: function (data) {
-            // console.log(data)
-            updated_product_code = product_code;
-            dataTable.DataTable().draw('page');
-        },
-        error: function () {
-            toastr.error('Could not update cart! Please Try Again.');
-        },
-        complete: function () {
-
-        }
-    })
-}
-
-function updateUserOrderById(orderitem_id, action) {
-    let url = "/api/cart/"
-    let method = 'POST'
-
-    $.ajax(url, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
-        },
-        data: JSON.stringify({'orderitem_id': orderitem_id, 'action': action}),
-        success: function (data) {
-            // console.log(data)
-            updated_product_id = Number(orderitem_id);
-            dataTable.DataTable().draw('page');
-        },
-        error: function () {
-            toastr.error('Could not update cart! Please Try Again.');
-        },
-        // complete: function () {
-        //
-        // }
-    })
-}
-
-function updateCartByQuantityValue(elem, id_item, action) {
-    let quantity = 1;
-    if (action ==='add'){
-        elem.parentNode.parentNode.querySelector('input[type=number]').stepUp();
-        quantity = elem.parentNode.parentNode.querySelector('input[type=number]').value
-    }
-    else if (action ==='remove'){
-        elem.parentNode.parentNode.querySelector('input[type=number]').stepDown();
-        quantity = elem.parentNode.parentNode.querySelector('input[type=number]').value
-    }
-    else {
-        quantity = elem.value;
-        elem.blur();
-    }
-    // toastr.error('Quantity' + quantity + id_item);
-
-    let url = "/api/cart/"
+function updateOrderDetails(data_json, reload_table, reload_page = false) {
+    console.log(JSON.stringify(data_json))
+    let url = "/api/handle-order/"
 
     $.ajax(url, {
         method: 'POST',
@@ -192,15 +125,16 @@ function updateCartByQuantityValue(elem, id_item, action) {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        data: JSON.stringify({
-            'action': 'add_quantity_by_input',
-            'orderitem_id': id_item,
-            'quantity_by_id': quantity,
-        }),
+        data: JSON.stringify(data_json),
         success: function (data) {
+            toastr.success(data.response);
+            if (reload_table === true) {
+                dataTable.DataTable().draw('page');
+            }
+            if (reload_page === true) {
+                window.location.reload();
+            }
             // console.log(data)
-            updated_product_id = Number(id_item);
-            dataTable.DataTable().draw('page');
         },
         error: function () {
             toastr.error('An error occurred please check the value entered');
@@ -210,35 +144,18 @@ function updateCartByQuantityValue(elem, id_item, action) {
     })
 }
 
-function updateCartByValue(id_item, action, value) {
-    let url = "/api/cart/"
+//CallBacks
+dataTable.on('change', '.update-order-item', function () {
+    let data_json = {
+        'action': 'update-order-item',
+        'order_item_id': this.getAttribute('data-order-item-id'),
+        [this.name]: this.value
+    }
+    updateOrderDetails(data_json, true)
+    // updated_variation_id = parseInt(this.getAttribute('data-variation-id'));
+});
 
-    $.ajax(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
-        },
-        data: JSON.stringify({
-            'action': action,
-            'value': value,
-            'orderitem_id': id_item,
-        }),
-        success: function (data) {
-            // console.log(data)
-            updated_product_id = Number(id_item);
-            dataTable.DataTable().draw('page');
-        },
-        error: function () {
-            toastr.error('An error occurred please check the value entered');
-        },
-        // complete: function () {
-        // }
-    })
-}
-
-
-
+//Old Functions
 function product_search(value) {
     let url = '/api/search-products';
 
@@ -291,7 +208,7 @@ function completePos() {
 onScan.attachTo(document, {
     suffixKeyCodes: [13], // enter-key expected at the end of a scan
     reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
-    onScan: function(sCode) { // Alternative to document.addEventListener('scan')
+    onScan: function (sCode) { // Alternative to document.addEventListener('scan')
         console.log('abcds', sCode);
         // addBillItemToBill(sCode);
         updateUserOrder(sCode, 'add')
@@ -400,8 +317,6 @@ function discountOrder() {
         toastr.error('An error occurred please check the value entered')
     })
 }
-
-
 
 
 function open_receipt_and_reload(url) {

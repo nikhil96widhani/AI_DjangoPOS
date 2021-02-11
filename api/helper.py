@@ -1,3 +1,6 @@
+from rest_framework import status
+from rest_framework.response import Response
+
 from inventory.models_new import *
 from django.db.models import F
 from .serializers import *
@@ -64,7 +67,7 @@ def get_order_item_data(variation):
         "mrp": variation.mrp,
         "discount_price": variation.discount_price,
 
-        "quantity": variation.quantity,
+        "quantity": 1,
     }
 
 
@@ -78,3 +81,48 @@ def updateProducts_fromBillItems(bill_items):
             weight=each.weight,
             expiry_date=each.expiry_date
         )
+
+
+def add_order_item(request):
+    if 'order_id' not in request.data.keys() and request.user.is_authenticated:
+        customer = request.user
+        order = OrderNew.objects.get(user=customer, complete=False)
+        order_id = order.id
+
+    else:
+        order_id = request.data['order_id']
+        order = OrderNew.objects.get(pk=order_id)
+
+    if 'variation_id' in request.data.keys():
+        variation_id = request.data['variation_id']
+        variation = ProductVariation.objects.get(pk=variation_id)
+
+    else:
+        # Add Variation using Product Code if only one variation is present
+        product_code = request.data['product_code']
+        try:
+            variation = ProductVariation.objects.get(product=product_code)
+        except ProductVariation.MultipleObjectsReturned:
+            return Response({'multiple_variation_exists': True, **get_variation_data(product_code)})
+
+    try:
+        order_item = order.orderitemnew_set.get(variation=variation.id)
+        order_item.quantity += 1
+        order_item.save()
+        return Response({'status': 'quantity_updated', 'response': 'Product quantity updated!',
+                         'data': OrderItemNewSerializer(order_item).data})
+    except OrderItemNew.MultipleObjectsReturned:
+        order_items = order.stockbillitems_set.filter(product_variation=variation.id)
+        for i in range(1, len(order_items)):
+            order_items[i].delete()
+        return Response({'status': 'error',
+                         'response': 'Multiple variations were present. Deleted duplicate variations.'})
+    except OrderItemNew.DoesNotExist:
+        order_item_data = {'order': order_id, **get_order_item_data(variation)}
+
+        # Save bill item
+        serializer = OrderItemNewSerializer(data=order_item_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

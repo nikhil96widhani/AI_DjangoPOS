@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .cart_views import add_order_item
+from .cart_views import handle_order, CartListViewNew
 from .pos_views import *
 from .report_views import *
 from .inventory_views import *
@@ -33,5 +33,6 @@ urlpatterns = [
     path('product-variation-search/', searchProductVariations, name='product-variation-search'),
     path('vendor-list/', VendorListView.as_view(), name='api-vendor-list'),
 
-    path('add-order-item/', add_order_item, name='add-order-item'),
+    path('cart-datatable-new/', CartListViewNew.as_view(), name='api-cart-datatable-new'),
+    path('handle-order/', handle_order, name='handle-order'),
 ]
