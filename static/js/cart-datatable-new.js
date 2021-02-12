@@ -127,6 +127,7 @@ function updateOrderDetails(data_json, reload_table, reload_page = false) {
         },
         data: JSON.stringify(data_json),
         success: function (data) {
+            console.log(data)
             toastr.success(data.response);
             if (reload_table === true) {
                 dataTable.DataTable().draw('page');
@@ -155,21 +156,40 @@ dataTable.on('change', '.update-order-item', function () {
     // updated_variation_id = parseInt(this.getAttribute('data-variation-id'));
 });
 
-//Old Functions
+
+// Initialize with options
+onScan.attachTo(document, {
+    suffixKeyCodes: [13], // enter-key expected at the end of a scan
+    reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
+    onScan: function (sCode) { // Alternative to document.addEventListener('scan')
+        console.log(sCode)
+        let data_json = {
+            'action': 'add-order-item',
+            'product_code': sCode,
+        }
+        updateOrderDetails(data_json, true)
+    },
+});
+// END SCANNER INPUT
+
+
+
+
+//Old Functions ##############################################################
 function product_search(value) {
-    let url = '/api/search-products';
+    let url = '/api/product-variation-search/';
 
     $.getJSON(url, {'search_term': value}, function (response) {
         let trHTML = '';
-        if (response.products === undefined || response.products.length === 0) {
+        if (response === undefined || response.length === 0) {
             trHTML += `<li><div class="alert alert-secondary" role="alert">  No Products Found</div></li>`
         } else {
-            $.each(response.products, function (e, item) {
+            $.each(response, function (e, item) {
                 trHTML += `<li class="list-group-item">
                             <div class="row pt-2 ">
-                                <div class="col"><div>${item.name}</div>
+                                <div class="col"><div>${item.product.name}</div>
                                     <div class="row">
-                                       <div class="col"><span class="align-middle text-muted small">Code: ${item.product_code}</span></div>
+                                       <div class="col"><span class="align-middle text-muted small">Code: ${item.product.product_code}</span></div>
                                        <div class="col-auto"><span class="align-middle text-muted small float-right"> ₹${item.discount_price}</span></div>
                                     </div>
                                 </div>
@@ -204,17 +224,7 @@ function completePos() {
 //     });
 // });
 
-// Initialize with options
-onScan.attachTo(document, {
-    suffixKeyCodes: [13], // enter-key expected at the end of a scan
-    reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
-    onScan: function (sCode) { // Alternative to document.addEventListener('scan')
-        console.log('abcds', sCode);
-        // addBillItemToBill(sCode);
-        updateUserOrder(sCode, 'add')
-    },
-});
-// END SCANNER INPUT
+
 
 // Refund Calculator
 function calculateRefund(cash) {

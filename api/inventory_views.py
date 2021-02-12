@@ -227,12 +227,12 @@ def searchProductVariations(request):
         """
         search_term = request.GET.get("search_term")
         if search_term:
-            products_contains = ProductVariation.objects.filter(product__name__contains=search_term)[:5]
+            products_contains = ProductVariation.objects.filter(product__name__contains=search_term)[:8]
             products_starts = ProductVariation.objects.filter(product__name__startswith=search_term)[:3]
             products_code_starts = ProductVariation.objects.filter(product__product_code__startswith=search_term)[:5]
-            products = (products_starts | products_contains | products_code_starts)[:5]
+            products = (products_starts | products_contains | products_code_starts)[:8]
         else:
-            products = []
+            products = ProductVariation.objects.all()[:10]
 
         product_serializer = ProductVariationSerializer(products, many=True)
         return Response(product_serializer.data)

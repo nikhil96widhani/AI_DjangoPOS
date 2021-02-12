@@ -86,7 +86,7 @@ def updateProducts_fromBillItems(bill_items):
 def add_order_item(request):
     if 'order_id' not in request.data.keys() and request.user.is_authenticated:
         customer = request.user
-        order = OrderNew.objects.get(user=customer, complete=False)
+        order = OrderNew.objects.get(customer=customer, complete=False)
         order_id = order.id
 
     else:
