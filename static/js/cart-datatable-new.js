@@ -1,6 +1,6 @@
 const dataTable = $("#cart-datatable");
-let updated_product_code = 0;
-let updated_product_id = 0;
+const searchTable = $("#AllProductListLi");
+let updated_order_item_id = 0;
 let total_cart_value = 0;
 
 const getDatatableInput = (order_item_id, name, value) => {
@@ -30,10 +30,8 @@ function loadCartData() {
             footer: true
         },
         "rowCallback": function (row, data, dataIndex) {
-            if (data.product_code === updated_product_code || data.id === updated_product_id) {
+            if (data.id === updated_order_item_id) {
                 $(row).addClass('clicked');
-                updated_product_code = 0;
-                updated_product_id = 0;
             }
         },
         'columns': [
@@ -57,15 +55,17 @@ function loadCartData() {
                 'data': 'quantity', 'width': '10%', render: function (data, type, row) {
                     return `<div class="input-group " style="width: 70px">
                               <div class="input-group-prepend">
-                                <button class="btn btn-sm btn-primary btn-rounded m-0 px-2 py-0 z-depth-0 
-                                waves-effect minus decrease" onclick="updateCartByQuantityValue(this, ${row.id}, 'remove')"
-                                > <i class="fas fa-minus"></i> </button>
+                                <button class="btn btn-sm btn-primary btn-rounded m-0 px-2 py-0 z-depth-0 waves-effect update-quantity"
+                                        data-action="minus">
+                                    <i class="fas fa-minus"></i>
+                                </button>
                               </div>
                               ${getDatatableInput(row.id, 'quantity', data)}
                               <div class="input-group-append">
-                                <button class="btn btn-sm btn-primary btn-rounded m-0 px-2 py-0 z-depth-0 waves-effect 
-                                plus increase" onclick="updateCartByQuantityValue(this, ${row.id}, 'add')"
-                                ><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-sm btn-primary btn-rounded m-0 px-2 py-0 z-depth-0 waves-effect update-quantity"
+                                        data-action="plus">
+                                    <i class="fas fa-plus"></i>
+                                </button>
                               </div>
                             </div>`
                 }
@@ -73,7 +73,10 @@ function loadCartData() {
             {'data': 'amount', 'width': '12%'},
             {
                 'data': 'id', 'width': '10%', render: function (data) {
-                    return `<button class="btn btn-danger btn-sm btn-rounded mr-4" title="Delete Product" onclick="updateUserOrderById('${data}', 'delete_byId')"><i class="fas fa-trash"></i></button>`
+                    return `<button class="btn btn-danger btn-sm btn-rounded mr-4 update-quantity" 
+                                    title="Delete Product" data-action="delete">
+                                <i class="fas fa-trash"></i>
+                            </button>`
                 },
                 "orderable": false,
             },
@@ -128,9 +131,10 @@ function updateOrderDetails(data_json, reload_table, reload_page = false) {
         data: JSON.stringify(data_json),
         success: function (data) {
             console.log(data)
-            toastr.success(data.response);
             if (reload_table === true) {
                 dataTable.DataTable().draw('page');
+                updated_order_item_id = data.data.id;
+                console.log(updated_order_item_id)
             }
             if (reload_page === true) {
                 window.location.reload();
@@ -153,8 +157,38 @@ dataTable.on('change', '.update-order-item', function () {
         [this.name]: this.value
     }
     updateOrderDetails(data_json, true)
-    // updated_variation_id = parseInt(this.getAttribute('data-variation-id'));
 });
+
+searchTable.on('click', '.add-variation-to-order', function () {
+    let data_json = {
+        'action': 'add-order-item',
+        'variation_id': this.getAttribute('data-variation-id'),
+    }
+    updateOrderDetails(data_json, true)
+});
+
+dataTable.on('click', '.update-quantity', function () {
+    const action = this.getAttribute('data-action');
+    const quantity_selector = this.closest('tr').querySelector('input[name="quantity"]')
+    let quantity_value = parseInt(quantity_selector.value);
+
+    if (action === 'plus') quantity_value++;
+    else if (action === 'minus') quantity_value--;
+    else if (action === 'delete') quantity_value = 0;
+
+    let data_json = {
+        'action': 'update-order-item',
+        'order_item_id': quantity_selector.getAttribute('data-order-item-id'),
+        [quantity_selector.name]: quantity_value
+    }
+
+    console.log(data_json)
+    updateOrderDetails(data_json, true)
+});
+
+$('#btn-clear-cart').click(() => {
+    updateOrderDetails({'action': 'clear-cart'}, true)
+})
 
 
 // Initialize with options
@@ -173,13 +207,12 @@ onScan.attachTo(document, {
 // END SCANNER INPUT
 
 
-
-
 //Old Functions ##############################################################
 function product_search(value) {
     let url = '/api/product-variation-search/';
 
     $.getJSON(url, {'search_term': value}, function (response) {
+        console.log(response)
         let trHTML = '';
         if (response === undefined || response.length === 0) {
             trHTML += `<li><div class="alert alert-secondary" role="alert">  No Products Found</div></li>`
@@ -194,14 +227,15 @@ function product_search(value) {
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <button type="button" onclick="updateUserOrder('${item.product_code}', 'add')" class="btn btn-primary btn-sm mr-1">
+                                    <button type="button" data-variation-id=${item.id} 
+                                            class="btn btn-primary btn-sm mr-1 add-variation-to-order">
                                         <i class="fas fa-shopping-cart"> +</i>
                                     </button>
                                 </div>
                             </div></li>`
             })
         }
-        $("#AllProductListLi").empty().append(trHTML);
+        searchTable.html(trHTML);
     });
 }
 
@@ -223,7 +257,6 @@ function completePos() {
 //         updateUserOrder(event.code, 'add')
 //     });
 // });
-
 
 
 // Refund Calculator
@@ -374,3 +407,8 @@ $(document).ready(function () {
     // const myCustomScrollbar = document.querySelector('#AllProductListLi');
     // const ps = new PerfectScrollbar(myCustomScrollbar);
 });
+
+
+// setTimeout(function () {
+//
+// }, 2000);

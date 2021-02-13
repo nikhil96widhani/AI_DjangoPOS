@@ -247,13 +247,13 @@ class OrderNew(models.Model):
                 revenue_total = calculateDiscountPrice(revenue_total, int(self.discount.value))
             else:
                 revenue_total = revenue_total - int(self.discount.value)
-        return revenue_total
+        return round(revenue_total, 2)
 
     @property
     def get_cart_revenue_NoDiscount(self):
         order_items = self.orderitemnew_set.all()
         revenue_total = sum([item.get_revenue for item in order_items])
-        return revenue_total
+        return round(revenue_total, 2)
 
     @property
     def get_cart_cost(self):
@@ -320,29 +320,32 @@ class OrderItemNew(models.Model):
         verbose_name_plural = "Order Items - New"
 
     def save(self, *args, **kwargs):
-        if self.product is not None:
-            self.product_code = self.product.product_code
-            self.product_name = self.product.name
-            self.discount_price = self.discount_price if self.discount_price else self.variation.discount_price
-            self.mrp = self.mrp if self.mrp else self.variation.mrp
-            self.cost = self.variation.cost
-            self.weight = self.variation.weight
-            self.weight_unit = self.variation.weight_unit
-
+        if self.quantity <= 0:
+            self.delete()  # you do not need neither to return the deleted object nor to call the super method.
         else:
-            self.product_code = None
-            self.mrp = self.discount_price
-            self.cost = self.discount_price
+            if self.product is not None:
+                self.product_code = self.product.product_code
+                self.name = self.product.name
+                self.discount_price = self.discount_price if self.discount_price else self.variation.discount_price
+                self.mrp = self.mrp if self.mrp else self.variation.mrp
+                self.cost = self.variation.cost
+                self.weight = self.variation.weight
+                self.weight_unit = self.variation.weight_unit
 
-        if self.discount_price and self.quantity:
-            self.amount = round(self.quantity * self.discount_price, 2)
-            super(OrderItemNew, self).save(*args, **kwargs)
-        elif self.mrp and self.quantity:
-            self.amount = round(self.quantity * self.mrp, 2)
-            super(OrderItemNew, self).save(*args, **kwargs)
-        else:
-            self.amount = None
-            super(OrderItemNew, self).save(*args, **kwargs)
+            else:
+                self.product_code = None
+                self.mrp = self.discount_price
+                self.cost = self.discount_price
+
+            if self.discount_price and self.quantity:
+                self.amount = round(self.quantity * self.discount_price, 2)
+                super(OrderItemNew, self).save(*args, **kwargs)
+            elif self.mrp and self.quantity:
+                self.amount = round(self.quantity * self.mrp, 2)
+                super(OrderItemNew, self).save(*args, **kwargs)
+            else:
+                self.amount = None
+                super(OrderItemNew, self).save(*args, **kwargs)
 
     @property
     def get_revenue(self):
@@ -360,4 +363,4 @@ class OrderItemNew(models.Model):
         return total
 
     def __str__(self):
-        return str(self.id)
+        return str(f'Order Id - {self.order} | Order Item Id - {self.id}')

@@ -1,8 +1,7 @@
+from django.db.models import F
 from rest_framework import status
 from rest_framework.response import Response
 
-from inventory.models_new import *
-from django.db.models import F
 from .serializers import *
 
 
@@ -56,17 +55,6 @@ def get_order_item_data(variation):
     return {
         "product": variation.product.product_code,
         "variation": variation.id,
-        "discount": None,
-
-        "product_code": variation.product.product_code,
-        "name": variation.product.name,
-
-        "weight": variation.weight,
-        "weight_unit": variation.weight_unit,
-        "cost": variation.cost,
-        "mrp": variation.mrp,
-        "discount_price": variation.discount_price,
-
         "quantity": 1,
     }
 
@@ -112,7 +100,7 @@ def add_order_item(request):
         return Response({'status': 'quantity_updated', 'response': 'Product quantity updated!',
                          'data': OrderItemNewSerializer(order_item).data})
     except OrderItemNew.MultipleObjectsReturned:
-        order_items = order.stockbillitems_set.filter(product_variation=variation.id)
+        order_items = order.orderitemnew_set.filter(product_variation=variation.id)
         for i in range(1, len(order_items)):
             order_items[i].delete()
         return Response({'status': 'error',
@@ -124,5 +112,29 @@ def add_order_item(request):
         serializer = OrderItemNewSerializer(data=order_item_data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'status': 'order_item_add', 'response': 'Added Order Item.',
+                             'data': serializer.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def update_order_item(request):
+    order_item = OrderItemNew.objects.get(id=request.data['order_item_id'])
+    serializer = OrderItemNewSerializer(order_item, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'status': 'updated', 'response': 'Order item details updated.', 'data': serializer.data})
+
+
+def clear_cart(request):
+    if 'order_id' not in request.data.keys() and request.user.is_authenticated:
+        customer = request.user
+        order = OrderNew.objects.get(customer=customer, complete=False)
+
+    else:
+        order_id = request.data['order_id']
+        order = OrderNew.objects.get(pk=order_id)
+
+    order_items = order.orderitemnew_set.all()
+    for item in order_items:
+        item.delete()
+    return Response({'status': 'cart-cleared', 'response': 'Cleared cart successfully.'})
