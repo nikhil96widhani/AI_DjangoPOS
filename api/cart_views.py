@@ -4,7 +4,9 @@ from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.helper import get_variation_data, get_order_item_data, add_order_item, update_order_item, clear_cart
+from api.helper import get_variation_data, get_order_item_data, add_order_item, update_order_item, clear_cart, \
+    apply_order_discount, completeOrder
+
 from api.serializers import OrderItemNewSerializer, CartOrderSerializer, CartOrderNewSerializer
 from inventory.models_new import OrderNew, ProductVariation, OrderItemNew
 
@@ -34,6 +36,12 @@ def handle_order(request):
 
         elif action == 'clear-cart':
             return clear_cart(request)
+
+        elif action == 'order-discount':
+            return apply_order_discount(request)
+
+        elif action == 'complete-order':
+            return completeOrder(request)
 
         else:
             return Response({'status': 'unknown_request'})

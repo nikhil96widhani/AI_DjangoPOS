@@ -90,7 +90,10 @@ function loadCartData() {
             if (json.data.order.discount != null) {
                 discount = json.data.order.discount
                 remove_discount = `<button class="btn btn-sm btn-danger btn-rounded ml-3 py-0 px-2 my-0" 
-                                    onclick="updateUserOrder('${json.data.order.id}', 'remove_order_discount')">
+                                    onclick="updateOrderDetails({'order_id': ${json.data.order.id}, 
+                                    'action': 'order-discount', 
+                                    'sub-action': 'remove_order_discount'
+                                    }, true)">
                                     <i class="fas fa-times"></i></button>`
                 if (discount.is_percentage === true) discount = discount.value + '%'
                 else discount = '₹' + discount.value
@@ -190,6 +193,22 @@ $('#btn-clear-cart').click(() => {
     updateOrderDetails({'action': 'clear-cart'}, true)
 })
 
+$('#apply-order-discount').click(() => {
+    let value = document.getElementById('discount_value').value
+    let is_percentage = document.getElementById("discount_value_checkbox").checked
+    updateOrderDetails({'action': 'order-discount', 'sub-action': 'apply_discount',
+    'value': value, 'is_percentage': is_percentage}, true)
+})
+
+
+$('#quick-add-item').click(() => {
+    let name = document.getElementById('qa_name').value
+    let quantity = document.getElementById('qa_quantity').value
+    let discount_price = document.getElementById('qa_discount_price').value
+    updateOrderDetails({'action': 'add-order-item', 'quick_add_item_name': name,
+        'quantity': quantity, 'discount_price': discount_price}, true)
+})
+
 
 // Initialize with options
 onScan.attachTo(document, {
@@ -205,6 +224,17 @@ onScan.attachTo(document, {
     },
 });
 // END SCANNER INPUT
+
+
+function completePos() {
+    setTimeout(function () {
+        // $('#horizontal-stepper').nextStep();
+        window.location.reload();
+        $('#horizontal-stepper').nextStep();
+    }, 500);
+
+}
+
 
 
 //Old Functions ##############################################################
@@ -240,23 +270,6 @@ function product_search(value) {
 }
 
 
-function completePos() {
-    setTimeout(function () {
-        // $('#horizontal-stepper').nextStep();
-        window.location.reload();
-        $('#horizontal-stepper').nextStep();
-    }, 500);
-
-}
-
-
-// SCANNER INPUT
-// $(function () {
-//     $(document).pos();
-//     $(document).on('scan.pos.barcode', function (event) {
-//         updateUserOrder(event.code, 'add')
-//     });
-// });
 
 
 // Refund Calculator
@@ -294,73 +307,6 @@ function CompleteOrder() {
 $('#CashReceivedValue').on('input', function () {
     calculateRefund($(this).val())
 });
-
-function quickAddProduct() {
-    let url = "/api/cart/"
-    let name = document.getElementById('qa_name').value
-    let quantity = document.getElementById('qa_quantity').value
-    let discount_price = document.getElementById('qa_discount_price').value
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({
-            'name': name,
-            'discount_price': discount_price,
-            'quantity': quantity,
-            'action': 'quick_add'
-        })
-    })
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            // console.log(data)
-            // updated_product_id = data.id;
-            dataTable.DataTable().draw('page');
-            toastr.success(data.response_text)
-        }).catch(error => {
-        //Here is still promise
-        // console.log(error);
-        toastr.error('An error occurred please check the values entered')
-    })
-}
-
-
-function discountOrder() {
-    let url = "/api/cart/"
-    let value = document.getElementById('discount_value').value
-    let is_percentage = document.getElementById("discount_value_checkbox").checked
-
-    fetch(url, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({
-            'action': 'apply_discount',
-            'value': value,
-            'is_percentage': is_percentage,
-        })
-    })
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            // console.log(data)
-            dataTable.DataTable().draw('page');
-            toastr.success(data.response_text)
-        }).catch(error => {
-        //Here is still promise
-        // console.log(error);
-        toastr.error('An error occurred please check the value entered')
-    })
-}
-
 
 function open_receipt_and_reload(url) {
     // CompleteOrder()
