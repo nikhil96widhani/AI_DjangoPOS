@@ -33,6 +33,7 @@ function loadCartData() {
             if (data.id === updated_order_item_id) {
                 $(row).addClass('clicked');
             }
+            updated_order_item_id = 0;
         },
         'columns': [
             {'data': 'name', 'class': 'text-left font-weight-bold'},
