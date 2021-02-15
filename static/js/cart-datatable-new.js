@@ -122,6 +122,37 @@ function loadCartData() {
     });
 }
 
+const prepareAndFillProductVariationModal = (data) => {
+    let product_name = data.product_data.name
+    $('.product-variation-selectModal').modal('show');
+    const th = ["Product Code", "Product Name", "Cost", "MRP", "Discounted Price", "Quantity", "Weight", "Actions",]
+    let table_header = `<table class="table nowrap text-center custom-datatable" style="width:100%">
+                    <thead>
+                        <tr style="background: #e2e6ea">
+                            ${th.map(h => `<th>${h}</th>`).join('')}
+                        </tr>
+                    </thead><tbody>`
+    let table_data = data.variation_data.map(row => {
+        return `<tr>
+                <td>${row.product}</td>
+                <td>${product_name}</td>
+                <td>${row.cost}</td>
+                <td>${row.mrp}</td>
+                <td>${row.discount_price}</td>
+                <td>${row.quantity}</td>
+                <td>${row.weight}</td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"
+                    onclick="updateOrderDetails({'action': 'add-order-item', 'variation_id': ${row.id}}, true); 
+                    $('.product-variation-selectModal').modal('hide');"
+                    ><i class="fas fa-plus"></i></button>
+                </td>
+            </tr>`;
+    }).join('');
+    let table_footer = `</tbody></table>`;
+    $("#product-variation-select-datatable").html(table_header + table_data + table_footer);
+}
+
 function updateOrderDetails(data_json, reload_table, reload_page = false) {
     console.log(JSON.stringify(data_json))
     let url = "/api/handle-order/"
@@ -135,6 +166,10 @@ function updateOrderDetails(data_json, reload_table, reload_page = false) {
         data: JSON.stringify(data_json),
         success: function (data) {
             console.log(data)
+            if (data.multiple_variation_exists === true){
+                toastr.info('Multiple Variation Exists');
+                prepareAndFillProductVariationModal(data)
+            }
             if (reload_table === true) {
                 dataTable.DataTable().draw('page');
                 updated_order_item_id = data.data.id;
@@ -229,16 +264,13 @@ onScan.attachTo(document, {
 
 function completePos() {
     setTimeout(function () {
-        // $('#horizontal-stepper').nextStep();
-        window.location.reload();
+        let payment_mode = document.getElementById("payment-mode")
+        updateOrderDetails({'action': 'complete-order', 'payment_mode': payment_mode.value}, false, true)
         $('#horizontal-stepper').nextStep();
     }, 500);
 
 }
 
-
-
-//Old Functions ##############################################################
 function product_search(value) {
     let url = '/api/product-variation-search/';
 
@@ -270,10 +302,8 @@ function product_search(value) {
     });
 }
 
-
-
-
 // Refund Calculator
+
 function calculateRefund(cash) {
     let cart_total_amount = total_cart_value
     // cart_total_amount = parseInt(cart_total_amount.innerText)inventory_orderitem
@@ -288,26 +318,14 @@ function calculateRefund(cash) {
     }
 }
 
-function CompleteOrder() {
-    let payment_mode = document.getElementById("payment-mode")
-    let url = "/api/cart/"
-
-    $.ajax(url, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
-        },
-        data: JSON.stringify({'product_code': null, 'action': 'complete', 'payment-mode': payment_mode.value}),
-        success: function (data) {
-            // console.log(data)
-        }
-    })
-}
-
 $('#CashReceivedValue').on('input', function () {
     calculateRefund($(this).val())
 });
+
+
+//Old Functions ##############################################################
+
+
 
 function open_receipt_and_reload(url) {
     // CompleteOrder()

@@ -199,7 +199,7 @@
                                                     </button>
                                                     <button id="stepper-complete-order" type="button"
                                                             class="btn btn-success btn-md mr-1 btn-rounded next-step font-weight-500"
-                                                            onclick="updateOrderDetails({'action': 'complete-order'})" data-feedback="completePos">
+                                                            data-feedback="completePos">
                                                         Complete Order
                                                         <!-- <i class="fas fa-plus"></i> Font Awesome fontawesome.com -->
                                                     </button>
@@ -223,6 +223,7 @@
         <!-- Card -->
     </section>
     <!-- Buttons -->
+    {% include 'pos/components/modal-variations.html' %}
     {% include 'pos/components/pos-modal-whatsapp.html' %}
     {% include 'pos/components/pos-modal-calculator.html' %}
     {% include 'pos/components/pos-modal-quick-add.html' %}
