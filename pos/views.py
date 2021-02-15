@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from inventory.models import *
+from inventory.models_new import *
 
 
 # Create your views here.
@@ -10,7 +10,7 @@ from inventory.models import *
 def pos_homeView(request):
     if request.user.is_authenticated:
         customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = OrderNew.objects.get_or_create(customer=customer, complete=False)
         try:
             last_order_id = int(order.id) - 1
         except:
@@ -33,7 +33,7 @@ def pos_homeView(request):
 
 def receiptView(request, pk):
     try:
-        order = Order.objects.get(pk=pk)
+        order = OrderNew.objects.get(pk=pk)
         cart_items = order.orderitem_set.all()
         context = {
             'order': order,
@@ -51,7 +51,7 @@ def receiptView(request, pk):
 
 def productLabelView(request, pk):
     try:
-        product = Product.objects.get(product_code=pk)
+        product = ProductVariation.objects.get(product_code=pk)
         context = {
             'product': product,
         }
