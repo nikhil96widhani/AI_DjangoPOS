@@ -1,7 +1,9 @@
 const dataTable = $("#cart-datatable");
 const searchTable = $("#AllProductListLi");
+const multiple_variation_table = $("#product-variation-select-datatable");
 let updated_order_item_id = 0;
 let total_cart_value = 0;
+let variation_id_to_delete, scanned_product_code;
 
 const getDatatableInput = (order_item_id, name, value) => {
     return `<input class="form-control input-sm px-1 text-center update-order-item" type="number" min="0" 
@@ -144,8 +146,10 @@ const prepareAndFillProductVariationModal = (data) => {
                 <td>
                     <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"
                     onclick="updateOrderDetails({'action': 'add-order-item', 'variation_id': ${row.id}}, true); 
-                    $('.product-variation-selectModal').modal('hide');"
-                    ><i class="fas fa-plus"></i></button>
+                    $('.product-variation-selectModal').modal('hide');"><i class="fas fa-plus"></i></button>
+                    <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2 delete-variation" 
+                    data-variation-id="${row.id}">
+                    <i class="fas fa-trash"></i></button>
                 </td>
             </tr>`;
     }).join('');
@@ -166,17 +170,18 @@ function updateOrderDetails(data_json, reload_table, reload_page = false) {
         data: JSON.stringify(data_json),
         success: function (data) {
             console.log(data)
-            if (data.multiple_variation_exists === true){
+            if (data.multiple_variation_exists === true) {
                 toastr.info('Multiple Variation Exists');
                 prepareAndFillProductVariationModal(data)
-            }
-            if (reload_table === true) {
-                dataTable.DataTable().draw('page');
-                updated_order_item_id = data.data.id;
-                console.log(updated_order_item_id)
-            }
-            if (reload_page === true) {
-                window.location.reload();
+            } else {
+                if (reload_table === true) {
+                    dataTable.DataTable().draw('page');
+                    updated_order_item_id = data.data.id;
+                    console.log(updated_order_item_id)
+                }
+                if (reload_page === true) {
+                    window.location.reload();
+                }
             }
             // console.log(data)
         },
@@ -187,6 +192,30 @@ function updateOrderDetails(data_json, reload_table, reload_page = false) {
         // }
     })
 }
+
+function deleteProduct() {
+    let url = "/api/variations/" + variation_id_to_delete + "/";
+
+    $.ajax(url, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+    }).done(function () {
+        toastr.info('Product was deleted successfully.');
+        $('#deleteProductPrompt').modal('hide');
+        let url = '/api/product-and-variations/';
+        console.log(scanned_product_code)
+        $.getJSON(url, {
+            'product_code': scanned_product_code,
+            'action': 'product_variation_data'
+        }, response => prepareAndFillProductVariationModal(response))
+    }).fail(function () {
+        toastr.error('Unable to delete product! Please try again.');
+    })
+}
+
 
 //CallBacks
 dataTable.on('change', '.update-order-item', function () {
@@ -204,6 +233,17 @@ searchTable.on('click', '.add-variation-to-order', function () {
         'variation_id': this.getAttribute('data-variation-id'),
     }
     updateOrderDetails(data_json, true)
+});
+
+multiple_variation_table.on('click', '.delete-variation', function () {
+    variation_id_to_delete = this.getAttribute('data-variation-id');
+    // $('.product-variation-selectModal').modal('hide');
+    $('#deleteProductPrompt').modal('show');
+    $('#static-product-code-delete').empty().html(variation_id_to_delete);
+});
+
+$('#product-delete-yes').on('click', function (e) {
+    deleteProduct();
 });
 
 dataTable.on('click', '.update-quantity', function () {
@@ -232,8 +272,10 @@ $('#btn-clear-cart').click(() => {
 $('#apply-order-discount').click(() => {
     let value = document.getElementById('discount_value').value
     let is_percentage = document.getElementById("discount_value_checkbox").checked
-    updateOrderDetails({'action': 'order-discount', 'sub-action': 'apply_discount',
-    'value': value, 'is_percentage': is_percentage}, true)
+    updateOrderDetails({
+        'action': 'order-discount', 'sub-action': 'apply_discount',
+        'value': value, 'is_percentage': is_percentage
+    }, true)
 })
 
 
@@ -241,9 +283,20 @@ $('#quick-add-item').click(() => {
     let name = document.getElementById('qa_name').value
     let quantity = document.getElementById('qa_quantity').value
     let discount_price = document.getElementById('qa_discount_price').value
-    updateOrderDetails({'action': 'add-order-item', 'quick_add_item_name': name,
-        'quantity': quantity, 'discount_price': discount_price}, true)
+    updateOrderDetails({
+        'action': 'add-order-item', 'quick_add_item_name': name,
+        'quantity': quantity, 'discount_price': discount_price
+    }, true)
 })
+
+// $('#test-button').click(function () {
+//     let data_json = {
+//         'action': 'add-order-item',
+//         'product_code': '2008',
+//     }
+//     scanned_product_code = '2008';
+//     updateOrderDetails(data_json, true)
+// })
 
 
 // Initialize with options
@@ -252,6 +305,7 @@ onScan.attachTo(document, {
     reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
     onScan: function (sCode) { // Alternative to document.addEventListener('scan')
         console.log(sCode)
+        scanned_product_code = sCode;
         let data_json = {
             'action': 'add-order-item',
             'product_code': sCode,
@@ -259,6 +313,7 @@ onScan.attachTo(document, {
         updateOrderDetails(data_json, true)
     },
 });
+
 // END SCANNER INPUT
 
 
@@ -324,7 +379,6 @@ $('#CashReceivedValue').on('input', function () {
 
 
 //Old Functions ##############################################################
-
 
 
 function open_receipt_and_reload(url) {
