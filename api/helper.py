@@ -149,9 +149,7 @@ def clear_cart(request):
         order_id = request.data['order_id']
         order = OrderNew.objects.get(pk=order_id)
 
-    order_items = order.orderitemnew_set.all()
-    for item in order_items:
-        item.delete()
+    order.orderitemnew_set.all().delete()
     return Response({'status': 'cart-cleared', 'response': 'Cleared cart successfully.'})
 
 
