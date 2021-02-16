@@ -95,7 +95,7 @@
 
                                         <div class="col-sm-6">
                                             <button type="button" class="btn btn-md btn-indigo w-100 font-weight-500"
-                                                    data-toggle="modal" data-target="#whts-add-modal" disabled>Add
+                                                    data-toggle="modal" data-target="#add-customer-modal">Add
                                                 Customer
                                             </button>
                                         </div>
@@ -243,8 +243,8 @@
                     Product (Code - <span class="text-warning" id="static-product-code-delete"></span>) will be deleted.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="product-delete-yes">Yes</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" id="product-delete-yes">Yes</button>
                 </div>
             </div>
         </div>
@@ -252,9 +252,11 @@
 
     <!-- Buttons -->
     {% include 'pos/components/pos-modal-whatsapp.html' %}
+    {% include 'pos/components/add-customer-modal.html' %}
     {% include 'pos/components/pos-modal-calculator.html' %}
     {% include 'pos/components/pos-modal-quick-add.html' %}
     {% include 'pos/components/pos-modal-discount.html' %}
+
 
 {% endblock %}
 

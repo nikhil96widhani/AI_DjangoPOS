@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from accounts.models import User
+from accounts.models import User , PosCustomer
 from django.utils.timezone import now
 from datetime import date
 
@@ -225,6 +225,7 @@ class StockBillItems(models.Model):
 
 class OrderNew(models.Model):
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    pos_customer = models.ForeignKey(PosCustomer, on_delete=models.SET_NULL, blank=True, null=True)
     date_order = models.DateTimeField(default=now, editable=False)
     payment_mode = models.CharField(max_length=10, choices=Payment_mode, default="Cash", blank=True, null=True)
     cart_revenue = models.FloatField(null=True, blank=True)

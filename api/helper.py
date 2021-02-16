@@ -1,6 +1,7 @@
 from django.db.models import F
 from rest_framework import status
 from rest_framework.response import Response
+from accounts.models import PosCustomer
 
 from .serializers import *
 
@@ -186,4 +187,17 @@ def completeOrder(request):
     return Response(
         {"status": "completed",
          "response": "Order Closed/completed"}
+    )
+
+
+def addCustomer(request):
+    order, order_id = getOrderData(request)
+    phone_number = int(request.data['phone_number']) if request.data['phone_number'] is not '' or None else None
+    customer, created = PosCustomer.objects.get_or_create(name=request.data['name'],
+                                                          phone_number=phone_number)
+    order.pos_customer = customer
+    order.save()
+    return Response(
+        {"status": 'added',
+         "response": "Customer was successfully added"}
     )

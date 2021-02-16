@@ -80,6 +80,7 @@ function loadCartData() {
                                     title="Delete Product" data-action="delete">
                                 <i class="fas fa-trash"></i>
                             </button>`
+
                 },
                 "orderable": false,
             },
@@ -144,12 +145,12 @@ const prepareAndFillProductVariationModal = (data) => {
                 <td>${row.quantity}</td>
                 <td>${row.weight}</td>
                 <td>
-                    <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"
-                    onclick="updateOrderDetails({'action': 'add-order-item', 'variation_id': ${row.id}}, true); 
-                    $('.product-variation-selectModal').modal('hide');"><i class="fas fa-plus"></i></button>
-                    <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2 delete-variation" 
+                    <button type="button" class="btn btn-danger btn-sm m-0 p-1 px-2 delete-variation" 
                     data-variation-id="${row.id}">
                     <i class="fas fa-trash"></i></button>
+                    <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2 ml-2"
+                    onclick="updateOrderDetails({'action': 'add-order-item', 'variation_id': ${row.id}}, true); 
+                    $('.product-variation-selectModal').modal('hide');"><i class="fas fa-plus"></i></button>
                 </td>
             </tr>`;
     }).join('');
@@ -157,7 +158,7 @@ const prepareAndFillProductVariationModal = (data) => {
     $("#product-variation-select-datatable").html(table_header + table_data + table_footer);
 }
 
-function updateOrderDetails(data_json, reload_table, reload_page = false) {
+function updateOrderDetails(data_json, reload_table, reload_page = false, toast_message = false) {
     console.log(JSON.stringify(data_json))
     let url = "/api/handle-order/"
 
@@ -181,6 +182,9 @@ function updateOrderDetails(data_json, reload_table, reload_page = false) {
                 }
                 if (reload_page === true) {
                     window.location.reload();
+                }
+                if (toast_message ===true){
+                    toastr.success(data.response);
                 }
             }
             // console.log(data)
@@ -278,6 +282,14 @@ $('#apply-order-discount').click(() => {
     }, true)
 })
 
+$('#add-customer').click(() => {
+    let name = document.getElementById('cus_name').value
+    let phone_number = document.getElementById("cus_number").value
+    updateOrderDetails({
+        'action': 'add-customer', 'name': name,
+        'phone_number': phone_number,
+    }, false, false, true)
+})
 
 $('#quick-add-item').click(() => {
     let name = document.getElementById('qa_name').value
