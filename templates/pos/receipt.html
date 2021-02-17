@@ -34,6 +34,15 @@
         </div>
         <!-- END HEADER RECEIPT -->
 
+        {% if order.pos_customer %}
+            <div class="text-left pb-2 font-weight-bold">
+                Customer Name
+                <span class="float-right">
+                        {{ order.pos_customer.name }}
+                    </span>
+            </div>
+        {% endif %}
+
         <!-- RECEIPT BODY -->
         <div>
             <!-- RECEIPT BODY - Order Items -->
@@ -62,8 +71,8 @@
                 <tbody>
             </table>
             {% for a in cart_items %}
-                <div class="product-name font-weight-500">{{ a.product_name }}
-                    {% if a.product.weight %}, {{ a.product.weight }}{{ a.product.weight_unit }}
+                <div class="product-name font-weight-500">{{ a.product.name }}
+                    {% if a.weight %}, {{ a.weight }}{{ a.weight_unit }}
                     {% endif %}</div>
                 <table class="text-left ml-2 w-100">
                     <tr>
@@ -120,22 +129,25 @@
             <div class="h5">M.R.P TOTAL: <i class="las la-rupee-sign la-1x"></i>{{ order.get_cart_mrp }} </div>
             <div class="h5 font-weight-bold">YOU SAVED: <i class="las la-rupee-sign la-1x"></i>{{ savings }}</div>
             <br>
-            <div class="font-weight-bold h4">NET PAYABLE: <i class="las la-rupee-sign la-lg"></i>{{ order.get_cart_revenue }} </div>
+            <div class="font-weight-bold h4">NET PAYABLE: <i
+                    class="las la-rupee-sign la-lg"></i>{{ order.get_cart_revenue }} </div>
         </div>
         <!-- END RECEIPT BODY -->
 
         <!-- TNC and Credits -->
         <div class="border-dark border-top py-2">
             <div class="font-weight-bold text-center footer-text-small pb-1">Terms & Conditions</div>
-                <ul class="footer-text-smallul">
-                    <li>No Return on goods sold</li>
-                    <li>Non discounted goods can be exchanged within 3 days</li>
-                    <li>Opened items will not be exchanged</li>
-                    <li>Whole grains will not be taken back</li>
-                    <li>This bill will be visible for only 10 days</li>
-                    <li>Subject to BHOPAL Jurisdiction</li>
-                </ul>
-            <div class="text-center border-dark border-dotted footer-text-small py-1">Thank you for shopping at ShopRight Supermarket Hope to see you again!</div>
+            <ul class="footer-text-smallul">
+                <li>No Return on goods sold</li>
+                <li>Non discounted goods can be exchanged within 3 days</li>
+                <li>Opened items will not be exchanged</li>
+                <li>Whole grains will not be taken back</li>
+                <li>This bill will be visible for only 10 days</li>
+                <li>Subject to BHOPAL Jurisdiction</li>
+            </ul>
+            <div class="text-center border-dark border-dotted footer-text-small py-1">Thank you for shopping at
+                ShopRight Supermarket Hope to see you again!
+            </div>
         </div>
         <!-- END TNC and Credits -->
     </div>

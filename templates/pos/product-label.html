@@ -23,7 +23,7 @@
     <div class="card-body product-label pt-0">
         <div class="row pt-0">
             <div class="product-name pt-1">
-                {{ product.name|truncatechars:35 }}
+                {{ product.product.name|truncatechars:35 }}
             </div>
             <span class="product-name pt-1">
             {% if product.weight %}
@@ -63,7 +63,7 @@
     <button id="btnPrint" class="hidden-print">Print</button>
     <script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>
     <script type="text/javascript">
-        JsBarcode("#barcode-text", '{{ product.product_code }}', {
+        JsBarcode("#barcode-text", '{{ product.product.product_code }}', {
             format: "CODE128",
             {#ean128: true,#}
             font: "monospace",

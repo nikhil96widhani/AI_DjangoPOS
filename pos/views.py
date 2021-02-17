@@ -34,7 +34,7 @@ def pos_homeView(request):
 def receiptView(request, pk):
     try:
         order = OrderNew.objects.get(pk=pk)
-        cart_items = order.orderitem_set.all()
+        cart_items = order.orderitemnew_set.all()
         context = {
             'order': order,
             'cart_items': cart_items,
@@ -51,7 +51,7 @@ def receiptView(request, pk):
 
 def productLabelView(request, pk):
     try:
-        product = ProductVariation.objects.get(product_code=pk)
+        product = ProductVariation.objects.get(id=pk)
         context = {
             'product': product,
         }

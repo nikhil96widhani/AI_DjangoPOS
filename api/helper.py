@@ -180,14 +180,20 @@ def apply_order_discount(request):
 
 def completeOrder(request):
     order, order_id = getOrderData(request)
-    order.complete = True
-    if request.data.get('payment_mode'):
-        order.payment_mode = request.data['payment_mode']
-    order.save()
-    return Response(
-        {"status": "completed",
-         "response": "Order Closed/completed"}
-    )
+    if len(order.orderitemnew_set.all()) >= 1:
+        order.complete = True
+        if request.data.get('payment_mode'):
+            order.payment_mode = request.data['payment_mode']
+        order.save()
+        return Response(
+            {"status": "completed",
+             "response": "Order Closed/completed"}
+        )
+    else:
+        return Response(
+            {"status": "not-complete",
+             "response": "Order empty, didn't complete order"}
+        )
 
 
 def addCustomer(request):

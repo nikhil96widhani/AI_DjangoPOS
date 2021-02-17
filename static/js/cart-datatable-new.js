@@ -337,6 +337,17 @@ function completePos() {
     }, 500);
 
 }
+async function open_receipt_and_reload(url) {
+    let payment_mode = document.getElementById("payment-mode")
+    await updateOrderDetails({'action': 'complete-order', 'payment_mode': payment_mode.value})
+
+    //Open in new tab
+    window.open(url, '_blank');
+    //focus to that window
+    window.focus();
+    //reload current page
+    location.reload();
+}
 
 function product_search(value) {
     let url = '/api/product-variation-search/';
@@ -393,38 +404,38 @@ $('#CashReceivedValue').on('input', function () {
 //Old Functions ##############################################################
 
 
-function open_receipt_and_reload(url) {
-    // CompleteOrder()
-    // //Open in new tab
-    // window.open(url, '_blank');
-    // //focus to that window
-    // window.focus();
-    // //reload current page
-    // location.reload();
-
-
-    let payment_mode = document.getElementById("payment-mode")
-    let url2 = "/api/cart/"
-
-    $.ajax(url2, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
-        },
-        data: JSON.stringify({'product_code': null, 'action': 'complete', 'payment-mode': payment_mode.value}),
-        complete: function () {
-            //Open in new tab
-            window.open(url, '_blank');
-            //focus to that window
-            window.focus();
-            //reload current page
-
-            location.reload();
-        }
-    })
-
-}
+// function open_receipt_and_reload(url) {
+//     // CompleteOrder()
+//     // //Open in new tab
+//     // window.open(url, '_blank');
+//     // //focus to that window
+//     // window.focus();
+//     // //reload current page
+//     // location.reload();
+//
+//
+//     let payment_mode = document.getElementById("payment-mode")
+//     let url2 = "/api/cart/"
+//
+//     $.ajax(url2, {
+//         method: 'PUT',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': csrftoken,
+//         },
+//         data: JSON.stringify({'product_code': null, 'action': 'complete', 'payment-mode': payment_mode.value}),
+//         complete: function () {
+//             //Open in new tab
+//             window.open(url, '_blank');
+//             //focus to that window
+//             window.focus();
+//             //reload current page
+//
+//             location.reload();
+//         }
+//     })
+//
+// }
 
 
 $(document).ready(function () {
