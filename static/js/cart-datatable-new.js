@@ -158,11 +158,11 @@ const prepareAndFillProductVariationModal = (data) => {
     $("#product-variation-select-datatable").html(table_header + table_data + table_footer);
 }
 
-function updateOrderDetails(data_json, reload_table, reload_page = false, toast_message = false) {
+async function updateOrderDetails(data_json, reload_table = false, reload_page = false, toast_message = false) {
     console.log(JSON.stringify(data_json))
     let url = "/api/handle-order/"
 
-    $.ajax(url, {
+    await $.ajax(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ function updateOrderDetails(data_json, reload_table, reload_page = false, toast_
                 if (reload_page === true) {
                     window.location.reload();
                 }
-                if (toast_message ===true){
+                if (toast_message === true) {
                     toastr.success(data.response);
                 }
             }
@@ -228,7 +228,7 @@ dataTable.on('change', '.update-order-item', function () {
         'order_item_id': this.getAttribute('data-order-item-id'),
         [this.name]: this.value
     }
-    updateOrderDetails(data_json, true)
+    updateOrderDetails(data_json, true, true)
 });
 
 searchTable.on('click', '.add-variation-to-order', function () {
@@ -337,14 +337,16 @@ function completePos() {
     }, 500);
 
 }
+
 async function open_receipt_and_reload(url) {
     let payment_mode = document.getElementById("payment-mode")
     await updateOrderDetails({'action': 'complete-order', 'payment_mode': payment_mode.value})
 
-    //Open in new tab
-    window.open(url, '_blank');
+    console.log('Order Details Completed')
     //focus to that window
     window.focus();
+    // //Open in new tab
+    window.open(url, '_blank');
     //reload current page
     location.reload();
 }
