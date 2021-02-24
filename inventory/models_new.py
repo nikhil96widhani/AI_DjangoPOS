@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from accounts.models import User , PosCustomer
+from accounts.models import User, PosCustomer
 from django.utils.timezone import now
 from datetime import date
 
@@ -297,13 +297,13 @@ class OrderItemNew(models.Model):
     product = models.ForeignKey(ProductNew, on_delete=models.SET_NULL, blank=True, null=True)
     variation = models.ForeignKey(ProductVariation, on_delete=models.SET_NULL, blank=True, null=True)
     discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True)
-    
+
     # Copied Values
     ##########################################################################
     # Product Values
     product_code = models.CharField(max_length=30, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
-    
+
     # Variation Values
     weight = models.IntegerField(blank=True, null=True)
     weight_unit = models.CharField(max_length=9, blank=True, null=True)
@@ -311,7 +311,7 @@ class OrderItemNew(models.Model):
     mrp = models.FloatField(null=True, blank=True)
     discount_price = models.FloatField(null=True, blank=True)
     ##########################################################################
-    
+
     # Extra
     amount = models.FloatField(null=True, blank=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)

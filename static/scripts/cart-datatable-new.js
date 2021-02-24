@@ -32,10 +32,11 @@ function loadCartData() {
             footer: true
         },
         "rowCallback": function (row, data, dataIndex) {
+            console.log('From Table - ' + updated_order_item_id)
             if (data.id === updated_order_item_id) {
                 $(row).addClass('clicked');
             }
-            updated_order_item_id = 0;
+            // updated_order_item_id = 0;
         },
         'columns': [
             {'data': 'name', 'class': 'text-left font-weight-bold'},
@@ -177,8 +178,10 @@ async function updateOrderDetails(data_json, reload_table = false, reload_page =
             } else {
                 if (reload_table === true) {
                     dataTable.DataTable().draw('page');
-                    updated_order_item_id = data.data.id;
-                    console.log(updated_order_item_id)
+                    if (data.status !== 'cart-cleared'){
+                        updated_order_item_id = data.data.id;
+                        console.log(updated_order_item_id)
+                    }
                 }
                 if (reload_page === true) {
                     window.location.reload();

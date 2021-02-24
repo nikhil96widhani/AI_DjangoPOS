@@ -125,16 +125,17 @@ def order_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# Fixed -- Changed to New Order Api
 class OrdersListView(generics.ListAPIView):
-    queryset = Order.objects.filter(complete=True).order_by('-date_order')
-    serializer_class = OrderSerializer
+    queryset = OrderNew.objects.filter(complete=True).order_by('-date_order')
+    serializer_class = OrderNewSerializer
 
     def list(self, request, *args, **kwargs):
         temp_queryset = self.get_queryset()
         if request.GET.get("date1") and request.GET.get("date2"):
             date1 = datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
             date2 = datetime.strptime(request.GET.get("date2"), '%Y-%m-%d') + timedelta(days=1)
-            temp_queryset = Order.objects.filter(complete=True).filter(date_order__range=[date1, date2]).order_by(
+            temp_queryset = OrderNew.objects.filter(complete=True).filter(date_order__range=[date1, date2]).order_by(
                 '-date_order')
 
         queryset = self.filter_queryset(temp_queryset)
@@ -147,11 +148,14 @@ class OrdersListView(generics.ListAPIView):
         return Response(serializer.data)
 
 
+# Fixed -- Changed to New Order Items Api
 class OrderItemsView(APIView):
     @staticmethod
     def get(request):
-        order_items = OrderItem.objects.filter(order=request.GET.get("order_id"))
-        order_item_serializer = OrderItemSerializer(order_items, many=True)
+        # order_items = OrderItem.objects.filter(order=request.GET.get("order_id"))
+        order = OrderNew.objects.get(pk=request.GET.get("order_id"))
+        order_items = order.orderitemnew_set.all()
+        order_item_serializer = OrderItemNewSerializer(order_items, many=True)
         return Response({'order_items': order_item_serializer.data})
 
 

@@ -10,4 +10,5 @@ urlpatterns = [
     path('products/', products_view, name='products'),
     path('add-product/', add_product_view, name='add-product'),
     path('update-inventory-by-bill/', updateInventoryByBill, name='update-inventory-by-bill'),
+    path('stock-bills-datatable/', stock_bills_datatable_view, name='stock-bills-datatable'),
 ]

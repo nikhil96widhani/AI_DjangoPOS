@@ -68,11 +68,13 @@
                 <ul class="collapsible collapsible-accordion">
                     <li><a href="{% url 'pos-home' %}" class="waves-effect"><i
                             class="fas fa-rupee-sign"></i>POS</a></li>
-                    <li><a class="collapsible-header waves-effect"><i class="fas fas fa-warehouse"></i>Inventory<i
+                    <li><a class="collapsible-header waves-effect"><i class="fas fas fa-book"></i>Inventory<i
                             class="fas fa-angle-down pl-5"></i></a></li>
                     <li>
                     <li><a href="{% url 'products' %}" class="waves-effect pl-5">
                         <i class="fas fa-layer-group"></i>All Products</a>
+                    <li><a href="{% url 'stock-bills-datatable' %}" class="waves-effect pl-5">
+                        <i class="fas fa-receipt"></i>Stock Bills</a>
                     <li><a href="{% url 'update-inventory-by-bill' %}" class="waves-effect pl-5">
                         <i class="fas fa-truck"></i>Add Stock</a>
                     {#                    <li>#}
@@ -86,7 +88,7 @@
                     {#                            </ul>#}
                     {#                        </div>#}
                     {#                    </li>#}
-                    <li><a class="collapsible-header waves-effect"><i class="fas fa-border-all"></i>Reports<i
+                    <li><a class="collapsible-header waves-effect"><i class="fas fa-chart-bar"></i>Reports<i
                             class="fas fa-angle-down pl-5"></i></a></li>
                     <li>
                     <li><a href="{% url 'orders-datatable' %}" class="waves-effect pl-5">
@@ -94,7 +96,7 @@
                     <li><a href="{% url 'dashboard' %}" class="waves-effect pl-5">
                         <i class="fas fa-chart-line"></i>Dashboard</a>
                     <li><a href="{% url 'update-inventory' %}" class="waves-effect">
-                        <i class="far fa-edit"></i>Update Inventory</a></li>
+                        <i class="fas fa-edit"></i>Update Inventory</a></li>
                     <li>
                     <li><a href="{% url 'settings' %}" class="waves-effect">
                         <i class="fas fa-cog"></i>Settings</a></li>
@@ -293,7 +295,7 @@
 <script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/steppers.js' %}"></script>
 <!--Custom scripts-->
-<script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/scripts.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/darkmode.js' %}"></script>
 <script>

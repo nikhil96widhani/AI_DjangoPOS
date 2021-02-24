@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F, Q
 from django.utils.crypto import get_random_string
@@ -13,9 +15,17 @@ from .helper import *
 from inventory.models_new import *
 
 
+def get_default_vendor(bill):
+    if bill.vendor is None:
+        vendor, created = Vendor.objects.get_or_create(name='unknown')
+        return vendor
+    else:
+        return bill.vendor
+
+
 class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
     queryset = StockBillItems.objects.none()
-    serializer_class = bill_items_serializer
+    serializer_class = StockBillItemSerializer
 
     def get(self, request, format=None):
         bill_id = request.GET.get("bill_id")
@@ -37,6 +47,15 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
             Response(content, status=status.HTTP_404_NOT_FOUND)
 
     @staticmethod
+    def delete(request):
+        print('delete')
+        bill_id = request.data["bill_id"]
+        print('id ' + bill_id)
+        bill = StockBill.objects.get(pk=bill_id)
+        bill.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @staticmethod
     def post(request):
         action = request.data['action']
         message = 'Error Updating Data'
@@ -49,21 +68,23 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
                 bill.save()
                 message = 'Bill vendor successfully updated'
             else:
-                serializer = BillSerializer(bill, data=request.data, partial=True)
+                serializer = StockBillSerializer(bill, data=request.data, partial=True)
                 if serializer.is_valid():
                     serializer.save()
                     message = 'Bill data successfully updated'
         elif action == 'update_bill_item':
             bill_item = StockBillItems.objects.get(id=request.data['id'])
-            serializer = bill_items_serializer(bill_item, data=request.data, partial=True)
+            serializer = StockBillItemSerializer(bill_item, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 message = 'Bill item was successfully updated'
+
         elif action == 'delete_billItem':
             billItem_id = request.data['billItem_id']
             billItem = StockBillItems.objects.get(id=billItem_id)
             billItem.delete()
             message = 'Successfully removed item'
+
         elif action == 'complete_and_update':
             bill_id = request.GET.get("bill_id")
             if bill_id is None and request.user.is_authenticated:
@@ -72,6 +93,7 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
                 bill_items = bill.stockbillitems_set.all()
                 updateProducts_fromBillItems(bill_items)
                 bill.complete = True
+                bill.vendor = get_default_vendor(bill)
                 bill.save()
                 message = 'Bill Saved'
             elif bill_id:
@@ -80,6 +102,7 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
                     bill_items = bill.stockbillitems_set.all()
                     updateProducts_fromBillItems(bill_items)
                     bill.complete = True
+                    bill.vendor = get_default_vendor(bill)
                     bill.save()
                     message = 'Bill Saved'
                 except ObjectDoesNotExist:
@@ -275,7 +298,7 @@ def add_bill_item(request):
             bill_item_data = {'stock_bill': stock_bill, **get_bill_item_data(variation)}
 
             # Save bill item
-            serializer = bill_items_serializer(data=bill_item_data)
+            serializer = StockBillItemSerializer(data=bill_item_data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -291,3 +314,35 @@ class VendorListView(APIView):
         else:
             vendors = Vendor.objects.all()[:10].values_list('name', flat=True)
         return Response({'suggestions': vendors})
+
+
+# Fixed -- Datatable for stock bills
+class StockBillsListView(generics.ListAPIView):
+    queryset = StockBill.objects.filter(complete=True).order_by('-date_ordered')
+    serializer_class = StockBillSerializer
+
+    def list(self, request, *args, **kwargs):
+        temp_queryset = self.get_queryset()
+        if request.GET.get("date1") and request.GET.get("date2"):
+            date1 = datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
+            date2 = datetime.strptime(request.GET.get("date2"), '%Y-%m-%d') + timedelta(days=1)
+            temp_queryset = StockBill.objects.filter(complete=True).filter(date_ordered__range=[date1, date2]).order_by(
+                '-date_ordered')
+
+        queryset = self.filter_queryset(temp_queryset)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class StockBillItemsView(APIView):
+    @staticmethod
+    def get(request):
+        stock_bill = StockBill.objects.get(pk=request.GET.get("order_id"))
+        stock_bill_items = stock_bill.stockbillitems_set.all()
+        stock_bill_item_serializer = StockBillItemSerializer(stock_bill_items, many=True)
+        return Response({'stock_bill_items': stock_bill_item_serializer.data})

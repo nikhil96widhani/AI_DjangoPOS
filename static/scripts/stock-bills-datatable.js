@@ -1,9 +1,9 @@
-let order_id_to_delete;
-const dataTable = $("#orders-datatable");
+let stock_bill_id_to_delete;
+const dataTable = $("#stock-bills-datatable");
 
-function loadOrderDetails(order_id, selector) {
+function loadStockBillDetails(order_id, selector) {
     selector.html('Loading...');
-    let url = '/api/order-items/';
+    let url = '/api/stock-bill-items/';
 
     let html = `<table class="table table-sm table-hover table-active">
                   <thead>
@@ -11,7 +11,7 @@ function loadOrderDetails(order_id, selector) {
                       <th scope="col" class="font-weight-bolder">#</th>
                       <th scope="col" class="font-weight-bolder">Product Code</th>
                       <th scope="col" class="font-weight-bolder">Product Name</th>
-                      <th scope="col" class="font-weight-bolder">Quantity</th>
+                      <th scope="col" class="font-weight-bolder">Stock</th>
                       <th scope="col" class="font-weight-bolder">Cost (₹)</th>
                       <th scope="col" class="font-weight-bolder">MRP (₹)</th>
                       <th scope="col" class="font-weight-bolder">Final Price (₹)</th>
@@ -29,12 +29,12 @@ function loadOrderDetails(order_id, selector) {
         success: function (data) {
             console.log(data);
             let count = 1;
-            $.each(data["order_items"], function (key, value) {
+            $.each(data["stock_bill_items"], function (key, value) {
                 html += `<tr>
                           <td>${count}</td>
                           <td>${value.product_code}</td>
-                          <td>${value.product_name}</td>
-                          <td>${value.quantity}</td>
+                          <td>${value.name}</td>
+                          <td>${value.stock}</td>
                           <td>${value.cost}</td>
                           <td>${value.mrp}</td>
                           <td>${value.discount_price}</td>
@@ -45,7 +45,7 @@ function loadOrderDetails(order_id, selector) {
             html += '</tbody></table>';
         },
         error: function () {
-            html = 'Could not fetch Order Details! Please Try Again.'
+            html = 'Could not fetch Stock Bill Details! Please Try Again.'
         },
         complete: function () {
             selector.html(html).slideDown(200);
@@ -57,20 +57,20 @@ function format() {
     return '<div class="slider text-center" style="display: none">Loading...</div>';
 }
 
-function loadOrdersData(date1, date2) {
-    let url = '/api/orders-datatable/?format=datatables';
+function loadStockBillsData(date1, date2) {
+    let url = '/api/stock-bills-datatable/?format=datatables';
     if (date1 !== null && date2 !== null) {
-        url = `/api/orders-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
+        url = `/api/stock-bills-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
     }
     return dataTable.DataTable({
         'ajax': url,
         "fnInitComplete": function () {
-            const myCustomScrollbar = document.querySelector('#orders-datatable_wrapper .dataTables_scrollBody');
+            const myCustomScrollbar = document.querySelector('#stock-bills-datatable_wrapper .dataTables_scrollBody');
             const ps = new PerfectScrollbar(myCustomScrollbar);
         },
         "language": {
             "zeroRecords": `<div class="alert alert-warning text-center" role="alert">
-                            No orders found for your search! 
+                            No stock bills found! 
                            </div>`
         },
         'columns': [
@@ -85,35 +85,35 @@ function loadOrdersData(date1, date2) {
             },
             {'data': 'id',},
             {
-                'data': 'date_order',
+                'data': 'date_ordered',
                 render: function (data) {
                     return dateFormat(data, "d mmm yyyy (HH:MM)");
                 }
             },
-            {'data': 'cart_quantity'},
-            {'data': 'payment_mode'},
-            {'data': 'cart_cost'},
-            {'data': 'cart_mrp'},
-            {'data': 'cart_revenue'},
-            {'data': 'cart_profit'},
+            {'data': 'name', render: handleBlankData},
+            {'data': 'vendor.name', render: handleBlankData},
+            {'data': 'bill_quantity'},
+            {'data': 'bill_cost'},
+            {'data': 'bill_mrp'},
+            {'data': 'bill_revenue'},
+            {'data': 'bill_profit'},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
-                    return `<a class="pr-3" href="/pos/receipt/${data}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
-                            <a class=""><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" 
-                                onclick="deleteOrderConfirmation('${data}')"></i></a>`;
+                    return `<a class=""><i class="fa fa-trash stock-bill-delete" aria-hidden="true" data-toggle="modal" 
+                            data-target="#deleteStockBillPrompt" data-stock-bill-id="${data}"></i></a>`;
                 }
             },
         ],
     });
 }
 
-function deleteOrderConfirmation(order_id) {
-    order_id_to_delete = order_id;
-    $('#static-order-id-delete').empty().html(order_id_to_delete);
-}
+dataTable.on('click', '.stock-bill-delete', function () {
+    stock_bill_id_to_delete = this.getAttribute('data-stock-bill-id');
+    $('#static-stock-bill-id-delete').empty().html(stock_bill_id_to_delete);
+});
 
-function deleteOrder() {
-    let url = "/api/orders/" + order_id_to_delete + "/";
+function deleteStockBill() {
+    let url = "/api/stock-bill/";
 
     $.ajax(url, {
         method: 'DELETE',
@@ -121,21 +121,21 @@ function deleteOrder() {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
+        data: JSON.stringify({'bill_id': stock_bill_id_to_delete}),
     }).done(function () {
         dataTable.DataTable().draw(false);
-        toastr.info('Order was deleted successfully.');
+        toastr.info('Stock Bill was deleted successfully.');
         $('.close').click();
     }).fail(function () {
-        toastr.error('Unable to delete order! Please try again.');
+        toastr.error('Unable to delete stock bill! Please try again.');
     })
 }
 
-function loadOrdersDatatable(date1 = null, date2 = null) {
-    $('#orders-datatable thead tr').clone(true).appendTo('#orders-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2").attr("style", "background: #f8f9fa");
-    $('#orders-datatable thead tr:eq(1) th').each(function (i) {
-        const title = $(this).text();
+function loadStockBillsDatatable(date1 = null, date2 = null) {
+    $('#stock-bills-datatable thead tr').clone(true).appendTo('#stock-bills-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2").attr("style", "background: #f8f9fa");
+    $('#stock-bills-datatable thead tr:eq(1) th').each(function (i) {
         $(this).html(`<input type="text" class="form-control form-control-sm ml-1"/>`);
-        if (i === 9) {
+        if (i === 10) {
             $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button" onclick="resetAdvanceSearch()"><i class="fa fa-close" style="font-size: larger" aria-hidden="true"></i></div>');
         } else if (i === 2) {
             $(this).html(`<input type="date" class="form-control form-control-sm ml-1"/>`);
@@ -152,9 +152,9 @@ function loadOrdersDatatable(date1 = null, date2 = null) {
             }
         });
     });
-    const table = loadOrdersData(date1, date2);
+    const table = loadStockBillsData(date1, date2);
 
-    $('#orders-datatable tbody').on('click', 'td.details-control', function () {
+    $('#stock-bills-datatable tbody').on('click', 'td.details-control', function () {
         let tr = $(this).closest('tr');
         let row = table.row(tr);
 
@@ -182,20 +182,20 @@ function loadOrdersDatatable(date1 = null, date2 = null) {
                     });
                 }
             });
-            loadOrderDetails(row.data().id, $('div.slider', row.child()));
+            loadStockBillDetails(row.data().id, $('div.slider', row.child()));
         }
     });
 }
 
 function updateOrdersDatatableRows(date1, date2) {
-    let url = `/api/orders-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
+    let url = `/api/stock-bills-datatable/?format=datatables&date1=${date1}&date2=${date2}`;
     let datatable = dataTable.DataTable();
     datatable.clear().draw();
     datatable.ajax.url(url).load();
 }
 
-$('#order-delete-yes').on('click', function (e) {
-    deleteOrder();
+$('#stock-bill-delete-yes').on('click', function (e) {
+    deleteStockBill();
 });
 
 $(function () {

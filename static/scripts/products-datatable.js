@@ -1,4 +1,4 @@
-let product_code_to_update, product_code_to_delete, variation_id_to_update, variation_id_to_delete;
+let product_code_to_update, variation_id_to_update, variation_id_to_delete;
 const dataTable = $("#products-datatable");
 const common_product_category_selector = $('.product_categories');
 const edit_product_category_selector = $('#edit_product_categories');
@@ -33,6 +33,7 @@ const addProductDetails = function (product_form_selector, variation_form_select
             $(variation_form_selector).trigger('reset');
             $('#product_code').removeAttr('disabled');
             common_product_category_selector.tagator('refresh');
+            $('#addProductModalForm').modal('hide');
             dataTable.DataTable().draw(false);
         },
         error: function () {
@@ -49,8 +50,8 @@ function generateProductCode(checkbox) {
         let url = '/api/product-code-generator/';
 
         $.getJSON(url, {}, function (response) {
-            console.log(response.unique_product_code);
-            product_code_text_field_selector.val(response.unique_product_code);
+            console.log(response["unique_product_code"]);
+            product_code_text_field_selector.val(response["unique_product_code"]);
             product_code_text_field_selector.attr('disabled', 'disabled');
         });
     } else {
@@ -79,11 +80,11 @@ function loadProductsData() {
         'ajax': '/api/variations/?format=datatables',
         "fnInitComplete": function () {
             const myCustomScrollbar = document.querySelector('#products-datatable_wrapper .dataTables_scrollBody');
-            const ps = new PerfectScrollbar(myCustomScrollbar);
+            new PerfectScrollbar(myCustomScrollbar);
         },
         "language": {
             "zeroRecords": `<div class="alert alert-warning text-center" role="alert">
-                            No products found for your search! 
+                            No products found! 
                             <a href="#" class="text-primary" data-toggle="modal" data-target="#addProductModalForm">Click Here to add product.</a></div>`
         },
         select: true,
@@ -114,7 +115,7 @@ function loadProductsData() {
                     return `<a class="pr-3" href="/pos/product-label/${data}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
                             <a class="pr-3"><i class="fa fa-plus" aria-hidden="true" data-toggle="modal" data-target="#addVariationModalForm" onclick="addAndUpdateVariationButtonAction('add-variation', '${data}', '${row.product.product_code}')"></i></a>
                             <a class="pr-3"><i class="fa fa-pen" aria-hidden="true" data-toggle="modal" data-target="#editProductModalForm" onclick="addAndUpdateVariationButtonAction('edit', '${data}', '${row.product.product_code}')"></i></a>
-                            <a class=""><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${data}')"></i></a>`;
+                            <a class=""><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteProductPrompt" onclick="deleteProductConfirmation('${data}', '${row.product.product_code}')"></i></a>`;
                 }
             },
             {'data': 'quantity_unit', "visible": false},
@@ -123,27 +124,27 @@ function loadProductsData() {
     });
 }
 
-function editProductDetails(variation_id, product_code) {
-    variation_id_to_update = variation_id;
-    product_code_to_update = product_code;
-    let url = '/api/variations/' + variation_id_to_update;
-    $('#static-product-code').empty().html(product_code_to_update);
-
-    $.getJSON(url, {}, function (response) {
-        console.log(response);
-        $.each(response, function (key, value) {
-            let field_selector = $(`#edit-variation-form [name="${key}"]`);
-            field_selector.val(value);
-        })
-        $.each(response.product, function (key, value) {
-            let field_selector = $(`#edit-product-form [name="${key}"]`);
-            field_selector.val(value);
-        })
-        console.log(response.product.category.join())
-        edit_product_category_selector.val(response.product.category.join())
-        edit_product_category_selector.tagator('refresh');
-    });
-}
+// function editProductDetails(variation_id, product_code) {
+//     variation_id_to_update = variation_id;
+//     product_code_to_update = product_code;
+//     let url = '/api/variations/' + variation_id_to_update;
+//     $('#static-product-code').empty().html(product_code_to_update);
+//
+//     $.getJSON(url, {}, function (response) {
+//         console.log(response);
+//         $.each(response, function (key, value) {
+//             let field_selector = $(`#edit-variation-form [name="${key}"]`);
+//             field_selector.val(value);
+//         })
+//         $.each(response.product, function (key, value) {
+//             let field_selector = $(`#edit-product-form [name="${key}"]`);
+//             field_selector.val(value);
+//         })
+//         console.log(response.product.category.join())
+//         edit_product_category_selector.val(response.product.category.join())
+//         edit_product_category_selector.tagator('refresh');
+//     });
+// }
 
 function updateProductDetails(product_form_selector, variation_form_selector) {
     const product_form_data = getFormData($(product_form_selector));
@@ -166,7 +167,7 @@ function updateProductDetails(product_form_selector, variation_form_selector) {
             'X-CSRFToken': csrftoken,
         },
         data: JSON.stringify(data),
-        success: function (data) {
+        success: function () {
             toastr.info('Product details were successfully updated.');
             $('.close').click();
             dataTable.DataTable().draw(false);
@@ -196,7 +197,7 @@ const addVariation = (variation_form_selector) => {
             'X-CSRFToken': csrftoken,
         },
         data: JSON.stringify(data),
-        success: function (data) {
+        success: function () {
             toastr.info('Variation was successfully added.');
             $('.close').click();
             dataTable.DataTable().draw(false);
@@ -231,9 +232,9 @@ function addAndUpdateVariationButtonAction(action, variation_id, product_code) {
     });
 }
 
-function deleteProductConfirmation(variation_id) {
+function deleteProductConfirmation(variation_id, product_code) {
     variation_id_to_delete = variation_id;
-    $('#static-product-code-delete').empty().html(variation_id_to_delete);
+    $('#static-product-code-delete').empty().html(product_code);
 }
 
 function deleteProduct() {
@@ -254,20 +255,11 @@ function deleteProduct() {
     })
 }
 
-function changeDiscountPercent(discount_price_selector, discount_percent_selector, mrp_selector) {
-    discount_percent_selector.val(roundToTwoDecimal(((mrp_selector.val() - discount_price_selector.val()) * 100) / mrp_selector.val()))
-}
-
-function changeDiscountPrice(discount_price_selector, discount_percent_selector, mrp_selector) {
-    discount_price_selector.val(roundToTwoDecimal(mrp_selector.val() * (1 - discount_percent_selector.val() / 100)))
-}
-
 
 /**************************Events**************************/
 $(document).ready(function () {
     $('#products-datatable thead tr').clone(true).appendTo('#products-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2").attr("style", "background: #f8f9fa");
     $('#products-datatable thead tr:eq(1) th').each(function (i) {
-        const title = $(this).text();
         $(this).html(`<input type="text" class="form-control form-control-sm ml-1"/>`);
         if (i === 9) {
             $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button" onclick="resetAdvanceSearch()"><i class="fa fa-close" style="font-size: larger" aria-hidden="true"></i></div>');
@@ -289,10 +281,6 @@ $(document).ready(function () {
 });
 
 /*Add Product Events*/
-const add_discount_price_selector = $('#add_discount_price')
-const add_discount_percent_selector = $('#add_discount_percent')
-const add_mrp_selector = $('#add_mrp')
-
 $('#generate_product_code_checkbox').change(function () {
     generateProductCode(this);
 });
@@ -328,29 +316,23 @@ $('#add-variation-product-form-submit').click(function () {
     productFormHandler('add-variation');
 });
 
-add_discount_price_selector.on('input', function () {
-    changeDiscountPercent(add_discount_price_selector, add_discount_percent_selector, add_mrp_selector)
-});
+$('.discount_percentage, .discount_price, .mrp').on('input', function () {
+    const parent_form = this.closest('form')
+    const class_name = this.className
+    const discount_price_selector = parent_form.querySelector('.discount_price')
+    const discount_percent_selector = parent_form.querySelector('.discount_percentage')
+    const mrp_selector = parent_form.querySelector('.mrp')
 
-$('#add_discount_percent, #add_mrp').on('input', function () {
-    changeDiscountPrice(add_discount_price_selector, add_discount_percent_selector, add_mrp_selector)
-});
+    if (class_name.includes('discount_price')) {
+        discount_percent_selector.value = roundToTwoDecimal(((mrp_selector.value - discount_price_selector.value) * 100) / mrp_selector.value)
+    } else {
+        discount_price_selector.value = roundToTwoDecimal(mrp_selector.value * (1 - discount_percent_selector.value / 100))
+    }
+})
 
 /*Edit Product Events*/
-const edit_discount_price_selector = $('#edit_discount_price')
-const edit_discount_percent_selector = $('#edit_discount_percent')
-const edit_mrp_selector = $('#edit_mrp')
-
-$('#product-delete-yes').on('click', function (e) {
+$('#product-delete-yes').on('click', function () {
     deleteProduct();
-});
-
-edit_discount_price_selector.on('input', function () {
-    changeDiscountPercent(edit_discount_price_selector, edit_discount_percent_selector, edit_mrp_selector)
-});
-
-$('#edit_discount_percent, #edit_mrp').on('input', function () {
-    changeDiscountPrice(edit_discount_price_selector, edit_discount_percent_selector, edit_mrp_selector)
 });
 
 $('.product_companies').autocomplete(
@@ -390,7 +372,7 @@ const checkProductExists = async (product_code) => {
         data: data,
         success: function (data) {
             console.log(data)
-            product_exists = data.product_exists;
+            product_exists = data["product_exists"];
         },
         error: function () {
             toastr.error('Could not check product code existence! Please try again.');

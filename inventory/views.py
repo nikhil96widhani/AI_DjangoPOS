@@ -55,3 +55,7 @@ def updateInventoryByBill(request):
             'order': [],
         }
     return render(request, 'inventory/update_inventory_by_bill.html', context)
+
+
+def stock_bills_datatable_view(request):
+    return render(request, 'inventory/stock-bills-datatable.html', {})
