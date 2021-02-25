@@ -1,7 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from inventory.models_new import *
+from django.utils.timezone import now
+
+from inventory.models import ProductVariation, OrderNew, Payment_mode
 
 
 # Create your views here.
@@ -65,23 +67,23 @@ def productExpLabelView(request):
     return render(request, 'pos/product-expiry-label.html', {'date': now().date()})
 
 
-@login_required
-def cart_datatable_view(request):
-    all_products = Product.objects.all()[:10]
-    if request.user.is_authenticated:
-        customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        cart_items = order.orderitem_set.all()
-        context = {
-            'all_products': all_products,
-            'order': order,
-            'cart_items': cart_items,
-            'payment_mode': Payment_mode
-        }
-    else:
-        context = {
-            'all_products': all_products,
-            'order': [],
-            'cart_items': []
-        }
-    return render(request, 'pos/pos.html', context)
+# @login_required
+# def cart_datatable_view(request):
+#     all_products = Product.objects.all()[:10]
+#     if request.user.is_authenticated:
+#         customer = request.user
+#         order, created = Order.objects.get_or_create(customer=customer, complete=False)
+#         cart_items = order.orderitem_set.all()
+#         context = {
+#             'all_products': all_products,
+#             'order': order,
+#             'cart_items': cart_items,
+#             'payment_mode': Payment_mode
+#         }
+#     else:
+#         context = {
+#             'all_products': all_products,
+#             'order': [],
+#             'cart_items': []
+#         }
+#     return render(request, 'pos/pos.html', context)

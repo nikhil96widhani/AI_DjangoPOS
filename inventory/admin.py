@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from . import models_new
+import inventory.models
 from .models import *
 
 
@@ -15,15 +15,15 @@ class OrderItemList(admin.ModelAdmin):
 
 
 # Register your models here.
-admin.site.register(Product, ProductList)
+# admin.site.register(Product, ProductList)
+# admin.site.register(OrderItem, OrderItemList)
+# admin.site.register(Order)
 admin.site.register(ProductCategories)
 admin.site.register(ProductCompany)
-admin.site.register(Order)
-admin.site.register(OrderItem, OrderItemList)
-admin.site.register(models_new.ProductNew)
-admin.site.register(models_new.ProductVariation)
-admin.site.register(models_new.Vendor)
-admin.site.register(models_new.StockBill)
-admin.site.register(models_new.StockBillItems)
-admin.site.register(models_new.OrderNew)
-admin.site.register(models_new.OrderItemNew)
+admin.site.register(inventory.models.ProductNew)
+admin.site.register(inventory.models.ProductVariation)
+admin.site.register(inventory.models.Vendor)
+admin.site.register(inventory.models.StockBill)
+admin.site.register(inventory.models.StockBillItems)
+admin.site.register(inventory.models.OrderNew)
+admin.site.register(inventory.models.OrderItemNew)

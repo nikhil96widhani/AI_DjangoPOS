@@ -7,7 +7,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from inventory.models import Order
+from inventory.models import OrderNew
 
 
 def dashboard_view(request):
@@ -22,11 +22,12 @@ def orders_datatable_view(request):
     return render(request, 'reports/orders-datatable-page.html', {})
 
 
+# ToDo -- Move to ApiViews
 @api_view(['GET'])
 def daily_stats(request):
     date = datetime.today().strftime('%Y-%m-%d')
     if request.method == 'GET':
-        completed_orders = Order.objects.filter(complete=True, date_order=date)
+        completed_orders = OrderNew.objects.filter(complete=True, date_order=date)
         total_quantity = 0
         total_revenue = 0
         total_cost = 0

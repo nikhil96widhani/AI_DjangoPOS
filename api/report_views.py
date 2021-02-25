@@ -1,20 +1,12 @@
 from datetime import timedelta, datetime
 
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import generics, status
-from rest_framework.decorators import api_view
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from inventory.models import Order
 from .serializers import *
 from inventory.models import *
-from django.utils import timezone
-from django.db.models import Sum
-import json
 from dateutil import parser
-
-from .serializers import OrderSerializer
 
 
 def summary_orders(orders):
@@ -68,30 +60,30 @@ class OrdersView(APIView):
     @staticmethod
     def get(request):
         if request.GET.get("all_orders") == 'True':
-            orders = Order.objects.filter(complete=True)
+            orders = OrderNew.objects.filter(complete=True)
 
         elif request.GET.get("all_orders") == 'False' and request.GET.get("date1") and request.GET.get("date2"):
             if request.GET.get("date1") == request.GET.get("date2"):
                 date1 = parser.parse(request.GET.get("date1"))
-                orders = Order.objects.filter(date_order__year=date1.year, date_order__day=date1.day,
+                orders = OrderNew.objects.filter(date_order__year=date1.year, date_order__day=date1.day,
                                               date_order__month=date1.month, complete=True)
             else:
                 date1 = parser.parse(request.GET.get("date1"))
                 date2 = parser.parse(request.GET.get("date2"))
                 print(date1, date2)
-                orders = Order.objects.filter(
+                orders = OrderNew.objects.filter(
                     date_order__range=[date1, date2], complete=True)
 
         elif request.GET.get("all_orders") == 'False' and request.GET.get("date1"):
             date1 = parser.parse(request.GET.get("date1"))
-            orders = Order.objects.filter(
+            orders = OrderNew.objects.filter(
                 date_order__gt=date1, complete=True)
 
         else:
-            orders = Order.objects.filter(date_order__gt=now(), complete=True)
+            orders = OrderNew.objects.filter(date_order__gt=now(), complete=True)
 
         # Form Data to return
-        orders_serialized = OrderSerializer(orders, many=True)
+        orders_serialized = OrderNewSerializer(orders, many=True)
 
         if request.GET.get("only_summary") == 'True':
             return Response(
@@ -103,26 +95,26 @@ class OrdersView(APIView):
                 "orders_summary": summary_orders(orders),
                 "orders": orders_serialized.data,
             })
+#
+#     # @staticmethod
+#     # def post(request):
+#     #     return Response({"request": request.GET.get("damn")})
 
-    # @staticmethod
-    # def post(request):
-    #     return Response({"request": request.GET.get("damn")})
 
-
-@api_view(['GET', 'DELETE'])
-def order_detail(request, pk):
-    try:
-        order = Order.objects.get(pk=pk)
-    except Order.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = OrderSerializer(order)
-        return Response(serializer.data)
-
-    elif request.method == 'DELETE':
-        order.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+# @api_view(['GET', 'DELETE'])
+# def order_detail(request, pk):
+#     try:
+#         order = Order.objects.get(pk=pk)
+#     except Order.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+#
+#     if request.method == 'GET':
+#         serializer = OrderSerializer(order)
+#         return Response(serializer.data)
+#
+#     elif request.method == 'DELETE':
+#         order.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # Fixed -- Changed to New Order Api
@@ -167,8 +159,8 @@ class OrdersChartDataView(APIView):
             for date in dateRange(datetime.strptime(request.GET.get("date1"), '%Y-%m-%d'),
                                   datetime.strptime(request.GET.get("date2"), '%Y-%m-%d'),
                                   inclusive=True):
-                orders = Order.objects.filter(date_order__year=date.year, date_order__day=date.day,
-                                              date_order__month=date.month, complete=True)
+                orders = OrderNew.objects.filter(date_order__year=date.year, date_order__day=date.day,
+                                                 date_order__month=date.month, complete=True)
                 order_summary = summary_orders(orders)
                 dates.append(date), revenue.append(round(order_summary['total_revenue'], 2))
                 profit.append(round(order_summary['total_profit'], 2))

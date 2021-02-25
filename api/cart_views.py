@@ -7,8 +7,8 @@ from rest_framework.response import Response
 from api.helper import get_variation_data, get_order_item_data, add_order_item, update_order_item, clear_cart, \
     apply_order_discount, completeOrder, addCustomer
 
-from api.serializers import OrderItemNewSerializer, CartOrderSerializer, CartOrderNewSerializer
-from inventory.models_new import OrderNew, ProductVariation, OrderItemNew
+from api.serializers import OrderItemNewSerializer, CartOrderNewSerializer
+from inventory.models import ProductVariation, OrderNew, OrderItemNew
 
 
 class CartListViewNew(generics.ListAPIView):

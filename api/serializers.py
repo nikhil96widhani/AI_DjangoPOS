@@ -1,14 +1,13 @@
-from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from inventory.models import *
-from inventory.models_new import *
+from inventory.models import ProductNew, ProductVariation, StockBill, StockBillItems, OrderNew, OrderItemNew
 
 
-class cart_items_serializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderItem
-        depth = 1
-        fields = '__all__'
+# class cart_items_serializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = OrderItem
+#         depth = 1
+#         fields = '__all__'
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
@@ -17,31 +16,31 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = '__all__'
+# class ProductSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Product
+#         fields = '__all__'
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        depth = 1
-        fields = '__all__'
+# class OrderSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Order
+#         depth = 1
+#         fields = '__all__'
 
 
-class OrderItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderItem
-        # depth = 1
-        fields = '__all__'
+# class OrderItemSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = OrderItem
+#         # depth = 1
+#         fields = '__all__'
 
 
-class CartOrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        depth = 1
-        fields = ('id', 'get_cart_items_quantity', 'get_cart_revenue', 'discount')
+# class CartOrderSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Order
+#         depth = 1
+#         fields = ('id', 'get_cart_items_quantity', 'get_cart_revenue', 'discount')
 
 
 # --------------NEW

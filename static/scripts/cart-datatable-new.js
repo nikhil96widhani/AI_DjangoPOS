@@ -231,7 +231,7 @@ dataTable.on('change', '.update-order-item', function () {
         'order_item_id': this.getAttribute('data-order-item-id'),
         [this.name]: this.value
     }
-    updateOrderDetails(data_json, true, true)
+    updateOrderDetails(data_json, true)
 });
 
 searchTable.on('click', '.add-variation-to-order', function () {
@@ -395,7 +395,7 @@ function calculateRefund(cash) {
     if (cash < cart_total_amount) {
         document.getElementById('RefundAmount').innerHTML = "Less Cash Received";
     } else if (cash >= cart_total_amount) {
-        document.getElementById('RefundAmount').innerHTML = "Refund: ₹" + (cash - cart_total_amount).toString();
+        document.getElementById('RefundAmount').innerHTML = "Refund: ₹" + roundToTwoDecimal(cash - cart_total_amount).toString();
     } else {
         document.getElementById('RefundAmount').innerHTML = "No items to calculate or unknown error";
     }

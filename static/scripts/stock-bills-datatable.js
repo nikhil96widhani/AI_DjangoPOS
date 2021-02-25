@@ -87,7 +87,7 @@ function loadStockBillsData(date1, date2) {
             {
                 'data': 'date_ordered',
                 render: function (data) {
-                    return dateFormat(data, "d mmm yyyy (HH:MM)");
+                    return dateFormat(data, "d mmm yyyy");
                 }
             },
             {'data': 'name', render: handleBlankData},

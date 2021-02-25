@@ -1,18 +1,11 @@
 from datetime import datetime, timedelta
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import F, Q
-from django.utils.crypto import get_random_string
 from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import generics, status, mixins
-from .serializers import *
+from rest_framework import generics, mixins
 from .helper import *
-
-from inventory.models_new import *
 
 
 def get_default_vendor(bill):
@@ -318,7 +311,7 @@ class VendorListView(APIView):
 
 # Fixed -- Datatable for stock bills
 class StockBillsListView(generics.ListAPIView):
-    queryset = StockBill.objects.filter(complete=True).order_by('-date_ordered')
+    queryset = StockBill.objects.filter(complete=True).order_by('-id')
     serializer_class = StockBillSerializer
 
     def list(self, request, *args, **kwargs):
@@ -327,7 +320,7 @@ class StockBillsListView(generics.ListAPIView):
             date1 = datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
             date2 = datetime.strptime(request.GET.get("date2"), '%Y-%m-%d') + timedelta(days=1)
             temp_queryset = StockBill.objects.filter(complete=True).filter(date_ordered__range=[date1, date2]).order_by(
-                '-date_ordered')
+                '-id')
 
         queryset = self.filter_queryset(temp_queryset)
         page = self.paginate_queryset(queryset)

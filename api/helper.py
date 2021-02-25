@@ -1,7 +1,6 @@
 from django.db.models import F
 from rest_framework import status
 from rest_framework.response import Response
-from accounts.models import PosCustomer
 
 from .serializers import *
 
