@@ -1,13 +1,6 @@
 from rest_framework import serializers
 from inventory.models import *
-from inventory.models import ProductNew, ProductVariation, StockBill, StockBillItems, OrderNew, OrderItemNew
-
-
-# class cart_items_serializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = OrderItem
-#         depth = 1
-#         fields = '__all__'
+from inventory.models import Product, ProductVariation, StockBill, StockBillItems, Order, OrderItem
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
@@ -16,39 +9,12 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class ProductSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Product
-#         fields = '__all__'
-
-
-# class OrderSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Order
-#         depth = 1
-#         fields = '__all__'
-
-
-# class OrderItemSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = OrderItem
-#         # depth = 1
-#         fields = '__all__'
-
-
-# class CartOrderSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Order
-#         depth = 1
-#         fields = ('id', 'get_cart_items_quantity', 'get_cart_revenue', 'discount')
-
-
 # --------------NEW
 
 
-class ProductNewSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProductNew
+        model = Product
         fields = '__all__'
 
 
@@ -79,22 +45,22 @@ class StockBillSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class OrderNewSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OrderNew
+        model = Order
         depth = 1
         fields = '__all__'
 
 
-class OrderItemNewSerializer(serializers.ModelSerializer):
+class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OrderItemNew
+        model = OrderItem
         # depth = 1
         fields = '__all__'
 
 
-class CartOrderNewSerializer(serializers.ModelSerializer):
+class CartOrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OrderNew
+        model = Order
         depth = 1
         fields = ('id', 'get_cart_items_quantity', 'get_cart_revenue', 'discount')

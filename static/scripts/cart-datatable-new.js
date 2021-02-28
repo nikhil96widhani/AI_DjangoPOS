@@ -11,7 +11,7 @@ const getDatatableInput = (order_item_id, name, value) => {
 }
 
 function loadCartData() {
-    let url = '/api/cart-datatable-new/?format=datatables';
+    let url = '/api/cart-datatable/?format=datatables';
     return dataTable.DataTable({
         ajax: {
             'url': url,

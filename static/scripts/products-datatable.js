@@ -108,7 +108,7 @@ function loadProductsData() {
                     return data + " " + full['weight_unit'];
                 }
             },
-            {'data': 'product.company', render: handleBlankData},
+            {'data': 'product.brand', render: handleBlankData},
             {'data': 'product.rack_number', render: handleBlankData},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {

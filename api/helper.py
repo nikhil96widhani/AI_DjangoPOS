@@ -8,12 +8,12 @@ from .serializers import *
 def getOrderData(request):
     if 'order_id' not in request.data.keys() and request.user.is_authenticated:
         customer = request.user
-        order = OrderNew.objects.get(customer=customer, complete=False)
+        order = Order.objects.get(customer=customer, complete=False)
         order_id = order.id
 
     else:
         order_id = request.data['order_id']
-        order = OrderNew.objects.get(pk=order_id)
+        order = Order.objects.get(pk=order_id)
     return order, order_id
 
 
@@ -39,8 +39,8 @@ def get_variation_data(product_code):
     variations = ProductVariation.objects.filter(product=product_code)
     variation_data = [ProductVariationPostSerializer(variation).data for variation in variations]
 
-    product = ProductNew.objects.get(pk=product_code)
-    product_data = ProductNewSerializer(product).data
+    product = Product.objects.get(pk=product_code)
+    product_data = ProductSerializer(product).data
 
     return {'product_data': product_data, 'variation_data': variation_data}
 
@@ -94,7 +94,7 @@ def add_order_item(request):
         name = request.data['quick_add_item_name']
         discount_price = request.data['discount_price']
         quantity = request.data['quantity']
-        order_item = OrderItemNew.objects.create(order=order, product=None, quantity=int(quantity), name=name,
+        order_item = OrderItem.objects.create(order=order, product=None, quantity=int(quantity), name=name,
                                                  discount_price=float(discount_price))
         order_item.save()
         return Response({'status': 'custom-item_added',
@@ -109,22 +109,22 @@ def add_order_item(request):
             return Response({'multiple_variation_exists': True, **get_variation_data(product_code)})
 
     try:
-        order_item = order.orderitemnew_set.get(variation=variation.id)
+        order_item = order.orderitem_set.get(variation=variation.id)
         order_item.quantity += 1
         order_item.save()
         return Response({'status': 'quantity_updated', 'response': 'Product quantity updated!',
-                         'data': OrderItemNewSerializer(order_item).data})
-    except OrderItemNew.MultipleObjectsReturned:
-        order_items = order.orderitemnew_set.filter(product_variation=variation.id)
+                         'data': OrderItemSerializer(order_item).data})
+    except OrderItem.MultipleObjectsReturned:
+        order_items = order.orderitem_set.filter(product_variation=variation.id)
         for i in range(1, len(order_items)):
             order_items[i].delete()
         return Response({'status': 'error',
                          'response': 'Multiple variations were present. Deleted duplicate variations.'})
-    except OrderItemNew.DoesNotExist:
+    except OrderItem.DoesNotExist:
         order_item_data = {'order': order_id, **get_order_item_data(variation)}
 
         # Save bill item
-        serializer = OrderItemNewSerializer(data=order_item_data)
+        serializer = OrderItemSerializer(data=order_item_data)
         if serializer.is_valid():
             serializer.save()
             return Response({'status': 'order_item_add', 'response': 'Added Order Item.',
@@ -133,8 +133,8 @@ def add_order_item(request):
 
 
 def update_order_item(request):
-    order_item = OrderItemNew.objects.get(id=request.data['order_item_id'])
-    serializer = OrderItemNewSerializer(order_item, data=request.data, partial=True)
+    order_item = OrderItem.objects.get(id=request.data['order_item_id'])
+    serializer = OrderItemSerializer(order_item, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response({'status': 'updated', 'response': 'Order item details updated.', 'data': serializer.data})
@@ -143,13 +143,13 @@ def update_order_item(request):
 def clear_cart(request):
     if 'order_id' not in request.data.keys() and request.user.is_authenticated:
         customer = request.user
-        order = OrderNew.objects.get(customer=customer, complete=False)
+        order = Order.objects.get(customer=customer, complete=False)
 
     else:
         order_id = request.data['order_id']
-        order = OrderNew.objects.get(pk=order_id)
+        order = Order.objects.get(pk=order_id)
 
-    order.orderitemnew_set.all().delete()
+    order.orderitem_set.all().delete()
     return Response({'status': 'cart-cleared', 'response': 'Cleared cart successfully.'})
 
 
@@ -179,7 +179,7 @@ def apply_order_discount(request):
 
 def completeOrder(request):
     order, order_id = getOrderData(request)
-    if len(order.orderitemnew_set.all()) >= 1:
+    if len(order.orderitem_set.all()) >= 1:
         order.complete = True
         if request.data.get('payment_mode'):
             order.payment_mode = request.data['payment_mode']
@@ -197,7 +197,7 @@ def completeOrder(request):
 
 def addCustomer(request):
     order, order_id = getOrderData(request)
-    phone_number = int(request.data['phone_number']) if request.data['phone_number'] is not '' or None else None
+    phone_number = int(request.data['phone_number']) if request.data['phone_number'] != '' or None else None
     customer, created = PosCustomer.objects.get_or_create(name=request.data['name'],
                                                           phone_number=phone_number)
     order.pos_customer = customer

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .cart_views import handle_order, CartListViewNew
+from .cart_views import handle_order, CartListView
 from .pos_views import *
 from .report_views import *
 from .inventory_views import *
@@ -8,7 +8,7 @@ from .inventory_views import *
 cart_urls = [
     # path('cart/', Cart.as_view(), name='cart'),
     # path('cart-datatable/', CartListView.as_view(), name='api-cart-datatable'),
-    path('cart-datatable-new/', CartListViewNew.as_view(), name='api-cart-datatable-new'),
+    path('cart-datatable/', CartListView.as_view(), name='api-cart-datatable'),
     path('handle-order/', handle_order, name='handle-order'),
 ]
 
@@ -25,7 +25,7 @@ product_urls = [
     path('product-variation-search/', searchProductVariations, name='product-variation-search'),
     path('add-product-with-variation/', add_product_with_variation, name='post-product-with-variation'),
     path('variations/<int:pk>/', variation_detail, name='variation-detail'),
-    path('products_new/<str:pk>/', ProductDetail.as_view(), name='product-new-detail'),
+    path('products/<str:pk>/', ProductDetail.as_view(), name='product-detail'),
     path('variations/', ProductVariationListView.as_view(), name='variations-list'),
     path('product-and-variations/', variations_data_using_product_code, name='product-and-variations'),
     path('product-companies/', ProductCompaniesView.as_view(), name='api-products-companies'),

@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 
-from inventory.models import ProductVariation, OrderNew, Payment_mode
+from inventory.models import ProductVariation, Order, Payment_mode
 
 
 # Create your views here.
@@ -12,7 +12,7 @@ from inventory.models import ProductVariation, OrderNew, Payment_mode
 def pos_homeView(request):
     if request.user.is_authenticated:
         customer = request.user
-        order, created = OrderNew.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
         try:
             last_order_id = int(order.id) - 1
         except:
@@ -35,8 +35,8 @@ def pos_homeView(request):
 
 def receiptView(request, pk):
     try:
-        order = OrderNew.objects.get(pk=pk)
-        cart_items = order.orderitemnew_set.all()
+        order = Order.objects.get(pk=pk)
+        cart_items = order.orderitem_set.all()
         context = {
             'order': order,
             'cart_items': cart_items,

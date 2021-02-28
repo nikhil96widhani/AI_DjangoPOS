@@ -60,30 +60,30 @@ class OrdersView(APIView):
     @staticmethod
     def get(request):
         if request.GET.get("all_orders") == 'True':
-            orders = OrderNew.objects.filter(complete=True)
+            orders = Order.objects.filter(complete=True)
 
         elif request.GET.get("all_orders") == 'False' and request.GET.get("date1") and request.GET.get("date2"):
             if request.GET.get("date1") == request.GET.get("date2"):
                 date1 = parser.parse(request.GET.get("date1"))
-                orders = OrderNew.objects.filter(date_order__year=date1.year, date_order__day=date1.day,
+                orders = Order.objects.filter(date_order__year=date1.year, date_order__day=date1.day,
                                               date_order__month=date1.month, complete=True)
             else:
                 date1 = parser.parse(request.GET.get("date1"))
                 date2 = parser.parse(request.GET.get("date2"))
                 print(date1, date2)
-                orders = OrderNew.objects.filter(
+                orders = Order.objects.filter(
                     date_order__range=[date1, date2], complete=True)
 
         elif request.GET.get("all_orders") == 'False' and request.GET.get("date1"):
             date1 = parser.parse(request.GET.get("date1"))
-            orders = OrderNew.objects.filter(
+            orders = Order.objects.filter(
                 date_order__gt=date1, complete=True)
 
         else:
-            orders = OrderNew.objects.filter(date_order__gt=now(), complete=True)
+            orders = Order.objects.filter(date_order__gt=now(), complete=True)
 
         # Form Data to return
-        orders_serialized = OrderNewSerializer(orders, many=True)
+        orders_serialized = OrderSerializer(orders, many=True)
 
         if request.GET.get("only_summary") == 'True':
             return Response(
@@ -119,15 +119,15 @@ class OrdersView(APIView):
 
 # Fixed -- Changed to New Order Api
 class OrdersListView(generics.ListAPIView):
-    queryset = OrderNew.objects.filter(complete=True).order_by('-date_order')
-    serializer_class = OrderNewSerializer
+    queryset = Order.objects.filter(complete=True).order_by('-date_order')
+    serializer_class = OrderSerializer
 
     def list(self, request, *args, **kwargs):
         temp_queryset = self.get_queryset()
         if request.GET.get("date1") and request.GET.get("date2"):
             date1 = datetime.strptime(request.GET.get("date1"), '%Y-%m-%d')
             date2 = datetime.strptime(request.GET.get("date2"), '%Y-%m-%d') + timedelta(days=1)
-            temp_queryset = OrderNew.objects.filter(complete=True).filter(date_order__range=[date1, date2]).order_by(
+            temp_queryset = Order.objects.filter(complete=True).filter(date_order__range=[date1, date2]).order_by(
                 '-date_order')
 
         queryset = self.filter_queryset(temp_queryset)
@@ -145,9 +145,9 @@ class OrderItemsView(APIView):
     @staticmethod
     def get(request):
         # order_items = OrderItem.objects.filter(order=request.GET.get("order_id"))
-        order = OrderNew.objects.get(pk=request.GET.get("order_id"))
-        order_items = order.orderitemnew_set.all()
-        order_item_serializer = OrderItemNewSerializer(order_items, many=True)
+        order = Order.objects.get(pk=request.GET.get("order_id"))
+        order_items = order.orderitem_set.all()
+        order_item_serializer = OrderItemSerializer(order_items, many=True)
         return Response({'order_items': order_item_serializer.data})
 
 
@@ -159,7 +159,7 @@ class OrdersChartDataView(APIView):
             for date in dateRange(datetime.strptime(request.GET.get("date1"), '%Y-%m-%d'),
                                   datetime.strptime(request.GET.get("date2"), '%Y-%m-%d'),
                                   inclusive=True):
-                orders = OrderNew.objects.filter(date_order__year=date.year, date_order__day=date.day,
+                orders = Order.objects.filter(date_order__year=date.year, date_order__day=date.day,
                                                  date_order__month=date.month, complete=True)
                 order_summary = summary_orders(orders)
                 dates.append(date), revenue.append(round(order_summary['total_revenue'], 2))
