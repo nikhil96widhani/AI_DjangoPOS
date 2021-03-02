@@ -108,7 +108,7 @@ function loadProductsData() {
                     return data + " " + full['weight_unit'];
                 }
             },
-            {'data': 'product.brand', render: handleBlankData},
+            {'data': 'product.brand', render: data => handleBlankData(handleMissingData(data, 'name'))},
             {'data': 'product.rack_number', render: handleBlankData},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
@@ -226,6 +226,7 @@ function addAndUpdateVariationButtonAction(action, variation_id, product_code) {
             let field_selector = $(`#${action}-product-form [name="${key}"]`);
             field_selector.val(value);
         })
+        $(`#${action}-product-form [name="brand"]`).val(handleMissingData(response.product.brand, 'name', ''));
         console.log(response.product.category.join())
         $(product_category_selector).val(response.product.category.join())
         $(product_category_selector).tagator('refresh');

@@ -20,10 +20,20 @@ function attachRupeeSymbol(data) {
 }
 
 function handleBlankData(data) {
-    if (data === null) {
-        return "-";
+    const placeholder='-'
+    if (data === null || data === '') {
+        return placeholder;
     }
     return data;
+}
+
+const handleMissingData = (obj, key, placeholder='-') => {
+    if (obj === null) {
+        return placeholder;
+    }
+    // console.log(obj[key]);
+    const result = obj[key];
+    return (typeof result !== "undefined") ? result : placeholder;
 }
 
 var dateFormat = function () {

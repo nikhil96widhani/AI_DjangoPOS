@@ -28,7 +28,7 @@ class ProductVariationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductVariation
         fields = '__all__'
-        depth = 1
+        depth = 2
 
 
 class StockBillItemSerializer(serializers.ModelSerializer):

@@ -73,6 +73,9 @@ class Product(models.Model):
         # Updates Modified time of the product
         if self.modified_time is None:
             self.modified_time = now()
+        if self.brand is None:
+            brand_placeholder, created = ProductCompany.objects.get_or_create(name='')
+            self.brand = brand_placeholder
         super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
