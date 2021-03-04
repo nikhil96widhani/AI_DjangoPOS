@@ -145,6 +145,12 @@ function loadProductsData() {
 //         edit_product_category_selector.tagator('refresh');
 //     });
 // }
+const filterDatatableByProductCode = (product_code, close_modal=false) => {
+    if (close_modal) $('.close').click();
+    $('#toggle-advance-search-button').prop('checked', true).change();
+    $('#advance-search-bar > th:nth-child(1) > input').val(product_code);
+    dataTable.DataTable().column(0).search("^" + product_code + "$", true, false, true).draw();
+}
 
 function updateProductDetails(product_form_selector, variation_form_selector) {
     const product_form_data = getFormData($(product_form_selector));
@@ -197,10 +203,17 @@ const addVariation = (variation_form_selector) => {
             'X-CSRFToken': csrftoken,
         },
         data: JSON.stringify(data),
-        success: function () {
-            toastr.info('Variation was successfully added.');
-            $('.close').click();
-            dataTable.DataTable().draw(false);
+        success: function (data) {
+            if (data.status === 'success') {
+                toastr.info(data.response);
+                $('.close').click();
+                dataTable.DataTable().draw(false);
+            } else if (data.status === 'error') {
+                toastr.error(data.response);
+                filterDatatableByProductCode(product_code_to_update, true);
+            } else {
+                toastr.error('Unexpected Error!');
+            }
         },
         error: function () {
             toastr.error('Variation details were not added! Please try again.');
@@ -351,9 +364,7 @@ const searchProductCodeInDatatable = (product_code) => {
 $(function () {
     $(document).pos();
     $(document).on('scan.pos.barcode', function (event) {
-        $('#toggle-advance-search-button').prop('checked', true).change();
-        $('#advance-search-bar > th:nth-child(1) > input').val(event.code);
-        dataTable.DataTable().column(0).search("^" + event.code + "$", true, false, true).draw();
+        filterDatatableByProductCode(event.code);
     });
 });
 

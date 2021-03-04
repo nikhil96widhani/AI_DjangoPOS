@@ -178,6 +178,10 @@ class StockBill(models.Model):
 
         if not self.date_ordered:
             self.expiry_date = now
+
+        if self.vendor is None:
+            vendor_placeholder, created = Vendor.objects.get_or_create(name='')
+            self.vendor = vendor_placeholder
         super(StockBill, self).save(*args, **kwargs)
 
     def __str__(self):
