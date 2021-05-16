@@ -202,7 +202,7 @@ class StockBillItems(models.Model):
     weight = models.IntegerField(blank=True, null=True)
     weight_unit = models.CharField(max_length=9, choices=Weight_unit, default="", blank=True, null=True)
     expiry_date = models.DateField(blank=True, null=True)
-    is_new_variation = models.BooleanField(blank=True, null=True)
+    is_new_variation = models.BooleanField(blank=True, null=True, default=False)
 
     class Meta:
         verbose_name_plural = "StockBillItems"

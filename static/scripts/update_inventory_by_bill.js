@@ -73,6 +73,21 @@ function loadBillItemsTable() {
                     }
                 }
             },
+            {
+                'data': 'id', sortable: false, 'width': '2%', render: function (data, type, row, meta) {
+                    if (row.is_new_variation === false) {
+                        return `<div class="custom-control custom-checkbox" id="is_new_variation_form">
+                                    <input type="checkbox" class="custom-control-input bill-item-updater" id="is_new_variation" value="${data}">
+                                    <label class="custom-control-label" for="is_new_variation"></label>
+                                </div>`;
+                    } else if (row.is_new_variation === true) {
+                        return `<div class="custom-control custom-checkbox" id="is_new_variation_form">
+                                    <input type="checkbox" class="custom-control-input bill-item-updater" id="is_new_variation" value="${data}">
+                                    <label class="custom-control-label" for="is_new_variation"></label>
+                                </div>`;
+                    }
+                }
+            },
             {'data': 'product_code', sortable: false, 'width': '8%'},
             {'data': 'name', 'width': '30%'},
             {
@@ -438,9 +453,18 @@ $('.bill-data-updater').on('change', function () {
 });
 
 $('#bill-datatable').on('change', '.bill-item-updater', function() {
-    let data_json = {'action':'update_bill_item', 'id': this.getAttribute('data-variation-id'), [this.name] : this.value  }
-    updateBillDetails(data_json, true)
-    updated_variation_id = parseInt(this.getAttribute('data-variation-id'));
+    if (this.type==='checkbox') {
+        console.log(this.checked)
+        let data_json = {'action':'update_bill_item', 'id': this.value, [this.name] : this.value  }
+        updateBillDetails(data_json, true)
+        updated_variation_id = parseInt(this.getAttribute('data-variation-id'));
+
+    }
+    else{
+        let data_json = {'action':'update_bill_item', 'id': this.getAttribute('data-variation-id'), [this.name] : this.value  }
+        updateBillDetails(data_json, true)
+        updated_variation_id = parseInt(this.getAttribute('data-variation-id'));
+    }
 });
 
 $("#variation-search-input").on("input", function () {
@@ -452,6 +476,8 @@ $("#variation-search-input").on("input", function () {
 $("#complete-bill").on("click", function () {
     updateBillDetails({'action': 'complete_and_update'}, false, true)
 });
+
+
 
 // Initialize with options
 onScan.attachTo(document, {
