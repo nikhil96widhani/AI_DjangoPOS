@@ -73,14 +73,28 @@ def get_order_item_data(variation):
 
 def updateProducts_fromBillItems(bill_items):
     for each in bill_items:
-        ProductVariation.objects.filter(id=each.product_variation.id).update(
-            cost=each.cost,
-            mrp=each.mrp,
-            discount_price=each.discount_price,
-            quantity=F('quantity') + each.stock,
-            weight=each.weight,
-            expiry_date=each.expiry_date
-        )
+        if each.is_new_variation is False:
+            ProductVariation.objects.filter(id=each.product_variation.id).update(
+                cost=each.cost,
+                mrp=each.mrp,
+                discount_price=each.discount_price,
+                quantity=F('quantity') + each.stock,
+                weight=each.weight,
+                expiry_date=each.expiry_date
+            )
+        elif each.is_new_variation is True:
+            product_instance, created = Product.objects.get_or_create(product_code=each.product_code)
+
+            new_variation = ProductVariation.objects.create(product=product_instance)
+
+            new_variation.cost = each.cost
+            new_variation.mrp = each.mrp
+            new_variation.discount_price = each.discount_price
+            new_variation.quantity = F('quantity') + each.stock
+            new_variation.weight = each.weight
+            new_variation.expiry_date = each.expiry_date
+
+            new_variation.save()
 
 
 def add_order_item(request):
