@@ -46,6 +46,7 @@ def add_product_with_variation(request):
         if 'product_data' in request.data.keys():
             product_data = request.data['product_data']
             product_serializer = ProductSerializer(data=product_data)
+            print(product_data['category'])
             for cat in product_data['category']:
                 if cat != "":
                     category_object, created = ProductCategories.objects.get_or_create(name=cat)

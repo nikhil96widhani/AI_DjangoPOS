@@ -5,6 +5,10 @@ const edit_product_category_selector = $('#edit_product_categories');
 const add_product_category_selector = $('#add_product_categories');
 let product_code_text_field_selector = $('#product_code');
 
+const add_product_modal_selector = '#addProductModalForm';
+const edit_product_modal_selector = '#editProductModalForm';
+const add_variation_modal_selector = '#addVariationModalForm';
+
 
 const addProductDetails = function (product_form_selector, variation_form_selector) {
     const product_form_data = getFormData($(product_form_selector));
@@ -33,8 +37,8 @@ const addProductDetails = function (product_form_selector, variation_form_select
             $(variation_form_selector).trigger('reset');
             $('#product_code').removeAttr('disabled');
             common_product_category_selector.tagator('refresh');
-            $('#addProductModalForm').modal('hide');
-            dataTable.DataTable().draw(false);
+            $(add_product_modal_selector).modal('hide');
+            dataTable.DataTable().draw(true);
         },
         error: function () {
             toastr.error('Product was not saved! Please try again.');
@@ -145,7 +149,7 @@ function loadProductsData() {
 //         edit_product_category_selector.tagator('refresh');
 //     });
 // }
-const filterDatatableByProductCode = (product_code, close_modal=false) => {
+const filterDatatableByProductCode = (product_code, close_modal = false) => {
     if (close_modal) $('.close').click();
     $('#toggle-advance-search-button').prop('checked', true).change();
     $('#advance-search-bar > th:nth-child(1) > input').val(product_code);
@@ -176,7 +180,7 @@ function updateProductDetails(product_form_selector, variation_form_selector) {
         success: function () {
             toastr.info('Product details were successfully updated.');
             $('.close').click();
-            dataTable.DataTable().draw(false);
+            dataTable.DataTable().draw(true);
         },
         error: function () {
             toastr.error('Product details were not updated! Please try again.');
@@ -207,7 +211,7 @@ const addVariation = (variation_form_selector) => {
             if (data.status === 'success') {
                 toastr.info(data.response);
                 $('.close').click();
-                dataTable.DataTable().draw(false);
+                dataTable.DataTable().draw(true);
             } else if (data.status === 'error') {
                 toastr.error(data.response);
                 filterDatatableByProductCode(product_code_to_update, true);
@@ -330,6 +334,23 @@ $('#add-variation-product-form-submit').click(function () {
     productFormHandler('add-variation');
 });
 
+$(document).keyup(function (event) {
+    if (event.which === 13) {
+        let modal_open = true;
+        if ($(add_product_modal_selector).is(':visible')) {
+            productFormHandler('add');
+        } else if ($(edit_product_modal_selector).is(':visible')) {
+            productFormHandler('edit');
+        } else if ($(add_variation_modal_selector).is(':visible')) {
+            productFormHandler('add-variation');
+        } else modal_open = false;
+
+        if (modal_open) {
+            resetAdvanceSearch();
+        }
+    }
+});
+
 $('.discount_percentage, .discount_price, .mrp').on('input', function () {
     const parent_form = this.closest('form')
     const class_name = this.className
@@ -401,12 +422,12 @@ product_code_text_field_selector.focusout(async () => {
         const product_exists = await checkProductExists(product_code)
         console.log(product_exists)
         if (product_exists) {
-            $('#addProductModalForm').modal('hide');
+            $(add_product_modal_selector).modal('hide');
             product_code_text_field_selector.val('');
             $('#extraConfirmationPrompt h5.modal-title').html('Product Already Exists!')
             $('#extraConfirmationPrompt div.modal-body').html(`Product Code - ${product_code} already exists! Choose From Below Options.`)
             $('#modal-yes-button').html('Check Product Details').attr('onclick', `searchProductCodeInDatatable(${product_code}); $('#extraConfirmationPrompt').modal('hide');`);
-            $('#modal-no-button').html('Change Product Code').attr('onclick', `$('#addProductModalForm').modal('show'); `);
+            $('#modal-no-button').html('Change Product Code').attr('onclick', `$('${add_product_modal_selector}').modal('show'); `);
             $('#extraConfirmationPrompt').modal('show');
         }
     }
