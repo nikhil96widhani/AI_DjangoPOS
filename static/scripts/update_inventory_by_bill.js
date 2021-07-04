@@ -1,6 +1,19 @@
 let product_code_to_update, product_code_to_delete, variation_id_to_update, variation_id_to_delete, action_required,
     updated_bill_item_id;
 
+let contains_zero_stock_item = false;
+function checkZeroStock(){
+    if (contains_zero_stock_item === true) {
+        document.getElementById("complete-bill").disabled = true;
+        document.getElementById("notice_zero_quantity").textContent = "Change quantity of bill items or remove 0 quantity items to save bill and update stock";
+    } else if (contains_zero_stock_item === false) {
+        document.getElementById("complete-bill").disabled = false;
+        document.getElementById("notice_zero_quantity").textContent = "";
+
+    }
+    contains_zero_stock_item = false;
+}
+
 function getBillDetails() {
 
     let url = "/api/stock-bill/"
@@ -81,13 +94,16 @@ function loadBillItemsTable() {
                 'data': 'id', sortable: false, 'width': '2%', render: function (data, type, row, meta) {
                     if (row.is_new_variation === false) {
                         return `<div class="custom-control custom-checkbox" id="is_new_variation_form">
-                                    <input type="checkbox" class="custom-control-input bill-item-updater" id="is_new_variation" value="${data}">
-                                    <label class="custom-control-label" for="is_new_variation"></label>
+                                    <input type="checkbox" class="custom-control-input bill-item-updater" 
+                                    id="is_new_variation${data}" name="is_new_variation" data-variation-id="${data}" value=1
+                                    >
+                                    <label class="custom-control-label" for="is_new_variation${data}"></label>
                                 </div>`;
                     } else if (row.is_new_variation === true) {
                         return `<div class="custom-control custom-checkbox" id="is_new_variation_form">
-                                    <input type="checkbox" class="custom-control-input bill-item-updater" id="is_new_variation" value="${data}">
-                                    <label class="custom-control-label" for="is_new_variation"></label>
+                                    <input type="checkbox" class="custom-control-input bill-item-updater" 
+                                    id="is_new_variation${data}" name="is_new_variation" data-variation-id="${data}" value=0 checked>
+                                    <label class="custom-control-label" for="is_new_variation${data}"></label>
                                 </div>`;
                     }
                 }
@@ -113,6 +129,9 @@ function loadBillItemsTable() {
             {
                 'data': 'stock', 'width': '8%', render: function (data, type, full) {
                     if (data === null) return "-";
+                    if (data === 0) {
+                        contains_zero_stock_item=true;
+                    }
                     if (full['quantity_unit'] === null) return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
                               min="0" type="number" name="stock" value="${data}" data-variation-id=${full.id}></div>`;
@@ -161,6 +180,7 @@ function loadBillItemsTable() {
                         <div class="col-sm-4 table-success font-weight-500 text-center py-3 h6">Total MRP -  <span class="font-weight-bold"><i class="las la-rupee-sign"></i>${json.data.bill_mrp_total}</span></div>`
             // $(dataTable.DataTable().table().footer()).html(html);
             $('#total-values-div').html(html);
+            checkZeroStock();
 
         },
     });
@@ -193,6 +213,7 @@ function updateBillDetails(data_json, reload_table, reload_page=false) {
         // complete: function () {
         // }
     })
+    checkZeroStock();
 }
 
 const prepareAndFillProductVariationSearchTableData = (data) => {
@@ -453,18 +474,9 @@ $('.bill-data-updater').on('change', function () {
 });
 
 $('#bill-datatable').on('change', '.bill-item-updater', function() {
-    if (this.type==='checkbox') {
-        console.log(this.checked)
-        let data_json = {'action':'update_bill_item', 'id': this.value, [this.name] : this.value  }
-        updateBillDetails(data_json, true)
-        updated_bill_item_id = parseInt(this.getAttribute('data-variation-id'));
-
-    }
-    else{
-        let data_json = {'action':'update_bill_item', 'id': this.getAttribute('data-variation-id'), [this.name] : this.value  }
-        updateBillDetails(data_json, true)
-        updated_bill_item_id = parseInt(this.getAttribute('data-variation-id'));
-    }
+    let data_json = {'action':'update_bill_item', 'id': this.getAttribute('data-variation-id'), [this.name] : this.value }
+    updateBillDetails(data_json, true)
+    updated_bill_item_id = parseInt(this.getAttribute('data-variation-id'));
 });
 
 $("#variation-search-input").on("input", function () {
