@@ -21,7 +21,6 @@ def BillData(bill_object, self):
     bill_items = reversed(bill_object.stockbillitems_set.all())
     queryset = self.filter_queryset(bill_items)
     bill_item_serializer = self.get_serializer(queryset, many=True)
-
     content = {
         'bill_name': bill_object.name,
         'bill_vendor': bill_object.vendor.name if bill_object.vendor else None,

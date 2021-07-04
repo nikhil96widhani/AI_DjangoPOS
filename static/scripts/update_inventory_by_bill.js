@@ -1,6 +1,18 @@
 let product_code_to_update, product_code_to_delete, variation_id_to_update, variation_id_to_delete, action_required,
     updated_variation_id;
 
+let contains_zero_stock_item = false;
+function checkZeroStock(){
+    if (contains_zero_stock_item === true) {
+        document.getElementById("complete-bill").disabled = true;
+        document.getElementById("notice_zero_quantity").textContent = "Change quantity of bill items or remove 0 quantity items to save bill and update stock";
+    } else if (contains_zero_stock_item === false) {
+        document.getElementById("complete-bill").disabled = false;
+        document.getElementById("notice_zero_quantity").textContent = "";
+
+    }
+    contains_zero_stock_item = false;
+}
 function getBillDetails() {
 
     let url = "/api/stock-bill/"
@@ -112,6 +124,9 @@ function loadBillItemsTable() {
             {
                 'data': 'stock', 'width': '8%', render: function (data, type, full) {
                     if (data === null) return "-";
+                    if (data === 0) {
+                        contains_zero_stock_item=true;
+                    }
                     if (full['quantity_unit'] === null) return `<div class="input-group" style="width: 100%">
                               <input class="form-control input-sm quantity editor-table px-1 text-center bill-item-updater" 
                               min="0" type="number" name="stock" value="${data}" data-variation-id=${full.id}></div>`;
@@ -160,6 +175,7 @@ function loadBillItemsTable() {
                         <div class="col-sm-4 table-success font-weight-500 text-center py-3 h6">Total MRP -  <span class="font-weight-bold"><i class="las la-rupee-sign"></i>${json.data.bill_mrp_total}</span></div>`
             // $(dataTable.DataTable().table().footer()).html(html);
             $('#total-values-div').html(html);
+            checkZeroStock();
 
         },
     });
@@ -193,6 +209,7 @@ function updateBillDetails(data_json, reload_table, reload_page=false) {
         // complete: function () {
         // }
     })
+    checkZeroStock();
 }
 
 const prepareAndFillProductVariationSearchTableData = (data) => {
@@ -313,6 +330,7 @@ function product_variation_search(value) {
                     </tr>`
             })
             $("#product-search-datatable").empty().append(thead_code + trHTML + tfoot_code);
+
         }
     });
 }
@@ -427,7 +445,6 @@ const addBillItemToBill = (product_code_or_variation, is_variation = false) => {
         },
     });
 }
-
 // $(function () {
 //     $(document).pos();
 //     $(document).on('scan.pos.barcode', function (event) {
