@@ -71,7 +71,8 @@ def add_product_with_variation(request):
                                  'response': 'Variation with these values already exists!'})
             except ProductVariation.DoesNotExist:
                 product_variation_serializer.save()
-                return Response({'status': 'success', 'response': 'Variation was successfully added.'},
+                return Response({'status': 'success', 'response': 'Variation was successfully added.',
+                                 'variation_id': product_variation_serializer.data['id']},
                                 status=status.HTTP_201_CREATED)
 
         return Response(product_variation_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -36,16 +36,15 @@
                     <h2 class="pt-2">Bill Items</h2>
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-md btn-primary" onclick="addBillItemToBill('BFE2807200049')">Add Bill Item</button>
+{#                    <button class="btn btn-md btn-primary" onclick="addBillItemToBill('BFE2807200049')">Add Bill Item</button>#}
                     <button type="button" class="btn btn-md btn-secondary btn-rounded waves-effect waves-light mr-3"
                             data-toggle="modal" data-target=".product-variation-searchModal">
                         <i class="fas fa-search mr-2"></i>
                         Search by product name
                     </button>
-                    <button class="float-right btn btn-md btn-primary btn-rounded waves-effect waves-light"
-                            data-toggle="modal" data-target="#addProductModalForm"><i class="fas fa-plus mr-2"></i>
+                    <a class="float-right btn btn-md btn-primary btn-rounded waves-effect waves-light" href="{% url 'products' %}?show_modal=true"><i class="fas fa-plus mr-2"></i>
                         Add New Product
-                    </button>
+                    </a>
                 </div>
             </div>
             <div class="row py-2 mb-4 mt-3">
@@ -103,7 +102,7 @@
         </div>
     </div>
     {% include 'inventory/modal-search.html' %}
-    {% include 'components/add-variation-form-modal.html' %}
+    {% include 'components/add-product-form-modal.html' %}
 
 {% endblock %}
 

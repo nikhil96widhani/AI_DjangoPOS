@@ -9,6 +9,9 @@ const add_product_modal_selector = '#addProductModalForm';
 const edit_product_modal_selector = '#editProductModalForm';
 const add_variation_modal_selector = '#addVariationModalForm';
 
+const url = new URL(window.location.href);
+const show_modal = url.searchParams.get('show_modal');
+window.history.replaceState("", "", url.pathname);
 
 const addProductDetails = function (product_form_selector, variation_form_selector) {
     const product_form_data = getFormData($(product_form_selector));
@@ -39,6 +42,10 @@ const addProductDetails = function (product_form_selector, variation_form_select
             common_product_category_selector.tagator('refresh');
             $(add_product_modal_selector).modal('hide');
             dataTable.DataTable().draw(true);
+
+            if (show_modal){
+                window.location.href = `/inventory/update-inventory-by-bill?variation_id=${data.variation_id}`
+            }
         },
         error: function () {
             toastr.error('Product was not saved! Please try again.');
@@ -112,7 +119,7 @@ function loadProductsData() {
                     return data + " " + full['weight_unit'];
                 }
             },
-            {'data': 'product.brand', render: data => handleBlankData(handleMissingData(data, 'name'))},
+            {'data': 'product.brand', name: 'product.brand.name', render: data => handleBlankData(handleMissingData(data, 'name'))},
             {'data': 'product.rack_number', render: handleBlankData},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
@@ -296,6 +303,11 @@ $(document).ready(function () {
     });
     const table = loadProductsData();
     addCategoriesToInput(common_product_category_selector)
+
+    if (show_modal){
+        $(add_product_modal_selector).modal('show');
+        $('#add-variation-form input[name="quantity"]').val(0).prop('disabled', true)
+    }
 });
 
 /*Add Product Events*/

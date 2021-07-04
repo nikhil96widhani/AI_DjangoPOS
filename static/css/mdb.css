@@ -11415,8 +11415,8 @@ span[data-jarallax-element] {
 .sn-bg-3 {
   background-image: url("https://mdbootstrap.com/img/Photos/Others/sidenav3.jpg"); }
 
-.sn-bg-4 {
-  background-image: url("https://mdbootstrap.com/img/Photos/Others/sidenav4.jpg"); }
+/*.sn-bg-4 {*/
+/*  background-image: url("https://mdbootstrap.com/img/Photos/Others/sidenav4.jpg"); }*/
 
 .side-nav {
   position: fixed;

@@ -1,5 +1,5 @@
 let product_code_to_update, product_code_to_delete, variation_id_to_update, variation_id_to_delete, action_required,
-    updated_variation_id;
+    updated_bill_item_id;
 
 function getBillDetails() {
 
@@ -31,6 +31,10 @@ let updated_product_code = 0;
 let updated_product_id = 0;
 let total_cart_value = 0;
 
+const url = new URL(window.location.href);
+const variation_id = url.searchParams.get('variation_id');
+window.history.replaceState("", "", url.pathname);
+
 function loadBillItemsTable() {
     let url = '/api/stock-bill/?format=datatables';
 
@@ -54,11 +58,11 @@ function loadBillItemsTable() {
             footer: true
         },
         "rowCallback": function (row, data, dataIndex) {
-            console.log(typeof updated_variation_id)
+            console.log(typeof updated_bill_item_id)
             console.log(typeof data.id)
-            if (data.id === updated_variation_id) {
+            if (data.id === updated_bill_item_id) {
                 $(row).addClass('clicked');
-                updated_variation_id = 0;
+                updated_bill_item_id = 0;
             }
         },
         'columns': [
@@ -162,7 +166,6 @@ function loadBillItemsTable() {
     });
 }
 
-
 function updateBillDetails(data_json, reload_table, reload_page=false) {
     console.log(JSON.stringify(data_json))
     let url = "/api/stock-bill/"
@@ -254,15 +257,11 @@ const fillProductVariationSearchTable = final_data => {
                     <td>${row.mrp}</td>
                     <td>${row.discount_price}</td>
                     <td>${row.quantity}</td>
-                    <td>${row.weight}</td>
+                    <td>${handleBlankData(row.weight)}</td>
                     <td>
-                        <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"
+                        <button type="button" class="btn btn-success btn-sm m-0 p-1 px-2"
                         onclick="addBillItemToBill(${row.variation_id}, true); $('.product-variation-searchModal').modal('hide');"
-                        ><i class="fas fa-plus"></i></button>
-                        <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2" 
-                                data-toggle="modal" data-target="#addVariationModalForm" onclick="addAndUpdateVariationButtonAction('edit', '${row.variation_id}', '${row.product_code}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
+                        ><i class="fas fa-check"></i></button>
                     </td>
                 </tr>`;
         }).join('');
@@ -416,6 +415,7 @@ const addBillItemToBill = (product_code_or_variation, is_variation = false) => {
                 toastr.error(data.response);
             } else {
                 console.log(data);
+                updated_bill_item_id = data.id;
                 dataTable.DataTable().draw(false);
             }
         },
@@ -457,13 +457,13 @@ $('#bill-datatable').on('change', '.bill-item-updater', function() {
         console.log(this.checked)
         let data_json = {'action':'update_bill_item', 'id': this.value, [this.name] : this.value  }
         updateBillDetails(data_json, true)
-        updated_variation_id = parseInt(this.getAttribute('data-variation-id'));
+        updated_bill_item_id = parseInt(this.getAttribute('data-variation-id'));
 
     }
     else{
         let data_json = {'action':'update_bill_item', 'id': this.getAttribute('data-variation-id'), [this.name] : this.value  }
         updateBillDetails(data_json, true)
-        updated_variation_id = parseInt(this.getAttribute('data-variation-id'));
+        updated_bill_item_id = parseInt(this.getAttribute('data-variation-id'));
     }
 });
 
@@ -492,4 +492,8 @@ onScan.attachTo(document, {
 $(document).ready(function () {
     getBillDetails();
     loadBillItemsTable();
+
+    if (variation_id){
+        addBillItemToBill(variation_id, true);
+    }
 });

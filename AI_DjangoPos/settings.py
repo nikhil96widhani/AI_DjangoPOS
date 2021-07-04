@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'coupons_discounts',
 
     'rest_framework',
+    'fontawesome-free',
+
     'api',
     'accounts',
     'inventory',
