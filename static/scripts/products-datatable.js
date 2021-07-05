@@ -43,7 +43,7 @@ const addProductDetails = function (product_form_selector, variation_form_select
             $(add_product_modal_selector).modal('hide');
             dataTable.DataTable().draw(true);
 
-            if (show_modal){
+            if (show_modal) {
                 window.location.href = `/inventory/update-inventory-by-bill?variation_id=${data.variation_id}`
             }
         },
@@ -119,7 +119,11 @@ function loadProductsData() {
                     return data + " " + full['weight_unit'];
                 }
             },
-            {'data': 'product.brand', name: 'product.brand.name', render: data => handleBlankData(handleMissingData(data, 'name'))},
+            {
+                'data': 'product.brand',
+                name: 'product.brand.name',
+                render: data => handleBlankData(handleMissingData(data, 'name'))
+            },
             {'data': 'product.rack_number', render: handleBlankData},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
@@ -304,9 +308,22 @@ $(document).ready(function () {
     const table = loadProductsData();
     addCategoriesToInput(common_product_category_selector)
 
-    if (show_modal){
-        $(add_product_modal_selector).modal('show');
-        $('#add-variation-form input[name="quantity"]').val(0).prop('disabled', true)
+    if (show_modal) {
+        const modal_body = $(`${add_product_modal_selector} .modal-body`);
+
+        $(add_product_modal_selector).modal({'show': true, 'backdrop': 'static'});
+        $('#add-variation-form input[name="quantity"]').val(0).prop('disabled', true);
+        $('.modal-backdrop.show').css({'opacity': 1, 'backdrop-filter': 'blur(5px)', 'background-color': '#01223770'})
+
+        const info_html = '<div class="alert alert-info" role="alert"><strong>Stock can be updated from <span class="font-weight-bold">Add Stock</span> page after adding product.</strong></div>';
+        const warn_html = '<div class="alert alert-warning" role="alert"><strong>You will be automatically redirected to <span class="font-weight-bold">Add Stock</span> page if product code already exists.</strong></div>';
+        modal_body.prepend(warn_html);
+        modal_body.prepend(info_html);
+
+        $(add_product_modal_selector).on('hide.bs.modal', function (e) {
+            const product_code = product_code_text_field_selector.val()
+            window.location.href = `/inventory/update-inventory-by-bill?product_code=${product_code}`;
+        })
     }
 });
 
