@@ -309,6 +309,7 @@ $(document).ready(function () {
     addCategoriesToInput(common_product_category_selector)
 
     if (show_modal) {
+        const add_stock_url = '/inventory/update-inventory-by-bill';
         const modal_body = $(`${add_product_modal_selector} .modal-body`);
 
         $(add_product_modal_selector).modal({'show': true, 'backdrop': 'static'});
@@ -320,10 +321,15 @@ $(document).ready(function () {
         modal_body.prepend(warn_html);
         modal_body.prepend(info_html);
 
+        $(`${add_product_modal_selector} button.close`).click(() => {
+            window.location.href = add_stock_url;
+            return false;
+        })
+
         $(add_product_modal_selector).on('hide.bs.modal', function (e) {
             const product_code = product_code_text_field_selector.val()
-            window.location.href = `/inventory/update-inventory-by-bill?product_code=${product_code}`;
-        })
+            window.location.href = `${add_stock_url}?product_code=${product_code}`;
+        });
     }
 });
 
@@ -454,10 +460,10 @@ product_code_text_field_selector.focusout(async () => {
             $(add_product_modal_selector).modal('hide');
             product_code_text_field_selector.val('');
             $('#extraConfirmationPrompt h5.modal-title').html('Product Already Exists!')
-            $('#extraConfirmationPrompt div.modal-body').html(`Product Code - ${product_code} already exists! Choose From Below Options.`)
-            $('#modal-yes-button').html('Check Product Details').attr('onclick', `searchProductCodeInDatatable(${product_code}); $('#extraConfirmationPrompt').modal('hide');`);
+            $('#extraConfirmationPrompt div.modal-body').html(`Product Code - <span class="font-weight-bold text-primary">${product_code}</span> already exists! Choose From Below Options.`)
+            $('#modal-yes-button').html('Check Product Details').attr('onclick', `searchProductCodeInDatatable('${product_code}'); $('#extraConfirmationPrompt').modal('hide');`);
             $('#modal-no-button').html('Change Product Code').attr('onclick', `$('${add_product_modal_selector}').modal('show'); `);
             $('#extraConfirmationPrompt').modal('show');
         }
     }
-})
+});

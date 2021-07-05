@@ -510,6 +510,7 @@ $(document).ready(function () {
         addBillItemToBill(variation_id_from_url, true);
     }
     else if (product_code_from_url){
+        toastr.info(`Product code ('${product_code_from_url}') already exists!`)
         prepareAndFillProductVariationSearchTableData(product_code_from_url);
     }
 });
