@@ -1,6 +1,16 @@
 let product_code_to_update, product_code_to_delete, variation_id_to_update, variation_id_to_delete, action_required,
     updated_bill_item_id;
 
+const dataTable = $("#bill-datatable");
+let updated_product_code = 0;
+let updated_product_id = 0;
+let total_cart_value = 0;
+
+const url = new URL(window.location.href);
+const variation_id_from_url = url.searchParams.get('variation_id');
+const product_code_from_url = url.searchParams.get('product_code');
+window.history.replaceState("", "", url.pathname);
+
 let contains_zero_stock_item = false;
 function checkZeroStock(){
     if (contains_zero_stock_item === true) {
@@ -38,15 +48,6 @@ function getBillDetails() {
         // }
     })
 }
-
-const dataTable = $("#bill-datatable");
-let updated_product_code = 0;
-let updated_product_id = 0;
-let total_cart_value = 0;
-
-const url = new URL(window.location.href);
-const variation_id = url.searchParams.get('variation_id');
-window.history.replaceState("", "", url.pathname);
 
 function loadBillItemsTable() {
     let url = '/api/stock-bill/?format=datatables';
@@ -506,7 +507,10 @@ $(document).ready(function () {
     getBillDetails();
     loadBillItemsTable();
 
-    if (variation_id){
-        addBillItemToBill(variation_id, true);
+    if (variation_id_from_url){
+        addBillItemToBill(variation_id_from_url, true);
+    }
+    else if (product_code_from_url){
+        prepareAndFillProductVariationSearchTableData(product_code_from_url);
     }
 });
