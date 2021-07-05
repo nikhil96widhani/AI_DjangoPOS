@@ -282,7 +282,7 @@ const fillProductVariationSearchTable = final_data => {
                     <td>
                         <button type="button" class="btn btn-success btn-sm m-0 p-1 px-2"
                         onclick="addBillItemToBill(${row.variation_id}, true); $('.product-variation-searchModal').modal('hide');"
-                        ><i class="fas fa-check"></i></button>
+                        ><i class="fas fa-plus"></i></button>
                     </td>
                 </tr>`;
         }).join('');
@@ -486,7 +486,8 @@ $("#variation-search-input").on("input", function () {
 });
 
 $("#complete-bill").on("click", function () {
-    updateBillDetails({'action': 'complete_and_update'}, false, true)
+    updateBillDetails({'action': 'complete_and_update'}, false, false)
+    window.open('/inventory/stock-bills-datatable/','_top')
 });
 
 

@@ -12,7 +12,7 @@ itsdangerous==1.1.0
 macholib==1.14
 MarkupSafe==1.1.1
 numpy
-pandass
+pandas
 python-dateutil==2.8.1
 pytz==2020.1
 six==1.15.0
@@ -21,3 +21,4 @@ Werkzeug==1.0.1
 whichcraft==0.6.1
 whitenoise==5.2.0
 xlrd==1.2.0
+fontawesome-free

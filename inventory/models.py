@@ -89,7 +89,7 @@ class ProductVariation(models.Model):
     discount_price = models.FloatField(blank=True, null=True)
     discount_percentage = models.FloatField(blank=True, null=True)
     quantity_unit = models.CharField(max_length=9, choices=Quantity_unit, default="PCS", blank=True, null=True)
-    quantity = models.IntegerField(blank=True, null=True)
+    quantity = models.IntegerField(blank=True, null=True, default=0)
     weight = models.IntegerField(blank=True, null=True)
     weight_unit = models.CharField(max_length=9, choices=Weight_unit, default="", blank=True, null=True)
     expiry_date = models.DateField(blank=True, null=True)
@@ -354,7 +354,7 @@ class OrderItem(models.Model):
 
             else:
                 self.product_code = None
-                self.mrp = self.discount_price
+                self.mrp = self.discount_price if self.mrp is None or self.mrp < self.discount_price else self.mrp
                 self.cost = self.discount_price
 
             if self.discount_price and self.quantity:

@@ -4,6 +4,8 @@ from rest_framework.response import Response
 
 from .serializers import *
 
+from django.utils.timezone import now
+
 
 def getOrderData(request):
     if 'order_id' not in request.data.keys() and request.user.is_authenticated:
@@ -108,7 +110,7 @@ def add_order_item(request):
         discount_price = request.data['discount_price']
         quantity = request.data['quantity']
         order_item = OrderItem.objects.create(order=order, product=None, quantity=int(quantity), name=name,
-                                                 discount_price=float(discount_price))
+                                              discount_price=float(discount_price))
         order_item.save()
         return Response({'status': 'custom-item_added',
                          'response': '{} was added to order'.format(name), })
@@ -194,6 +196,7 @@ def completeOrder(request):
     order, order_id = getOrderData(request)
     if len(order.orderitem_set.all()) >= 1:
         order.complete = True
+        order.date_order = now()
         if request.data.get('payment_mode'):
             order.payment_mode = request.data['payment_mode']
         order.save()
