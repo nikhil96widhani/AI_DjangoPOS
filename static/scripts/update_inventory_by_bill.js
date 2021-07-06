@@ -282,7 +282,7 @@ const fillProductVariationSearchTable = final_data => {
                     <td>${handleBlankData(row.weight)}</td>
                     <td>
                         <button type="button" class="btn btn-success btn-sm m-0 p-1 px-2"
-                        onclick="addBillItemToBill(${row.variation_id}, true); $('.product-variation-searchModal').modal('hide');"
+                        onclick="addItemToBill(${row.variation_id}, true); $('.product-variation-searchModal').modal('hide');"
                         ><i class="fas fa-plus"></i></button>
                     </td>
                 </tr>`;
@@ -321,7 +321,7 @@ function product_variation_search(value) {
                         <td>${item.weight}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2"
-                            onclick="addBillItemToBill(${item.id}, true); $('.product-variation-searchModal').modal('hide');"
+                            onclick="addItemToBill(${item.id}, true); $('.product-variation-searchModal').modal('hide');"
                             ><i class="fas fa-plus"></i></button>
                             <button type="button" class="btn btn-primary btn-sm m-0 p-1 px-2" 
                                     data-toggle="modal" data-target="#addVariationModalForm" onclick="addAndUpdateVariationButtonAction('edit', '${item.id}', '${item.product.product_code}')">
@@ -414,7 +414,7 @@ $('#add-variation-product-form-submit').click(function () {
     productFormHandler(action_required);
 });
 
-const addBillItemToBill = (product_code_or_variation, is_variation = false) => {
+const addItemToBill = (product_code_or_variation, is_variation = false) => {
     let url = "/api/add-bill-item/"
     let data = {'product_code': product_code_or_variation}
     if (is_variation) {
@@ -451,7 +451,7 @@ const addBillItemToBill = (product_code_or_variation, is_variation = false) => {
 //     $(document).pos();
 //     $(document).on('scan.pos.barcode', function (event) {
 //         console.log("from barcode", event.code)
-//         addBillItemToBill(event.code);
+//         addItemToBill(event.code);
 //     });
 // });
 
@@ -499,7 +499,7 @@ onScan.attachTo(document, {
     reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
     onScan: function(sCode) { // Alternative to document.addEventListener('scan')
         console.log(sCode);
-        addBillItemToBill(sCode);
+        addItemToBill(sCode);
     },
 });
 
@@ -508,7 +508,7 @@ $(document).ready(function () {
     loadBillItemsTable();
 
     if (variation_id_from_url){
-        addBillItemToBill(variation_id_from_url, true);
+        addItemToBill(variation_id_from_url, true);
     }
     else if (product_code_from_url){
         toastr.info(`Product code ('${product_code_from_url}') already exists!`)

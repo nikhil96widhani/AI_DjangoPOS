@@ -84,6 +84,7 @@ def updateProducts_fromBillItems(bill_items):
                 expiry_date=each.expiry_date
             )
         elif each.is_new_variation is True:
+
             product_instance, created = Product.objects.get_or_create(product_code=each.product_code)
 
             new_variation = ProductVariation.objects.create(product=product_instance)
@@ -94,8 +95,11 @@ def updateProducts_fromBillItems(bill_items):
             new_variation.quantity = F('quantity') + each.stock
             new_variation.weight = each.weight
             new_variation.expiry_date = each.expiry_date
-
             new_variation.save()
+
+            # change variation id of stock bill item
+            each.product_variation = new_variation
+            each.save()
 
 
 def add_order_item(request):

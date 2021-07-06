@@ -67,10 +67,23 @@ class StockBillApiView(mixins.ListModelMixin, GenericAPIView):
                     message = 'Bill data successfully updated'
         elif action == 'update_bill_item':
             bill_item = StockBillItems.objects.get(id=request.data['id'])
-            serializer = StockBillItemSerializer(bill_item, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                message = 'Bill item was successfully updated'
+
+            if 'is_new_variation' in request.data and request.data['is_new_variation'] == '0':
+                variations_of_same_id = StockBillItems.objects.filter(
+                    product_variation=bill_item.product_variation).values_list(
+                    'is_new_variation', flat=True)
+                if sum(variations_of_same_id) + 1 == len(variations_of_same_id):
+                    message = 'Cannot unset as old variation is already being edited'
+                else:
+                    serializer = StockBillItemSerializer(bill_item, data=request.data, partial=True)
+                    if serializer.is_valid():
+                        serializer.save()
+                        message = 'Bill item was successfully updated'
+            else:
+                serializer = StockBillItemSerializer(bill_item, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    message = 'Bill item was successfully updated'
 
         elif action == 'delete_billItem':
             billItem_id = request.data['billItem_id']
@@ -279,8 +292,14 @@ def add_bill_item(request):
                 return Response({'multiple_variation_exists': True, **get_variation_data(product_code)})
 
         try:
-            bill.stockbillitems_set.get(product_variation=variation.id)
-            return Response({'status': 'error', 'response': 'Variation already exists!'})
+            # variations_of_same_id = bill.stockbillitems_set.get(product_variation=variation.id)
+
+            variations_of_same_id = bill.stockbillitems_set.filter(product_variation=variation.id).values_list(
+                'is_new_variation', flat=True)
+            if sum(variations_of_same_id) == len(variations_of_same_id):
+                bill_item_data = {'stock_bill': stock_bill, **get_bill_item_data(variation)}
+            else:
+                return Response({'status': 'error', 'response': 'Variation already exists in bill items!'})
         except StockBillItems.MultipleObjectsReturned:
             bill_items = bill.stockbillitems_set.filter(product_variation=variation.id)
             for i in range(1, len(bill_items)):
@@ -291,11 +310,11 @@ def add_bill_item(request):
             bill_item_data = {'stock_bill': stock_bill, **get_bill_item_data(variation)}
 
             # Save bill item
-            serializer = StockBillItemSerializer(data=bill_item_data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = StockBillItemSerializer(data=bill_item_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class VendorListView(APIView):
