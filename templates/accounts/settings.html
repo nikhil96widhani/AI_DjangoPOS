@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page-title %}
+    <i class="fas fa-angle-right align-middle fa-xs"></i> Settings
+{% endblock %}
+
+{% block content %}
+        <h1 class="text-center pt-1"> Shop Settings</h1>
+    <div class="container">
+  <div class="row justify-content-center">
+    <div class="form-group py-2">
+        <form method="POST">
+
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <!-- Sign in button -->
+
+            <div class="text-center mb-3">
+                <button class="btn blue-gradient btn-block btn-rounded z-depth-1a" type="submit">Save</button>
+            </div>
+
+
+        </form>
+    </div></div></div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock %}

@@ -9615,7 +9615,7 @@ table.table a.btn.btn-whatsapp {
   overflow-y: scroll;
   height: 12.5rem; }
 
-/*! PhotoSwipe main CSS by Dmitry Semenov | photoswipe.com | MIT license */
+/*! PhotoSwipe accounts CSS by Dmitry Semenov | photoswipe.com | MIT license */
 /*
   Styles for basic PhotoSwipe functionality (sliding area, open/close transitions)
 */
@@ -10189,7 +10189,7 @@ a.pswp__share--download:hover {
 .pswp__caption {
   background-color: rgba(0, 0, 0, 0.5); }
 
-/* pswp__ui--fit class is added when main image "fits" between top bar and bottom bar (caption) */
+/* pswp__ui--fit class is added when accounts image "fits" between top bar and bottom bar (caption) */
 .pswp__ui--fit .pswp__top-bar,
 .pswp__ui--fit .pswp__caption {
   background-color: rgba(0, 0, 0, 0.3); }
@@ -11415,8 +11415,8 @@ span[data-jarallax-element] {
 .sn-bg-3 {
   background-image: url("https://mdbootstrap.com/img/Photos/Others/sidenav3.jpg"); }
 
-.sn-bg-4 {
-  background-image: url("https://mdbootstrap.com/img/Photos/Others/sidenav4.jpg"); }
+/*.sn-bg-4 {*/
+/*  background-image: url("https://mdbootstrap.com/img/Photos/Others/sidenav4.jpg"); }*/
 
 .side-nav {
   position: fixed;

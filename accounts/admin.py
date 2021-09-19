@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User, SiteConfiguration, PosCustomer
+from solo.admin import SingletonModelAdmin
 
 
 class CustomAdmin(UserAdmin):
@@ -15,3 +16,5 @@ class CustomAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomAdmin)
+admin.site.register(SiteConfiguration, SingletonModelAdmin)
+admin.site.register(PosCustomer)

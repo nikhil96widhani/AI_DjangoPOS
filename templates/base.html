@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="mn-custom-scrollbar">
 
 <head>
     <meta charset="utf-8">
@@ -10,8 +10,10 @@
     <title>AI-POS</title>
     <!-- FontAwsome Icons -->
     {#    <script src="https://kit.fontawesome.com/ad14bd368c.js" crossorigin="anonymous"></script>#}
-    <script type="text/javascript" src="{% static 'js/ad14bd368c.js' %}"></script>
-    <link href="{% static 'css/fontawesome.css' %}" rel="stylesheet">
+{#    <script type="text/javascript" src="{% static 'js/ad14bd368c.js' %}"></script>#}
+{#    <link href="{% static 'css/fontawesome.css' %}" rel="stylesheet">#}
+    <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
     <!-- Pace CSS-->
     <link href="{% static 'css/pace-theme.css' %}" rel="stylesheet">
     <!-- Bootstrap core CSS -->
@@ -27,8 +29,11 @@
     <!-- Your custom styles (optional) -->
     <style>
         html {
-                font-size: 0.8rem !important;
-            }
+            font-size: 0.8rem !important;
+        }
+        fieldset:disabled div.tagator_element {
+            background-color: #e9ecef;
+        }
     </style>
 </head>
 
@@ -51,35 +56,52 @@
             <!--/. Logo -->
 
             <!--Search Form-->
-            <li>
-                <form class="search-form" role="search">
-                    <div class="md-form mt-0 waves-light">
-                        <input type="text" class="form-control py-2" placeholder="Search">
-                    </div>
-                </form>
-            </li>
+            {#            <li>#}
+            {#                <form class="search-form" role="search">#}
+            {#                    <div class="md-form mt-0 waves-light">#}
+            {#                        <input type="text" class="form-control py-2" placeholder="Search">#}
+            {#                    </div>#}
+            {#                </form>#}
+            {#            </li>#}
             <!--/.Search Form-->
             <!-- Side navigation links -->
+            <hr>
             <li>
                 <ul class="collapsible collapsible-accordion">
-                    <li><a href="{% url 'pos-home' %}" class="collapsible-header waves-effect"><i
+                    <li><a href="{% url 'pos-home' %}" class="waves-effect"><i
                             class="fas fa-rupee-sign"></i>POS</a></li>
-                    <li><a href="{% url 'products' %}" class="collapsible-header waves-effect"><i
-                            class="fas fa-warehouse"></i>Inventory</a></li>
+                    <li><a class="collapsible-header waves-effect"><i class="fas fas fa-book"></i>Inventory<i
+                            class="fas fa-angle-down pl-5"></i></a></li>
                     <li>
-                        <a class="collapsible-header waves-effect arrow-r"><i class="fas fa-border-all"></i>Reports<i
-                                class="fas fa-angle-down rotate-icon"></i></a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="{% url 'orders-datatable' %}" class="waves-effect">Orders</a>
-                                <li><a href="{% url 'dashboard' %}" class="waves-effect">Dashboard</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li><a href="{% url 'update-inventory' %}" class="collapsible-header waves-effect">
-                        <i class="far fa-edit"></i>Update Inventory</a></li>
+                    <li><a href="{% url 'products' %}" class="waves-effect pl-5">
+                        <i class="fas fa-layer-group"></i>All Products</a>
+                    <li><a href="{% url 'stock-bills-datatable' %}" class="waves-effect pl-5">
+                        <i class="fas fa-receipt"></i>Stock Bills</a>
+                    <li><a href="{% url 'update-inventory-by-bill' %}" class="waves-effect pl-5">
+                        <i class="fas fa-truck"></i>Add Stock</a>
+                    {#                    <li>#}
+                    {#                        <a class="collapsible-header waves-effect arrow-r active"><i class="fas fa-border-all"></i>Reports<i#}
+                    {#                                class="fas fa-angle-down rotate-icon"></i></a>#}
+                    {#                        <div class="collapsible-body">#}
+                    {#                            <ul>#}
+                    {#                                <li><a href="{% url 'orders-datatable' %}" class="waves-effect">Orders</a>#}
+                    {#                                <li><a href="{% url 'dashboard' %}" class="waves-effect">Dashboard</a>#}
+                    {#                                </li>#}
+                    {#                            </ul>#}
+                    {#                        </div>#}
+                    {#                    </li>#}
+                    <li><a class="collapsible-header waves-effect"><i class="fas fa-chart-bar"></i>Reports<i
+                            class="fas fa-angle-down pl-5"></i></a></li>
                     <li>
+                    <li><a href="{% url 'orders-datatable' %}" class="waves-effect pl-5">
+                        <i class="fas fa-shopping-bag"></i>Orders</a>
+                    <li><a href="{% url 'dashboard' %}" class="waves-effect pl-5">
+                        <i class="fas fa-chart-line"></i>Dashboard</a>
+                    <li><a href="{% url 'update-inventory' %}" class="waves-effect">
+                        <i class="fas fa-edit"></i>Update Inventory</a></li>
+                    <li>
+                    <li><a href="{% url 'settings' %}" class="waves-effect">
+                        <i class="fas fa-cog"></i>Settings</a></li>
                     {#                    <li>#}
                     {#                        <a class="collapsible-header waves-effect arrow-r"><i class="fas fa-user-cog mr-2"></i>Maintenance<i#}
                     {#                                class="fas fa-angle-down rotate-icon"></i></a>#}
@@ -209,6 +231,34 @@
         {% block content %}
         {% endblock %}
     </div>
+
+    {#MODAL#}
+    <!-- To change the direction of the modal animation change .right class -->
+    <div class="modal fade left" id="sideModalTR" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+
+        <!-- Add class .modal-side and then add class .modal-top-right (or other classes from list above) to set a position to the modal -->
+        <div class="modal-dialog modal-side modal-bottom-left" role="document">
+
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title w-100" id="myModalLabel">Modal Title</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% block modal-contents %}
+                    {% endblock %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 <!-- Main layout -->
 
@@ -247,7 +297,7 @@
 <script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/steppers.js' %}"></script>
 <!--Custom scripts-->
-<script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/scripts.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/darkmode.js' %}"></script>
 <script>
@@ -288,6 +338,15 @@
     }
 
     const csrftoken = getToken('csrftoken');
+</script>
+
+<script>
+    $(document).ready(function () {
+        const myCustomScrollbar = document.querySelectorAll('.mn-custom-scrollbar');
+        for (x of myCustomScrollbar) {
+            const ps = new PerfectScrollbar(x);
+        }
+    });
 </script>
 <! -- CSRF TOKEN -->
 
