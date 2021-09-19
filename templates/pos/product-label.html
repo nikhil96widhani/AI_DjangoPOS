@@ -1,8 +1,10 @@
 {% load static %}
 {% load pos_tags %}
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/product_label.css' %}">
+<link rel="stylesheet" href="{% static 'line_awesome/css/line-awesome.min.css' %}">
 
 {% if error %}
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <div class="alert alert-danger text-center" role="alert">
         {{ error }} <a href="javascript:window.open('','_self').close();">Close Tab</a>
     </div>
@@ -14,114 +16,74 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        {#        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">#}
-        <link rel="stylesheet" href="{% static 'css/product_label.css' %}">
-        <title>Label example</title>
+        <title>Product Label</title>
     </head>
     <body>
-    <div class="product-label">
-    <div class="card product-label">
-        <div class="card-body">
-            <div class="row hr-bottom-row1">
-                <div class="column left">
-                    <div class="a card-title">{{ product.name }}
-                        {% if product.weight %}
-                            , {{ product.weight }}
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="column right">
-                    <div class="numberCircle">
-                        {% if product.discount_percentage %}
-                            {{ product.discount_percentage|floatformat:0 }}% OFF
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </div>
-                </div>
+    <div class="float-right shopright vertical-text">Shopright Supermarket</div>
+    <div class="card-body product-label pt-0">
+        <div class="row pt-0">
+            <div class="product-name pt-1">
+                {{ product.product.name|truncatechars:35 }}
             </div>
-{#            <hr>#}
-            <div class="row2">
-                <div class="column2 left2">
-                    <div style="text-align:center;">
-                        <svg id="barcode" class="div.a"></svg>
-                    </div>
-                </div>
-                <div class="column right2 rotated pt-3">
-                    <div style="text-align: center ">
-                        <div class="a">MRP: ₹{{ product.mrp|price_format }}</div>
-                        <div class=""> OUR PRICE</div>
-                        <div class="a price-tag">₹{{ product.discount_price|price_format }}</div>
-                    </div>
-                </div>
+            <span class="product-name pt-1">
+            {% if product.weight %}
+                , {{ product.weight }}
+            {% endif %}
+                {% if product.weight_unit %}
+                    {{ product.weight_unit }}
+                {% endif %}
+        </span>
+        </div>
+        <div class="row">
+            <div class="barcode text-center">
+                <svg id="barcode-text" class="text-center"></svg>
             </div>
+        </div>
+        <div class="row pr-3 ml-n3">
+            <div class="col p-0 border border-dark">
+                <div class="our-rate pl-1 font-weight-bold">OUR RATE
+                    <span class="our-rate pl-1">(Inclusive of all taxes)</span></div>
 
+                <div class="row">
+                    <div class="price font-weight-bolder pl-3 text-center"><i class="las la-rupee-sign"></i>{{ product.discount_price|price_format }}/-</div>
+                    <div class="mrp font-weight-500 pl-3 font-weight-bold">MRP: <i class="las la-rupee-sign"></i>{{ product.mrp|price_format }}/-</div>
+                </div>
+            </div>
+            {% if product.discount_percentage %}
+                <div class="col col-3 p-0 border-top border-right border-bottom border-dark">
+                    <div class="text-center discount">Discount</div>
+                    <div class="text-center font-weight-bold discount-percent">
+                        {{ product.discount_percentage|floatformat:0 }}%
+
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
-        <p class="footer-text">SHOPRIGHT SUPERMARKET <span class="text-italic">(Prices are Inclusive of all Taxes)</span></p>
-    </div>
-
-    {#    NEW LABEL STYLE#}
-
-    {#<div class="card product-label border-dark">#}
-    {#    <div class="card-header">#}
-    {#        <div class="row">#}
-    {#            <div class="col-9">#}
-    {#                {{ product.name }}#}
-    {#                {% if product.weight %}#}
-    {#                    , {{ product.weight }}#}
-    {#                {% endif %}#}
-    {#            </div>#}
-    {#            <div class="col-3">#}
-    {#                <div class="badge badge-pill badge-success">#}
-    {#                    <div>{{ product.get_discount_percentage|floatformat:0 }}% OFF</div></div>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
-    {#    <div class="card-body my-3">#}
-    {#        <div class="row">#}
-    {#            <div class="col-9">#}
-    {#                <div class="text-center align-middle"><svg id="barcode" class="div.a"></svg></div>#}
-    {#            </div>#}
-    {#            <div class="col-3 rotated">#}
-    {#                    <div class="text-left">#}
-    {#                        <h5 class="font-weight-bold">MRP: ₹{{ product.mrp|price_format }}</h5>#}
-    {#                        <div>OUR PRICE</div>#}
-    {#                        <h3 class="font-weight-bold">₹{{ product.discount_price|price_format }} </h3>#}
-    {#                    </div>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
-    {#    <div class="card-footer text-muted text-center" style="max-height: 20px;">SHOPRIGHT SUPERMARKET  <span class="font-italic">(Prices Inclusive of all Taxes)</span></div>#}
-    {#    </div>#}
-
-    {#    asda#}
-
-
     <button id="btnPrint" class="hidden-print">Print</button>
     <script type="text/javascript" src="{% static 'js/JsBarcode.all.min.js' %}"></script>
     <script type="text/javascript">
-        JsBarcode("#barcode", '{{ product.product_code }}', {
+        JsBarcode("#barcode-text", '{{ product.product.product_code }}', {
             format: "CODE128",
+            {#ean128: true,#}
             font: "monospace",
-            textPosition: "bottom",
             marginLeft: 2,
-            marginTop: 2,
+            marginTop: 5,
             marginBottom: 2,
             marginRight: 2,
-            fontSize: 5,
-            {#lineColor: "#0aa",#}
-            width: 1,
-            textMargin: 0,
-            height: 35,
+            fontSize: 8,
+            width: 1.5,
+            textMargin: 1,
+            height: 55,
             {#displayValue: false#}
         });
     </script>
     <script type="text/javascript" src="{% static 'js/receipt.js' %}"></script>
     <script type="text/javascript">
         window.print();
-        window.open('', '_parent', '');
-        {#window.close()#}
+        window.onafterprint = function () {
+            window.close();
+        }
     </script>
     </body>
     </html>

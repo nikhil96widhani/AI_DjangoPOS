@@ -47,22 +47,30 @@ function UpdateStats(date1, date2) {
 }
 
 function UpdateStatsCards(response) {
-    document.getElementById("sold_order_number").innerHTML = response.orders.length +
-        "                  <small class=\"text-success ml-2\">" +
-        "                    <i class=\"fas fa-arrow-up fa-sm pr-1\"></i>13,4%</small>";
+    document.getElementById("sold_order_number").innerHTML = response.orders.length
+        // +
+        // "                  <small class=\"text-success ml-2\">" +
+        // "                    <i class=\"fas fa-arrow-up fa-sm pr-1\"></i>13,4%</small>"
+    ;
 
 
-    document.getElementById("sold_item_number").innerHTML = response.orders_summary.total_items +
-        "                  <small class=\"text-success ml-2\">" +
-        "                    <i class=\"fas fa-arrow-up fa-sm pr-1\"></i>13,4%</small>";
-    1
-    document.getElementById("sold_item_revenue").innerHTML = response.orders_summary.total_revenue +
-        "                  <small class=\"text-success ml-2\">" +
-        "                    <i class=\"fas fa-arrow-up fa-sm pr-1\"></i>13,4%</small>";
+    document.getElementById("sold_item_number").innerHTML = response.orders_summary.total_items
+        // +
+        // "                  <small class=\"text-success ml-2\">" +
+        // "                    <i class=\"fas fa-arrow-up fa-sm pr-1\"></i>13,4%</small>"
+    ;
 
-    document.getElementById("sold_item_profit").innerHTML = roundToTwoDecimal(response.orders_summary.total_profit) +
-        "                  <small class=\"text-danger ml-2\">" +
-        "                    <i class=\"fas fa-arrow-down fa-sm pr-1\"></i>13,4%</small>";
+    document.getElementById("sold_item_revenue").innerHTML = roundToTwoDecimal(response.orders_summary.total_revenue)
+        // +
+        // "                  <small class=\"text-success ml-2\">" +
+        // "                    <i class=\"fas fa-arrow-up fa-sm pr-1\"></i>13,4%</small>"
+    ;
+
+    document.getElementById("sold_item_profit").innerHTML = roundToTwoDecimal(response.orders_summary.total_profit)
+        // +
+        // "                  <small class=\"text-danger ml-2\">" +
+        // "                    <i class=\"fas fa-arrow-down fa-sm pr-1\"></i>13,4%</small>"
+    ;
 
     // console.log(response)
 }

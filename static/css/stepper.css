@@ -159,7 +159,7 @@ ul.stepper .md-form .validate {
     -webkit-box-pack: justify;
     -webkit-justify-content: space-between;
     justify-content: space-between;
-    min-height: 14rem;
+    min-height: 12rem;
     margin-left: -1.5rem;
     margin-right: -1.5rem;
     padding-left: 1.5rem;
@@ -169,7 +169,7 @@ ul.stepper .md-form .validate {
       content: '';
       background-color: transparent;
       width: 100%;
-      min-height: 5.25rem;
+      min-height: 0.1rem;
       position: absolute;
       left: -3px;
       -webkit-border-top-left-radius: 2px;
@@ -252,8 +252,8 @@ ul.stepper .md-form .validate {
       top: 0.9375rem; }
      ul.stepper.horizontal .step-new-content {
       position: absolute;
-      height: 100%;
-      top: 6rem;
+      height: 50%;
+      top: 2rem;
       left: 0;
       width: 100%;
       overflow-y: hidden;
