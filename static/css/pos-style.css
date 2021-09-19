@@ -11,11 +11,23 @@
 
 .my-custom-scrollbar-product-list {
     position: relative;
-    height: calc(100vh - 40vh);
+    /*height: calc(100vh - 45vh);*/
     width: 100%;
     overflow: auto;
 }
 
 .font-white {
     color: white !important;
+}
+
+.cart-quant {
+    height: 20px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
 }

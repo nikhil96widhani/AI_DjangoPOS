@@ -22,6 +22,7 @@ def orders_datatable_view(request):
     return render(request, 'reports/orders-datatable-page.html', {})
 
 
+# ToDo -- Move to ApiViews
 @api_view(['GET'])
 def daily_stats(request):
     date = datetime.today().strftime('%Y-%m-%d')

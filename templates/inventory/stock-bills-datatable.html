@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}">
+{% endblock %}
+
+{% block page-title %}
+    Stock Bills Datatable
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <div class="row justify-content-between mt-1 mb-2">
+                <div class="col-4">
+                    <h2 class="pt-2">Stock Bills</h2>
+                </div>
+                <div class="col-4">
+                    <a href="{% url 'update-inventory-by-bill' %}">
+                        <button class="float-right btn btn btn-md btn-primary btn-rounded waves-effect waves-light">
+                            <i class="fas fa-plus mr-3"></i>
+                            Add Stock
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="custom-control custom-switch float-right mb-2 mr-1">
+                        <input type="checkbox" class="custom-control-input" id="toggle-advance-search-button">
+                        <label class="custom-control-label" for="toggle-advance-search-button">Advance Search</label>
+                    </div>
+                </div>
+            </div>
+            <table id="stock-bills-datatable" class="table nowrap text-center custom-datatable" style="width:100%">
+                <thead>
+                <tr class="" style="background: #e2e6ea">
+                    <th></th>
+                    <th>Stock Bill Number</th>
+                    <th>Order Date</th>
+                    <th>Bill Name</th>
+                    <th>Vendor Name</th>
+                    <th>Total Stock</th>
+                    <th>Total Cost (₹)</th>
+                    <th>Total MRP (₹)</th>
+                    <th>Total Revenue (₹)</th>
+                    <th>Total Profit (₹)</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteStockBillPrompt" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Stock Bill (Number - <span class="text-warning" id="static-stock-bill-id-delete"></span>) will be deleted.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="stock-bill-delete-yes">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/jquery.pos.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/datatable-common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/stock-bills-datatable.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            loadStockBillsDatatable();
+        });
+    </script>
+{% endblock %}

@@ -1,118 +1,14 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.crypto import get_random_string
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
+
+from .helper import get_variation_data
 from .serializers import *
 
 from inventory.models import *
-
-
-class Cart(APIView):
-    def get(self, request, format=None):
-        order_id = request.GET.get("order_id")
-        whatsapp = request.GET.get("whatsapp")
-        if whatsapp == 'True' and request.user.is_authenticated:
-            try:
-                order = Order.objects.get(pk=order_id)
-                items = order.orderitem_set.all()
-                item_serializer = cart_items_serializer(items, many=True)
-                content = {
-                    'items': item_serializer.data,
-                    'cart_items_quantity': order.get_cart_items_quantity,
-                    'cart_total': order.get_cart_revenue,
-                    'cart_mrp_total': order.get_cart_mrp,
-                    'order_id': order.id
-                }
-                return Response(content)
-            except ObjectDoesNotExist:
-                return Response({'error': "no such order or an error occurred"})
-
-        elif order_id is None and request.user.is_authenticated:
-            customer = request.user
-            order, created = Order.objects.get_or_create(customer=customer, complete=False)
-
-            items = order.orderitem_set.all()
-            item_serializer = cart_items_serializer(items, many=True)
-
-            content = {
-                'items': item_serializer.data,
-                'cart_items_quantity': order.get_cart_items_quantity,
-                'cart_total': order.get_cart_revenue,
-                'cart_mrp_total': order.get_cart_mrp,
-                'order_id': order.id
-            }
-            return Response(content)
-        elif order_id:
-            try:
-                order = Order.objects.get(pk=order_id, complete=True)
-                items = order.orderitem_set.all()
-                item_serializer = cart_items_serializer(items, many=True)
-                content = {
-                    'items': item_serializer.data,
-                    'cart_items_quantity': order.get_cart_items_quantity,
-                    'cart_total': order.get_cart_revenue,
-                    'cart_mrp_total': order.get_cart_mrp,
-                    'order_id': order.id
-                }
-                return Response(content)
-            except ObjectDoesNotExist:
-                return Response({'error': "no such completed order"})
-        else:
-            content = {
-                'items': [],
-                'cart_items_quantity': '',
-                'cart_total': '',
-                'cart_mrp_total': '',
-                'order_id': ''
-            }
-            return Response(content)
-
-    def post(self, request, format=None):
-        action = request.data['action']
-        customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        if action == 'complete' and len(order.orderitem_set.all()) <= 0:
-            return Response(
-                {"response_type": "completed",
-                 "response_text": "No items to complete order. Please add items"}
-            )
-        elif action == 'complete' and len(order.orderitem_set.all()) > 0:
-            order.complete = True
-            order.payment_mode = request.data['payment-mode']
-            order.date_order = now()
-            order.save()
-            return Response(
-                {"response_type": "completed",
-                 "response_text": "Order Completed, Please print the Receipt or click Finish to refresh page"}
-            )
-        elif action == 'clear':
-            OrderItem.objects.filter(order=request.data['product_code']).delete()
-            return Response(
-                {"response_type": "updated",
-                 "response_text": "All Cart items removed. Start adding products"}
-            )
-        else:
-            product_code = request.data['product_code']
-            product = Product.objects.get(product_code=product_code)
-            orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
-
-            if action == 'add':
-                orderItem.quantity = (orderItem.quantity + 1)
-            elif action == 'remove':
-                orderItem.quantity = (orderItem.quantity - 1)
-
-            orderItem.save()
-
-            if orderItem.quantity <= 0 or action == 'delete':
-                orderItem.delete()
-
-            return Response(
-                {"response_type": "updated",
-                 "response_text": "Item was added/updated"}
-            )
 
 
 class ProductCategoryList(APIView):
@@ -135,54 +31,6 @@ class ProductCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductCategorySerializer
 
 
-class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.all().order_by('-modified_time')
-    serializer_class = ProductSerializer
-
-
-@api_view(['POST'])
-def add_product(request):
-    if request.method == 'POST':
-        product_serializer = ProductSerializer(data=request.data)
-        for cat in request.data['category']:
-            if cat != "":
-                category_object, created = ProductCategories.objects.get_or_create(name=cat)
-                if created:
-                    print(f'Category - {cat} was added.')
-        if product_serializer.is_valid():
-            product_serializer.save()
-            return Response(product_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(product_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def product_detail(request, pk):
-    try:
-        product = Product.objects.get(pk=pk)
-    except Product.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = ProductSerializer(product)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = ProductSerializer(product, data=request.data)
-        for cat in request.data['category']:
-            if cat != "":
-                category_object, created = ProductCategories.objects.get_or_create(name=cat)
-                if created:
-                    print(f'Category - {cat} was added.')
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 class ProductCodeGeneratorView(APIView):
     @staticmethod
     def get(request):
@@ -190,21 +38,110 @@ class ProductCodeGeneratorView(APIView):
         return Response({'unique_product_code': unique_product_code})
 
 
-@api_view(['GET'])
-def search_products(request):
-    if request.method == 'GET':
-        """
-            This is an Temporary search fix until we use POSTGRES database for final build. 
-            Once we start using postgres we can use full text search function feature with weights.   
-        """
-        search_term = request.GET.get("search_term")
-        if search_term:
-            products_contains = Product.objects.filter(name__contains=search_term)[:10]
-            products_starts = Product.objects.filter(name__startswith=search_term)[:3]
-            products_code_starts = Product.objects.filter(product_code__startswith=search_term)[:3]
-            products = (products_starts | products_contains | products_code_starts)[:10]
-        else:
-            products = Product.objects.all()[:10]
+@api_view(['POST'])
+def add_product_with_variation(request):
+    variation_data = request.data['variation_data']
+    if request.method == 'POST':
+        # Product Save
+        if 'product_data' in request.data.keys():
+            product_data = request.data['product_data']
+            product_serializer = ProductSerializer(data=product_data)
+            print(product_data['category'])
+            for cat in product_data['category']:
+                if cat != "":
+                    category_object, created = ProductCategories.objects.get_or_create(name=cat)
+                    if created:
+                        print(f'Category - {cat} was added.')
+            if product_serializer.is_valid():
+                product_serializer.save()
+                variation_data['product'] = product_data['product_code']
 
-        product_serializer = ProductSerializer(products, many=True)
-        return Response({'products': product_serializer.data})
+        product_variation_serializer = ProductVariationPostSerializer(data=variation_data)
+        if product_variation_serializer.is_valid():
+            try:
+                ProductVariation.objects.get(product=variation_data['product'],
+                                             cost=variation_data['cost'],
+                                             mrp=variation_data['mrp'],
+                                             discount_price=variation_data['discount_price'],
+                                             weight=variation_data['weight'],
+                                             expiry_date=variation_data['expiry_date'])
+                # variation_obj.quantity += int(quantity)
+                # variation_obj.save()
+                return Response({'status': 'error',
+                                 'response': 'Variation with these values already exists!'})
+            except ProductVariation.DoesNotExist:
+                product_variation_serializer.save()
+                return Response({'status': 'success', 'response': 'Variation was successfully added.',
+                                 'variation_id': product_variation_serializer.data['id']},
+                                status=status.HTTP_201_CREATED)
+
+        return Response(product_variation_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def variation_detail(request, pk):
+    try:
+        variation = ProductVariation.objects.get(pk=pk)
+    except ProductVariation.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        variation_serializer = ProductVariationSerializer(variation)
+        return Response(variation_serializer.data)
+
+    elif request.method == 'PUT':
+        product_data = request.data['product_data']
+        variation_data = request.data['variation_data']
+
+        # Product Update
+        product = Product.objects.get(pk=product_data['product_code'])
+        product_serializer = ProductSerializer(product, data=product_data)
+        for cat in product_data['category']:
+            if cat != "":
+                category_object, created = ProductCategories.objects.get_or_create(name=cat)
+                if created:
+                    print(f'Category - {cat} was added.')
+        if product_serializer.is_valid():
+            product_serializer.save()
+
+        # Variation Update
+        variation_serializer = ProductVariationPostSerializer(variation, data=variation_data, partial=True)
+        if variation_serializer.is_valid():
+            variation_serializer.save()
+            return Response(ProductVariationSerializer(variation).data)
+        return Response(variation_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        try:
+            ProductVariation.objects.get(product=variation.product.product_code)
+            product = Product.objects.get(pk=variation.product.product_code)
+            product.delete()
+        except ProductVariation.MultipleObjectsReturned:
+            variation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+
+class ProductVariationListView(generics.ListAPIView):
+    queryset = ProductVariation.objects.all().order_by('-modified_time')
+    serializer_class = ProductVariationSerializer
+
+
+@api_view(['GET'])
+def variations_data_using_product_code(request):
+    try:
+        Product.objects.get(pk=request.GET.get('product_code'))
+    except Product.DoesNotExist:
+        return Response({'product_exists': False})
+
+    if request.GET.get('action') == 'product_check':
+        return Response({'product_exists': True})
+
+    elif request.GET.get('action') == 'product_variation_data':
+        product_code = request.GET.get('product_code')
+        return Response(get_variation_data(product_code))

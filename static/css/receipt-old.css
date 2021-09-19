@@ -1,0 +1,134 @@
+* {
+    font-size: 12px;
+    font-family: 'Arial', serif;
+    line-height: normal;
+}
+.text-small{
+    font-size: 10px;
+}
+
+.h1{
+    font-size: 15px;
+    font-weight: bold;
+}
+.mr-5{
+    margin-right: 5px;
+}
+td,
+th,
+tr,
+table {
+    /*border-bottom: 1px solid black;*/
+    border-collapse: collapse;
+}
+
+td.equal{
+    text-align: center;
+    padding-right: 5px;
+    width: 25%;
+    max-width: 25%;
+}
+th.equal {
+    text-align: center;
+    padding-right: 5px;
+    width: 25%;
+    max-width: 25%;
+}
+
+div.description{
+    font-weight: bold;
+    padding-left: 5px;
+}
+
+div.product-name{
+    font-weight: 500;
+    padding-left: 5px;
+}
+
+div.mrp{
+    /*font-weight: bold;*/
+    font-size: 15px;
+}
+div.amount{
+    font-weight: bold;
+    font-size: 20px;
+}
+div.save{
+    align-items: center;
+    font-weight: bold;
+    font-size: 15px;
+}
+th.description {
+    width: 180px;
+    max-width: 180px;
+}
+
+td.quantity{
+    padding-left: 5px;
+}
+th.quantity {
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+
+td.price{
+    padding-left: 5px;
+}
+th.price {
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+
+td.footer{
+    padding-left: 5px;
+    font-weight: bolder;
+}
+p.footer-receipt-text{
+    border-style: dotted;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+.centered {
+    text-align: center;
+    align-content: center;
+}
+
+.ticket {
+    width: 270px;
+    max-width: 270px;
+}
+
+img {
+    max-width: inherit;
+    width: inherit;
+}
+.hidden-print{
+    background-color: red;
+    font-size: 30px;
+    height: 50px;
+    width: 100px
+    }
+
+.font-weight-500{
+    font-weight: bold;
+}
+
+.points-tnc{
+    padding-right: 3px;
+}
+
+
+ @page {
+  size: auto;
+  margin: 0;
+       }
+
+@media print {
+    .hidden-print,
+    .hidden-print * {
+        display: none !important;
+    }
+}

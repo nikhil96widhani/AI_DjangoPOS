@@ -37,7 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'solo',
+    'ckeditor',
+    'coupons_discounts',
+
     'rest_framework',
+    'fontawesome-free',
+
     'api',
     'accounts',
     'inventory',
@@ -108,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -150,3 +156,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 LOGIN_REDIRECT_URL = 'user-redirect'
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
+
+DSC_COUPON_CODE_LENGTH = 16

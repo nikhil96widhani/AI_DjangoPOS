@@ -1,0 +1,48 @@
+{% extends 'pos/components/pos-buttons-modal-base.html' %}
+{% load static %}
+
+{% block modal-css %}
+    {#    <link rel="stylesheet" href="{% static 'css/calculator-styles.css' %}">#}
+{% endblock %}
+
+{% block modal-title %}Apply Discount{% endblock %}
+
+{% block modal-id %}discount-modal{% endblock %}
+
+
+{% block modal-body %}
+
+    <div class="input-group my-5">
+    <div class="input-group-prepend">
+        <span class="input-group-text"><strong>Discount Value</strong></span>
+    </div>
+    <input type="number" step=".01" class="form-control" aria-label="Code"
+           name="discount_value"
+           id="discount_value" autocomplete="false" required>
+    <div class="input-group-append">
+        <div class="input-group-text">
+            <input class="form-check-input" type="checkbox"
+                   id="discount_value_checkbox">
+            <label class="form-check-label"
+                   for="discount_value_checkbox"></label>
+        </div>
+        <span class="input-group-text">%</span>
+    </div>
+
+{% endblock %}
+
+{% block modal-footer %}
+    {% with load_footer=True %}
+        {{ block.super }}
+    {% endwith %}
+
+
+{% endblock %}
+
+{% block modal-buttons %}
+    <button id="apply-order-discount" type="button" class="btn btn-primary" data-dismiss="modal">Apply</button>
+{% endblock %}
+
+{% block modal-javascript %}
+    {#    <script src="{% static 'js/calculator-script.js' %}"></script>#}
+{% endblock %}
