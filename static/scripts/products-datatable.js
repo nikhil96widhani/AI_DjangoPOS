@@ -291,7 +291,7 @@ $(document).ready(function () {
     $('#products-datatable thead tr:eq(1) th').each(function (i) {
         $(this).html(`<input type="text" class="form-control form-control-sm ml-1"/>`);
         if (i === 9) {
-            $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button" onclick="resetAdvanceSearch()"><i class="fa fa-close" style="font-size: larger" aria-hidden="true"></i></div>');
+            $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button" onclick="resetAdvanceSearch()"><i class="fas fa-times" style="font-size: larger" aria-hidden="true"></i></div>');
         }
         $('input', this).on('keyup change', function () {
             if (table.column(i).search() !== this.value) {

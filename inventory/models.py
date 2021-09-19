@@ -299,6 +299,7 @@ class Order(models.Model):
         return profit_total
 
     def save(self, *args, **kwargs):
+        print(self.get_cart_revenue)
         self.cart_revenue = "{:.2f}".format(self.get_cart_revenue)
         self.cart_profit = "{:.2f}".format(self.get_cart_profit)
         self.cart_cost = "{:.2f}".format(self.get_cart_cost)

@@ -494,14 +494,22 @@ $("#complete-bill").on("click", function () {
 
 
 // Initialize with options
-onScan.attachTo(document, {
-    suffixKeyCodes: [13], // enter-key expected at the end of a scan
-    reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
-    onScan: function(sCode) { // Alternative to document.addEventListener('scan')
-        console.log(sCode);
-        addItemToBill(sCode);
-    },
+$(function () {
+    $(document).pos();
+    $(document).on('scan.pos.barcode', function (event) {
+        console.log(event.code);
+        addItemToBill(event.code);
+    });
 });
+
+// onScan.attachTo(document, {
+//     suffixKeyCodes: [13], // enter-key expected at the end of a scan
+//     reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
+//     onScan: function(sCode) { // Alternative to document.addEventListener('scan')
+//         console.log(sCode);
+//         addItemToBill(sCode);
+//     },
+// });
 
 $(document).ready(function () {
     getBillDetails();
