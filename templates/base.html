@@ -1,9 +1,13 @@
 {% load static %}
+{% load solo_tags %}
+{% get_solo 'accounts.SiteConfiguration' as account_config %}
+
 
 <!DOCTYPE html>
 <html lang="en" class="mn-custom-scrollbar">
 
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -40,6 +44,14 @@
 <body class="fixed-sn white-skin">
 
 <!--Main Navigation-->
+<style>
+	.profile-pic{
+		max-width: 120px;
+		max-height: 70px;
+		margin: 0 auto;
+		border-radius: 0%;
+	}
+</style>
 <header>
 
     <!-- Sidebar navigation -->
@@ -48,9 +60,21 @@
             <!-- Logo -->
             <li class="logo-sn waves-effect py-3">
                 <div class="text-center">
-                    <a href="{% url 'pos-home' %}" class="pl-0"><img class="img-fluid px-2"
-                                                                     src="{% static 'images/receipt-logo.png' %}"
-                                                                     alt="logo"></a>
+                    <a href="{% url 'pos-home' %}" class="pl-0">
+{#                        <img class="img-fluid px-2" src="{% static 'images/receipt-logo.png' %}" alt="logo">#}
+                        {% if account_config.shop_logo %}
+{#                            {{ account_config.shop_logo.url }}#}
+                            <img class="profile-pic" height='200' width='200' src="{{ account_config.shop_logo.url }}" alt="logo">
+                        {% else %}
+                            <img class="profile-pic" src="{% static 'images/default_logo.png' %}" alt="logo">
+                        {% endif %}
+{#                        {% if SiteConfiguration.shop_logo %}#}
+{#                            <img src="{{ SiteConfiguration.shop_logo }}">#}
+{#                            {{  SiteConfiguration.shop_logo.url }}#}
+{#                        {% endif %}#}
+{#                        {{ user.User.firstname }}#}
+                    </a>
+{#                    <a href="{% url 'pos-home' %}" class="pl-0"> {{ form.instance.shop_name }} </a>#}
                 </div>
             </li>
             <!--/. Logo -->
@@ -99,9 +123,17 @@
                         <i class="fas fa-chart-line"></i>Dashboard</a>
                     <li><a href="{% url 'update-inventory' %}" class="waves-effect">
                         <i class="fas fa-edit"></i>Update Inventory</a></li>
-                    <li>
-                    <li><a href="{% url 'settings' %}" class="waves-effect">
-                        <i class="fas fa-cog"></i>Settings</a></li>
+                    {% if request.user.is_superuser %}
+                        <li><a class="collapsible-header waves-effect"><i class="fas fa-chart-bar"></i>Settings<i
+                            class="fas fa-angle-down pl-5"></i></a></li>
+                        <li>
+                        <li><a href="{% url 'settings' %}" class="waves-effect pl-5">
+                            <i class="fas fa-shopping-bag"></i>Shop Settings</a>
+                        <li><a href="{% url 'backup' %}" class="waves-effect pl-5">
+                            <i class="fas fa-sync-alt fa-spin"></i>Backup Now</a>
+{#                        <li><a href="{% url 'settings' %}" class="waves-effect">#}
+{#                            <i class="fas fa-cog"></i>Settings</a></li>#}
+                    {% endif %}
                     {#                    <li>#}
                     {#                        <a class="collapsible-header waves-effect arrow-r"><i class="fas fa-user-cog mr-2"></i>Maintenance<i#}
                     {#                                class="fas fa-angle-down rotate-icon"></i></a>#}
@@ -131,7 +163,8 @@
         </div>
         <!-- Breadcrumb-->
         <div class="breadcrumb-dn mr-auto ml-3">
-            <h5 class="pt-1 grey-text"> AI POS SYSTEM
+{#            <h5 class="pt-1 grey-text"> AI POS SYSTEM#}
+                <h5 class="pt-1 grey-text"> {{ account_config.shop_name }}
                 {% block page-title %}
                 {% endblock %}
             </h5>

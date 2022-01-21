@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from solo.models import SingletonModel
 from ckeditor.fields import RichTextField
-
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 # A custom user model needs a user manager
@@ -94,8 +94,18 @@ currency_choice = (
 )
 
 
+def clean_image(img):
+    file_size = img.file.size
+    limit_kb = 150
+    limit = limit_kb * 1024
+    if file_size > limit_kb * 1024:
+        raise ValidationError("Max size of file is %s KB" % limit)
+
+    # limit_mb = 8
+    # if file_size > limit_mb * 1024 * 1024:
+    #    raise ValidationError("Max size of file is %s MB" % limit_mb)
+
 class SiteConfiguration(SingletonModel):
-    # Shop Fields
     shop_name = models.CharField(max_length=255, blank=True, null=True, default='Shop Name')
     address = models.CharField(max_length=100, blank=True, null=True, default='Bhopal, India')
     country_located = models.CharField(max_length=20, blank=True, null=True, default='India')
@@ -110,6 +120,7 @@ class SiteConfiguration(SingletonModel):
     # tnc = models.CharField(max_length=5, null=True)
     receipt_message = models.CharField(max_length=100, blank=True, null=True, default='Thank you for shopping')
     receipt_tnc = RichTextField(blank=True, null=True, default='<li>No Return on goods sold</li>')
+    shop_logo = models.ImageField(default='images/default_logo.png', null=True, blank=True, upload_to="images/", validators=[clean_image])
 
     def __str__(self):
         return "Site Configuration"

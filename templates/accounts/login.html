@@ -1,29 +1,62 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block page-title %}
     <i class="fas fa-angle-right align-middle fa-xs"></i> Login
 {% endblock %}
 
 {% block content %}
-<div class="p-5">
-    <!-- Card -->
-<div class="card card-cascade align-item-center justify-content-center mx-auto" style="width: 30rem">
 
-  <!-- Card image -->
-  <div class="view view-cascade gradient-card-header blue-gradient">
+        <head>
+            <style>
+                body {
+                    background-image: url("{% static 'images/background-image.png' %}");
+                    background-repeat: no-repeat;
+                    background-attachment: fixed;
+                    background-size: 100% 100%;
+                }
+            </style>
+        </head>
+    <body>
 
-    <!-- Title -->
-    <h2 class="card-header-title">Login</h2>
+    <div class="p-5">
+        <!-- Card -->
+        <div class="card card-cascade align-item-center justify-content-center mx-auto" style="width: 30rem">
 
-  </div>
+        <!-- Card image -->
+        <div class="view view-cascade gradient-card-header blue-gradient">
+
+        <!-- Title -->
+        <h2 class="card-header-title">Login</h2>
+
+    </div>
 
   <!-- Card content -->
   <div class="card-body card-body-cascade text-center px-lg-5 pt-5">
 
     <!-- Form -->
-    <form class="text-center" style="color: #757575;" method="POST">
+    <form class="text-left" style="color: #757575;" method="POST">
     {% csrf_token %}
-        {{form.as_p}}
+{#        {{form.as_p}}#}
+        <!-- bootstrap for login form -->
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username">
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+
+{#        <button type="submit" class="btn btn-primary">Submit</button>#}
+
 
       <!-- Sign in button -->
       <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Sign in</button>

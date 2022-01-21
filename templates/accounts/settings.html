@@ -6,23 +6,27 @@
 
 {% block content %}
         <h1 class="text-center pt-1"> Shop Settings</h1>
+{#        <h1 class="text-center pt-1"> hi {{ form.instance.shop_name }}</h1>#}
     <div class="container">
-  <div class="row justify-content-center">
-    <div class="form-group py-2">
-        <form method="POST">
+          <div class="row justify-content-center">
+            <div class="form-group py-2">
+                <form method="POST" enctype="multipart/form-data">
 
-            {% csrf_token %}
-            {{ form.as_p }}
+                    {% csrf_token %}
+                    {{ form.as_p }}
 
-            <!-- Sign in button -->
+                    <!-- Sign in button -->
 
-            <div class="text-center mb-3">
-                <button class="btn blue-gradient btn-block btn-rounded z-depth-1a" type="submit">Save</button>
+                <div class="text-center mb-3">
+                    <input class="btn btn-primary" type="submit" name="Save">
+{#                        <button class="btn blue-gradient btn-block btn-rounded z-depth-1a" type="submit">Save</button>#}
+                </div>
+
+
+                </form>
             </div>
-
-
-        </form>
-    </div></div></div>
+          </div>
+    </div>
 {% endblock %}
 
 {% block javascript %}
