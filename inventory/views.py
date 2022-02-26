@@ -22,7 +22,7 @@ def updateInventoryView(request):
         return render(request, 'update-inventory.html', context)
     return render(request, 'update-inventory.html', {})
 
-
+@login_required
 def products_view(request):
     weight_unit = Weight_unit
     quantity_unit = Quantity_unit

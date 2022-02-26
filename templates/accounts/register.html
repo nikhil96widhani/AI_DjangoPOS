@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block page-title %}
     <i class="fas fa-angle-right align-middle fa-xs"></i> Register
@@ -7,16 +6,6 @@
 
 
 {% block content %}
-    <head>
-        <style>
-            body {
-                background-image: url("{% static 'images/background-image.png' %}");
-                background-repeat: no-repeat;
-                background-attachment: fixed;
-                background-size: 100% 100%;
-            }
-        </style>
-    </head>
 <div class="p-5">
         <!-- Card -->
         <div class="card card-cascade mx-auto" style="width: 40rem">
@@ -33,33 +22,29 @@
             <div class="card-body card-body-cascade px-lg-5 pt-5">
 
                 <!-- Form -->
-                    <form method="POST">
-                    <div class="form-group">
-
-                        {% csrf_token %}
-{#                        {% csrf_token %}#}
-                        {% for field in form %}
-                            <p>
-                                {{ field.label_tag }}
-                                {{ field }}
-                                {% if field.help_text %}
-                                    <p class="text-muted" style="color: grey">{{ field.help_text }}</p>
-                                {% endif %}
-                                {% for error in field.errors %}
-                                    <p style="color: red">{{ error }}</p>
-                                {% endfor %}
-                            </p>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <p>
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <p class="text-muted" style="color: grey">{{ field.help_text }}</p>
+                            {% endif %}
+                        {% for error in field.errors %}
+                            <p style="color: red">{{ error }}</p>
                         {% endfor %}
-    {#                    {{ form.as_p }}#}
+                        </p>
+                    {% endfor %}
 
 
-                        <!-- Sign in button -->
-                        <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
-                                type="submit">Register
-                        </button>
-                    </div>
-                    </form>
+                    <!-- Sign in button -->
+                    <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
+                            type="submit">Register
+                    </button>
 
+                </form>
                 <!-- Form -->
 
                 <hr>
