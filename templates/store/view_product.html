@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{#<img src="{{ data.image.url }}" alt="img">#}
+
+    {% for i in data %}
+        {% if i.image %}
+{#            {{ i.image.url }}#}
+            <img src="{{ i.image.url }}" width="500px"/>
+        {% endif %}
+
+    {% endfor %}
+
+{% endblock %}
