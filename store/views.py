@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from inventory.models import Product, ProductVariation
 from accounts.models import User
 from .forms import CustomerCreationForm
-
+import uuid
 
 # Create your views here.
 def home_page(request):
@@ -17,8 +17,11 @@ def user_signup(request):
     if request.method == 'POST':
         form = CustomerCreationForm(request.POST)
         if form.is_valid():
-            form.save()
             print("hi")
+            form.save()
+            # obj.username = uuid.uuid4()
+            # obj.save()
+
             return redirect('store_home_page')
 
     print("Hi")
