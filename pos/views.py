@@ -41,7 +41,6 @@ def pos_homeView(request):
             'order': [],
             'last_order_id': 0
         }
-    print(context)
     return render(request, 'pos/cart-datatable.html', context)
 
 
