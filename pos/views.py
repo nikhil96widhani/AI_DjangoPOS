@@ -2,17 +2,28 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
-
+from django.core.exceptions import MultipleObjectsReturned
 from inventory.models import ProductVariation, Order, Payment_mode
+from time import sleep
 
 
 # Create your views here.
 
+
 @login_required
 def pos_homeView(request):
     if request.user.is_authenticated:
-        customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        def getCreateOrder_Patch(user):
+            try:
+                orderr, created = Order.objects.get_or_create(customer=user, complete=False)
+                return orderr
+            except MultipleObjectsReturned:
+                orders = Order.objects.filter(customer=user, complete=False)
+                orders.delete()
+                return getCreateOrder_Patch(user)
+
+        order = getCreateOrder_Patch(request.user)
+
         try:
             last_order_id = int(order.id) - 1
         except:
@@ -30,6 +41,7 @@ def pos_homeView(request):
             'order': [],
             'last_order_id': 0
         }
+    print(context)
     return render(request, 'pos/cart-datatable.html', context)
 
 

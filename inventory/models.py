@@ -1,4 +1,5 @@
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 from django.db import models
 from accounts.models import User, PosCustomer
@@ -218,8 +219,8 @@ class StockBillItems(models.Model):
         self.weight_unit = self.product_variation.weight_unit
 
         if not self.expiry_date:
-            today = date.today()
-            self.expiry_date = date(today.year, today.month + 3, today.day)
+            # today = date.today()
+            self.expiry_date = date.today() + relativedelta(months=+3)
 
         super(StockBillItems, self).save(*args, **kwargs)
 
@@ -299,7 +300,6 @@ class Order(models.Model):
         return profit_total
 
     def save(self, *args, **kwargs):
-        print(self.get_cart_revenue)
         self.cart_revenue = "{:.2f}".format(self.get_cart_revenue)
         self.cart_profit = "{:.2f}".format(self.get_cart_profit)
         self.cart_cost = "{:.2f}".format(self.get_cart_cost)
