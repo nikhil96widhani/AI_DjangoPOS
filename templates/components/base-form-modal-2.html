@@ -62,6 +62,9 @@
                                     </div>
 
                                     <div class="border rounded px-3 py-4 my-4">
+
+
+
                                         <div class="input-group mb-4">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Company</span>
@@ -86,23 +89,55 @@
                                                    name="category"
                                                    id="{{ element_id }}_product_categories">
                                         </div>
-                                        <div class="input-group mt-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">Description</span>
-                                            </div>
-                                            <textarea class="form-control" aria-label="description"
-                                                      name="description"></textarea>
-                                        </div>
+
                                     </div>
                                 </fieldset>
                             </form>
                         </div>
 
                         <div class="col-lg-6 pl-lg-4 mt-3 mt-lg-0">
-                            <form id="{{ element_id }}-variation-form">
-                                <div class="mb-3 mt-1 h4 grey-ic {{ variation_title_visibility }}">Variation Details
+                            <form id="{{ element_id }}-variation-form" enctype="multipart/form-data">
+
+                                <div class="mb-3 mt-1 h4 grey-ic {{ variation_title_visibility }}">
+                                    Variation Details
                                 </div>
+
+{#                                <div class="input-group mb-4">#}
+{#                                    <div class="custom-file">#}
+{#                                        <input name="photo" id="{{ element_id }}_photo" type="file"  required class="form-control photo"#}
+{#                                               aria-label="photo">#}
+{#                                        <label class="custom-file-label" for="photo">Choose file</label>#}
+{#                                    </div>#}
+{#                                    <div class="input-group-append">#}
+{#                                        <span class="input-group-text" id="">Upload</span>#}
+{#                                    </div>#}
+{#                                </div>#}
+
+                                <div class="input-group mb-3">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="product_image_upload" name="image">
+                                        <label class="custom-file-label" for="{{ element_id }}_image">Choose file</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="">Upload</span>
+                                    </div>
+                                </div>
+
+{#                                <form method="put" enctype="multipart/form-data" id ="image-upload">#}
+{#                                    <input name="image" type="file" id="image">#}
+{#                                    <input type="submit">#}
+{#                                </form>#}
+
+                                <div class="input-group mt-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Description</span>
+                                    </div>
+                                    <textarea class="form-control" aria-label="description"
+                                              name="description"></textarea>
+                                </div>
+
                                 <div class="border rounded px-3 py-4 my-4">
+
                                     <div class="input-group mb-4">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><strong>Buying Cost</strong></span>

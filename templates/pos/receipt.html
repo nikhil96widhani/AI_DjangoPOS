@@ -71,7 +71,7 @@
                 <tbody>
             </table>
             {% for a in cart_items %}
-                <div class="product-name font-weight-500">{{ a.name }}
+                <div class="product-name font-weight-500">{{ a.product.name }}
                     {% if a.weight %}, {{ a.weight }}{{ a.weight_unit }}
                     {% endif %}</div>
                 <table class="text-left ml-2 w-100">

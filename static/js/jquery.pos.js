@@ -7,7 +7,6 @@
             scan: '',
             swipe: ''
         };
-        interval = setInterval(() => data.scan = '', 1000);
         //set default options
         defaults = {
             scan: true,

@@ -66,7 +66,7 @@
                                         {#                                        <br>#}
                                         <ul class="list-group list-group-flush overflow-auto my-custom-scrollbar-product-list mn-custom-scrollbar"
                                             style="height: 45vh"
-                                            id="AllProductListLi">
+                                            id="script">
                                         </ul>
                                     </div>
                                     <!-- All Products -->
@@ -259,8 +259,7 @@
 {% endblock %}
 
 {% block javascript %}
-{#    <script type="text/javascript" src="{% static 'js/onscan.js' %}"></script>#}
-    <script src="{% static 'js/jquery.pos.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/onscan.js' %}"></script>
     <script src="{% static 'scripts/whatsapp_receipt.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'scripts/datatable-common.js' %}"></script>
