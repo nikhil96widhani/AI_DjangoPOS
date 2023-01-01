@@ -1,0 +1,121 @@
+body{ position:relative; min-height:100vh }
+
+body.offcanvas-active{
+    overflow:hidden;
+}
+
+
+.main-wrap{
+    margin-left: 260px;
+}
+
+.content-main{
+    padding:30px 3%; margin-left:auto; margin-right:auto;
+}
+
+.navbar-aside{
+    max-width: 260px;
+	display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    overflow-y: auto;
+    background-color:$white;
+    box-shadow:$box-shadow-sm;
+    z-index: 10;
+    border-right:1px solid $border-color;
+
+    .aside-top{
+        padding:1rem .5rem; 
+        display:flex; 
+        align-items:center;
+        justify-content:space-between;
+        .brand-wrap{
+            padding-left:$spacer/2;
+            padding-right:$spacer/2;
+            display:inline-block;
+        }
+        .logo{ height:46px; width:auto; max-width:200px}
+    }
+
+}
+
+.main-header{
+    padding-left:3%;
+    padding-right:3%;
+    min-height:72px;
+    background-color:$white;
+    border-bottom:1px solid $border-color;
+
+    .nav{
+        align-items:center;
+    }
+    .nav-item > a{ border-radius:$border-radius; color: $gray-500; display:block; text-decoration:none; }
+    .nav-link:hover{ background-color:$gray-200;  color: $primary  }
+
+    .col-search{
+        flex-grow:0.5;
+    }
+    .col-nav{
+        display:flex; align-items:center;
+    }
+}
+
+.nav-item{
+    img.rounded-circle{ border:2px solid #eee;
+        &:hover{ border-color:$primary}
+    }
+}
+
+.content-header{
+    display:flex; align-items:center; justify-content: space-between; margin-bottom:30px;
+    .content-title{ margin-bottom:0;}
+}
+
+.inner{
+    padding:$spacer;
+}
+
+body.aside-mini{
+    .main-wrap{
+        margin-left:70px;
+    }
+    .navbar-aside{
+        max-width:70px; overflow:visible; position:absolute; min-height:100%; bottom:auto;
+        .aside-top{ 
+            text-align:center; 
+            > div{ flex-grow:1; }
+        }
+        .brand-wrap, .logo{ display:none}
+    }
+    // .navbar-aside end
+    
+    .menu-aside{
+        .menu-link{ 
+            text-align:center;
+            .text{ display:none;}
+            .icon{ margin-right:0; }
+        }
+        .submenu{ 
+            border:1px solid #ddd; border-radius:$border-radius;
+            box-shadow:$box-shadow;
+            background-color:white; 
+            margin-left:0;  
+            padding:10px;
+            position:absolute; left:100%; top:0;
+            width:180px;
+        }
+        .menu-item{
+            position:relative; 
+            &:hover .submenu{
+                display:block; z-index:10;
+            }
+        }
+        .menu-item.has-submenu{
+            .menu-link:after{ display:none;} 
+        }
+    } 
+    // .menu-aside end
+}
+// body.aside-mini

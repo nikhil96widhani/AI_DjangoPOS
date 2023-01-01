@@ -1,0 +1,684 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Sample title - Ecommerce admin dashboard template</title>
+
+  <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+  <link href="css/bootstrap.css?v=1.1" rel="stylesheet" type="text/css"/>
+
+  <!-- custom style -->
+  <link href="css/ui.css?v=1.1" rel="stylesheet" type="text/css"/>
+  <link href="css/responsive.css?v=1.1" rel="stylesheet" />
+
+  <!-- iconfont -->
+  <link rel="stylesheet" href="fonts/material-icon/css/round.css"/>
+
+</head>
+<body>
+
+<b class="screen-overlay"></b>
+
+<aside class="navbar-aside" id="offcanvas_aside">
+<div class="aside-top">
+  <a href="page-index-1.html" class="brand-wrap">
+    <img src="images/logo.svg" height="46" class="logo" alt="Ecommerce dashboard template">
+  </a>
+  <div>
+    <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+  </div>
+</div> <!-- aside-top.// -->
+
+<nav>
+  <ul class="menu-aside">
+    <li class="menu-item"> 
+      <a class="menu-link" href="page-index-1.html"> <i class="icon material-icons md-home"></i> 
+        <span class="text">Dashboard</span> 
+      </a> 
+    </li>
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>  
+        <span class="text">Products</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-products-list.html">Product list view</a>
+        <a href="page-products-table.html">Product table view</a>
+        <a href="page-products-grid.html">Product grid</a>
+        <a href="page-products-grid-2.html">Product grid 2</a>
+        <a href="page-categories.html">Categories</a>
+      </div>
+    </li>
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i> 
+        <span class="text">Orders</span> 
+      </a>
+      <div class="submenu">
+        <a href="page-orders-1.html">Order list 1</a>
+        <a href="page-orders-2.html">Order list 2</a>
+        <a href="page-orders-detail.html">Order detail</a>
+      </div> 
+    </li>
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i> 
+        <span class="text">Sellers</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-sellers-cards.html">Sellers cards</a>
+        <a href="page-sellers-list.html">Sellers list</a>
+        <a href="page-seller-detail.html">Seller profile</a>
+      </div> 
+    </li>
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>  
+        <span class="text">Add product</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-form-product-1.html">Add product 1</a>
+        <a href="page-form-product-2.html">Add product 2</a>
+        <a href="page-form-product-3.html">Add product 3</a>
+        <a href="page-form-product-4.html">Add product 4</a>  
+      </div>
+    </li>
+    <li class="menu-item has-submenu">
+      <a class="menu-link" href="page-transactions-A.html"> <i class="icon material-icons md-monetization_on"></i> 
+        <span class="text">Transactions</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-transactions-A.html">Transaction 1</a>
+        <a href="page-transactions-B.html">Transaction 2</a>
+      </div>
+    </li>
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>  
+        <span class="text">Account</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-account-login.html">User login</a>
+        <a href="page-account-register.html">User registration</a>
+        <a href="page-error-404.html">Error 404</a>
+      </div>
+    </li>
+    <li class="menu-item active"> 
+      <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i> 
+        <span class="text">Reviews</span> 
+      </a> 
+    </li>
+    <li class="menu-item"> 
+      <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i> 
+        <span class="text">Brands</span> </a> 
+    </li>
+    <li class="menu-item"> 
+      <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i> 
+        <span class="text">Statistics</span> 
+      </a> 
+    </li>
+  </ul>
+  <hr>
+  <ul class="menu-aside">
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i> 
+        <span class="text">Settings</span> 
+      </a>
+      <div class="submenu">
+        <a href="page-settings-1.html">Setting sample 1</a>
+        <a href="page-settings-2.html">Setting sample 2</a>
+      </div>
+    </li>
+    <li class="menu-item">
+      <a class="menu-link" href="page-0-blank.html"> <i class="icon material-icons md-local_offer"></i> 
+        <span class="text"> Starter page </span>
+      </a> 
+    </li>
+  </ul>
+  <br>
+  <br>
+</nav>
+</aside>
+
+<main class="main-wrap">
+   <header class="main-header navbar">
+        <div class="col-search">
+             <form class="searchform">
+                  <div class="input-group">
+                       <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                       <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
+                  </div>
+                  <datalist id="search_terms">
+                       <option value="Products"> </option>
+                       <option value="New orders"> </option>
+                       <option value="Apple iphone"> </option>
+                       <option value="Ahmed Hassan"> </option>
+                  </datalist>
+             </form>
+        </div>
+        <div class="col-nav">
+           <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="md-28 material-icons md-menu"></i> </button>
+           <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link btn-icon" onclick="darkmode(this)" title="Dark mode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn-icon" href="#"> <i class="material-icons md-notifications_active"></i> </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"> English </a>
+            </li>
+            <li class="dropdown nav-item">
+              <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#"> <img class="img-xs rounded-circle" src="images/people/avatar1.jpg" alt="User"></a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <a class="dropdown-item" href="#">My profile</a>
+                <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item text-danger" href="#">Exit</a>
+              </div>
+            </li>
+          </ul> 
+        </div>
+   </header>
+   <section class="content-main">
+        <div class="content-header">
+             <h2 class="content-title">Reviews</h2>
+        </div>
+        <div class="card mb-4">
+         <header class="card-header">
+              <div class="row gx-3">
+                   <div class="col-lg-4 col-md-6 me-auto">
+                        <input type="text" placeholder="Search..." class="form-control" />
+                   </div>
+                   <div class="col-lg-2 col-md-3 col-6">
+                        <select class="form-select">
+                             <option>Status</option>
+                             <option>Active</option>
+                             <option>Disabled</option>
+                             <option>Show all</option>
+                        </select>
+                   </div>
+                   <div class="col-lg-2 col-md-3 col-6">
+                        <select class="form-select">
+                             <option>Show 20</option>
+                             <option>Show 30</option>
+                             <option>Show 40</option>
+                        </select>
+                   </div>
+              </div>
+         </header>
+         <!-- card-header end// -->
+         <div class="card-body">
+
+<div class="table-responsive">                 
+<table class="table table-hover">
+<thead>
+     <tr>
+          <th>
+           <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" />
+           </div>
+          </th>
+          <th>#ID</th>
+          <th>Product</th>
+          <th>Name</th>
+          <th>Rating</th>
+          <th>Date</th>
+          <th class="text-end">Action</th>
+     </tr>
+</thead>
+<tbody>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>23</td>
+          <td><b>A-Line Mini Dress in Blue</b></td>
+          <td>Devon Lane</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 60%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>10.03.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>24</td>
+          <td><b>Fashion Woman Bag</b></td>
+          <td>Guy Hawkins</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 80%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>04.12.2019</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>25</td>
+          <td><b>Air Jordan 1 Top 3 Sneaker (DS)</b></td>
+          <td>Savannah Nguyen</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 90%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>25.05.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light">
+                         <i class="material-icons md-more_horiz"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>26</td>
+          <td><b>Samsung Galaxy S20 (SM-G980F/DS) Dual SIM</b></td>
+          <td>Kristin Watson</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 90%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>01.06.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>27</td>
+          <td><b>Macbook Pro 16 inch (2020 ) For Sale</b></td>
+          <td>Jane Cooper</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 100%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>13.03.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>28</td>
+          <td><b>Gaming Chair, local pickup only</b></td>
+          <td>Courtney Henry</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 100%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>21.02.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>29</td>
+          <td><b>Coach Tabby 26 for sale</b></td>
+          <td>Ralph Edwards</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 90%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>23.03.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>30</td>
+          <td><b>Oneplus 7 Pro GM1910 256GB</b></td>
+          <td>Courtney Henry</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 70%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>20.02.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>31</td>
+          <td><b>DJI Mavic Pro 2</b></td>
+          <td>Theresa Webb</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 20%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>10.03.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>32</td>
+          <td><b>Heimer Miller Sofa (Mint Condition)</b></td>
+          <td>Darrell Steward</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 80%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>10.04.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>33</td>
+          <td><b>Dell XPS 13 9380, 13.3" 4K UHD (3840X2160) </b></td>
+          <td>Leslie Alexander</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 50%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>25.05.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>34</td>
+          <td><b>Fashion Woman Bag</b></td>
+          <td>Esther Howard</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 100%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>07.04.2020</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+     <tr>
+          <td>
+               <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" />
+               </div>
+          </td>
+          <td>35</td>
+          <td><b>iPad Pro 2017 Model</b></td>
+          <td>Savannah Nguyen</td>
+          <td>
+               <ul class="rating-stars">
+                    <li style="width: 100%;" class="stars-active">
+                         <img src="images/icons/stars-active.svg" height="16" alt="stars" />
+                    </li>
+                    <li>
+                         <img src="images/icons/starts-disable.svg" height="16" alt="stars" />
+                    </li>
+               </ul>
+          </td>
+          <td>10.10.2019</td>
+          <td class="text-end">
+               <a href="#" class="btn btn-light">Detail</a>
+               <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
+                    <div class="dropdown-menu">
+                         <a class="dropdown-item" href="#">View detail</a>
+                         <a class="dropdown-item" href="#">Edit info</a>
+                         <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+               </div>
+               <!-- dropdown //end -->
+          </td>
+     </tr>
+</tbody>
+</table>
+
+</div> <!-- table-responsive//end -->
+         </div>
+         <!-- card-body end// -->
+        </div>
+        <!-- card end// -->
+   </section>
+   <!-- content-main end// -->
+</main>
+<script>
+   if (localStorage.getItem("darkmode")) {
+        var body_el = document.body;
+        body_el.className += "dark";
+   }
+</script>
+
+<script src="js/jquery-3.5.0.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+
+
+<!-- Custom JS -->
+<script src="js/script.js?v=1.0"></script>
+</body>
+</html>

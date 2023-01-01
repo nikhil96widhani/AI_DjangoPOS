@@ -1,0 +1,68 @@
+.menu-aside{
+	list-style:none;
+	margin:$spacer / 2; padding:0;
+	
+	a{ display:block;  text-decoration:none; }
+
+	.menu-item{
+		margin-bottom:5px;
+		.icon{ color:$gray-500; margin-right:10px; font-size:24px;  }
+		&.active{
+			.icon{ color:$primary; }
+			.menu-link{ background-color:lighten($primary, 40%); }
+		}
+	}
+
+	.menu-link{
+		padding:10px; color:$gray-700; font-weight:bold; border-radius:$border-radius-lg; 
+		position:relative;
+		@include text-truncate();
+		.text{  vertical-align:middle; }
+	}
+
+	.menu-link:hover{
+		transition:.2s linear; background-color:$gray-200;
+	}
+
+	.submenu{
+		margin-left:44px;  display:none;	
+		a{ color:$gray-600; padding:5px;
+		&:hover{ color:$black;}	
+		}
+	}
+
+	.menu-item.active .submenu{ display:block; }
+
+	// arrow triangle
+	.menu-item.has-submenu > .menu-link:after{
+		display: inline-block; 
+		float:right;
+		position:absolute;
+		right: 10px; 
+		top:10px;
+		margin-top:.6em;
+	    vertical-align:middle;
+	    content: "";
+	    border-top: 5px solid $gray-500;
+	    border-right: 5px solid transparent;
+	    border-bottom: 0;
+	    border-left: 5px solid transparent;
+	}
+
+}
+
+
+/// override bootstrap nav-pills
+.nav-pills{
+	.nav-link{ color:$gray-600;  font-weight:500;
+		&:hover{ color:$dark;  background-color:rgba($gray-500, .15); }
+	}
+}
+
+
+// only desktop screens
+@media (min-width:993px){
+
+
+
+}
