@@ -1,7 +1,7 @@
 from django.db.models import F
-from inventory.models import *
 from rest_framework import status
 from rest_framework.response import Response
+
 from .serializers import *
 
 from django.utils.timezone import now

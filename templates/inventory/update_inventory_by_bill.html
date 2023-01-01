@@ -36,7 +36,7 @@
                     <h2 class="pt-2">Bill Items</h2>
                 </div>
                 <div class="col-auto">
-{#                    <button class="btn btn-md btn-primary" onclick="addItemToBill('BFE2807200049')">Add Bill Item</button>#}
+{#                    <button class="btn btn-md btn-primary" onclick="addBillItemToBill('BFE2807200049')">Add Bill Item</button>#}
                     <button type="button" class="btn btn-md btn-secondary btn-rounded waves-effect waves-light mr-3"
                             data-toggle="modal" data-target=".product-variation-searchModal">
                         <i class="fas fa-search mr-2"></i>
@@ -89,7 +89,6 @@
                     <th>Quantity</th>
                     <th>Weight</th>
                     <th>Expiry Date</th>
-                    <th>Total Cost</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -115,8 +114,8 @@
 
     <script type="text/javascript" src="{% static 'js/fm.tagator.jquery.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery.autocomplete.js' %}"></script>
-    <script src="{% static 'js/jquery.pos.js' %}"></script>
-{#    <script type="text/javascript" src="{% static 'js/onscan.js' %}"></script>#}
+{#    <script src="{% static 'js/jquery.pos.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'js/onscan.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'scripts/datatable-common.js' %}"></script>
     <script type="text/javascript" src="{% static 'scripts/update_inventory_by_bill.js' %}"></script>

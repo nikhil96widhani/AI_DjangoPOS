@@ -3,6 +3,7 @@ function getFormData($form) {
     const indexed_array = {};
 
     $.map(serializeArray, function (n, i) {
+        // console.log(n['name'])
         if (n['value'] === "") {
             indexed_array[n['name']] = null;
         } else indexed_array[n['name']] = n['value'];

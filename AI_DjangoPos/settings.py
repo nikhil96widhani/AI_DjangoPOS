@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'solo',
     'ckeditor',
     'coupons_discounts',
+    'store',
 
     'rest_framework',
     'fontawesome-free',
@@ -142,6 +143,10 @@ REST_FRAMEWORK = {
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_URL = "/static/"
+
+# For media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # For Docker prod uncomment this line
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
