@@ -9,7 +9,7 @@ from .helper import get_variation_data
 from .serializers import *
 
 from inventory.models import *
-import json
+
 
 class ProductCategoryList(APIView):
     @staticmethod
@@ -40,16 +40,11 @@ class ProductCodeGeneratorView(APIView):
 
 @api_view(['POST'])
 def add_product_with_variation(request):
-    # request has 2 datas one under overall data of form(excluding image) and one with image data
-    overall_data = json.loads(request.data['overall_data'])
-    product_data = overall_data['product_data']
-    variation_data = overall_data['variation_data']
-
-
+    variation_data = request.data['variation_data']
     if request.method == 'POST':
-
-        if product_data:
-            # product_data = request.data['product_data']
+        # Product Save
+        if 'product_data' in request.data.keys():
+            product_data = request.data['product_data']
             product_serializer = ProductSerializer(data=product_data)
             print(product_data['category'])
             for cat in product_data['category']:
@@ -60,7 +55,7 @@ def add_product_with_variation(request):
             if product_serializer.is_valid():
                 product_serializer.save()
                 variation_data['product'] = product_data['product_code']
-        variation_data['image'] = request.FILES['image']
+
         product_variation_serializer = ProductVariationPostSerializer(data=variation_data)
         if product_variation_serializer.is_valid():
             try:
@@ -75,7 +70,6 @@ def add_product_with_variation(request):
                 return Response({'status': 'error',
                                  'response': 'Variation with these values already exists!'})
             except ProductVariation.DoesNotExist:
-
                 product_variation_serializer.save()
                 return Response({'status': 'success', 'response': 'Variation was successfully added.',
                                  'variation_id': product_variation_serializer.data['id']},

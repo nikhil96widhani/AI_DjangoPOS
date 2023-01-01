@@ -110,7 +110,7 @@ function loadBillItemsTable() {
                 }
             },
             {'data': 'product_code', sortable: false, 'width': '8%'},
-            {'data': 'name', 'width': '30%'},
+            {'data': 'name', 'width': '28%'},
             {
                 'data': 'cost', 'width': '7%', render: function (data, type, row) {
                     return `<div class="input-group" style="width: 100%">
@@ -157,6 +157,7 @@ function loadBillItemsTable() {
             {'data': 'expiry_date', 'width': '7%', render: function (data, type, row) {
                 return `<input id="date_bill" type="date" class="form-control editor-table bill-item-updater" name="expiry_date" value="${data}" data-variation-id=${row.id} />`
                 }},
+            {'data': 'get_cost', sortable: false, 'width': '2%'},
             {'data': 'id', sortable: false, 'width': '7%', render: function (data, type, row) {
                     return `<button class="btn btn-danger btn-sm btn-rounded m-0 py-1 px-2" 
                                 onclick="updateBillDetails({'action':'delete_billItem', 'billItem_id' : ${data}}, true)"
@@ -167,7 +168,9 @@ function loadBillItemsTable() {
         'drawCallback': function () {
             let api = this.api();
             let json = api.ajax.json();
-
+            if (json.data.bill_items.length === 0 ){
+                contains_zero_stock_item = true
+            }
 
             // let html = `<tr><th class="table-info font-weight-500 h6">Total Quantity -
             //                 <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></th>
@@ -494,14 +497,22 @@ $("#complete-bill").on("click", function () {
 
 
 // Initialize with options
-onScan.attachTo(document, {
-    suffixKeyCodes: [13], // enter-key expected at the end of a scan
-    reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
-    onScan: function(sCode) { // Alternative to document.addEventListener('scan')
-        console.log(sCode);
-        addItemToBill(sCode);
-    },
+$(function () {
+    $(document).pos();
+    $(document).on('scan.pos.barcode', function (event) {
+        console.log(event.code);
+        addItemToBill(event.code);
+    });
 });
+
+// onScan.attachTo(document, {
+//     suffixKeyCodes: [13], // enter-key expected at the end of a scan
+//     reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
+//     onScan: function(sCode) { // Alternative to document.addEventListener('scan')
+//         console.log(sCode);
+//         addItemToBill(sCode);
+//     },
+// });
 
 $(document).ready(function () {
     getBillDetails();
@@ -514,4 +525,6 @@ $(document).ready(function () {
         toastr.info(`Product code ('${product_code_from_url}') already exists!`)
         prepareAndFillProductVariationSearchTableData(product_code_from_url);
     }
+
+
 });

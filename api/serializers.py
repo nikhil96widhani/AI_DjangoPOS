@@ -19,10 +19,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductVariationPostSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(
-        max_length=None, use_url=True,
-    )
-
     class Meta:
         model = ProductVariation
         fields = '__all__'
@@ -39,7 +35,10 @@ class StockBillItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockBillItems
         depth = 0
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ('id', 'product_code', 'name', 'cost', 'mrp', 'discount_price',
+                  'discount_percentage', 'stock', 'quantity_unit', 'weight', 'weight_unit',
+                  'expiry_date', 'is_new_variation', 'stock_bill', 'product_variation', 'get_cost')
 
 
 class StockBillSerializer(serializers.ModelSerializer):

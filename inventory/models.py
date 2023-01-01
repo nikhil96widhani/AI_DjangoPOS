@@ -1,11 +1,11 @@
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 from django.db import models
 from accounts.models import User, PosCustomer
 from inventory.helpers import calculateDiscountPrice
 from django.utils.timezone import now
 from coupons_discounts.models import Discount
-from django.core.exceptions import ValidationError
 
 # Create your models here.
 # Discounts
@@ -53,17 +53,6 @@ class ProductCompany(models.Model):
     def __str__(self):
         return self.name
 
-#for max image size
-# def clean_image(img):
-#     file_size = img.file.size
-#     limit_kb = 150
-#     limit = limit_kb * 1024
-#     if file_size > limit_kb * 1024:
-#         raise ValidationError("Max size of file is %s KB" % limit)
-#
-#     # limit_mb = 8
-#     # if file_size > limit_mb * 1024 * 1024:
-#     #    raise ValidationError("Max size of file is %s MB" % limit_mb)
 
 class Product(models.Model):
     """
@@ -73,6 +62,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     # company = models.CharField(max_length=100, blank=True, null=True)
     brand = models.ForeignKey(ProductCompany, on_delete=models.SET_NULL, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     category = models.ManyToManyField('ProductCategories', blank=True)
     rack_number = models.CharField(max_length=100, blank=True, null=True)
     modified_time = models.DateTimeField(blank=True, null=True, editable=False)
@@ -105,9 +95,6 @@ class ProductVariation(models.Model):
     weight_unit = models.CharField(max_length=9, choices=Weight_unit, default="", blank=True, null=True)
     expiry_date = models.DateField(blank=True, null=True)
     modified_time = models.DateTimeField(default=now, blank=True, null=True, editable=False)
-    image = models.ImageField(default='images/default.jpg', null=True, blank=True, upload_to="images/")
-    description = models.TextField(blank=True, null=True)
-
 
     def save(self, *args, **kwargs):
         # Sets discount price of product
@@ -232,8 +219,8 @@ class StockBillItems(models.Model):
         self.weight_unit = self.product_variation.weight_unit
 
         if not self.expiry_date:
-            today = date.today()
-            self.expiry_date = date(today.year, today.month + 3, today.day)
+            # today = date.today()
+            self.expiry_date = date.today() + relativedelta(months=+3)
 
         super(StockBillItems, self).save(*args, **kwargs)
 
