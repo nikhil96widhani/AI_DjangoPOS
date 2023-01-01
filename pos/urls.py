@@ -4,6 +4,10 @@ from .views import *
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
+    ##########  NEW THEME ###########
+    path('new', posHomeView, name='new-pos-home'),
+    ##########  NEW THEME ###########
+
     path('', pos_homeView, name='pos-home'),
     # path('datatable', cart_datatable_view, name='cart-datatable'),
     path('receipt/<int:pk>', receiptView, name='receipt'),

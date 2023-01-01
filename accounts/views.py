@@ -4,8 +4,6 @@ from django.http import HttpResponseRedirect
 from .models import *
 from .forms import *
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
-from .tasks import *
 
 
 def loginView(request):
@@ -24,7 +22,7 @@ class registerView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('user-redirect')
+        return redirect('user_redirect')
 
 
 def user_redirect(request):
@@ -41,20 +39,10 @@ def user_redirect(request):
         return redirect("login")
 
 
-@login_required
 def settingsView(request):
     instance = SiteConfiguration.objects.get()
-    form = SettingsForm(request.POST or None, request.FILES or None, instance=instance)
+    form = SettingsForm(request.POST or None, instance=instance)
     if form.is_valid():
         form.save()
         return redirect('settings')
-    context = {
-        'form': form,
-    }
-    return render(request, 'accounts/settings.html', context)
-
-
-@login_required
-def backupView(request):
-    backup_everyday.delay()
-    return redirect("pos-home")
+    return render(request, 'accounts/settings.html', {'form': form})

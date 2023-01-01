@@ -315,18 +315,31 @@ $('#quick-add-item').click(() => {
 
 
 // Initialize with options
-onScan.attachTo(document, {
-    suffixKeyCodes: [13], // enter-key expected at the end of a scan
-    reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
-    onScan: function (sCode) { // Alternative to document.addEventListener('scan')
-        console.log(sCode)
-        scanned_product_code = sCode;
+// onScan.attachTo(document, {
+//     suffixKeyCodes: [13], // enter-key expected at the end of a scan
+//     reactToPaste: true, // Compatibility to built-in scanners in paste-mode (as opposed to keyboard-mode)
+//     onScan: function (sCode) { // Alternative to document.addEventListener('scan')
+//         console.log(sCode)
+//         scanned_product_code = sCode;
+//         let data_json = {
+//             'action': 'add-order-item',
+//             'product_code': sCode,
+//         }
+//         updateOrderDetails(data_json, true)
+//     },
+// });
+
+$(function () {
+    $(document).pos();
+    $(document).on('scan.pos.barcode', function (event) {
+        console.log(event.code)
+        scanned_product_code = event.code;
         let data_json = {
             'action': 'add-order-item',
-            'product_code': sCode,
-        }
-        updateOrderDetails(data_json, true)
-    },
+            'product_code': event.code,
+        };
+        updateOrderDetails(data_json, true);
+    });
 });
 
 // END SCANNER INPUT

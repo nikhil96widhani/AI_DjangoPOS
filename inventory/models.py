@@ -1,4 +1,5 @@
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 from django.db import models
 from accounts.models import User, PosCustomer
@@ -61,6 +62,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     # company = models.CharField(max_length=100, blank=True, null=True)
     brand = models.ForeignKey(ProductCompany, on_delete=models.SET_NULL, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     category = models.ManyToManyField('ProductCategories', blank=True)
     rack_number = models.CharField(max_length=100, blank=True, null=True)
     modified_time = models.DateTimeField(blank=True, null=True, editable=False)
@@ -83,7 +85,6 @@ class Product(models.Model):
 
 class ProductVariation(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    variation_name = models.CharField(max_length=30, null=True)
     cost = models.FloatField(blank=True, null=True)
     mrp = models.FloatField(blank=True, null=True)
     discount_price = models.FloatField(blank=True, null=True)
@@ -94,8 +95,6 @@ class ProductVariation(models.Model):
     weight_unit = models.CharField(max_length=9, choices=Weight_unit, default="", blank=True, null=True)
     expiry_date = models.DateField(blank=True, null=True)
     modified_time = models.DateTimeField(default=now, blank=True, null=True, editable=False)
-    image = models.ImageField(default='images/default.jpg', null=True, blank=True, upload_to="images/")
-    description = models.TextField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         # Sets discount price of product
@@ -220,8 +219,8 @@ class StockBillItems(models.Model):
         self.weight_unit = self.product_variation.weight_unit
 
         if not self.expiry_date:
-            today = date.today()
-            self.expiry_date = date(today.year, today.month + 3, today.day)
+            # today = date.today()
+            self.expiry_date = date.today() + relativedelta(months=+3)
 
         super(StockBillItems, self).save(*args, **kwargs)
 

@@ -1,0 +1,72 @@
+
+.icontext{
+    display: inline-flex; align-items: center;
+    .icon{position:relative;  flex-shrink: 0; margin-right:10px;}
+    .text{  }
+    small, .title{ display:block; } 
+}
+
+.tag{
+  display: inline-block; padding:3px 7px; background:#f2f2f2; border:1px xolid #eee; border-radius:3px; margin-top:4px; margin-right: 2px; font-size:85%;
+}
+
+
+.price{ font-weight: 600; }
+
+.notify{
+  position: absolute;
+  top: -4px;  right: -10px;
+  display: inline-block;
+  padding: .25em .6em;
+  font-size: 75%;  line-height: 1;  text-align: center;
+  border-radius: 3rem;  color: #fff;  background-color:$red;
+}
+
+
+.map-pin{
+  border-radius: 3rem; 
+  background-color:rgb(255, 0, 0);
+  position: absolute; 
+  display:inline-block;
+  width:16px; height:16px;
+  &:after{
+    content:"";  position: absolute; 
+     width:50px; height:50px;
+     display:inline-block;
+     top:8px; left:8px;
+     border-radius:100%; 
+     transform:translate(-50%, -50%);
+     background-color:rgba(255, 0, 0, .3);
+  }
+}
+
+.icon-action{margin-top:5px; float:right;}
+
+
+/* ====================== box ==================== */
+.box{
+  padding:$spacer; 
+  border-radius:$border-radius; border:1px solid rgba($gray-600, .2); background:$white;
+  img{ max-width: 100%; }
+}
+
+/* ================= RATINGS ============== */
+.label-rating{margin-left:7px; display:inline-block; vertical-align:middle}
+
+/* rating-stars */
+.rating-stars{display:inline-block; vertical-align:middle; list-style:none; margin:0; padding:0; position:relative; 
+    white-space: nowrap; clear:both;  line-height:0.8;
+    i{ font-size:14px; color:#ccc; display:inline;}
+    img{ height: 16px; max-width:none;}
+    li{display:block;  text-overflow:clip;  white-space:nowrap; z-index:1; }
+  
+    li.stars-active{z-index:2; position:absolute; top:0; left:0; overflow: hidden;
+        i{color:orange;}
+    }
+
+    &.stars-lg{
+      img{ height:24px; max-width:none;}
+    }
+}
+
+

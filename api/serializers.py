@@ -35,7 +35,10 @@ class StockBillItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockBillItems
         depth = 0
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ('id', 'product_code', 'name', 'cost', 'mrp', 'discount_price',
+                  'discount_percentage', 'stock', 'quantity_unit', 'weight', 'weight_unit',
+                  'expiry_date', 'is_new_variation', 'stock_bill', 'product_variation', 'get_cost')
 
 
 class StockBillSerializer(serializers.ModelSerializer):
