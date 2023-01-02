@@ -1,0 +1,73 @@
+{% extends 'new/pos/components/pos-buttons-modal-base.html' %}
+{% load static %}
+
+{% block modal-css %}
+    {#    <link rel="stylesheet" href="{% static 'css/calculator-styles.css' %}">#}
+{% endblock %}
+
+{% block modal-title %}Quick Add Item{% endblock %}
+
+{% block modal-id %}quick-add-modal{% endblock %}
+
+
+{% block modal-body %}
+
+    <div class="input-group input-group-md mb-2">
+        <span class="input-group-text" id="product-name-qa">Product Name</span>
+        <input id="qa_name" type="text" class="form-control" aria-label="name" aria-describedby="product-name-qa">
+    </div>
+
+    <div class="input-group input-group-md mb-2">
+        <span class="input-group-text" id="sale-price-qa">Sale Price</span>
+        <span class="input-group-text" id="sale-price-qa">₹</span>
+        <input id="qa_discount_price" type="number" step=".01" class="form-control" aria-label="discount_price"
+               aria-describedby="sale-price-qa">
+    </div>
+
+    <div class="input-group input-group-md mb-2">
+        <span class="input-group-text" id="quantity-qa">Quantity</span>
+        <input id="qa_quantity" type="number" step="1" class="form-control" aria-label="quantity"
+               aria-describedby="quantity-qa">
+    </div>
+
+{% endblock %}
+
+{% block modal-footer %}
+    {% with load_footer=True %}
+        {{ block.super }}
+    {% endwith %}
+
+
+{% endblock %}
+
+{% block modal-buttons %}
+    <button id="quick-add-item" type="submit" class="btn btn-primary btn-md" data-dismiss="modal">Add</button>
+{% endblock %}
+
+{% block modal-javascript %}
+    {#    <script src="{% static 'js/calculator-script.js' %}"></script>#}
+{% endblock %}
+
+{#<div id="quickAddDiv" class="position-absolute card z-index-master shadow-lg p-2" style="display: block">#}
+{#    <h5 class="text-center border-bottom pb-1 mb-2">Quick Add Item</h5>#}
+{#    <div class="input-group input-group-sm mb-1">#}
+{#        <span class="input-group-text" id="product-name-qa">Product Name</span>#}
+{#        <input id="qa_name" type="text" class="form-control" aria-label="name" aria-describedby="product-name-qa">#}
+{#    </div>#}
+{##}
+{#    <div class="input-group input-group-sm mb-1">#}
+{#        <span class="input-group-text" id="sale-price-qa">Sale Price</span>#}
+{#        <span class="input-group-text" id="sale-price-qa">₹</span>#}
+{#        <input id="qa_discount_price" type="number" step=".01" class="form-control" aria-label="discount_price"#}
+{#               aria-describedby="sale-price-qa">#}
+{#    </div>#}
+{##}
+{#    <div class="input-group input-group-sm mb-1">#}
+{#        <span class="input-group-text" id="quantity-qa">Quantity</span>#}
+{#        <input id="qa_quantity" type="number" step="1" class="form-control" aria-label="quantity"#}
+{#               aria-describedby="quantity-qa">#}
+{#    </div>#}
+{#    <div class="text-center border-top pt-2 mt-2">#}
+{#        <button id="quick-add-item" type="submit" class="btn btn-primary btn-sm" data-dismiss="modal">Add</button>#}
+{#    </div>#}
+{#</div>#}
