@@ -18,6 +18,10 @@
                 background-color: white;
             }
         }
+        .no-border {
+    border: 0;
+    box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+}
     </style>
 {% endblock %}
 
@@ -57,19 +61,25 @@
                                 <div class="col-lg-2 col-md-3 col-6">
 
                                     <div class="dropdown d-grid">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light px-1 py-0"> Actions<i
+                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light px-1 py-0">Actions<i
                                                 class="material-icons md-arrow_drop_down"></i> </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                                            <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#quick-add-modal">Quick Add Item</a>
+                                            <a type="button" class="dropdown-item" data-toggle="modal" data-target="#discount-modal">Apply Discount</a>
+                                            <a type="button" class="dropdown-item" data-toggle="modal" data-target="#add-customer-modal">Add Customer</a>
+                                            <a type="button" class="dropdown-item" onclick="window.open('{% url 'receipt' last_order_id %}','_blank')">Print Last Receipt</a>
+                                            <a type="button" class="dropdown-item" data-toggle="modal" data-target="#calculator-modal">Calculator</a>
+                                            <a type="button" class="dropdown-item" data-toggle="modal"
+                                data-target="#whatsapp-add-modal"
+                                disabled="">
+                            <i class="icon material-icons md-message"></i> Whatsapp Receipt</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </header>
-                        <div class="table-responsive">
-                            <table id="cart-datatable" class="table table-hover w-100">
+                        <div class="table-responsive" style="height: 55vh">
+                            <table id="cart-datatable" class="table table-hover w-100" >
                                 <thead class="bg-light">
                                 <tr>
                                     <th>Product</th>
@@ -87,11 +97,11 @@
                                 </thead>
                             </table>
                         </div>
-                        <div class="col-12 t">
-                            <div id="total-values-div" class="border-2 border-top border-primary-light pt-2 ">
+                        <div class="col-12">
+                            <div id="total-values-div" class="border-2 border-top border-primary-light pt-2">
                             </div>
 
-                            <div class="row">
+                            <div class="row pt-2">
                                 <div class="col-sm-5">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-text">₹</span>
