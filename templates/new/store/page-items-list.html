@@ -1,3 +1,5 @@
+{% extends 'new/base.html' %}
+{% load static %}
 {% block content %}
     <!-- ============== SECTION PAGETOP ============== -->
     <section class="bg-primary py-5">
@@ -246,7 +248,7 @@
                     <article class="card card-product-list">
                         <div class="row g-0">
                             <aside class="col-xl-3 col-md-4">
-                                <a href="#" class="img-wrap"> <img src="images/items/8.jpg"> </a>
+                                <a href="#" class="img-wrap"> <img src="{% static 'new/store/images/items/8.jpg' %}"> </a>
                             </aside> <!-- col.// -->
                             <div class="col-xl-6 col-md-5 col-sm-7">
                                 <div class="card-body">
@@ -255,9 +257,9 @@
                                     <div class="rating-wrap mb-2">
                                         <ul class="rating-stars">
                                             <li class="stars-active" style="width: 90%;">
-                                                <img src="images/misc/stars-active.svg" alt="">
+                                                <img src="{% static 'new/store/images/misc/stars-active.svg' %}" alt="">
                                             </li>
-                                            <li><img src="images/misc/starts-disable.svg" alt=""></li>
+                                            <li><img src="{% static 'new/store/images/misc/starts-disable.svg' %}" alt=""></li>
                                         </ul>
                                         <span class="label-rating text-warning">4.5</span>
                                         <i class="dot"></i>

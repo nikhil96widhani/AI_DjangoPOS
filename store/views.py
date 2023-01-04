@@ -7,4 +7,14 @@ from inventory.models import Product, ProductVariation
 def home_page(request):
     # data = ProductVariation.objects.all().filter(product='vineet')
     # print(data)
-    return render(request, 'website/store/page-index.html')
+    return render(request, 'new/store/page-index.html')
+
+
+def items_list(request):
+
+    return render(request, 'new/store/page-items-list.html')
+
+
+def item_detail(request):
+
+    return render(request, 'new/store/page-item-detail.html')
