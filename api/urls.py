@@ -16,7 +16,7 @@ product_urls = [
     path('product-categories/', ProductCategoryList.as_view(), name='product-category-get-post'),
     path('product-categories/<int:pk>/', ProductCategoryDetail.as_view(), name='product-category-update-delete'),
 
-    # path('products/', ProductListView.as_view(), name='product-list'),
+    path('products/', ProductListView.as_view(), name='product-list'),
     # path('add-product/', add_product, name='post-product'),
     # path('products/<str:pk>/', product_detail, name='product-detail'),
 

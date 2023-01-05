@@ -133,6 +133,49 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 
 
+class ProductListView(generics.ListAPIView):
+    queryset = Product.objects.all().order_by('-modified_time')
+    # print(queryset)
+    serializer_class = ProductSerializer
+    # Response({
+    #     "orders_summary": summary_orders(orders),
+    #     "orders": orders_serialized.data,
+    # })
+
+    # def list(self, request, *args, **kwargs):
+    #     queryset = Product.objects.all().order_by('-modified_time')
+        # keys = ["product_data", "variation_data"]
+        # data = {key: None for key in keys}
+        # for val in queryset:
+        #     dat = ProductSerializer(val).data
+        #     data["product_data"] += dat
+        #     queryset = val.productvariation_set.first()
+        #     serializer = ProductVariationSerializer(queryset, many=True)
+        #     data["variation_data"] += serializer.data
+        # for data in queryset:
+        #     setattr(data, data['image'], data.get_image)
+        #     # data['image'] = data.get_image
+        # print(queryset)
+        # serializer = ProductSerializer(queryset, many=True)
+        # print(serializer.data[0])
+        # i = 0
+        # var_data = []
+        # for data in queryset:
+        #     var_data += data.get_image
+        #     i = i + 1
+        #
+        # print(serializer.data[0])
+        # for i in range(len(serializer.data)):
+        #     serializer.data[i] = queryset[i].get_image
+        # return serializer.data
+        # return Response({
+        #     'product': serializer.data
+        #     # 'extra': variation_data(queryset)
+        # })
+        # return Response(serializer.data)
+
+
+
 class ProductVariationListView(generics.ListAPIView):
     queryset = ProductVariation.objects.all().order_by('-modified_time')
     serializer_class = ProductVariationSerializer
