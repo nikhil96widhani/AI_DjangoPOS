@@ -61,6 +61,7 @@ class OrdersView(APIView):
     def get(request):
         if request.GET.get("all_orders") == 'True':
             orders = Order.objects.filter(complete=True)
+            print(orders)
 
         elif request.GET.get("all_orders") == 'False' and request.GET.get("date1") and request.GET.get("date2"):
             if request.GET.get("date1") == request.GET.get("date2"):

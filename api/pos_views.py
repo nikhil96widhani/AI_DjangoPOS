@@ -11,6 +11,7 @@ from .serializers import *
 from inventory.models import *
 import json
 
+
 class ProductCategoryList(APIView):
     @staticmethod
     def get(request):
@@ -41,10 +42,14 @@ class ProductCodeGeneratorView(APIView):
 @api_view(['POST'])
 def add_product_with_variation(request):
     # request has 2 datas one under overall data of form(excluding image) and one with image data
-    overall_data = json.loads(request.data['overall_data'])
-    product_data = overall_data['product_data']
-    variation_data = overall_data['variation_data']
 
+    overall_data = json.loads(request.data['overall_data'])
+    if 'product_data' in overall_data:
+        product_data = overall_data['product_data']
+    else:
+        product_data = None
+
+    variation_data = overall_data['variation_data']
 
     if request.method == 'POST':
 
@@ -53,6 +58,8 @@ def add_product_with_variation(request):
             product_serializer = ProductSerializer(data=product_data)
             print(product_data['category'])
             for cat in product_data['category']:
+                print("Hi")
+                print(cat)
                 if cat != "":
                     category_object, created = ProductCategories.objects.get_or_create(name=cat)
                     if created:
@@ -60,9 +67,11 @@ def add_product_with_variation(request):
             if product_serializer.is_valid():
                 product_serializer.save()
                 variation_data['product'] = product_data['product_code']
+
         variation_data['image'] = request.FILES['image']
         product_variation_serializer = ProductVariationPostSerializer(data=variation_data)
         if product_variation_serializer.is_valid():
+            print("image valid")
             try:
                 ProductVariation.objects.get(product=variation_data['product'],
                                              cost=variation_data['cost'],
@@ -80,7 +89,8 @@ def add_product_with_variation(request):
                 return Response({'status': 'success', 'response': 'Variation was successfully added.',
                                  'variation_id': product_variation_serializer.data['id']},
                                 status=status.HTTP_201_CREATED)
-
+        else:
+            print("image invalid")
         return Response(product_variation_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -133,9 +143,78 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 
 
+from rest_framework.pagination import PageNumberPagination
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 5
+    # page_size_query_param = 'page_size'
+    page_query_param = 'pageNumber'
+    # max_page_size = 1000
+
+
+def variation_data(datas):
+    var_data = {
+    }
+    for i in range(len(datas)):
+        if i == 0:
+            var_data['image'] = datas[i].get_image
+        else:
+            var_data.update(
+                image=var_data['image'] + datas[i].get_image,
+            )
+    # for data in datas:
+    #     var_data['image'] += data.get_image
+
+    return var_data
+
+
+class ProductListView(generics.ListAPIView):
+    queryset = Product.objects.all().order_by('-modified_time')
+    # print(queryset)
+    serializer_class = ProductSerializer
+    # Response({
+    #     "orders_summary": summary_orders(orders),
+    #     "orders": orders_serialized.data,
+    # })
+
+    # def list(self, request, *args, **kwargs):
+    #     queryset = Product.objects.all().order_by('-modified_time')
+        # keys = ["product_data", "variation_data"]
+        # data = {key: None for key in keys}
+        # for val in queryset:
+        #     dat = ProductSerializer(val).data
+        #     data["product_data"] += dat
+        #     queryset = val.productvariation_set.first()
+        #     serializer = ProductVariationSerializer(queryset, many=True)
+        #     data["variation_data"] += serializer.data
+        # for data in queryset:
+        #     setattr(data, data['image'], data.get_image)
+        #     # data['image'] = data.get_image
+        # print(queryset)
+        # serializer = ProductSerializer(queryset, many=True)
+        # print(serializer.data[0])
+        # i = 0
+        # var_data = []
+        # for data in queryset:
+        #     var_data += data.get_image
+        #     i = i + 1
+        #
+        # print(serializer.data[0])
+        # for i in range(len(serializer.data)):
+        #     serializer.data[i] = queryset[i].get_image
+        # return serializer.data
+        # return Response({
+        #     'product': serializer.data
+        #     # 'extra': variation_data(queryset)
+        # })
+        # return Response(serializer.data)
+
+
 class ProductVariationListView(generics.ListAPIView):
     queryset = ProductVariation.objects.all().order_by('-modified_time')
     serializer_class = ProductVariationSerializer
+    # pagination_class = StandardResultsSetPagination
 
 
 @api_view(['GET'])

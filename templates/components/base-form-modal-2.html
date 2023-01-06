@@ -59,10 +59,18 @@
                                             <input type="text" class="form-control" aria-label="Name"
                                                    name="name" required>
                                         </div>
+
+                                        <div class="input-group mt-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Description</span>
+                                            </div>
+                                            <textarea class="form-control" aria-label="description"
+                                                      name="description"></textarea>
+                                        </div>
+
                                     </div>
 
                                     <div class="border rounded px-3 py-4 my-4">
-
 
 
                                         <div class="input-group mb-4">
@@ -80,6 +88,13 @@
                                             <input type="text" class="form-control" aria-label="rack"
                                                    name="rack_number">
                                         </div>
+                                        {#                                        <div class="input-group mb-4">#}
+                                        {#                                            <div class="input-group-prepend">#}
+                                        {#                                                <span class="input-group-text">Category</span>#}
+                                        {#                                            </div>#}
+                                        {#                                            <input type="text" class="form-control" aria-label="rack"#}
+                                        {#                                                   name="product_category" id="product_category">#}
+                                        {#                                        </div>#}
                                         <div class="input-group mb-4">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Categories</span>
@@ -101,40 +116,39 @@
                                 <div class="mb-3 mt-1 h4 grey-ic {{ variation_title_visibility }}">
                                     Variation Details
                                 </div>
-
-{#                                <div class="input-group mb-4">#}
-{#                                    <div class="custom-file">#}
-{#                                        <input name="photo" id="{{ element_id }}_photo" type="file"  required class="form-control photo"#}
-{#                                               aria-label="photo">#}
-{#                                        <label class="custom-file-label" for="photo">Choose file</label>#}
-{#                                    </div>#}
-{#                                    <div class="input-group-append">#}
-{#                                        <span class="input-group-text" id="">Upload</span>#}
-{#                                    </div>#}
-{#                                </div>#}
-
+                                <div class="input-group mb-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><strong>Variation Name</strong></span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Name"
+                                               name="variation_name" required>
+                                    </div>
+                                </div>
                                 <div class="input-group mb-3">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="product_image_upload" name="image">
-                                        <label class="custom-file-label" for="{{ element_id }}_image">Choose file</label>
+                                        <input type="file" class="custom-file-input" id="{{ element_id }}_image"
+                                               name="image">
+                                        <label class="custom-file-label" for="{{ element_id }}_image">Choose
+                                            file</label>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text" id="">Upload</span>
                                     </div>
                                 </div>
 
-{#                                <form method="put" enctype="multipart/form-data" id ="image-upload">#}
-{#                                    <input name="image" type="file" id="image">#}
-{#                                    <input type="submit">#}
-{#                                </form>#}
+                                {#                                <form method="put" enctype="multipart/form-data" id ="image-upload">#}
+                                {#                                    <input name="image" type="file" id="image">#}
+                                {#                                    <input type="submit">#}
+                                {#                                </form>#}
 
-                                <div class="input-group mt-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Description</span>
-                                    </div>
-                                    <textarea class="form-control" aria-label="description"
-                                              name="description"></textarea>
-                                </div>
+                                {#                                <div class="input-group mt-3">#}
+                                {#                                    <div class="input-group-prepend">#}
+                                {#                                        <span class="input-group-text">Description</span>#}
+                                {#                                    </div>#}
+                                {#                                    <textarea class="form-control" aria-label="description"#}
+                                {#                                              name="description"></textarea>#}
+                                {#                                </div>#}
 
                                 <div class="border rounded px-3 py-4 my-4">
 
