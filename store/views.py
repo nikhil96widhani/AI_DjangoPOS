@@ -10,7 +10,7 @@ from inventory.models import Product, ProductVariation
 def home_page(request):
     # data = ProductVariation.objects.all().filter(product='vineet')
     # print(data)
-    return render(request, 'new/store/page-index.html')
+    return render(request, 'new/store/page/page-index.html')
 
 
 def user_profile(request):
@@ -26,7 +26,7 @@ def user_profile(request):
     #         return redirect('store_home_page')
     #
     # print("Hi")
-    return render(request, 'new/user-profile.html')
+    return render(request, 'new/store/user/user-profile.html')
 
 
 def user_signup(request):
@@ -42,14 +42,14 @@ def user_signup(request):
             return redirect('store_home_page')
 
     print("Hi")
-    return render(request, 'new/user-signup.html', {'form': form})
+    return render(request, 'new/store/user/user-signup.html', {'form': form})
 
 
 def items_list(request):
     respose = ProductVariationListView()
     print("hi")
     print(respose)
-    return render(request, 'new/store/page-items-list.html')
+    return render(request, 'new/store/page/page-items-list.html')
 
 
 def item_detail(request, pk):
@@ -62,7 +62,7 @@ def item_detail(request, pk):
     # print(len(obj1))
     # {'datas': obj1, 'data': obj1[0]}
     print(pk)
-    return render(request, 'new/store/page-item-detail.html', {'id': pk})
+    return render(request, 'new/store/page/page-item-detail.html', {'id': pk})
 
 
 def order_cart(request):
