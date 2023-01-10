@@ -1,4 +1,4 @@
-function datatable(data, ind) {
+function  datatable(data, ind) {
 
     let product_data = data.product_data
     let variation_data = data['variation_data'][ind]
