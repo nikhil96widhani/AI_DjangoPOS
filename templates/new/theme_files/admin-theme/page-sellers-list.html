@@ -1,0 +1,441 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Sample title - Ecommerce admin dashboard template</title>
+
+  <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+  <link href="css/bootstrap.css?v=1.1" rel="stylesheet" type="text/css"/>
+
+  <link rel="stylesheet" href="fonts/material-icon/css/round.css"/>
+
+  <!-- custom style -->
+  <link href="css/ui.css?v=1.1" rel="stylesheet" type="text/css"/>
+  <link href="css/responsive.css?v=1.1" rel="stylesheet" />
+
+</head>
+<body>
+
+<b class="screen-overlay"></b>
+
+<aside class="navbar-aside" id="offcanvas_aside">
+<div class="aside-top">
+  <a href="page-index-1.html" class="brand-wrap">
+    <img src="images/logo.svg" height="46" class="logo" alt="Ecommerce dashboard template">
+  </a>
+  <div>
+    <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+  </div>
+</div> <!-- aside-top.// -->
+
+<nav>
+  <ul class="menu-aside">
+    <li class="menu-item"> 
+      <a class="menu-link" href="page-index-1.html"> <i class="icon material-icons md-home"></i> 
+        <span class="text">Dashboard</span> 
+      </a> 
+    </li>
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>  
+        <span class="text">Products</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-products-list.html">Product list view</a>
+        <a href="page-products-table.html">Product table view</a>
+        <a href="page-products-grid.html">Product grid</a>
+        <a href="page-products-grid-2.html">Product grid 2</a>
+        <a href="page-categories.html">Categories</a>
+      </div>
+    </li>
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i> 
+        <span class="text">Orders</span> 
+      </a>
+      <div class="submenu">
+        <a href="page-orders-1.html">Order list 1</a>
+        <a href="page-orders-2.html">Order list 2</a>
+        <a href="page-orders-detail.html">Order detail</a>
+      </div> 
+    </li>
+    <li class="menu-item has-submenu active"> 
+      <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i> 
+        <span class="text">Sellers</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-sellers-cards.html">Sellers cards</a>
+        <a href="page-sellers-list.html">Sellers list</a>
+        <a href="page-seller-detail.html">Seller profile</a>
+      </div> 
+    </li>
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>  
+        <span class="text">Add product</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-form-product-1.html">Add product 1</a>
+        <a href="page-form-product-2.html">Add product 2</a>
+        <a href="page-form-product-3.html">Add product 3</a>
+        <a href="page-form-product-4.html">Add product 4</a>  
+      </div>
+    </li>
+    <li class="menu-item has-submenu">
+      <a class="menu-link" href="page-transactions-A.html"> <i class="icon material-icons md-monetization_on"></i> 
+        <span class="text">Transactions</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-transactions-A.html">Transaction 1</a>
+        <a href="page-transactions-B.html">Transaction 2</a>
+      </div>
+    </li>
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>  
+        <span class="text">Account</span> 
+      </a> 
+      <div class="submenu">
+        <a href="page-account-login.html">User login</a>
+        <a href="page-account-register.html">User registration</a>
+        <a href="page-error-404.html">Error 404</a>
+      </div>
+    </li>
+    <li class="menu-item"> 
+      <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i> 
+        <span class="text">Reviews</span> 
+      </a> 
+    </li>
+    <li class="menu-item"> 
+      <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i> 
+        <span class="text">Brands</span> </a> 
+    </li>
+    <li class="menu-item"> 
+      <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i> 
+        <span class="text">Statistics</span> 
+      </a> 
+    </li>
+  </ul>
+  <hr>
+  <ul class="menu-aside">
+    <li class="menu-item has-submenu"> 
+      <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i> 
+        <span class="text">Settings</span> 
+      </a>
+      <div class="submenu">
+        <a href="page-settings-1.html">Setting sample 1</a>
+        <a href="page-settings-2.html">Setting sample 2</a>
+      </div>
+    </li>
+    <li class="menu-item">
+      <a class="menu-link" href="page-0-blank.html"> <i class="icon material-icons md-local_offer"></i> 
+        <span class="text"> Starter page </span>
+      </a> 
+    </li>
+  </ul>
+  <br>
+  <br>
+</nav>
+</aside>
+
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                  <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                  <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i> </button>
+                </div>
+                <datalist id="search_terms">
+                  <option value="Products">
+                  <option value="New orders">
+                  <option value="Apple iphone">
+                  <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div class="col-nav">
+             <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="md-28 material-icons md-menu"></i> </button>
+             <ul class="nav">
+              <li class="nav-item">
+                  <a class="nav-link btn-icon" onclick="darkmode(this)" title="Dark mode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn-icon" href="#"> <i class="material-icons md-notifications_active"></i> </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"> English </a>
+              </li>
+              <li class="dropdown nav-item">
+                <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#"> <img class="img-xs rounded-circle" src="images/people/avatar1.jpg" alt="User"></a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a class="dropdown-item" href="#">My profile</a>
+                  <a class="dropdown-item" href="#">Settings</a>
+                  <a class="dropdown-item text-danger" href="#">Exit</a>
+                </div>
+              </li>
+            </ul> 
+        </div>
+    </header>
+
+<section class="content-main">
+
+    <div class="content-header">
+        <h2 class="content-title">Sellers list</h2>
+        <div>
+            <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Search..." class="form-control">
+                </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <select class="form-select">
+                        <option>Status</option>
+                        <option>Active</option>
+                        <option>Disabled</option>
+                        <option>Show all</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <select class="form-select">
+                        <option>Show 20</option>
+                        <option>Show 30</option>
+                        <option>Show 40</option>
+                    </select>
+                </div>
+            </div>
+        </header> <!-- card-header end// -->
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Seller</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Registered</th>
+                            <th class="text-end"> Action </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar1.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Eleanor Pena</h6>
+                                        <small class="text-muted">Seller ID: #439</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>eleanor2020@example.com</td>
+                            <td><span class="badge rounded-pill alert-success">Active</span></td>
+                            <td>08.07.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar2.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Mary Monasa</h6>
+                                        <small class="text-muted">Seller ID: #129</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>monalisa@example.com</td>
+                            <td><span class="badge rounded-pill alert-success">Active</span></td>
+                            <td>11.07.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar3.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Jonatan Ive</h6>
+                                        <small class="text-muted">Seller ID: #400</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>mrjohn@example.com</td>
+                            <td><span class="badge rounded-pill alert-success">Active</span></td>
+                            <td>08.07.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar4.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Eleanor Pena</h6>
+                                        <small class="text-muted">Seller ID: #439</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>eleanor2020@example.com</td>
+                            <td><span class="badge rounded-pill alert-danger">Inactive</span></td>
+                            <td>08.07.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar1.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Albert Pushkin</h6>
+                                        <small class="text-muted">Seller ID: #439</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>someone@mymail.com</td>
+                            <td><span class="badge rounded-pill alert-success">Active</span></td>
+                            <td>20.11.2019</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar2.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Alexandra Pena</h6>
+                                        <small class="text-muted">Seller ID: #439</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>eleanor2020@example.com</td>
+                            <td><span class="badge rounded-pill alert-danger">Inactive</span></td>
+                            <td>08.07.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar3.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Eleanor Pena</h6>
+                                        <small class="text-muted">Seller ID: #439</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>eleanor2020@example.com</td>
+                            <td><span class="badge rounded-pill alert-danger">Inactive</span></td>
+                            <td>08.07.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar4.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Alex Pushkina</h6>
+                                        <small class="text-muted">Seller ID: #439</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>alex@gmail.org</td>
+                            <td><span class="badge rounded-pill alert-success">Active</span></td>
+                            <td>08.07.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar1.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Eleanor Pena</h6>
+                                        <small class="text-muted">Seller ID: #439</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>eleanor2020@example.com</td>
+                            <td><span class="badge rounded-pill alert-success">Active</span></td>
+                            <td>08.07.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%">
+                                <a href="#" class="itemside">
+                                    <div class="left">
+                                        <img src="images/people/avatar2.jpg" class="img-sm img-avatar" alt="Userpic">
+                                    </div>
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">Eleanor Pena</h6>
+                                        <small class="text-muted">Seller ID: #439</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>eleanor2020@example.com</td>
+                            <td><span class="badge rounded-pill alert-success">Active</span></td>
+                            <td>08.07.2020</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light">View</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> <!-- table-responsive.// -->
+            </div>
+
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+
+
+</section> <!-- content-main end// -->
+</main>
+
+<script type="text/javascript">
+    if(localStorage.getItem("darkmode")){
+        var body_el = document.body;
+        body_el.className += 'dark';
+    }
+</script>
+
+<script src="js/jquery-3.5.0.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+<script src="js/script.js?v=1.0" type="text/javascript"></script>
+
+</body>
+</html>

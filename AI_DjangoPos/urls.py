@@ -21,16 +21,15 @@ from accounts import views as account_views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', account_views.user_redirect, name='user-redirect'),
     path('inventory/', include('inventory.urls')),
     path('accounts/', include('accounts.urls')),
+    path('store/', include('store.urls')),
     path('pos/', include('pos.urls')),
     path('api/', include('api.urls')),
     path('reports/', include('reports.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('store/', include('store.urls')),
-]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT )

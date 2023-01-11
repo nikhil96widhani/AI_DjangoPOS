@@ -1,0 +1,168 @@
+{% extends 'new/pos/base.html' %}
+{% load static %}
+
+{% block customCSS %}
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'new/pos/vendor/datatables/css/dataTables.bootstrap5.min.css' %}">
+    <style>
+        tr.clicked {
+            animation-name: product-animation;
+            animation-duration: 1s;
+        }
+
+        @keyframes product-animation {
+            0% {
+                background-color: lightskyblue;
+            }
+            80% {
+                background-color: white;
+            }
+        }
+        .no-border {
+    border: 0;
+    box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+}
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div id="pos-content">
+        {#        <span class="text-muted">POS > Sale</span>#}
+        <div class="card mt-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="input-group mb-4 mt-1">
+                            <input id="ProductSearchInputPos" type="text" class="form-control"
+                                   placeholder="Search Products">
+                            <button id="clearProductSearchInputPos" type="button" class="btn bg-transparent btn-rounded"
+                                    style="margin-left: -38px; z-index: 100">
+                                <i class="material-icons md-clear"></i> </i>
+                            </button>
+                        </div>
+                        <div id="AllProductListLi" class="mt-0"></div>
+                        <div class="d-grid pt-2">
+                            <button class="btn btn-outline-primary">Edit Quick Add Items</button>
+                        </div>
+                    </div>
+                    <div class="col-md-8 shadow-sm py-1">
+                        <header>
+                            <div class="row gx-3">
+                                <div class="col-lg-4 col-md-6 me-auto d-flex ">
+                                    <div class=""><span class="h2 align-top">Cart</span></div>
+                                </div>
+                                <div class="col-lg-5 col-md-3 col-6 text-end">
+                                    <div>
+                                        <span class="badge rounded-pill alert-info text-info align-middle">Order ID: {{ order }}</span>
+                                        <span class="badge rounded-pill alert-info text-info align-middle">Unpaid, Open</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3 col-6">
+
+                                    <div class="dropdown d-grid">
+                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light px-1 py-0">Actions<i
+                                                class="material-icons md-arrow_drop_down"></i> </a>
+                                        <div class="dropdown-menu">
+                                            <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#quick-add-modal">Quick Add Item</a>
+                                            <a type="button" class="dropdown-item" data-toggle="modal" data-target="#discount-modal">Apply Discount</a>
+                                            <a type="button" class="dropdown-item" data-toggle="modal" data-target="#add-customer-modal">Add Customer</a>
+                                            <a type="button" class="dropdown-item" onclick="window.open('{% url 'receipt' last_order_id %}','_blank')">Print Last Receipt</a>
+                                            <a type="button" class="dropdown-item" data-toggle="modal" data-target="#calculator-modal">Calculator</a>
+                                            <a type="button" class="dropdown-item" data-toggle="modal"
+                                data-target="#whatsapp-add-modal"
+                                disabled="">
+                            <i class="icon material-icons md-message"></i> Whatsapp Receipt</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        <div class="table-responsive" style="height: 55vh">
+                            <table id="cart-datatable" class="table table-hover w-100" >
+                                <thead class="bg-light">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>MRP(₹)</th>
+                                    <th>OurPrice(₹)</th>
+                                    <th>Quantity</th>
+                                    <th>Amount(₹)</th>
+                                    <th class="text-center">
+                                        <button type="button" class="btn btn-outline-danger px-1 py-0"
+                                                id="btn-clear-cart">
+                                            Clear
+                                        </button>
+                                    </th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-12">
+                            <div id="total-values-div" class="border-2 border-top border-primary-light pt-2">
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col-sm-5">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">₹</span>
+                                        <input id="CashReceivedValue" type="number" class="form-control w-50"
+                                               aria-label="Small" aria-describedby="CashReceived" min="0"
+                                               max="10000000" autocomplete="off">
+
+                                        <select id="payment-mode"
+                                                class="form-select form-select-sm dropdown-menu-end custom-select"
+                                                autocomplete="off" aria-label="payment-mode">
+
+                                            <option value="Cash" selected="">Cash</option>
+
+                                            <option value="Card">Card</option>
+
+                                            <option value="Paytm">Paytm</option>
+
+                                            <option value="UPI">UPI</option>
+
+                                            <option value="Other">Other</option>
+
+                                        </select>
+                                    </div>
+                                    <small id="emailHelp" class="form-text text-muted text-center mt-0 pt-0">
+                                        Input Cash received and Mode of Payment</small>
+                                </div>
+                                <div class="col-sm-2">
+                                    <!-- REFUND AMOUNT -->
+                                    <h5 class="text-left font-weight-bold mt-2" id="RefundAmount"></h5>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="btn-group btn-group-sm w-100" role="group"
+                                         aria-label="Basic outlined example">
+                                        <button type="button" class="btn btn-outline-secondary">Complete
+                                            Order
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary"><i
+                                                class="icon material-icons md-print"></i> Print &amp;
+                                            Complete
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> <!-- .col// -->
+                </div> <!-- .row // -->
+            </div> <!-- card body .// -->
+        </div>
+
+    </div>
+    <!-- Button Modals -->
+    {% include 'new/pos/components/quick-add-item.html' %}
+{% endblock %}
+
+
+{% block customJavascript %}
+    <script src="{% static 'new/pos/scripts/pos_home.js' %}"></script>
+    <script src="{% static 'new/pos/vendor/datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'new/pos/vendor/datatables/js/dataTables.bootstrap5.min.js' %}"></script>
+    <script src="{% static 'new/pos/scripts/datatable-common.js' %}"></script>
+{% endblock %}
+

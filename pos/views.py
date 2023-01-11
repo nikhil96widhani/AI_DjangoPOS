@@ -30,7 +30,7 @@ def pos_homeView(request):
             'order': [],
             'last_order_id': 0
         }
-    return render(request, 'pos/cart-datatable.html', context)
+    return render(request, 'new/pos/pos-home2.html', context)
 
 
 def receiptView(request, pk):

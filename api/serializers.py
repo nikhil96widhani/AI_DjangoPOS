@@ -21,6 +21,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductVariationPostSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(
+        max_length=None, use_url=True,
+    )
+
     class Meta:
         model = ProductVariation
         fields = '__all__'
