@@ -15,7 +15,7 @@ import json
 class ProductCategoryList(APIView):
     @staticmethod
     def get(request):
-        categories = ProductCategories.objects.all()
+        categories = ProductCategories.objects.order_by('name')
         category_serializer = ProductCategorySerializer(categories, many=True)
         categories_data = [cat['name'] for cat in category_serializer.data]
         return Response({'categories': categories_data})
@@ -96,6 +96,7 @@ def add_product_with_variation(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def variation_detail(request, pk):
+    print("hi")
     try:
         variation = ProductVariation.objects.get(pk=pk)
     except ProductVariation.DoesNotExist:
@@ -219,62 +220,21 @@ class ProductVariationListView(generics.ListAPIView):
 
 class ProductsByCategory(generics.ListAPIView):
 
-    lookup_url_kwarg = "categories"
     serializer_class = ProductSerializer
 
-    # def get_queryset(self):
-    #     print("sup again")
-    #     category = self.kwargs.get(self.lookup_url_kwarg)
-    #     print(category)
-    #     if category == "default":
-    #         products = Product.objects.all().order_by('-modified_time')
-    #
-    #     else:
-    #         products = Product.objects.filter(category=category)
-    #
-    #     # products_data = [ProductSerializer(product).data for product in products]
-    #
-    #     return products
     def get_queryset(self):
 
         query_params = self.request.query_params
         categories = query_params.get('categories', None)
-        print(categories)
-        print(type(categories))
+        # we need data in list to filter by multiple categories
         categories = categories.split(",")
-        print( len(categories))
-        print(categories)
-        print(type(categories))
-        if categories == ['default']:
-            # print("yes")
+        if categories == ['null']:
             products = Product.objects.all().order_by('-modified_time')
         else:
             products = Product.objects.filter(category__in=categories)
 
-        print(products)
-
         return products
-    # print("sup")
-    # lookup_url_kwarg = "category"
-    # serializer_class = ProductSerializer
-    #
-    # def get_queryset(self):
-    #     print("sup again")
-    #     category = self.kwargs.get(self.lookup_url_kwarg)
-    #     print(category)
-    #     if category == "default":
-    #         products = Product.objects.all().order_by('-modified_time')
-    #
-    #     else:
-    #         products = Product.objects.filter(category=category)
-    #
-    #     # products_data = [ProductSerializer(product).data for product in products]
-    #
-    #     return products
 
-    # def get_serializer_class(self):
-    #     products_data = [ProductSerializer(product).data for product in self.products]
-    #     re
 
 
 @api_view(['GET'])
