@@ -2,6 +2,8 @@ function  datatable(data, ind) {
 
     let product_data = data.product_data
     let variation_data = data['variation_data'][ind]
+    console.log(product_data)
+    console.log(variation_data)
     let text = `
         
         <div class="container">
@@ -106,7 +108,8 @@ function  datatable(data, ind) {
                     </div> <!-- input-group.// -->
                   </div> <!-- col.// -->
                 </div> <!-- row.// -->
-            
+                <a aria-label="Order on WhatsApp" href="https://wa.me/917987441085?text=Hi, I want to order product with id = ${variation_data.id}" target="_blank" rel="noopener noreferrer">
+                 <img alt="Order on WhatsApp" src="/static/images/img_1.png" width="300" height="100"/>
                 <a href="#" class="btn  btn-warning"> Buy now </a>
                 <a href="#" class="btn  btn-primary"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
                 <a href="#" class="btn  btn-light"> <i class="me-1 fa fa-heart"></i> Save </a>
@@ -118,7 +121,6 @@ function  datatable(data, ind) {
         </div> <!-- container .//  -->
         `;
     document.getElementById("product").innerHTML = text;
-
 }
 
 $(document).ready(function () {
