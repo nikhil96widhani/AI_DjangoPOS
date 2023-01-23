@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from .cart_views import handle_order, CartListView
 from .pos_views import *
@@ -29,6 +29,10 @@ product_urls = [
     path('variations/', ProductVariationListView.as_view(), name='variations-list'),
     path('product-and-variations/', variations_data_using_product_code, name='product-and-variations'),
     path('product-companies/', ProductCompaniesView.as_view(), name='api-products-companies'),
+    path('products-by-category/', ProductsByCategory.as_view(), name='products-by-category'),
+    # path('products-by-category/<str:category>', ProductsByCategory.as_view(), name='products-by-category'),
+    path('', SomethingAPIView.as_view(), name='something'),
+    # re_path(r'^$', SomethingAPIView.as_view(), name='something'),
 ]
 
 order_urls = [

@@ -143,18 +143,6 @@
 <main class="main-wrap">
     <header class="main-header navbar">
         <div class="col-search">
-            <form class="searchform">
-                <div class="input-group">
-                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                    <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
-                </div>
-                <datalist id="search_terms">
-                    <option value="Products">
-                    <option value="New orders">
-                    <option value="Apple iphone">
-                    <option value="Ahmed Hassan">
-                </datalist>
-            </form>
         </div>
         <div class="col-nav">
             <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
@@ -190,237 +178,160 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <form>
-                            <div class="mb-4">
-                                <label for="product_name" class="form-label">Name</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_name">
-                            </div>
-                            <div class="mb-4">
-                                <label for="product_slug" class="form-label">Slug</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_slug">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label">Parent</label>
-                                <select class="form-select">
-                                    <option>Clothes</option>
-                                    <option>T-Shirts</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label">Description</label>
-                                <textarea placeholder="Type here" class="form-control" rows="4"></textarea>
-                            </div>
-                            <div class="d-grid">
-                                <button class="btn btn-primary">Create category</button>
-                            </div>
-                        </form>
+                        <div class="input-group mb-4">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search Products">
+                            <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i>
+                            </button>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-outline-primary">Edit Quick Add Items</button>
+                        </div>
                     </div>
                     <div class="col-md-8">
+                        <header>
+                            <div class="row gx-3">
+                                <div class="col-lg-4 col-md-6 me-auto d-flex ">
+                                    <div class="pt-2"><span class="h5">Cart</span></div>
+                                </div>
+                                <div class="col-lg-5 col-md-3 col-6 text-end">
+                                    <div>
+                                    <span class="badge rounded-pill alert-info text-info align-middle">Order ID: 1156</span>
+                                    <span class="badge rounded-pill alert-info text-info align-middle">Unpaid, Open</span>
+                                        </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3 col-6">
 
-                        <table class="table table-hover">
+                                    <div class="dropdown d-grid">
+                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light px-1 py-0"> Actions<i
+                                                class="material-icons md-arrow_drop_down"></i> </a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">View detail</a>
+                                            <a class="dropdown-item" href="#">Edit info</a>
+                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="">
-                                    </div>
+                                <th>Product</th>
+                                <th>MRP(₹)</th>
+                                <th>OurPrice(₹)</th>
+                                <th>Quantity</th>
+                                <th>Amount</th>
+                                <th class="text-end">
+                                    <button type="button" class="btn btn-outline-danger px-1 py-0 w-100"
+                                            id="btn-clear-cart">
+                                        Clear
+                                    </button>
                                 </th>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Slug</th>
-                                <th>Order</th>
-                                <th class="text-end">Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="">
-                                    </div>
-                                </td>
-                                <td>21</td>
-                                <td><b>Men clothes</b></td>
-                                <td>Men clothes</td>
-                                <td>/men</td>
-                                <td>1</td>
+
+                                <td><b>Men fashion</b></td>
+                                <td>10</td>
+                                <td>10</td>
+                                <td>2</td>
+                                <td>2</td>
                                 <td class="text-end">
-                                    <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
-                                                class="material-icons md-more_horiz"></i> </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
+                                    <a href="#" data-bs-toggle="dropdown" class="text-black-50"> <i
+                                            class="material-icons md-delete"></i> </a>
                                     <!-- dropdown //end -->
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="">
-                                    </div>
-                                </td>
-                                <td>2</td>
                                 <td><b>Women fashion</b></td>
-                                <td>Fashions for Women</td>
-                                <td>/women</td>
+                                <td>10</td>
+                                <td>10</td>
+                                <td>2</td>
                                 <td>2</td>
                                 <td class="text-end">
-                                    <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
-                                                class="material-icons md-more_horiz"></i> </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
-                                    <!-- dropdown //end -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="">
-                                    </div>
-                                </td>
-                                <td>3</td>
-                                <td><b>Kids clothes</b></td>
-                                <td>Clothes for kids</td>
-                                <td>/kids</td>
-                                <td>3</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
-                                                class="material-icons md-more_horiz"></i> </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
-                                    <!-- dropdown //end -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><i class="material-icons md-subdirectory_arrow_right text-muted"></i></td>
-                                <td>4</td>
-                                <td><b>Hot Gifts</b></td>
-                                <td>Hot Gifts</td>
-                                <td>/gifts</td>
-                                <td>4</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
-                                                class="material-icons md-more_horiz"></i> </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
-                                    <!-- dropdown //end -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><i class="material-icons md-subdirectory_arrow_right text-muted"></i></td>
-                                <td>5</td>
-                                <td><b>Electronics</b></td>
-                                <td>Electronics</td>
-                                <td>/electr</td>
-                                <td>5</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
-                                                class="material-icons md-more_horiz"></i> </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
-                                    <!-- dropdown //end -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="">
-                                    </div>
-                                </td>
-                                <td>6</td>
-                                <td><b>Accessories</b></td>
-                                <td>Accessories</td>
-                                <td>/accessories</td>
-                                <td>6</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
-                                                class="material-icons md-more_horiz"></i> </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
-                                    <!-- dropdown //end -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="">
-                                    </div>
-                                </td>
-                                <td>7</td>
-                                <td><b>Jewellery</b></td>
-                                <td>Jewellery</td>
-                                <td>/jewel</td>
-                                <td>7</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
-                                                class="material-icons md-more_horiz"></i> </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
-                                    <!-- dropdown //end -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="">
-                                    </div>
-                                </td>
-                                <td>8</td>
-                                <td><b>Interiors</b></td>
-                                <td>Interiors</td>
-                                <td>/interior</td>
-                                <td>8</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
-                                                class="material-icons md-more_horiz"></i> </a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">View detail</a>
-                                            <a class="dropdown-item" href="#">Edit info</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
+                                    <a href="#" data-bs-toggle="dropdown" class="text-black-50"> <i
+                                            class="material-icons md-delete"></i> </a>
                                     <!-- dropdown //end -->
                                 </td>
                             </tr>
                             </tbody>
-                        </table>
+                            <tfoot class="bg-light bg-gradient">
+                            <!-- <tr>
 
+                                                         <td><b>ORDER ID : 577 </b></td>
+                                                         <td>20</td>
+                                                         <td>20</td>
+                                                         <td>4</td>
+                                                         <td>4</td>
+                                                         <td class="text-end">
+                                                             <button class="btn btn-outline-success px-1 py-0 w-100" href="#">
+                                                 <i class="icon material-icons md-print"></i> Pay
+                                             </button>
+                                                         </td>
+                                                     </tr>-->
+                            </tfoot>
+                        </table>
+                        </div>
+
+                        <div id="total-values-div" class="col-12">
+                            <article class="">
+                                <dl class="dlist">
+                                    <dt>Total Quantity:</dt>
+                                    <dd>6</dd>
+                                </dl>
+                                <dl class="dlist">
+                                    <dt>Cart Discount:</dt>
+                                    <dd>NA</dd>
+                                </dl>
+                                <dl class="dlist">
+                                    <dt>Total Amount:</dt>
+                                    <dd class="fw-bold h5">₹114</dd>
+                                </dl>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text">₹</span>
+                                           <input id="CashReceivedValue" type="number" class="form-control w-50"
+                                                   aria-label="Small" aria-describedby="CashReceived" min="0"
+                                                   max="10000000" autocomplete="off">
+
+                                             <select id="payment-mode" class="form-select form-select-sm dropdown-menu-end custom-select"
+                                                        autocomplete="off" aria-label="payment-mode">
+
+                                                    <option value="Cash" selected="">Cash</option>
+
+                                                    <option value="Card">Card</option>
+
+                                                    <option value="Paytm">Paytm</option>
+
+                                                    <option value="UPI">UPI</option>
+
+                                                    <option value="Other">Other</option>
+
+                                                </select>
+                                        </div>
+                                        <small id="emailHelp" class="form-text text-muted text-center mt-0 pt-0">
+                                            Input Cash received and Mode of Payment</small>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <!-- REFUND AMOUNT -->
+                                        <h5 class="text-left font-weight-bold mt-2" id="RefundAmount"></h5>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="btn-group btn-group-sm w-100" role="group" aria-label="Basic outlined example">
+  <button type="button" class="btn btn-outline-secondary">Complete
+                                                Order</button>
+  <button type="button" class="btn btn-outline-primary"><i
+                                                    class="icon material-icons md-print"></i> Print &amp;
+                                                Complete</button>
+</div>
+
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
                     </div> <!-- .col// -->
                 </div> <!-- .row // -->
             </div> <!-- card body .// -->

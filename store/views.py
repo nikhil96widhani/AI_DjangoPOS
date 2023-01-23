@@ -1,25 +1,3 @@
-# from django.shortcuts import render
-# from django.http import HttpResponse
-# from inventory.models import Product, ProductVariation
-#
-#
-# # Create your views here.
-# def home_page(request):
-#     # data = ProductVariation.objects.all().filter(product='vineet')
-#     # print(data)
-#     return render(request, 'new/store/pages/page-index.html')
-#
-#
-# def items_list(request):
-#
-#     return render(request, 'new/store/pages/page-items-list.html')
-#
-#
-# def item_detail(request):
-#
-#     return render(request, 'new/store/pages/page-item-detail.html')
-
-
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from inventory.models import Product, ProductVariation
@@ -29,12 +7,10 @@ import uuid
 from api.pos_views import *
 from inventory.models import Product, ProductVariation
 # Create your views here.
-
-
 def home_page(request):
     # data = ProductVariation.objects.all().filter(product='vineet')
     # print(data)
-    return render(request, 'new/store/pages/page-index.html')
+    return render(request, 'new/store/page/page-index.html')
 
 
 def user_profile(request):
@@ -50,7 +26,7 @@ def user_profile(request):
     #         return redirect('store_home_page')
     #
     # print("Hi")
-    return render(request, 'new/store/user-profile.html')
+    return render(request, 'new/store/user/user-profile.html')
 
 
 def user_signup(request):
@@ -66,14 +42,14 @@ def user_signup(request):
             return redirect('store_home_page')
 
     print("Hi")
-    return render(request, 'new/store/user-signup.html', {'form': form})
+    return render(request, 'new/store/user/user-signup.html', {'form': form})
 
 
 def items_list(request):
     respose = ProductVariationListView()
     print("hi")
     print(respose)
-    return render(request, 'new/store/pages/page-items-list.html')
+    return render(request, 'new/store/page/page-items-list.html')
 
 
 def item_detail(request, pk):
@@ -86,7 +62,7 @@ def item_detail(request, pk):
     # print(len(obj1))
     # {'datas': obj1, 'data': obj1[0]}
     print(pk)
-    return render(request, 'new/store/pages/page-item-detail.html', {'id': pk})
+    return render(request, 'new/store/page/page-item-detail.html', {'id': pk})
 
 
 def order_cart(request):

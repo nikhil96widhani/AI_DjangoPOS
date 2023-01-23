@@ -6,6 +6,12 @@ let updated_order_item_id = 0;
 let total_cart_value = 0;
 let variation_id_to_delete, scanned_product_code;
 
+
+const getDatatableInput = (order_item_id, name, value) => {
+    return `<input class="form-control no-border text-center update-order-item" type="number" min="0" 
+              name="${name}" value="${value}" data-order-item-id=${order_item_id}>`;
+}
+
 // Cart Datatable
 function loadCartData() {
     let url = '/api/cart-datatable/?format=datatables';
@@ -35,17 +41,33 @@ function loadCartData() {
             // updated_order_item_id = 0;
         },
         'columns': [
-            {'data': 'name', 'class': 'text-left fw-500'},
-            {'data': 'weight', 'class': 'text-center', 'width': '10%', render: function (data, type, row) {
-                if(data && row.weight_unit){
-                    return `${data}${row.weight_unit}`
+            {'data': 'name', 'class': 'text-left title', render: function (data, type, row) {
+                if(row.weight && row.weight_unit){
+                    if (data.includes(`${row.weight}${row.weight_unit}`)){
+                        let product = data.replace(`${row.weight}${row.weight_unit}`, "");
+                        return `${product}, ${row.weight}${row.weight_unit}`
                     }
+                    else {
+                        return `${data}, ${row.weight}${row.weight_unit}`
+                    }
+                }
                 else{
                     return data
-                    }
+                }
                 }},
-            {'data': 'mrp', 'class': 'update-order-item text-center'},
-            {'data': 'discount_price', 'class': 'update-order-item text-center'},
+            {'data': 'mrp', 'class': 'update-order-item text-center', 'width': '11%', render: function (data, type, row) {
+                    return `<div class="input-group input-group-sm">
+                            ${getDatatableInput(row.id, 'mrp', data)}
+                            </div>`
+                }
+            },
+            {'data': 'discount_price', 'class': 'update-order-item text-center', 'width': '11%', render: function (data, type, row) {
+                    return `<div class="input-group input-group-sm">
+                            ${getDatatableInput(row.id, 'discount_price', data)}
+                            </div>`
+                }
+            },
+
             {
                 'data': 'quantity', 'class': 'text-left', 'width': '11%', render: function (data, type, row) {
                     return `<div class="input-group quantity-stepper">
@@ -64,18 +86,14 @@ function loadCartData() {
             {'data': 'amount', 'class': 'text-center', 'width': '10%'},
             {
                 'data': 'id', 'class': 'text-center', 'width': '6%', render: function (data) {
-                    return `<button class="btn btn-outline-danger py-0 px-1 update-quantity"
+                    return `<button class="btn py-0 px-1 update-quantity"
                              title="Delete Product" data-action="delete">
-                                <i class="fa fa-trash fa-sm"></i>
+                                <i class="material-icons md-delete text-black-50"></i>
                             </button>`
                 },
                 "orderable": false,
             },
         ],
-        createdRow: function (row, data, dataIndex) {
-            $('td:eq(2)',row).attr('contenteditable',true).attr('name', 'mrp').attr('value', data.mrp).attr('data-order-item-id', data.id);
-            $('td:eq(3)',row).attr('contenteditable',true).attr('name', 'discount_price').attr('value', data.mrp).attr('data-order-item-id', data.id);
-        },
         'drawCallback': function () {
             let api = this.api();
             let json = api.ajax.json();
@@ -94,22 +112,16 @@ function loadCartData() {
             }
             let html = `<article class="">
                             <dl class="dlist">
-                                <dt>Total Quantity:</dt>
+                                <dt><b>Total Quantity:</b></dt>
                                 <dd>${json.data.order.get_cart_items_quantity}</dd>
                             </dl>
                             <dl class="dlist">
-                                <dt>Cart Discount:</dt>
+                                <dt><b>Cart Discount:</b></dt>
                                 <dd>${discount} ${remove_discount}</dd>
                             </dl>
                             <dl class="dlist">
-                                <dt>Total Amount:</dt>
+                                <dt><b>Total Amount:</b></dt>
                                 <dd class="fw-bold h5">₹${json.data.order.get_cart_revenue}</dd>
-                            </dl>
-                            <dl class="dlist">
-                                <dt class="text-muted">Status:</dt>
-                                <dd>
-                                    <span class="badge rounded-pill alert-success text-success">Unpaid, Open</span>
-                                </dd>
                             </dl>
                         </article>`
             total_cart_value = json.data.order.get_cart_revenue;
@@ -152,18 +164,18 @@ function product_search(value) {
                 if (item.weight !== null && item.weight_unit !== null ){
                     weight = `(${item.weight} ${item.weight_unit})`
                 }
-                HTML += `<article class="box fa-sm z-index-master m-2 ${(e===final_data_arr.length -1 ? '' : 'mb-2')}">
+                HTML += `<article class="box py-2 px-2 mx-2 ${(e===final_data_arr.length -1 ? '' : 'mb-2')}">
                     <div class="itemside">
-<!--{#                        <div class="aside">#}-->
-<!--{#                            <img src="https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/9d877957-e370-4f7c-8a0a-27ce66b04c41.png?auto=format&size=150" width="96" height="96" class="img-sm rounded">#}-->
-<!--{#                        </div>#}-->
+<!--                       <div class="aside">-->
+<!--                          <img src="https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/9d877957-e370-4f7c-8a0a-27ce66b04c41.png?auto=format&size=150" width="96" height="96" class="img-sm rounded">-->
+<!--                      </div>-->
                         <div class="info w-100 p-0">
-                            <button class="btn btn-outline-primary float-end py-1 px-2 add-variation-to-order" 
+                            <button class="btn btn-outline-primary px-1 py-0 float-end add-variation-to-order" 
                             data-variation-id=${item.id} >
-                                <i class="fas fa-shopping-cart fa-sm"> +</i>
+                                <i class="material-icons md-shopping_cart fa-sm"> +</i>
                             </button>
-                            <h6 class="title">${item.product.name} ${weight}</h6>
-                            <span class="text-muted">Code: ${item.product.product_code}</span>
+                            <div class="title"><b>${item.product.name} ${weight}</b></div>
+                            <div class="text-muted">Code: ${item.product.product_code}</div>
                             <div class="text-muted">MRP: ₹${item.mrp} | OurPrice: ₹${item.discount_price}</span>
                         </div>
                     </div>
@@ -172,7 +184,7 @@ function product_search(value) {
         }
         div_products_list.style.display = 'block';
         if (value.length >0){
-            div_products_list.innerHTML = `<div class="search-bar-divider">${HTML}<div>`;
+            div_products_list.innerHTML = `<div class="py-2 mb-2">${HTML}<div>`;
         }
         else {
             div_products_list.innerHTML = '';
@@ -218,11 +230,6 @@ async function updateOrderDetails(data_json, reload_table = false, reload_page =
         // }
     })
 }
-
-function setSearchResultsDivWidth(){
-    div_products_list.style.width = `${input_products.clientWidth}px`;
-    window.addEventListener('resize', setSearchResultsDivWidth);
-}
 // Product Search
 
 // Event Listeners
@@ -247,16 +254,16 @@ $("#AllProductListLi").on('click', '.add-variation-to-order', function () {
 $('#AllProductListLi').on('mousedown', function(event) {
     event.preventDefault();
 });
-document.getElementById('product-search-group').addEventListener('focusout', (event) => {
-    // alert(document.activeElement.classList)
-    div_products_list.style.display = 'none';
-});
-document.getElementById('product-search-group').addEventListener('focusin', (event) => {
-    div_products_list.style.display = 'block';
-});
-document.getElementById("ProductSearchInputPos").addEventListener('click', function () {
-    div_products_list.style.display = 'block';
-});
+// document.getElementById('product-search-group').addEventListener('focusout', (event) => {
+//     // alert(document.activeElement.classList)
+//     div_products_list.style.display = 'none';
+// });
+// document.getElementById('product-search-group').addEventListener('focusin', (event) => {
+//     div_products_list.style.display = 'block';
+// });
+// document.getElementById("ProductSearchInputPos").addEventListener('click', function () {
+//     div_products_list.style.display = 'block';
+// });
 
 document.getElementById("btn-clear-cart").addEventListener('click', function () {
     let callUpdateOrderDetails = updateOrderDetails({'action': 'clear-cart'}, true)
@@ -283,34 +290,34 @@ dataTable.on('click', '.update-quantity', function () {
     let callUpdateOrderDetails = updateOrderDetails(data_json, true)
 });
 
-// Content Editable api calls
-dataTable.on('keypress', '[contenteditable]', function(e){
-    var key = e.keyCode || e.charCode;
-    if (key >= 48 && key <= 57) {
-        // alert('You pressed ' + (key - 48));
-    }
-    else if (e.which === 13){
-        let data_json = {
-            'action': 'update-order-item',
-            'order_item_id': this.getAttribute('data-order-item-id'),
-            [this.getAttribute('name')]: this.innerHTML
-        }
-        let callUpdateOrderDetails = updateOrderDetails(data_json, true)
-        return false
-    }
-    else {
-        return false
-    }
-});
-
-dataTable.on('blur', '[contenteditable]', function(e) {
-        let data_json = {
-        'action': 'update-order-item',
-        'order_item_id': this.getAttribute('data-order-item-id'),
-        [this.getAttribute('name')]: this.innerHTML
-    }
-    let callUpdateOrderDetails = updateOrderDetails(data_json, true)
-});
+// // Content Editable api calls
+// dataTable.on('keypress', '[contenteditable]', function(e){
+//     var key = e.keyCode || e.charCode;
+//     if (key >= 48 && key <= 57) {
+//         // alert('You pressed ' + (key - 48));
+//     }
+//     else if (e.which === 13){
+//         let data_json = {
+//             'action': 'update-order-item',
+//             'order_item_id': this.getAttribute('data-order-item-id'),
+//             [this.getAttribute('name')]: this.innerHTML
+//         }
+//         let callUpdateOrderDetails = updateOrderDetails(data_json, true)
+//         return false
+//     }
+//     else {
+//         return false
+//     }
+// });
+//
+// dataTable.on('blur', '[contenteditable]', function(e) {
+//         let data_json = {
+//         'action': 'update-order-item',
+//         'order_item_id': this.getAttribute('data-order-item-id'),
+//         [this.getAttribute('name')]: this.innerHTML
+//     }
+//     let callUpdateOrderDetails = updateOrderDetails(data_json, true)
+// });
 
 dataTable.on('change', '.update-order-item', function () {
     let data_json = {
@@ -323,10 +330,6 @@ dataTable.on('change', '.update-order-item', function () {
 
 // Document Ready Event Listners
 window.addEventListener('DOMContentLoaded', (event) => {
-    // set width of results div_products_list
-    setSearchResultsDivWidth()
-    // set width of results div_products_list
-
     // Load Cart Data
     loadCartData();
     // Load Cart Data

@@ -17,23 +17,28 @@ const addProductDetails = function (product_form_selector, variation_form_select
     // console.log("hi")
     // console.log(product_form_selector)
     // console.log("hi1")
-    console.log(variation_form_selector)
+    // console.log(variation_form_selector)
     // var formData = $(variation_form_selector).serializeObject();
     // var result = JSON.stringify(formData);
     // console.log(result)
-    const product_form_data = getFormData($(product_form_selector));
+    // console.log("hi")
+    let product_form_data = getFormData($(product_form_selector));
     let variation_form_data = getFormData($(variation_form_selector));
 
+    console.log(product_form_data['category'])
     // FormData helps to send image data with ajax call
     let formData = new FormData();
-    formData.append('image', $('#product_image_upload')[0].files[0]);
+    formData.append('image', $('#add_image')[0].files[0]);
     // const dataWithImage = {...variation_form_data,...formData};
     // variation_form_data += formData;
-    // console.log($('#product_image_upload')[0].files[0])
+    console.log($('#add_image')[0].files[0])
     // console.log(formData.entries())
-
-    console.log(variation_form_data)
+    // console.log(product_form_data)
+    // console.log(variation_form_data)
     product_form_data["product_code"] = $('#product_code').val();
+    // console.log($('#product_code').val())
+    // product_form_data["category"] = $('#product_category').val();
+    // console.log($('#product_category').val())
     if (product_form_data["category"] === null) {
         product_form_data["category"] = [];
     } else product_form_data["category"] = add_product_category_selector.val().split(",");
@@ -225,10 +230,17 @@ function updateProductDetails(product_form_selector, variation_form_selector) {
 }
 
 const addVariation = (variation_form_selector) => {
+    console.log("hi")
     const variation_form_data = getFormData($(variation_form_selector));
     variation_form_data['product'] = product_code_to_update;
-
+    let formData = new FormData();
+    formData.append('image', $("#add-variation_image")[0].files[0]);
+    // const dataWithImage = {...variation_form_data,...formData};
+    // variation_form_data += formData;
+    console.log($("#add-variation_image")[0].files[0])
     const data = {'variation_data': variation_form_data}
+    formData.append('overall_data', JSON.stringify(data))
+
     console.log(data);
 
     let url = "/api/add-product-with-variation/";
@@ -236,10 +248,13 @@ const addVariation = (variation_form_selector) => {
     $.ajax(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        data: JSON.stringify(data),
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: formData,
         success: function (data) {
             if (data.status === 'success') {
                 toastr.info(data.response);

@@ -1,6 +1,6 @@
 altgraph==0.17
 asgiref==3.2.10
-click==7.1.2
+click
 Django==3.1.2
 django-ckeditor==6.0.0
 django-js-asset==1.2.2
@@ -14,7 +14,7 @@ MarkupSafe==1.1.1
 numpy
 pandas
 python-dateutil==2.8.1
-pytz==2020.1
+pytz
 six==1.15.0
 sqlparse==0.3.1
 Werkzeug==1.0.1

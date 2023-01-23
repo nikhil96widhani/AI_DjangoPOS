@@ -11,10 +11,11 @@ from .serializers import *
 from inventory.models import *
 import json
 
+
 class ProductCategoryList(APIView):
     @staticmethod
     def get(request):
-        categories = ProductCategories.objects.all()
+        categories = ProductCategories.objects.order_by('name')
         category_serializer = ProductCategorySerializer(categories, many=True)
         categories_data = [cat['name'] for cat in category_serializer.data]
         return Response({'categories': categories_data})
@@ -41,11 +42,15 @@ class ProductCodeGeneratorView(APIView):
 @api_view(['POST'])
 def add_product_with_variation(request):
     # request has 2 datas one under overall data of form(excluding image) and one with image data
+
     overall_data = json.loads(request.data['overall_data'])
-    product_data = overall_data['product_data']
+    if 'product_data' in overall_data:
+        product_data = overall_data['product_data']
+    else:
+        product_data = None
+
     variation_data = overall_data['variation_data']
-
-
+    print(product_data)
     if request.method == 'POST':
 
         if product_data:
@@ -53,6 +58,8 @@ def add_product_with_variation(request):
             product_serializer = ProductSerializer(data=product_data)
             print(product_data['category'])
             for cat in product_data['category']:
+                print("Hi")
+                print(cat)
                 if cat != "":
                     category_object, created = ProductCategories.objects.get_or_create(name=cat)
                     if created:
@@ -60,9 +67,11 @@ def add_product_with_variation(request):
             if product_serializer.is_valid():
                 product_serializer.save()
                 variation_data['product'] = product_data['product_code']
+
         variation_data['image'] = request.FILES['image']
         product_variation_serializer = ProductVariationPostSerializer(data=variation_data)
         if product_variation_serializer.is_valid():
+            print("image valid")
             try:
                 ProductVariation.objects.get(product=variation_data['product'],
                                              cost=variation_data['cost'],
@@ -80,12 +89,14 @@ def add_product_with_variation(request):
                 return Response({'status': 'success', 'response': 'Variation was successfully added.',
                                  'variation_id': product_variation_serializer.data['id']},
                                 status=status.HTTP_201_CREATED)
-
+        else:
+            print("image invalid")
         return Response(product_variation_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def variation_detail(request, pk):
+    print("hi")
     try:
         variation = ProductVariation.objects.get(pk=pk)
     except ProductVariation.DoesNotExist:
@@ -133,6 +144,32 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 
 
+from rest_framework.pagination import PageNumberPagination
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 5
+    # page_size_query_param = 'page_size'
+    page_query_param = 'pageNumber'
+    # max_page_size = 1000
+
+
+def variation_data(datas):
+    var_data = {
+    }
+    for i in range(len(datas)):
+        if i == 0:
+            var_data['image'] = datas[i].get_image
+        else:
+            var_data.update(
+                image=var_data['image'] + datas[i].get_image,
+            )
+    # for data in datas:
+    #     var_data['image'] += data.get_image
+
+    return var_data
+
+
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all().order_by('-modified_time')
     # print(queryset)
@@ -144,41 +181,60 @@ class ProductListView(generics.ListAPIView):
 
     # def list(self, request, *args, **kwargs):
     #     queryset = Product.objects.all().order_by('-modified_time')
-        # keys = ["product_data", "variation_data"]
-        # data = {key: None for key in keys}
-        # for val in queryset:
-        #     dat = ProductSerializer(val).data
-        #     data["product_data"] += dat
-        #     queryset = val.productvariation_set.first()
-        #     serializer = ProductVariationSerializer(queryset, many=True)
-        #     data["variation_data"] += serializer.data
-        # for data in queryset:
-        #     setattr(data, data['image'], data.get_image)
-        #     # data['image'] = data.get_image
-        # print(queryset)
-        # serializer = ProductSerializer(queryset, many=True)
-        # print(serializer.data[0])
-        # i = 0
-        # var_data = []
-        # for data in queryset:
-        #     var_data += data.get_image
-        #     i = i + 1
-        #
-        # print(serializer.data[0])
-        # for i in range(len(serializer.data)):
-        #     serializer.data[i] = queryset[i].get_image
-        # return serializer.data
-        # return Response({
-        #     'product': serializer.data
-        #     # 'extra': variation_data(queryset)
-        # })
-        # return Response(serializer.data)
-
+    # keys = ["product_data", "variation_data"]
+    # data = {key: None for key in keys}
+    # for val in queryset:
+    #     dat = ProductSerializer(val).data
+    #     data["product_data"] += dat
+    #     queryset = val.productvariation_set.first()
+    #     serializer = ProductVariationSerializer(queryset, many=True)
+    #     data["variation_data"] += serializer.data
+    # for data in queryset:
+    #     setattr(data, data['image'], data.get_image)
+    #     # data['image'] = data.get_image
+    # print(queryset)
+    # serializer = ProductSerializer(queryset, many=True)
+    # print(serializer.data[0])
+    # i = 0
+    # var_data = []
+    # for data in queryset:
+    #     var_data += data.get_image
+    #     i = i + 1
+    #
+    # print(serializer.data[0])
+    # for i in range(len(serializer.data)):
+    #     serializer.data[i] = queryset[i].get_image
+    # return serializer.data
+    # return Response({
+    #     'product': serializer.data
+    #     # 'extra': variation_data(queryset)
+    # })
+    # return Response(serializer.data)
 
 
 class ProductVariationListView(generics.ListAPIView):
     queryset = ProductVariation.objects.all().order_by('-modified_time')
     serializer_class = ProductVariationSerializer
+    # pagination_class = StandardResultsSetPagination
+
+
+class ProductsByCategory(generics.ListAPIView):
+
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+
+        query_params = self.request.query_params
+        categories = query_params.get('categories', None)
+        # we need data in list to filter by multiple categories
+        categories = categories.split(",")
+        if categories == ['null']:
+            products = Product.objects.all().order_by('-modified_time')
+        else:
+            products = Product.objects.filter(category__in=categories)
+
+        return products
+
 
 
 @api_view(['GET'])
@@ -194,3 +250,34 @@ def variations_data_using_product_code(request):
     elif request.GET.get('action') == 'product_variation_data':
         product_code = request.GET.get('product_code')
         return Response(get_variation_data(product_code))
+
+
+class SomethingAPIView(generics.ListAPIView):
+    lookup_url_kwarg = "category"
+    serializer_class = ProductSerializer
+
+    # def get_queryset(self):
+    #     print("sup again")
+    #     category = self.kwargs.get(self.lookup_url_kwarg)
+    #     print(category)
+    #     if category == "default":
+    #         products = Product.objects.all().order_by('-modified_time')
+    #
+    #     else:
+    #         products = Product.objects.filter(category=category)
+    #
+    #     # products_data = [ProductSerializer(product).data for product in products]
+    #
+    #     return products
+    def get_queryset(self):
+        query_params = self.request.query_params
+        somethings = query_params.get('something', None)
+        print(somethings)
+        print(type(somethings))
+        somethings = somethings.split(",")
+        print(somethings)
+        print(type(somethings))
+        products = Product.objects.filter(category__in=somethings)
+        print(products)
+        return products
+        # return query_params

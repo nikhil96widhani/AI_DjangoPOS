@@ -6,7 +6,7 @@ let total_cart_value = 0;
 let variation_id_to_delete, scanned_product_code;
 
 const getDatatableInput = (order_item_id, name, value) => {
-    return `<input class="form-control input-sm px-1 text-center update-order-item" type="number" min="0" 
+    return `<input class="form-control input-sm px-1 text-center no-border update-order-item" type="number" min="0" 
               name="${name}" value="${value}" data-order-item-id=${order_item_id} style="height: 20px;">`;
 }
 

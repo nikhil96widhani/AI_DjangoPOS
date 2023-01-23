@@ -5,7 +5,7 @@ from accounts.models import User, PosCustomer
 from inventory.helpers import calculateDiscountPrice
 from django.utils.timezone import now
 from coupons_discounts.models import Discount
-from django.core.exceptions import ValidationError
+# from PIL import Image
 
 # Create your models here.
 # Discounts
@@ -53,17 +53,6 @@ class ProductCompany(models.Model):
     def __str__(self):
         return self.name
 
-#for max image size
-# def clean_image(img):
-#     file_size = img.file.size
-#     limit_kb = 150
-#     limit = limit_kb * 1024
-#     if file_size > limit_kb * 1024:
-#         raise ValidationError("Max size of file is %s KB" % limit)
-#
-#     # limit_mb = 8
-#     # if file_size > limit_mb * 1024 * 1024:
-#     #    raise ValidationError("Max size of file is %s MB" % limit_mb)
 
 class Product(models.Model):
     """
@@ -76,6 +65,42 @@ class Product(models.Model):
     category = models.ManyToManyField('ProductCategories', blank=True)
     rack_number = models.CharField(max_length=100, blank=True, null=True)
     modified_time = models.DateTimeField(blank=True, null=True, editable=False)
+    description = models.TextField(blank=True, null=True)
+
+    @property
+    def get_image(self):
+        if self.productvariation_set.count() > 0:
+            img = self.productvariation_set.first().image
+            return img.url
+        else:
+            return None
+
+    @property
+    def get_mrp(self):
+        if self.productvariation_set.count() > 0:
+            var = self.productvariation_set.first()
+            return var.mrp
+        else:
+            return None
+
+    @property
+    def get_discount_price(self):
+        if self.productvariation_set.count() > 0:
+            var = self.productvariation_set.first()
+            return var.discount_price
+        else:
+            return None
+    # @property
+    # def get_min(self):
+
+        # order_items = self.orderitem_set.all()
+        # revenue_total = sum([item.get_revenue for item in order_items])
+        # if self.discount:
+        #     if self.discount.is_percentage:
+        #         revenue_total = calculateDiscountPrice(revenue_total, int(self.discount.value))
+        #     else:
+        #         revenue_total = revenue_total - int(self.discount.value)
+        # return round(revenue_total, 2)
 
     class Meta:
         verbose_name_plural = "Products"
@@ -95,6 +120,7 @@ class Product(models.Model):
 
 class ProductVariation(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    variation_name = models.CharField(max_length=30, null=True)
     cost = models.FloatField(blank=True, null=True)
     mrp = models.FloatField(blank=True, null=True)
     discount_price = models.FloatField(blank=True, null=True)
@@ -106,8 +132,6 @@ class ProductVariation(models.Model):
     expiry_date = models.DateField(blank=True, null=True)
     modified_time = models.DateTimeField(default=now, blank=True, null=True, editable=False)
     image = models.ImageField(default='images/default.jpg', null=True, blank=True, upload_to="images/")
-    description = models.TextField(blank=True, null=True)
-
 
     def save(self, *args, **kwargs):
         # Sets discount price of product

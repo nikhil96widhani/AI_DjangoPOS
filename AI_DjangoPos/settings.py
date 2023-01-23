@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'solo',
     'ckeditor',
     'coupons_discounts',
-    'store',
 
     'rest_framework',
     'fontawesome-free',
@@ -48,7 +47,8 @@ INSTALLED_APPS = [
     'api',
     'accounts',
     'inventory',
-    'pos'
+    'pos',
+    'store',
 ]
 
 MIDDLEWARE = [

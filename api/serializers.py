@@ -15,7 +15,9 @@ class ProductCategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = '__all__'
+        # depth = 1
+        fields = ('product_code', 'name', 'brand', 'category', 'rack_number', 'modified_time', 'description', 'get_image', 'get_mrp', 'get_discount_price')
+
 
 
 class ProductVariationPostSerializer(serializers.ModelSerializer):
