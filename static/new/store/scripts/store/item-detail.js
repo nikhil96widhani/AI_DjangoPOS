@@ -108,9 +108,9 @@ function  datatable(data, ind) {
                     </div> <!-- input-group.// -->
                   </div> <!-- col.// -->
                 </div> <!-- row.// -->
-                <a aria-label="Order on WhatsApp" href="https://wa.me/917987441085?text=Hi, I want to order product with id = ${variation_data.id}" target="_blank" rel="noopener noreferrer">
-                 <img alt="Order on WhatsApp" src="/static/images/img_1.png" width="300" height="100"/>
-                <a href="#" class="btn  btn-warning"> Buy now </a>
+                <div id="qrcode"></div>
+                <br>
+                <a href="https://wa.me/917987441085?text=Hi, I would like to order ${product_data.name} ${variation_data.variation_name} id = ${variation_data.id}" target="_blank" rel="noopener noreferrer" class="btn  btn-warning"> Scan to Buy  </a>
                 <a href="#" class="btn  btn-primary"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
                 <a href="#" class="btn  btn-light"> <i class="me-1 fa fa-heart"></i> Save </a>
               
@@ -121,6 +121,17 @@ function  datatable(data, ind) {
         </div> <!-- container .//  -->
         `;
     document.getElementById("product").innerHTML = text;
+    // <a aria-label="Order on WhatsApp" href="https://wa.me/917987441085?text=Hi, I want to order product with id = ${variation_data.id}" target="_blank" rel="noopener noreferrer">
+    //              <img alt="Order on WhatsApp" src="/static/images/img_1.png" width="300" height="100"/>
+    var url = "https://wa.me/917987441085?text=Hi, I would like to order " + product_data.name + " " + variation_data.variation_name + " id = " + variation_data.id;
+    new QRCode(document.getElementById("qrcode"), {
+        text: url,
+        width: 128,
+        height: 128,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
 }
 
 $(document).ready(function () {
