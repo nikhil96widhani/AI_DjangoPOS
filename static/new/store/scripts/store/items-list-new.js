@@ -1,6 +1,6 @@
 $(document).ready(function () {
     getcategories()
-    pagination(null, 1)
+    pagination("", 1)
 
 
 });
@@ -52,7 +52,7 @@ function apply_category() {
         checkbox_value.push($(this).val());
     });
 
-    if (checkbox_value.length == 0) pagination(null, 1)
+    if (checkbox_value.length == 0) pagination("", 1)
     else pagination(checkbox_value, 1)
 }
 
@@ -187,7 +187,7 @@ function pagination(category, curr_page) {
 
     $.ajax({
 
-        url: '/api/products-by-category/?categories=' + category + '&pageSize=5&page=' + curr_page,
+        url: '/api/products-by-category/?category__in=' + category + '&pageSize=5&page=' + curr_page,
 
         type: "GET",
 

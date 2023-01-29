@@ -218,23 +218,33 @@ class ProductVariationListView(generics.ListAPIView):
     # pagination_class = StandardResultsSetPagination
 
 
+# vineet
+
+
+import django_filters.rest_framework
+from .filters import *
+
+
 class ProductsByCategory(generics.ListAPIView):
-
+    # queryset = Product.objects.filter(category__name__in=['Macrame', 'Cricket Bat'])
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    # filterset_fields = ('category',)
+    filterset_class = ProductFilter
 
-    def get_queryset(self):
-
-        query_params = self.request.query_params
-        categories = query_params.get('categories', None)
-        # we need data in list to filter by multiple categories
-        categories = categories.split(",")
-        if categories == ['null']:
-            products = Product.objects.all().order_by('-modified_time')
-        else:
-            products = Product.objects.filter(category__in=categories)
-
-        return products
-
+    # def get_queryset(self):
+    #
+    #     query_params = self.request.query_params
+    #     categories = query_params.get('categories', None)
+    #     # we need data in list to filter by multiple categories
+    #     categories = categories.split(",")
+    #     if categories == ['null']:
+    #         products = Product.objects.all().order_by('-modified_time')
+    #     else:
+    #         products = Product.objects.filter(category__in=categories)
+    #
+    #     return products
 
 
 @api_view(['GET'])
