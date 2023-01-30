@@ -225,7 +225,7 @@ import django_filters.rest_framework
 from .filters import *
 
 
-class ProductsByCategory(generics.ListAPIView):
+class StoreProducts(generics.ListAPIView):
     # queryset = Product.objects.filter(category__name__in=['Macrame', 'Cricket Bat'])
     queryset = Product.objects.all()
     serializer_class = ProductSerializer

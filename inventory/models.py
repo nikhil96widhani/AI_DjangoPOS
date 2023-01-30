@@ -53,7 +53,7 @@ class ProductCompany(models.Model):
     def __str__(self):
         return self.name
 
-
+from django.db.models import Min
 class Product(models.Model):
     """
 
@@ -66,6 +66,12 @@ class Product(models.Model):
     rack_number = models.CharField(max_length=100, blank=True, null=True)
     modified_time = models.DateTimeField(blank=True, null=True, editable=False)
     description = models.TextField(blank=True, null=True)
+
+    min_mrp = models.FloatField(blank=True, null=True)
+
+    def update_min_mrp(self):
+        self.min_mrp = self.productvariation_set.aggregate(Min('mrp'))['mrp__min']
+        self.save()
 
     @property
     def get_image(self):
@@ -112,6 +118,10 @@ class Product(models.Model):
         if self.brand is None:
             brand_placeholder, created = ProductCompany.objects.get_or_create(name='')
             self.brand = brand_placeholder
+
+        # updates the minimum mrp among all variations
+        if self.productvariation_set.count() > 0:
+            self.min_mrp = self.productvariation_set.aggregate(Min('mrp'))['mrp__min']
         super(Product, self).save(*args, **kwargs)
 
     def __str__(self):

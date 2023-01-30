@@ -1,6 +1,6 @@
 $(document).ready(function () {
     getcategories()
-    pagination("", 1)
+    pagination("",0, 10000000,  1)
 
 
 });
@@ -8,8 +8,7 @@ $(document).ready(function () {
 $(document).on('click', '.pagination-select', function(){
         let curr_page = $(this).attr('data-page-no');
         let categories = $(this).attr('data-categories');
-        console.log(curr_page, categories);
-        $('html, body').animate({scrollTop: 0}, 0);
+
         pagination(categories, curr_page)
     });
 
@@ -44,16 +43,15 @@ async function getcategories() {
 
 }
 
-function apply_category() {
+function apply_filter() {
     let checkbox_value = new Array();
 
     $("input:checkbox[name=category]:checked").each(function () {
         console.log($(this).val())
         checkbox_value.push($(this).val());
     });
-
-    if (checkbox_value.length == 0) pagination("", 1)
-    else pagination(checkbox_value, 1)
+    if (checkbox_value.length == 0) pagination("",$('#min_mrp').val(), $('#max_mrp').val(),  1)
+    else pagination(checkbox_value,$('#min_mrp').val(), $('#max_mrp').val(), 1)
 }
 
 function template(data) {
@@ -181,22 +179,24 @@ function pagination_datable(category, curr_page, next) {
 
 }
 
-function pagination(category, curr_page) {
+function pagination(category, min_mrp, max_mrp, curr_page) {
 
-
+    // let URL = '/api/store-products/pageSize=5&page=' + curr_page;
+    //
+    // if (category) URL += '&category__in=' + category
 
     $.ajax({
 
-        url: '/api/products-by-category/?category__in=' + category + '&pageSize=5&page=' + curr_page,
+        url: '/api/store-products/?category__in=' + category + '&mrp=' + min_mrp + ',' + max_mrp  + '&pageSize=5&page=' + curr_page,
 
         type: "GET",
 
         dataType: "json", success: function (data) {
 
             $('#data-container').html(template(data['results']));
-            let text = ``;
 
-            pagination_datable(category, curr_page, data['next'])
+            pagination_datable(category, curr_page, data['next']);
+            $('html, body').animate({scrollTop: 0}, 0);
         },
 
         error: function (error) {
