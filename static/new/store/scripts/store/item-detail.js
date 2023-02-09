@@ -1,4 +1,4 @@
-function  datatable(data, ind) {
+function  datatable(data, ind, quantity) {
 
     let product_data = data.product_data
     let variation_data = data['variation_data'][ind]
@@ -76,7 +76,7 @@ function  datatable(data, ind) {
                 <div class="row mb-4">
                   <div class="col-md-4 col-6 mb-2">
                     <label class="form-label">Variation</label>
-                    <select class="form-select">`
+                    <select class="form-select value-input">`
                                 for (let i = 0; i < data.variation_data.length; i++) {
                                     if (i == ind) {
                                                 text += `<option selected data-ind="${i}" data-product-id="${product_data.product_code}">${data.variation_data[i].variation_name}</option>`
@@ -91,16 +91,16 @@ function  datatable(data, ind) {
               
                     </select>
                   </div> <!-- col.// -->
-                  <div class="col-md-4 col-6 mb-3">
+                  <div class="col-md-4 col-6 mb-3 quantity">
                     <label class="form-label d-block">Quantity</label>
                     <div class="input-group input-spinner">
-                      <button class="btn btn-icon btn-light" type="button"> 
+                      <button class="btn btn-icon btn-light quantity-minus" type="button"> 
                           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#999" viewBox="0 0 24 24">
                             <path d="M19 13H5v-2h14v2z"></path>
                           </svg>
                       </button>
-                      <input class="form-control text-center" placeholder="" value="14">
-                      <button class="btn btn-icon btn-light" type="button"> 
+                      <input class="form-control text-center value-input" placeholder="" value="${quantity}" id="quantity">
+                      <button class="btn btn-icon btn-light quantity-plus" type="button"> 
                           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#999" viewBox="0 0 24 24">
                             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
                           </svg>
@@ -110,7 +110,7 @@ function  datatable(data, ind) {
                 </div> <!-- row.// -->
                 <div id="qrcode"></div>
                 <br>
-                <a href="https://wa.me/917987441085?text=Hi, I would like to order ${product_data.name} ${variation_data.variation_name} id = ${variation_data.id}" target="_blank" rel="noopener noreferrer" class="btn  btn-warning"> Scan to Buy  </a>
+                <a href="https://wa.me/917987441085?text=Hi, I would like to order ${document.URL + encodeURIComponent("&index="+ind+"&quantity="+quantity)}" target="_blank" rel="noopener noreferrer" class="btn  btn-warning" id="buy"> Scan to Buy  </a>
                 <a href="#" class="btn  btn-primary"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
                 <a href="#" class="btn  btn-light"> <i class="me-1 fa fa-heart"></i> Save </a>
               
@@ -120,10 +120,17 @@ function  datatable(data, ind) {
         
         </div> <!-- container .//  -->
         `;
+                 //                text += `<a aria-label="Order on WhatsApp" href="https://wa.me/917987441085?text=Hi, I want to order ${document.URL}?index=${ind}" target="_blank" rel="noopener noreferrer">
+                 // <img alt="Order on WhatsApp" src="/static/images/img_1.png" width="300" height="100"/>`
     document.getElementById("product").innerHTML = text;
-    // <a aria-label="Order on WhatsApp" href="https://wa.me/917987441085?text=Hi, I want to order product with id = ${variation_data.id}" target="_blank" rel="noopener noreferrer">
-    //              <img alt="Order on WhatsApp" src="/static/images/img_1.png" width="300" height="100"/>
-    var url = "https://wa.me/917987441085?text=Hi, I would like to order " + product_data.name + " " + variation_data.variation_name + " id = " + variation_data.id;
+    // var tmp = document.URL
+    // console.log(tmp, typeof tmp)
+    // tmp = tmp + "&index=" + ind
+    // console.log(tmp, typeof tmp)
+    // console.log(encodeURIComponent(tmp))
+    var product_url = document.URL + encodeURIComponent("&index="+ind+"&quantity="+quantity)
+    var url = "https://wa.me/917987441085?text=Hi, I would like to order \n" + product_url;
+    console.log(url)
     new QRCode(document.getElementById("qrcode"), {
         text: url,
         width: 128,
@@ -136,20 +143,66 @@ function  datatable(data, ind) {
 
 $(document).ready(function () {
     let product_id = $("#product").data("id");
-    product_data_with_variation(product_id, 0);
+    let index = $("#product").data("index");
+    let quantity = $("#product").data("quantity");
+    product_data_with_variation(product_id, index, quantity);
 
 });
 
 
-$(document).on('change',".form-select", function() {
+function incrementQuantity(e) {
+    $('#quantity').val( function(i, oldval) {
+        return ++oldval;
+    });
+}
+
+function decrementQuantity(e) {
+    $('#quantity').val( function(i, oldval) {
+        if (oldval > 1) return --oldval;
+        else return 1;
+    });
+
+}
+
+function qrcode_generator() {
+    let index = $('.value-input').find(':selected').attr('data-ind');
+    let quantity = $('#quantity').val();
+    let product_url = document.URL + encodeURIComponent("&index="+index+"&quantity="+quantity)
+    let url = "https://wa.me/917987441085?text=Hi, I would like to order \n" + product_url;
+    $("#qrcode").empty();
+    $("#buy").attr("href", url);
+    new QRCode(document.getElementById("qrcode"), {
+        text: url,
+        width: 128,
+        height: 128,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+}
+
+$(document).on('click', '.quantity-plus', function() {
+  incrementQuantity();
+  qrcode_generator();
+});
+
+
+$(document).on('click', '.quantity-minus', function() {
+  decrementQuantity();
+  qrcode_generator();
+});
+
+
+$(document).on('change',".value-input", function() {
 
         let index = $(this).find(':selected').attr('data-ind');
         let product_code = $(this).find(':selected').attr('data-product-id');
-        product_data_with_variation(product_code, index)
+        let quantity = $('#quantity').val();
+        product_data_with_variation(product_code, index, quantity)
 });
 
 
-function product_data_with_variation(product_code, ind) {
+function product_data_with_variation(product_code, ind, quantity) {
     $.ajax({
 
         url: '/api/product-and-variations/?action=product_variation_data&product_code=' + product_code,
@@ -158,7 +211,7 @@ function product_data_with_variation(product_code, ind) {
 
         dataType: "json", success: function (resp) {
             console.log(resp)
-            datatable(resp, ind)
+            datatable(resp, ind, quantity)
             // return data;
         },
 

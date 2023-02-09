@@ -5,6 +5,7 @@ from accounts.models import User, PosCustomer
 from inventory.helpers import calculateDiscountPrice
 from django.utils.timezone import now
 from coupons_discounts.models import Discount
+
 # from PIL import Image
 
 # Create your models here.
@@ -53,7 +54,10 @@ class ProductCompany(models.Model):
     def __str__(self):
         return self.name
 
+
 from django.db.models import Min
+
+
 class Product(models.Model):
     """
 
@@ -68,6 +72,7 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
 
     min_mrp = models.FloatField(blank=True, null=True)
+    min_mrp_image = models.ImageField(default='images/default.jpg', null=True, blank=True, upload_to="images/")
 
     def update_min_mrp(self):
         self.min_mrp = self.productvariation_set.aggregate(Min('mrp'))['mrp__min']
@@ -75,11 +80,12 @@ class Product(models.Model):
 
     @property
     def get_image(self):
-        if self.productvariation_set.count() > 0:
-            img = self.productvariation_set.first().image
-            return img.url
-        else:
-            return None
+        # if self.productvariation_set.count() > 0:
+        #     img = self.productvariation_set.first().image
+        #     return img.url
+        # else:
+        #     return None
+        return self.min_mrp_image.url
 
     @property
     def get_mrp(self):
@@ -96,17 +102,18 @@ class Product(models.Model):
             return var.discount_price
         else:
             return None
+
     # @property
     # def get_min(self):
 
-        # order_items = self.orderitem_set.all()
-        # revenue_total = sum([item.get_revenue for item in order_items])
-        # if self.discount:
-        #     if self.discount.is_percentage:
-        #         revenue_total = calculateDiscountPrice(revenue_total, int(self.discount.value))
-        #     else:
-        #         revenue_total = revenue_total - int(self.discount.value)
-        # return round(revenue_total, 2)
+    # order_items = self.orderitem_set.all()
+    # revenue_total = sum([item.get_revenue for item in order_items])
+    # if self.discount:
+    #     if self.discount.is_percentage:
+    #         revenue_total = calculateDiscountPrice(revenue_total, int(self.discount.value))
+    #     else:
+    #         revenue_total = revenue_total - int(self.discount.value)
+    # return round(revenue_total, 2)
 
     class Meta:
         verbose_name_plural = "Products"
@@ -120,8 +127,8 @@ class Product(models.Model):
             self.brand = brand_placeholder
 
         # updates the minimum mrp among all variations
-        if self.productvariation_set.count() > 0:
-            self.min_mrp = self.productvariation_set.aggregate(Min('mrp'))['mrp__min']
+        # if self.productvariation_set.count() > 0:
+        # self.min_mrp = self.productvariation_set.aggregate(Min('mrp'))['mrp__min']
         super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -144,6 +151,17 @@ class ProductVariation(models.Model):
     image = models.ImageField(default='images/default.jpg', null=True, blank=True, upload_to="images/")
 
     def save(self, *args, **kwargs):
+        # updates the minimum mrp among all variations
+        if (self.product.min_mrp is None) or (self.product.min_mrp > self.mrp):
+            self.product.min_mrp = self.mrp
+            self.product.min_mrp_image = self.image
+            self.product.save()
+        # else:
+        #     if self.product.min_mrp > self.mrp:
+        #         self.product.min_mrp = self.mrp
+        #         self.product.min_mrp_image = self.image
+        #         self.product.save()
+
         # Sets discount price of product
         if self.discount_price is None:
             self.discount_price = self.mrp
@@ -161,6 +179,7 @@ class ProductVariation(models.Model):
         self.modified_time = now()
 
         super(ProductVariation, self).save(*args, **kwargs)
+        # self.product.save()
 
     def __str__(self):
         return f'{self.id}-{self.product.product_code}-{self.product}-{self.cost}-{self.mrp}-{self.discount_price}'

@@ -1,21 +1,24 @@
+const max_val = 100000000
+
 $(document).ready(function () {
     getcategories()
-    pagination("",0, 10000000,  1)
+
+    pagination("",0, max_val,  1)
 
 
 });
 
 $(document).on('click', '.pagination-select', function(){
-        let curr_page = $(this).attr('data-page-no');
-        let categories = $(this).attr('data-categories');
-
-        pagination(categories, curr_page)
-    });
+    let curr_page = $(this).attr('data-page-no');
+    let categories = $(this).attr('data-categories');
+    let mrp_range = get_mrp_range();
+    pagination(categories, mrp_range[0], mrp_range[1], curr_page)
+});
 
 async function getcategories() {
 
     // Storing response
-    fetch('/api/product-categories/')
+    fetch('/api/store-product-categories/')
         .then(result =>{
             if (!result.ok) {
                 console.log("problem")
@@ -24,13 +27,12 @@ async function getcategories() {
             return result.json()
         })
         .then(data =>{
-            let categories = data.categories
             let text = ``;
-            for (var i = 0; i < categories.length; i++) {
+            for (var i = 0; i < data.length; i++) {
                 text += `<label class="form-check mb-2">
-                                            <input class="form-check-input" name="category" type="checkbox" value="${categories[i]}">
-                                            <span class="form-check-label"> ${categories[i]} </span>
-                                            <b class="badge rounded-pill bg-gray-dark float-end">120</b>
+                                            <input class="form-check-input" name="category" type="checkbox" value="${data[i]['category__name']}">
+                                            <span class="form-check-label"> ${data[i]['category__name']} </span>
+                                            <b class="badge rounded-pill bg-gray-dark float-end">${data[i]['count']}</b>
                                         </label> <!-- form-check end.// -->`;
             }
             // text += `<button class="btn btn-light w-100" type="button" onclick="apply_category()">Apply</button>`
@@ -43,6 +45,17 @@ async function getcategories() {
 
 }
 
+function get_mrp_range() {
+    let min_mrp = $('#min_mrp').val()
+    let max_mrp = $('#max_mrp').val()
+    if (min_mrp=="" && max_mrp=="") {
+        min_mrp = 0; max_mrp = max_val;
+    }
+    else if (max_mrp == "") max_mrp = max_val;
+    else min_mrp = 0;
+    return [min_mrp, max_mrp];
+}
+
 function apply_filter() {
     let checkbox_value = new Array();
 
@@ -50,8 +63,8 @@ function apply_filter() {
         console.log($(this).val())
         checkbox_value.push($(this).val());
     });
-    if (checkbox_value.length == 0) pagination("",$('#min_mrp').val(), $('#max_mrp').val(),  1)
-    else pagination(checkbox_value,$('#min_mrp').val(), $('#max_mrp').val(), 1)
+    let mrp_range = get_mrp_range();
+    pagination(checkbox_value, mrp_range[0], mrp_range[1], 1)
 }
 
 function template(data) {
@@ -61,11 +74,11 @@ function template(data) {
         text += `<article class="card card-product-list" >
                             <div class="row g-0" >
                             <aside class="col-xl-3 col-md-4">
-                                <a href="item-detail/${data[i].product_code}" class="img-wrap" data-id = "${data[i].product_code}" onclick="Url(this)"> <img src="${data[i].get_image}"> </a>
+                                <a href="item-detail/?pk=${data[i].product_code}" class="img-wrap" data-id = "${data[i].product_code}" onclick="Url(this)"> <img src="${data[i].get_image}"> </a>
                             </aside> <!-- col.// -->
                             <div class="col-xl-6 col-md-5 col-sm-7" >
                                 <div class="card-body">
-                                    <a href="item-detail/${data[i].product_code}" class="title h5" "> ${data[i].name} </a>
+                                    <a href="item-detail/?pk=${data[i].product_code}" class="title h5" "> ${data[i].name} </a>
 
                                     <div class="rating-wrap mb-2">
                                         <ul class="rating-stars">
@@ -89,7 +102,7 @@ function template(data) {
             <del class="price-old"> ₹${data[i].get_mrp} </del>`
         }
         else {
-        text += `<span class="price h5"> ₹${data[i].get_mrp} </span>`
+        text += `<span class="price h5"> ₹${data[i].min_mrp} </span>`
         }
 
 

@@ -14,6 +14,7 @@ cart_urls = [
 
 product_urls = [
     path('product-categories/', ProductCategoryList.as_view(), name='product-category-get-post'),
+    path('store-product-categories/', StoreProductsCategories.as_view(), name='store-product-category'),
     path('product-categories/<int:pk>/', ProductCategoryDetail.as_view(), name='product-category-update-delete'),
 
     path('products/', ProductListView.as_view(), name='product-list'),
