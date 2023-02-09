@@ -37,7 +37,7 @@ def BillData(bill_object, self):
 
 
 def get_variation_data(product_code):
-    variations = ProductVariation.objects.filter(product=product_code)
+    variations = ProductVariation.objects.filter(product=product_code).order_by('mrp')
     variation_data = [ProductVariationPostSerializer(variation).data for variation in variations]
 
     product = Product.objects.get(pk=product_code)

@@ -14,6 +14,7 @@ cart_urls = [
 
 product_urls = [
     path('product-categories/', ProductCategoryList.as_view(), name='product-category-get-post'),
+    path('store-product-categories/', StoreProductsCategories.as_view(), name='store-product-category'),
     path('product-categories/<int:pk>/', ProductCategoryDetail.as_view(), name='product-category-update-delete'),
 
     path('products/', ProductListView.as_view(), name='product-list'),
@@ -29,7 +30,7 @@ product_urls = [
     path('variations/', ProductVariationListView.as_view(), name='variations-list'),
     path('product-and-variations/', variations_data_using_product_code, name='product-and-variations'),
     path('product-companies/', ProductCompaniesView.as_view(), name='api-products-companies'),
-    path('products-by-category/', ProductsByCategory.as_view(), name='products-by-category'),
+    path('store-products/', StoreProducts.as_view(), name='store-products'),
     # path('products-by-category/<str:category>', ProductsByCategory.as_view(), name='products-by-category'),
     path('', SomethingAPIView.as_view(), name='something'),
     # re_path(r'^$', SomethingAPIView.as_view(), name='something'),

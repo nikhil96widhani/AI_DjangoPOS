@@ -26,6 +26,21 @@ class ProductCategoryList(APIView):
         return Response(request.data, status=status.HTTP_201_CREATED)
 
 
+from django.db.models import Count
+
+
+class StoreProductsCategories(APIView):
+    # queryset = Product.objects.filter(category__name__in=['Macrame', 'Cricket Bat'])
+    # queryset = Product.objects.all().values('category__name').filter(category__isnull=False).annotate(
+    #     count=Count('category__name')).order_by('category__name')
+    # serializer_class = ProductCategorySerializer
+    @staticmethod
+    def get(request):
+        return Response(Product.objects.all().values('category__name').filter(category__isnull=False).annotate(
+            count=Count('category__name')).order_by('category__name'))
+
+
+
 class ProductCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = ProductCategories.objects.all()
@@ -96,7 +111,7 @@ def add_product_with_variation(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def variation_detail(request, pk):
-    print("hi")
+    print("hi1")
     try:
         variation = ProductVariation.objects.get(pk=pk)
     except ProductVariation.DoesNotExist:
@@ -218,23 +233,33 @@ class ProductVariationListView(generics.ListAPIView):
     # pagination_class = StandardResultsSetPagination
 
 
-class ProductsByCategory(generics.ListAPIView):
+# vineet
 
+
+import django_filters.rest_framework
+from .filters import *
+
+
+class StoreProducts(generics.ListAPIView):
+    # queryset = Product.objects.filter(category__name__in=['Macrame', 'Cricket Bat'])
+    queryset = Product.objects.all().order_by('min_mrp')
     serializer_class = ProductSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    # filterset_fields = ('category',)
+    filterset_class = ProductFilter
 
-    def get_queryset(self):
-
-        query_params = self.request.query_params
-        categories = query_params.get('categories', None)
-        # we need data in list to filter by multiple categories
-        categories = categories.split(",")
-        if categories == ['null']:
-            products = Product.objects.all().order_by('-modified_time')
-        else:
-            products = Product.objects.filter(category__in=categories)
-
-        return products
-
+    # def get_queryset(self):
+    #
+    #     query_params = self.request.query_params
+    #     categories = query_params.get('categories', None)
+    #     # we need data in list to filter by multiple categories
+    #     categories = categories.split(",")
+    #     if categories == ['null']:
+    #         products = Product.objects.all().order_by('-modified_time')
+    #     else:
+    #         products = Product.objects.filter(category__in=categories)
+    #
+    #     return products
 
 
 @api_view(['GET'])

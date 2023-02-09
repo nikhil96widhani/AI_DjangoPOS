@@ -1,22 +1,24 @@
+const max_val = 100000000
+
 $(document).ready(function () {
     getcategories()
-    pagination(null, 1)
+
+    pagination("",0, max_val,  1)
 
 
 });
 
 $(document).on('click', '.pagination-select', function(){
-        let curr_page = $(this).attr('data-page-no');
-        let categories = $(this).attr('data-categories');
-        console.log(curr_page, categories);
-        $('html, body').animate({scrollTop: 0}, 0);
-        pagination(categories, curr_page)
-    });
+    let curr_page = $(this).attr('data-page-no');
+    let categories = $(this).attr('data-categories');
+    let mrp_range = get_mrp_range();
+    pagination(categories, mrp_range[0], mrp_range[1], curr_page)
+});
 
 async function getcategories() {
 
     // Storing response
-    fetch('/api/product-categories/')
+    fetch('/api/store-product-categories/')
         .then(result =>{
             if (!result.ok) {
                 console.log("problem")
@@ -25,13 +27,12 @@ async function getcategories() {
             return result.json()
         })
         .then(data =>{
-            let categories = data.categories
             let text = ``;
-            for (var i = 0; i < categories.length; i++) {
+            for (var i = 0; i < data.length; i++) {
                 text += `<label class="form-check mb-2">
-                                            <input class="form-check-input" name="category" type="checkbox" value="${categories[i]}">
-                                            <span class="form-check-label"> ${categories[i]} </span>
-                                            <b class="badge rounded-pill bg-gray-dark float-end">120</b>
+                                            <input class="form-check-input" name="category" type="checkbox" value="${data[i]['category__name']}">
+                                            <span class="form-check-label"> ${data[i]['category__name']} </span>
+                                            <b class="badge rounded-pill bg-gray-dark float-end">${data[i]['count']}</b>
                                         </label> <!-- form-check end.// -->`;
             }
             // text += `<button class="btn btn-light w-100" type="button" onclick="apply_category()">Apply</button>`
@@ -44,16 +45,26 @@ async function getcategories() {
 
 }
 
-function apply_category() {
+function get_mrp_range() {
+    let min_mrp = $('#min_mrp').val()
+    let max_mrp = $('#max_mrp').val()
+    if (min_mrp=="" && max_mrp=="") {
+        min_mrp = 0; max_mrp = max_val;
+    }
+    else if (max_mrp == "") max_mrp = max_val;
+    else min_mrp = 0;
+    return [min_mrp, max_mrp];
+}
+
+function apply_filter() {
     let checkbox_value = new Array();
 
     $("input:checkbox[name=category]:checked").each(function () {
         console.log($(this).val())
         checkbox_value.push($(this).val());
     });
-
-    if (checkbox_value.length == 0) pagination(null, 1)
-    else pagination(checkbox_value, 1)
+    let mrp_range = get_mrp_range();
+    pagination(checkbox_value, mrp_range[0], mrp_range[1], 1)
 }
 
 function template(data) {
@@ -63,11 +74,11 @@ function template(data) {
         text += `<article class="card card-product-list" >
                             <div class="row g-0" >
                             <aside class="col-xl-3 col-md-4">
-                                <a href="item-detail/${data[i].product_code}" class="img-wrap" data-id = "${data[i].product_code}" onclick="Url(this)"> <img src="${data[i].get_image}"> </a>
+                                <a href="item-detail/?pk=${data[i].product_code}" class="img-wrap" data-id = "${data[i].product_code}" onclick="Url(this)"> <img src="${data[i].get_image}"> </a>
                             </aside> <!-- col.// -->
                             <div class="col-xl-6 col-md-5 col-sm-7" >
                                 <div class="card-body">
-                                    <a href="item-detail/${data[i].product_code}" class="title h5" "> ${data[i].name} </a>
+                                    <a href="item-detail/?pk=${data[i].product_code}" class="title h5" "> ${data[i].name} </a>
 
                                     <div class="rating-wrap mb-2">
                                         <ul class="rating-stars">
@@ -91,7 +102,7 @@ function template(data) {
             <del class="price-old"> ₹${data[i].get_mrp} </del>`
         }
         else {
-        text += `<span class="price h5"> ₹${data[i].get_mrp} </span>`
+        text += `<span class="price h5"> ₹${data[i].min_mrp} </span>`
         }
 
 
@@ -181,22 +192,24 @@ function pagination_datable(category, curr_page, next) {
 
 }
 
-function pagination(category, curr_page) {
+function pagination(category, min_mrp, max_mrp, curr_page) {
 
-
+    // let URL = '/api/store-products/pageSize=5&page=' + curr_page;
+    //
+    // if (category) URL += '&category__in=' + category
 
     $.ajax({
 
-        url: '/api/products-by-category/?categories=' + category + '&pageSize=5&page=' + curr_page,
+        url: '/api/store-products/?category__in=' + category + '&mrp=' + min_mrp + ',' + max_mrp  + '&pageSize=5&page=' + curr_page,
 
         type: "GET",
 
         dataType: "json", success: function (data) {
 
             $('#data-container').html(template(data['results']));
-            let text = ``;
 
-            pagination_datable(category, curr_page, data['next'])
+            pagination_datable(category, curr_page, data['next']);
+            $('html, body').animate({scrollTop: 0}, 0);
         },
 
         error: function (error) {

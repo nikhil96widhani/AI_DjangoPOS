@@ -60,7 +60,10 @@
                                 </a>
                             </header>
                             <div class="collapse show" id="collapse_aside_brands">
-                                <div class="card-body overflow-auto" id="category-container" style="max-width: 360px; max-height: 200px;">
+                                <div class="card-body" >
+                                    <div  class="row mb-3 overflow-auto" style="max-width: 360px; max-height: 200px;" id="category-container">
+
+                                    </div>
                                     {#                                    <label class="form-check mb-2">#}
                                     {#                                        <input class="form-check-input" type="checkbox" value="" checked>#}
                                     {#                                        <span class="form-check-label"> Mercedes </span>#}
@@ -96,9 +99,9 @@
                                     {#                                        <span class="form-check-label"> Honda accord </span>#}
                                     {#                                        <b class="badge rounded-pill bg-gray-dark float-end">30</b>#}
                                     {#                                    </label> <!-- form-check end.// -->#}
+                                    <button class="btn btn-light w-100" type="button" onclick="apply_filter()">Apply</button>
                                 </div>
-                                <br>
-                                <button class="btn btn-light w-100" type="button" onclick="apply_category()">Apply</button>
+
                             </div>
                         </article>
 
@@ -115,15 +118,15 @@
                                     <div class="row mb-3">
                                         <div class="col-6">
                                             <label for="min" class="form-label">Min</label>
-                                            <input class="form-control" id="min" placeholder="$0" type="number">
+                                            <input class="form-control" id="min_mrp" placeholder="₹0" type="number">
                                         </div> <!-- col end.// -->
 
                                         <div class="col-6">
                                             <label for="max" class="form-label">Max</label>
-                                            <input class="form-control" id="max" placeholder="$1,0000" type="number">
+                                            <input class="form-control" id="max_mrp" placeholder="₹1,0000" type="number">
                                         </div> <!-- col end.// -->
                                     </div> <!-- row end.// -->
-                                    <button class="btn btn-light w-100" type="button">Apply</button>
+                                    <button class="btn btn-light w-100" type="button" onclick="apply_filter()">Apply</button>
                                 </div> <!-- card-body.// -->
                             </div>
                         </article> <!-- filter-group // -->

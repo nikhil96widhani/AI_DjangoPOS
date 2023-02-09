@@ -52,7 +52,7 @@ def items_list(request):
     return render(request, 'new/store/page/page-items-list.html')
 
 
-def item_detail(request, pk):
+def item_detail(request):
     # obj = Product.objects.get(product_code=pk)
     # obj1 = ProductVariation.objects.filter(product=obj)
     # print(obj)
@@ -61,8 +61,14 @@ def item_detail(request, pk):
     # print(obj1.image.url)
     # print(len(obj1))
     # {'datas': obj1, 'data': obj1[0]}
-    print(pk)
-    return render(request, 'new/store/page/page-item-detail.html', {'id': pk})
+    pk = request.GET.get('pk')
+    index = request.GET.get('index')
+    quantity = request.GET.get('quantity')
+    if index is None:
+        index = 0
+    if quantity is None:
+        quantity = 1
+    return render(request, 'new/store/page/page-item-detail.html', {'id': pk, 'index': index, 'quantity': quantity})
 
 
 def order_cart(request):
