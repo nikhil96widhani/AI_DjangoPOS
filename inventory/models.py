@@ -149,6 +149,8 @@ class ProductVariation(models.Model):
     expiry_date = models.DateField(blank=True, null=True)
     modified_time = models.DateTimeField(default=now, blank=True, null=True, editable=False)
     image = models.ImageField(default='images/default.jpg', null=True, blank=True, upload_to="images/")
+    colour = models.CharField(max_length=20, blank=True, null=True)
+    orders = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         # updates the minimum mrp among all variations

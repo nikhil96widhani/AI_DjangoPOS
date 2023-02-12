@@ -17,21 +17,21 @@ function  datatable(data, ind, quantity) {
                    </a>
                 </div> <!-- img-big-wrap.// -->
                 <div class="thumbs-wrap">
-                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big1.jpg" class="item-thumb"> 
-                    <img width="60" height="60" src="images/items/detail1/thumb1.jpg"> 
-                  </a>
-                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big2.jpg" class="item-thumb"> 
-                    <img width="60" height="60" src="images/items/detail1/thumb2.jpg">  
-                  </a>
-                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big3.jpg" class="item-thumb"> 
-                    <img width="60" height="60" src="images/items/detail1/thumb3.jpg">  
-                  </a>
-                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big4.jpg" class="item-thumb"> 
-                    <img width="60" height="60" src="images/items/detail1/thumb4.jpg">  
-                  </a>
-                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big.jpg" class="item-thumb"> 
-                    <img width="60" height="60" src="images/items/detail1/thumb.jpg">  
-                  </a>
+<!--                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big1.jpg" class="item-thumb"> -->
+<!--                    <img width="60" height="60" src="images/items/detail1/thumb1.jpg"> -->
+<!--                  </a>-->
+<!--                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big2.jpg" class="item-thumb"> -->
+<!--                    <img width="60" height="60" src="images/items/detail1/thumb2.jpg">  -->
+<!--                  </a>-->
+<!--                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big3.jpg" class="item-thumb"> -->
+<!--                    <img width="60" height="60" src="images/items/detail1/thumb3.jpg">  -->
+<!--                  </a>-->
+<!--                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big4.jpg" class="item-thumb"> -->
+<!--                    <img width="60" height="60" src="images/items/detail1/thumb4.jpg">  -->
+<!--                  </a>-->
+<!--                  <a data-fslightbox="mygalley" data-type="image" href="images/items/detail1/big.jpg" class="item-thumb"> -->
+<!--                    <img width="60" height="60" src="images/items/detail1/thumb.jpg">  -->
+<!--                  </a>-->
                 </div> <!-- thumbs-wrap.// -->
               </article> <!-- gallery-wrap .end// -->
             </aside>
@@ -58,18 +58,28 @@ function  datatable(data, ind, quantity) {
                 <p>${product_data.description}</p>
             
                 <dl class="row">
-                  <dt class="col-3">Type:</dt>
-                  <dd class="col-9">Regular</dd>
-            
-                  <dt class="col-3">Color</dt>
-                  <dd class="col-9">Brown</dd>
-            
-                  <dt class="col-3">Material</dt>
-                  <dd class="col-9">Cotton, Jeans </dd>
-            
-                  <dt class="col-3">Brand</dt>
-                  <dd class="col-9">Reebook </dd>
-                </dl>
+                    <dt class="col-3">Brand</dt>
+                    <dd class="col-9">${product_data.brand}</dd>
+                    
+                    <dt class="col-3">Category</dt>
+                    <dd class="col-9">${product_data.category}</dd>
+`
+                if (variation_data.colour) {
+                    text += `<dt class="col-3">Colour</dt>
+                            <dd class="col-9">${variation_data.colour}</dd>`
+                }
+                  // text += `<dt class="col-3">Type:</dt>
+                  // <dd class="col-9">Regular</dd>
+                  //
+                  // <dt class="col-3">Color</dt>
+                  // <dd class="col-9">Brown</dd>
+                  //
+                  // <dt class="col-3">Material</dt>
+                  // <dd class="col-9">Cotton, Jeans </dd>
+                  //
+                  // <dt class="col-3">Brand</dt>
+                  // <dd class="col-9">Reebook </dd>
+                text += `</dl>
             
                 <hr>
             
@@ -86,7 +96,7 @@ function  datatable(data, ind, quantity) {
                                                 text += `<option data-ind="${i}" data-product-id="${product_data.product_code}">${data.variation_data[i].variation_name}</option>`
 
                                     }
-    }
+                                }
                                 text +=  ` 
               
                     </select>

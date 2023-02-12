@@ -68,6 +68,9 @@ function apply_filter() {
 }
 
 function template(data) {
+    let count = data['count']
+    data = data['results']
+    document.getElementById("item-count").innerHTML = count + " Items found";
     let text = ``;
     // {% url 'store_items_detail' %}
     for (let i = 0; i < data.length; i++) {
@@ -206,7 +209,7 @@ function pagination(category, min_mrp, max_mrp, curr_page) {
 
         dataType: "json", success: function (data) {
 
-            $('#data-container').html(template(data['results']));
+            $('#data-container').html(template(data));
 
             pagination_datable(category, curr_page, data['next']);
             $('html, body').animate({scrollTop: 0}, 0);
