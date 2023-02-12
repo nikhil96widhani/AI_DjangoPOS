@@ -10,7 +10,8 @@ from inventory.models import Product, ProductVariation
 def home_page(request):
     # data = ProductVariation.objects.all().filter(product='vineet')
     # print(data)
-    return render(request, 'new/store/page/page-index.html')
+    # return render(request, 'new/store/page/page-index.html')
+    return render(request, 'new/store/home-page.html')
 
 
 def user_profile(request):

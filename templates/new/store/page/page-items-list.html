@@ -21,9 +21,7 @@
             <div class="row">
                 <aside class="col-lg-3">
 
-                    <button class="btn btn-outline-secondary mb-3 w-100  d-lg-none" data-bs-toggle="collapse"
-                            data-bs-target="#aside_filter">Show filter
-                    </button>
+                    <button class="btn btn-outline-secondary mb-3 w-100  d-lg-none" data-bs-toggle="collapse" data-bs-target="#aside_filter">Show filter</button>
 
                     <!-- ===== Card for sidebar filter ===== -->
                     <div id="aside_filter" class="collapse card d-lg-block mb-5">
@@ -51,7 +49,7 @@
                             </div>
                         </article> <!-- filter-group // -->
 
-                        <article class="filter-group" >
+                        <article class="filter-group">
                             <header class="card-header">
                                 <a href="#" class="title" data-bs-toggle="collapse"
                                    data-bs-target="#collapse_aside_brands">
@@ -114,7 +112,7 @@
                             </header>
                             <div class="collapse show" id="collapse_aside2">
                                 <div class="card-body">
-                                    <input type="range" class="form-range" min="0" max="100">
+{#                                    <input type="range" class="form-range" min="0" max="100">#}
                                     <div class="row mb-3">
                                         <div class="col-6">
                                             <label for="min" class="form-label">Min</label>
@@ -230,7 +228,7 @@
                 <main class="col-lg-9">
 
                     <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
-                        <strong class="d-block py-2">32 Items found </strong>
+                        <strong class="d-block py-2" id="item-count">32 Items found </strong>
                         <div class="ms-auto">
                             <select class="form-select d-inline-block w-auto">
                                 <option value="0">Best match</option>
