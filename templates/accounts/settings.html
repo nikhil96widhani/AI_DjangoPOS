@@ -9,7 +9,7 @@
     <div class="container">
   <div class="row justify-content-center">
     <div class="form-group py-2">
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
 
             {% csrf_token %}
             {{ form.as_p }}

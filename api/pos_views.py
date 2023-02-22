@@ -40,7 +40,6 @@ class StoreProductsCategories(APIView):
             count=Count('category__name')).order_by('category__name'))
 
 
-
 class ProductCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = ProductCategories.objects.all()
@@ -240,26 +239,44 @@ import django_filters.rest_framework
 from .filters import *
 
 
+class GridResultsSetPagination(PageNumberPagination):
+    page_size = 15
+    page_size_query_param = 'page_size'
+
+
+class ListResultsSetPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+
+
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
+
 class StoreProducts(generics.ListAPIView):
     # queryset = Product.objects.filter(category__name__in=['Macrame', 'Cricket Bat'])
     queryset = Product.objects.all().order_by('min_mrp')
     serializer_class = ProductSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    # pagination_class = ListResultsSetPagination
     # filterset_fields = ('category',)
     filterset_class = ProductFilter
+    search_fields = ['name']
 
-    # def get_queryset(self):
-    #
-    #     query_params = self.request.query_params
-    #     categories = query_params.get('categories', None)
-    #     # we need data in list to filter by multiple categories
-    #     categories = categories.split(",")
-    #     if categories == ['null']:
-    #         products = Product.objects.all().order_by('-modified_time')
-    #     else:
-    #         products = Product.objects.filter(category__in=categories)
-    #
-    #     return products
+    # def get_paginated_response(self, data):
+    # pagination_class = LargeResultsSetPagination
+
+    def get_queryset(self):
+
+        queryset = Product.objects.all().order_by('min_mrp')
+        type = self.request.query_params.get('type', None)
+        # we need data in list to filter by multiple categories
+        if type is not None:
+            if type == "grid":
+                self.pagination_class = GridResultsSetPagination
+            else:
+                self.pagination_class = ListResultsSetPagination
+        return queryset
 
 
 @api_view(['GET'])

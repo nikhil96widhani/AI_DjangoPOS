@@ -41,7 +41,7 @@ def user_redirect(request):
 
 def settingsView(request):
     instance = SiteConfiguration.objects.get()
-    form = SettingsForm(request.POST or None, instance=instance)
+    form = SettingsForm(request.POST or None, request.FILES or None, instance=instance)
     if form.is_valid():
         form.save()
         return redirect('settings')
