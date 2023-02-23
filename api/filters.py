@@ -15,6 +15,7 @@ class ProductFilter(django_filters.FilterSet):
     category__in = InFilter(field_name='category', lookup_expr='in')
     mrp = NumberRangeFilter(field_name='min_mrp', lookup_expr='range')
 
+
     # category_in = django_filters.BaseInFilter(field_name='category', lookup_expr='in')
 
     class Meta:

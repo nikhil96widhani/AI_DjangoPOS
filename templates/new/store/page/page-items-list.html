@@ -1,14 +1,17 @@
 {% extends "new/store/base.html" %}
 {% load static %}
 {% block content %}
+    <div id="search" data-id="{{ search }}">
+
+    </div>
     <!-- ============== SECTION PAGETOP ============== -->
     <section class="bg-primary py-5">
         <div class="container">
-            <h2 class="text-white">NW Cricket</h2>
+            <h2 class="text-white"> {{ site.shop_name }}</h2>
             <ol class="breadcrumb ondark mb-0">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Library</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Data</li>
+                <li class="breadcrumb-item"><a href="{% url 'store_home_page' %}">Home</a></li>
+{#                <li class="breadcrumb-item"><a href="#">Library</a></li>#}
+                <li class="breadcrumb-item active" aria-current="page">Products</li>
             </ol>
         </div> <!-- container //  -->
     </section>
@@ -230,17 +233,23 @@
                     <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
                         <strong class="d-block py-2" id="item-count">32 Items found </strong>
                         <div class="ms-auto">
-                            <select class="form-select d-inline-block w-auto">
-                                <option value="0">Best match</option>
-                                <option value="1">Recommended</option>
-                                <option value="2">High rated</option>
-                                <option value="3">Randomly</option>
-                            </select>
+{#                            <select class="form-select d-inline-block w-auto">#}
+{#                                <option value="0">Best match</option>#}
+{#                                <option value="1">Recommended</option>#}
+{#                                <option value="2">High rated</option>#}
+{#                                <option value="3">Randomly</option>#}
+{#                            </select>#}
                             <div class="btn-group">
-                                <a href="#" class="btn btn-light" data-bs-toggle="tooltip" title="List view">
+{#                                <label class="fa fa-bars">#}
+{#                                    <input type="radio" checked="" name="view" value="list">#}
+{#                                </label>#}
+{#                                <label class="checkbox-btn">#}
+{#                                    <input type="radio" name="view"  value="grid"> <i class="fa fa-th" title="Grid View"></i>#}
+{#                                </label>#}
+                                <a class="btn btn-light active view-data" data-bs-toggle="tooltip" title="List view" data-id = "list">
                                     <i class="fa fa-bars"></i>
                                 </a>
-                                <a href="#" class="btn btn-light active" data-bs-toggle="tooltip" title="Grid view">
+                                <a  class="btn btn-light view-data" data-bs-toggle="tooltip" title="Grid view" data-id = "grid">
                                     <i class="fa fa-th"></i>
                                 </a>
                             </div> <!-- btn-group end.// -->
@@ -275,6 +284,6 @@
 {% block javascript %}
 
         <script src="{% static 'new/store/scripts/store/items-list-new.js' %}"></script>
-
+        <script src="{% static 'new/store/scripts/store/helper.js' %}"></script>
     {% endblock %}
 <!-- ============== SECTION CONTENT END// ============== -->

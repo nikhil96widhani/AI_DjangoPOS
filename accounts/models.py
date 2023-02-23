@@ -94,6 +94,16 @@ currency_choice = (
 )
 
 
+class WebUrls(models.Model):
+    instagram = models.URLField(null=True, blank=True)
+    facebook = models.URLField(null=True, blank=True)
+    youtube = models.URLField(null=True, blank=True)
+    twitter = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return "Website URLs"
+
+
 class SiteConfiguration(SingletonModel):
     # Shop Fields
     shop_name = models.CharField(max_length=255, blank=True, null=True, default='Shop Name')
@@ -111,11 +121,23 @@ class SiteConfiguration(SingletonModel):
     receipt_message = models.CharField(max_length=100, blank=True, null=True, default='Thank you for shopping')
     receipt_tnc = RichTextField(blank=True, null=True, default='<li>No Return on goods sold</li>')
 
+    about_us = RichTextField(blank=True, null=True, default='Welcome to our website.')
+    shop_logo = models.ImageField(default='images/default_shop_logo.jpg', null=True, blank=True, upload_to="images/")
+
+    # Weburls
+    instagram = models.URLField(null=True, blank=True)
+    facebook = models.URLField(null=True, blank=True)
+    youtube = models.URLField(null=True, blank=True)
+    twitter = models.URLField(null=True, blank=True)
+
     def __str__(self):
         return "Site Configuration"
 
     class Meta:
         verbose_name = "Site Configuration"
+
+
+
 
 
 class PosCustomer(models.Model):

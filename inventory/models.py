@@ -453,3 +453,17 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return str(f'Order Id - {self.order} | Order Item Id - {self.id}')
+
+
+class WishList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(ProductVariation)
+
+    def add_product(self, product):
+        self.items.add(product)
+
+    def remove_product(self, product):
+        self.items.remove(product)
+
+    def clear(self):
+        self.items.clear()
