@@ -49,10 +49,20 @@
 <section class="padding-y bg-light" style="min-height:90vh">
 <div class="container">
 
-
+{% if messages %}
+    {% for message in messages %}
+        <div style="text-align: center" class="alert alert-primary alert-dismissible fade show" role="alert">
+          <strong>Login to access wishlist!</strong>
+{#          <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
+{#            <span aria-hidden="true">&times;</span>#}
+{#          </button>#}
+        </div>
+    {% endfor %}
+{% endif %}
 
 <!-- ====== COMPONENT LOGIN  ====== -->
 <div class="card shadow mx-auto" style="max-width:400px; margin-top:40px;">
+
 	<div class="card-body">
 	<h4 class="card-title mb-4">Login</h4>
 	<form method="post">

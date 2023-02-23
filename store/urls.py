@@ -19,4 +19,5 @@ urlpatterns = [
     path('order-form', views.order_form, name='store_order_form'),
     path('about-us', views.about_us, name='store_about_us'),
     path('help-center', views.help_center, name='store_help_center'),
+    path('whislist/', views.user_wishlist, name='store_user_wishlist'),
 ]

@@ -125,8 +125,8 @@ function template_list(data) {
                                     <p class="text-success">Free shipping</p>
                                     <br>
                                     <div class="mb-3">
-                                        <a href="#" class="btn btn-primary"> Buy this </a>
-                                        <a href="#" class="btn btn-light btn-icon"> <i class="fa fa-heart"></i> </a>
+                                        <a href="item-detail/?pk=${data[i].product_code}" class="btn btn-primary"> Buy this </a>
+<!--                                        <a href="#" class="btn btn-light btn-icon"> <i class="fa fa-heart"></i> </a>-->
                                     </div>
                                 </div> <!-- info-aside.// -->
                             </aside> <!-- col.// -->
@@ -157,8 +157,8 @@ function template_grid(data) {
                             </div> <!-- price-wrap.// -->
                             <p class="title mb-2" style=" margin-top: 10px; height: 3em; line-height: 1.5em; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;">${data[i].name}</p>
                             
-                            <a href="#" class="btn btn-primary">Add to Wishlist</a>
-                            <a href="#" class="btn btn-light btn-icon"> <i class="fa fa-heart"></i> </a>
+                            <a href="item-detail/?pk=${data[i].product_code}" class="btn btn-primary">Buy this</a>
+<!--                            <a href="#" class="btn btn-light btn-icon"> <i class="fa fa-heart"></i> </a>-->
                         </figcaption>
                     </figure> <!-- card // -->
                 </div> <!-- col.// -->`

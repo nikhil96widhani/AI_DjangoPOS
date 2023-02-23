@@ -2,8 +2,6 @@ function  datatable(data, ind, quantity) {
 
     let product_data = data.product_data
     let variation_data = data['variation_data'][ind]
-    console.log(product_data)
-    console.log(variation_data)
     let text = `
         
         <div class="container">
@@ -118,11 +116,38 @@ function  datatable(data, ind, quantity) {
                     </div> <!-- input-group.// -->
                   </div> <!-- col.// -->
                 </div> <!-- row.// -->
-                <div id="qrcode"></div>
+                <div  id="qrcode-container" style="position: relative; display: inline-block;">
+                    <div id="qrcode"></div>
+                    <span id="scan-text" style="position: absolute;
+    top: 50%;
+    right: -150px; /* Adjust this value to change the distance between the text and the QR code */
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+}">Scan to order</span>
+                </div>
+                <div style="width: 50%; height: 15px; border-bottom: 1px solid black; text-align: center">
+                  <span style="font-size: 20px; background-color: #F3F5F6; padding: 0 10px;">
+                    OR <!--Padding is optional-->
+                  </span>
+                </div>
+<!--                <div class="row mb-4">-->
+<!--                    <div class="col-md-4 col-4 mb-2" id="qrcode">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-4 col-4 mb-1" >-->
+<!--                    <h3> Scan to order.</h3>-->
+<!--                    </div>-->
+<!--                    <div style="width: 50%; height: 15px; border-bottom: 1px solid black; text-align: center">-->
+<!--                  <span style="font-size: 20px; background-color: #F3F5F6; padding: 0 10px;">-->
+<!--                    OR &lt;!&ndash;Padding is optional&ndash;&gt;-->
+<!--                  </span>-->
+<!--                </div>-->
+<!--                </div>-->
                 <br>
-                <a href="https://wa.me/917987441085?text=Hi, I would like to order ${document.URL + encodeURIComponent("&index="+ind+"&quantity="+quantity)}" target="_blank" rel="noopener noreferrer" class="btn  btn-warning" id="buy"> Scan to Buy  </a>
-                <a href="#" class="btn  btn-primary"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
-                <a href="#" class="btn  btn-light"> <i class="me-1 fa fa-heart"></i> Save </a>
+                <a href="https://wa.me/917987441085?text=Hi, I would like to order ${document.URL + encodeURIComponent("&index="+ind+"&quantity="+quantity)}" target="_blank" rel="noopener noreferrer" class="btn  btn-warning" id="buy"> Click to Buy  </a>
+<!--                <a href="#" class="btn  btn-primary"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>-->
+                <a href="../whislist/?type=add&id=${variation_data.id}" class="btn  btn-light "> <i class="me-1 fa fa-heart"></i> Add to wishlist </a>
               
               </article> <!-- product-info-aside .// -->
             </main> <!-- col.// -->
@@ -140,7 +165,6 @@ function  datatable(data, ind, quantity) {
     // console.log(encodeURIComponent(tmp))
     var product_url = document.URL + encodeURIComponent("&index="+ind+"&quantity="+quantity)
     var url = "https://wa.me/917987441085?text=Hi, I would like to order \n" + product_url;
-    console.log(url)
     new QRCode(document.getElementById("qrcode"), {
         text: url,
         width: 128,
@@ -152,6 +176,8 @@ function  datatable(data, ind, quantity) {
 }
 
 $(document).ready(function () {
+    let wishlist_url = $("#wishlist_url").data("id")
+    console.log(wishlist_url)
     let product_id = $("#product").data("id");
     let index = $("#product").data("index");
     let quantity = $("#product").data("quantity");
@@ -202,6 +228,9 @@ $(document).on('click', '.quantity-minus', function() {
   qrcode_generator();
 });
 
+$(document).on('change', '#quantity', function() {
+  qrcode_generator();
+});
 
 $(document).on('change',".value-input", function() {
 
@@ -220,7 +249,6 @@ function product_data_with_variation(product_code, ind, quantity) {
         type: "GET",
 
         dataType: "json", success: function (resp) {
-            console.log(resp)
             datatable(resp, ind, quantity)
             // return data;
         },

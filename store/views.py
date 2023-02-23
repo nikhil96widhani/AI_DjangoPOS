@@ -5,7 +5,8 @@ from accounts.models import User
 from .forms import *
 import uuid
 from api.pos_views import *
-from inventory.models import Product, ProductVariation
+from inventory.models import Product, ProductVariation, WishList
+from accounts.models import SiteConfiguration
 
 
 # Create your views here.
@@ -52,12 +53,9 @@ def user_login(request):
         # form = UserLoginForm(request.POST)
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print(username, password)
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            print("hi")
             login(request, user)
-            print(request.user.firstname)
             return redirect('store_home_page')
 
     return render(request, 'new/store/user/user-login.html')
@@ -82,7 +80,7 @@ def items_list(request):
 
 
 # about_us mai <p> tags aa rahe hai
-from accounts.models import SiteConfiguration
+
 
 
 def about_us(request):
@@ -121,3 +119,24 @@ def order_cart(request):
 
 def order_form(request):
     return render(request, 'new/pos/page-order-form.html')
+
+
+def user_wishlist(request):
+    if request.user.is_authenticated:
+        wishlist, created = WishList.objects.get_or_create(user=request.user)
+        type = request.GET['type']
+        print(type)
+        id = request.GET['id']
+        item = ProductVariation.objects.get(id=id)
+        if type == "add":
+            wishlist.items.add(item)
+
+        elif type == "delete":
+            if wishlist.items.filter(ProductVariation=item).exists():
+                wishlist.items.filter(ProductVariation=item).delete()
+
+        return render(request, 'new/store/user/user-wishlist.html')
+
+    else:
+        messages = ["Login to view wishlist."]
+        return render(request, 'new/store/user/user-login.html', {'messages' : messages})
