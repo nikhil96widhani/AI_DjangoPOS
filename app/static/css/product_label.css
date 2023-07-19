@@ -1,0 +1,109 @@
+body {
+/*     font-size: 6px; */
+    font-family: 'Arial', serif;
+    line-height: 15px;
+    color: #000000;
+}
+
+.product-label {
+  width: 283px;
+  height: 137px;
+/*   padding: 3px 5px 4px; */
+  background-color: #ffffff;
+}
+
+.product-name {
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+/*   line-height: 10.13;
+  letter-spacing: 0.16px; */
+  text-align: left;
+}
+
+.barcode {
+  width: 100%;
+  height: 80px;
+/*   margin: 3px 0; */
+}
+
+.shopright {
+  font-size: 10px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.discount {
+  font-size: 8px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  text-align: left;
+}
+.discount-percent {
+  font-size: 18px;
+  line-height: 1;
+  text-align: left;
+}
+
+.our-rate {
+  font-size: 9px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.price {
+  font-size: 20px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+}
+
+.mrp {
+  font-size: 13px;
+  /*font-weight: bold;*/
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.mainborder{
+ width: 283px;
+  height: 140px;
+}
+
+.vertical-text {
+    display: flex;
+    position: absolute;
+    left: 161px;
+    line-height: 5px;
+    /*background-color: #DDDDDD;*/
+    padding-top: 2px;
+    /*border-radius: 5px 5px 0 0;*/
+    float: right;
+    -moz-transform: rotate(270deg);  /* FF3.5+ */
+    -o-transform: rotate(270deg);  /* Opera 10.5 */
+    -webkit-transform: rotate(-90deg);  /* Saf3.1+, Chrome */
+    -moz-transform-origin: 100% 100%;
+    -o-transform-origin: 100% 100%;
+    -webkit-transform-origin: 100% 100%;
+}
+
+@page {
+  size: auto;
+  margin: 0 0 0 5px;
+       }
+
+@media print {
+    .hidden-print,
+    .hidden-print * {
+        display: none !important;
+    }
+}

@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    command: /code/runapp.sh
+    container_name: shopright_v3
+    volumes:
+      - ./db:/code/db
+    ports:
+      - 8090:8000

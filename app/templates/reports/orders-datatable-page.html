@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}">
+{% endblock %}
+
+{% block page-title %}
+    Orders Datatable
+{% endblock %}
+
+{% block content %}
+    {% include 'components/orders-datatable.html' %}
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/jquery.pos.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/datatable-common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/orders-datatable.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            loadOrdersDatatable();
+        });
+    </script>
+{% endblock %}

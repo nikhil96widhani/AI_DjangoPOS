@@ -1,0 +1,21 @@
+{% extends 'components/base-form-modal-2.html' %}
+
+{% block modal_id %}addProductModalForm{% endblock %}
+
+{% block modal-title %}Add New Product{% endblock %}
+
+{#{% block form_id %}add-product-form{% endblock %}#}
+
+{% block form %}
+    {% with element_id='add' variation_title_visibility='invisible' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block product_code_wrapper %}
+    {% with addProduct=True %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock product_code_wrapper %}
+
+{% block submit-button-name %}Add{% endblock %}

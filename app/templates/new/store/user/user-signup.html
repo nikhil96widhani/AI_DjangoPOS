@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Type some info">
+  <meta name="author" content="Type name">
+
+  <title>{{ website.site_name }} </title>
+
+  <!-- Bootstrap css -->
+  <link href="{% static 'new/store/css/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+
+  <!-- Custom css -->
+
+  <link href="{% static 'new/store/css/ui.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'new/store/css/responsive.css' %}" rel="stylesheet" type="text/css" />
+
+  <!-- Font awesome 5 -->
+
+  <link href="{% static 'new/store/fonts/fontawesome/css/all.min.css' %}" type="text/css" rel="stylesheet">
+
+</head>
+<body>
+
+<header class="section-header border-bottom">
+	<section class="header-main">
+		<div class="container">
+			<div class="row gy-3 align-items-center">
+				<div class="col-4">
+					<a href="{% url 'store_home_page' %}" class="brand-wrap">
+						<img class="logo" height="40" width="120" src="{{ website.site_logo.url }}">
+					</a> <!-- brand-wrap end.// -->
+				</div>
+				<div class="col-8">
+					<div class="float-end">
+						<a href="{% url 'store_user_login' %}" class="btn btn-outline-primary">  Login </a>
+						<a href="{% url 'store_user_signup' %}" class="btn btn-primary">  Sign Up </a>
+			        </div>
+				</div> <!-- col end.// -->
+			</div> <!-- row end.// -->
+		</div> <!-- container end.// -->
+	</section> <!-- header-main end.// -->
+</header> <!-- section-header end.// -->
+
+<!-- ============== SECTION CONTENT  ============== -->
+<section class="padding-y bg-light" style="min-height:90vh">
+<div class="container">
+
+
+
+<!-- ====== COMPONENT LOGIN  ====== -->
+<div class="card shadow mx-auto" style="max-width:400px; margin-top:40px;">
+	<div class="card-body">
+	<h4 class="card-title mb-4">Sign in</h4>
+	<form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+			 <label class="form-label">Username</label>
+			 <input class="form-control" placeholder="Type username" type="text" name="username">
+		</div>
+		<div class="row gx-2">
+			<div class="col-6 mb-3">
+				<label class="form-label" >First name</label>
+				<input type="text" class="form-control" name="firstname">
+			</div>
+			<div class="col-6 mb-3">
+				<label class="form-label">Last name</label>
+				<input type="text" class="form-control" name="lastname">
+			</div>
+		</div> <!-- row // -->
+		<div class="mb-3">
+			 <label class="form-label">Email</label>
+			 <input class="form-control" placeholder="Type email" type="text" name="email">
+		</div>
+		<div class="mb-3">
+			 <label class="form-label">Phone</label>
+			 <div class="row gx-2">
+			 	<div class="col-4"> <input class="form-control" value="+91"  type="text"> </div>
+			 	<div class="col-8"> <input class="form-control" placeholder="Phone" type="text" name="phone"> </div>
+			 </div> <!-- row // -->
+		</div>
+		<div class="mb-3">
+			<label class="form-label">Create password</label>
+			<input class="form-control" placeholder="At least 6 characters." type="password" name="password1">
+		</div>
+		<div class="mb-3">
+			<label class="form-label">Repeat password</label>
+			<input class="form-control" placeholder="" type="password" name="password2">
+		</div>
+        <div class="mb-4">
+			<label class="form-check">
+			  <input class="form-check-input" type="checkbox"  value="">
+			  <span class="form-check-label"> I agree with Terms and Conditions </span>
+			</label>
+		</div>
+
+		<div class="mb-4">
+		  <button type="submit" class="btn btn-primary w-100"> Sign Up  </button>
+		</div>
+
+
+	</form>
+        {{ form.errors }}
+	<hr>
+	<p class="text-center mb-2">Already have account? <a href="{% url 'store_user_login' %}">Login</a></p>
+
+</div> <!-- card-body.// -->
+</div> <!-- card .// -->
+{#{{ form.as_p }}#}
+<!-- ====== COMPONENT LOGIN  END.// ====== -->
+
+<br><br>
+
+</div> <!-- container .//  -->
+</section>
+<!-- ============== SECTION CONTENT END// ============== -->
+
+<footer class="section-footer border-top padding-y">
+	<div class="container">
+		<p class="float-md-end">
+			&copy; Copyright 2022 All rights reserved
+		</p>
+		<p>
+			<a href="#" class="link-primary">Terms and conditions</a>
+		</p>
+	</div><!-- //container -->
+</footer>
+
+<!-- Bootstrap js -->
+
+<script src="{% static 'new/store/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Custom js -->
+
+<script src="{% static 'new/store/js/script.js' %}"></script>
+
+</body>
+</html>

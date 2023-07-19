@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Type some info">
+  <meta name="author" content="Type name">
+
+  <title>{{ websisite.site_name }} </title>
+
+  <!-- Bootstrap css -->
+  <link href="{% static 'new/store/css/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+
+  <!-- Custom css -->
+
+  <link href="{% static 'new/store/css/ui.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'new/store/css/responsive.css' %}" rel="stylesheet" type="text/css" />
+
+  <!-- Font awesome 5 -->
+
+  <link href="{% static 'new/store/fonts/fontawesome/css/all.min.css' %}" type="text/css" rel="stylesheet">
+
+</head>
+<body>
+
+<header class="section-header border-bottom">
+	<section class="header-main">
+		<div class="container">
+			<div class="row gy-3 align-items-center">
+				<div class="col-4">
+					<a href="{% url 'store_home_page' %}" class="brand-wrap">
+						<img class="logo" height="40" width="120" src="{{ website.site_logo.url }}">
+					</a> <!-- brand-wrap end.// -->
+				</div>
+				<div class="col-8">
+					<div class="float-end">
+                        <a href="{% url 'store_user_login' %}" class="btn btn-primary">  Login </a>
+						<a href="{% url 'store_user_signup' %}" class="btn btn-outline-primary"> Sign Up </a>
+
+			        </div>
+				</div> <!-- col end.// -->
+			</div> <!-- row end.// -->
+		</div> <!-- container end.// -->
+	</section> <!-- header-main end.// -->
+</header> <!-- section-header end.// -->
+
+<!-- ============== SECTION CONTENT  ============== -->
+<section class="padding-y bg-light" style="min-height:90vh">
+<div class="container">
+
+{% if messages %}
+    {% for message in messages %}
+        <div style="text-align: center" class="alert alert-primary alert-dismissible fade show" role="alert">
+          <strong>Login to access wishlist!</strong>
+{#          <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
+{#            <span aria-hidden="true">&times;</span>#}
+{#          </button>#}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- ====== COMPONENT LOGIN  ====== -->
+<div class="card shadow mx-auto" style="max-width:400px; margin-top:40px;">
+
+	<div class="card-body">
+	<h4 class="card-title mb-4">Login</h4>
+	<form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+			 <label class="form-label">Username</label>
+			 <input class="form-control" placeholder="Type username" type="text" name="username">
+		</div>
+
+		<div class="mb-3">
+			<label class="form-label">Password</label>
+			<input class="form-control" placeholder="Enter your password." type="password" name="password">
+		</div>
+
+
+		<div class="mb-4">
+		  <button type="submit" class="btn btn-primary w-100"> Login  </button>
+		</div>
+
+
+	</form>
+        {{ form.errors }}
+	<hr>
+	<p class="text-center mb-2">New here? <a href="{% url 'store_user_signup' %}">Signup</a></p>
+
+</div> <!-- card-body.// -->
+</div> <!-- card .// -->
+{#{{ form.as_p }}#}
+<!-- ====== COMPONENT LOGIN  END.// ====== -->
+
+<br><br>
+
+</div> <!-- container .//  -->
+</section>
+<!-- ============== SECTION CONTENT END// ============== -->
+
+<footer class="section-footer border-top padding-y">
+	<div class="container">
+		<p class="float-md-end">
+			&copy; Copyright 2022 All rights reserved
+		</p>
+		<p>
+			<a href="#" class="link-primary">Terms and conditions</a>
+		</p>
+	</div><!-- //container -->
+</footer>
+
+<!-- Bootstrap js -->
+
+<script src="{% static 'new/store/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Custom js -->
+
+<script src="{% static 'new/store/js/script.js' %}"></script>
+
+</body>
+</html>
