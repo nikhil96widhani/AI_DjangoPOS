@@ -115,3 +115,5 @@ media/
 # !**/migrations/__init__.py
 .idea/AI_DjangoPos.iml
 .idea/misc.xml
+/app/accounts/migrations/
+/app/inventory/migrations/
