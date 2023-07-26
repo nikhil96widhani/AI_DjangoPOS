@@ -40,25 +40,13 @@ def user_redirect(request):
 
 
 def settingsView(request):
-    # form_type = request.GET.get('FormType', None)
-    # if form_type == "website":
-    #     instance = StoreSettings.objects.get()
-    #     form = WebsiteForm(request.POST or None, request.FILES or None, instance=instance)
-    #     if form.is_valid():
-    #         form.save()
-    #         return redirect('settings')
-    #     return render(request, 'accounts/settings.html', {'form': form})
-    # else:
-    instance = SiteConfiguration.objects.get()
-    form_pos = SettingsForm(request.POST or None, request.FILES or None, instance=instance)
     form_store = StoreSettingsForm(request.POST or None, request.FILES or None, instance=StoreSettings.objects.get())
 
-    if 'pos' in request.POST:
-        if form_pos.is_valid():
-            form_pos.save()
-            return redirect('settings')
-    else:
-        if form_store.is_valid():
-            form_store.save()
-            return redirect('settings')
-    return render(request, 'accounts/settings.html', {'form_pos': form_pos, 'form_store': form_store})
+    if form_store.is_valid():
+        form_store.save()
+        return redirect('settings')
+    return render(request, 'accounts/settings.html', {'form_store': form_store})
+
+
+def expensesView(request):
+    return render(request, 'accounts/expenses_datatable.html')

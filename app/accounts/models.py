@@ -49,13 +49,14 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    username = models.CharField(max_length=30, unique=True)
+    username = models.CharField(max_length=30, unique=True, blank=True, null=True, )
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
     phone = models.CharField(max_length=20)
     # These are required for the AbstractBaseUser class by Django
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
+    is_customer = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -63,7 +64,7 @@ class User(AbstractBaseUser):
     # In a custom field, we need to set the field by which
     # users log in with. Here we want to use email.
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'firstname', 'lastname']
+    REQUIRED_FIELDS = ['email', 'phone', 'firstname', 'lastname']
 
     # Tell the user model where the user manager is
     objects = UserManager()
@@ -87,58 +88,18 @@ class User(AbstractBaseUser):
 
 
 # https://github.com/lazybird/django-solo
-
-class WebUrls(models.Model):
-    instagram = models.URLField(null=True, blank=True)
-    facebook = models.URLField(null=True, blank=True)
-    youtube = models.URLField(null=True, blank=True)
-    twitter = models.URLField(null=True, blank=True)
-
-    def __str__(self):
-        return "Website URLs"
-
-
-class SiteConfiguration(SingletonModel):
-    # Shop Fields
-    shop_name = models.CharField(max_length=255, blank=True, null=True, default='Shop Name')
-    address = models.CharField(max_length=100, blank=True, null=True, default='Bhopal, India')
-    country_located = models.CharField(max_length=20, blank=True, null=True, default='India')
-    email = models.EmailField(blank=True, null=True, default='admin@site.com')
-    phone_number = models.IntegerField(blank=True, null=True, default='1111111111')
-    whatsapp_number = models.IntegerField(blank=True, null=True, default='1111111111')
-
-    # Payment Fields
-
-    # Receipt Fields
-    # tnc = models.CharField(max_length=5, null=True)
-    receipt_message = models.CharField(max_length=100, blank=True, null=True, default='Thank you for shopping')
-    receipt_tnc = RichTextField(blank=True, null=True, default='<li>No Return on goods sold</li>')
-
-    about_us = RichTextField(blank=True, null=True, default='Welcome to our website.')
-    shop_logo = models.ImageField(default='images/default_shop_logo.jpg', null=True, blank=True, upload_to="images/")
-
-    def __str__(self):
-        return "Site Configuration"
-
-    class Meta:
-        verbose_name = "Site Configuration"
-
-
 class CurrencyChoice(models.TextChoices):
     Rupees = "₹", "INR"
     Canadian_dollar = "$", "CAD"
 
 
 class StoreSettings(SingletonModel):
+    # Shop Fields
     currency = models.CharField(
         max_length=2,
         choices=CurrencyChoice.choices,
         default=CurrencyChoice.Rupees
     )
-    #config.get_currency_display()
-    # config.currency
-
-    # Shop Fields
     site_name = models.CharField(max_length=255, blank=True, null=True, default='Shop Name')
     tagline = RichTextField(blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True, default='Bhopal, India')
@@ -152,15 +113,29 @@ class StoreSettings(SingletonModel):
     site_logo = models.ImageField(default='images/default_shop_logo.jpg', null=True, blank=True,
                                   upload_to="images/site_logo")
     homepage_image = models.ImageField(default='images/default_shop_logo.jpg', null=True, blank=True,
-                                       upload_to="images/homeepage_image")
+                                       upload_to="images/homepage_image")
 
     menu_maker = models.CharField(max_length=255, blank=True, null=True)
 
+    # RECEIPT
+    receipt_message = models.CharField(max_length=100, blank=True, null=True, default='Thank you for shopping')
+    receipt_tnc = RichTextField(blank=True, null=True, default='<li>All Sales are final</li>')
+
+    payment_status = models.JSONField(default=["cash"], blank=True, null=True)
     # Weburls
     instagram = models.URLField(null=True, blank=True)
     facebook = models.URLField(null=True, blank=True)
     youtube = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
+
+    # Email Settings
+    email_host = models.CharField(max_length=100, blank=True, null=True, default='smtp.example.com')
+    email_port = models.PositiveIntegerField(default=587)
+    email_username = models.CharField(max_length=100, blank=True, null=True, default='your_email@example.com')
+    email_password = models.CharField(max_length=100, blank=True, null=True, default='your_email_password')
+    email_use_tls = models.BooleanField(default=True)
+    email_use_ssl = models.BooleanField(default=False)
+    email_fail_silently = models.BooleanField(default=False)
 
     def __str__(self):
         return "Website Configuration"
@@ -169,9 +144,13 @@ class StoreSettings(SingletonModel):
         verbose_name = "Website Configuration"
 
 
-class PosCustomer(models.Model):
-    name = models.CharField(max_length=100, blank=True, null=True)
-    phone_number = models.IntegerField(blank=True, null=True)
+class Expense(models.Model):
+    title = models.CharField(max_length=100)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
+    description = models.TextField(blank=True, null=True)
+    expense_for = models.CharField(max_length=200, blank=True, null=True)  # Field for the expense purpose
+    invoice = models.FileField(upload_to="expense_receipts/", blank=True, null=True)  # New field for receipt
 
     def __str__(self):
-        return self.name
+        return f"{self.title} - {self.amount}"

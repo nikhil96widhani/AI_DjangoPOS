@@ -165,3 +165,4 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
 
 DSC_COUPON_CODE_LENGTH = 16
+

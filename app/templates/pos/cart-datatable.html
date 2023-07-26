@@ -129,7 +129,18 @@
                     <!-- Grid column -->
                     <div class="col-xl-8 col-md-12 mx-0">
                         <div class="card mr-4 mt-n4">
-                            <h4 class="text-center font-weight-bold pt-3 pb-2 mb-0">Cart</h4>
+                            <div class="row pt-2">
+                                <div class="col">
+                                </div>
+                                <div class="col-6 text-center">
+                                  <span class=" font-weight-bold pt-5 pb-2 mb-0 h3">Cart</span>
+                                </div>
+                                <div class="col-auto text-right pr-5">
+                                    <span id="order-customer-info"></span>
+                                </div>
+                              </div>
+
+
                             <div class="card-body py-0">
                                 <table id="cart-datatable" class="table text-center product-table table-cart-v-2"
                                        style="width:100%">
@@ -162,7 +173,7 @@
                                             <div class="col-sm-5">
                                                 <div class="input-group mb-4 w-75 ml-5">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text" id="CashReceived">₹</span>
+                                                        <span class="input-group-text" id="CashReceived">{{ my_config.currency }}</span>
                                                     </div>
                                                     <input id="CashReceivedValue" type="number" class="form-control"
                                                            aria-label="Small"
@@ -172,9 +183,9 @@
                                                     <div class="input-group-append">
                                                         <select id="payment-mode" class="custom-select custom-select"
                                                                 autocomplete="off" aria-label="payment-mode">
-                                                            {% for x,y in payment_mode %}
+                                                            {% for x in my_config.payment_status %}
                                                                 <option value="{{ x }}"{% if x == 'Cash' %}
-                                                                        selected{% endif %}>{{ y }}</option>
+                                                                        selected{% endif %}>{{ x }}</option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>

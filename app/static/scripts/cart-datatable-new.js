@@ -39,7 +39,11 @@ function loadCartData() {
             // updated_order_item_id = 0;
         },
         'columns': [
-            {'data': 'name', 'class': 'text-left font-weight-bold'},
+            {
+                'data': 'name', 'class': 'text-left font-weight-bold', render: function (data, type, row) {
+                    return `${data} [${row.get_variation_name}]`
+                }
+            },
             {'data': 'weight', 'width': '10%', render: handleBlankData},
             {
                 'data': 'mrp', 'width': '10%', render: function (data, type, row) {
@@ -101,7 +105,7 @@ function loadCartData() {
                                     }, true)">
                                     <i class="fas fa-times"></i></button>`
                 if (discount.is_percentage === true) discount = discount.value + '%'
-                else discount = '₹' + discount.value
+                else discount = store_currency + discount.value
             }
 
             // let html = `<tr><th class="table-info font-weight-500 h6">Total Quantity -
@@ -113,10 +117,21 @@ function loadCartData() {
             //             </tr>`
             let html = `<div class="col-sm-4 table-info font-weight-500 text-center py-3 h6">Total Quantity -  <span class="font-weight-bold">${json.data.order.get_cart_items_quantity}</span></div>
                         <div class="col-sm-4 table-warning font-weight-500 text-center py-3 h6">Total Amount -  <span class="font-weight-bold">${store_currency} ${json.data.order.get_cart_revenue}</span></div>
-                        <div class="col-sm-4 table-success font-weight-500 text-center py-3 h6">Cart Discount -  <span class="font-weight-bold">${store_currency} ${discount}</span>${remove_discount}</div>`
+                        <div class="col-sm-4 table-success font-weight-500 text-center py-3 h6">Cart Discount -  <span class="font-weight-bold">${discount}</span>${remove_discount}</div>`
             total_cart_value = json.data.order.get_cart_revenue;
             // $(dataTable.DataTable().table().footer()).html(html);
             $('#total-values-div').html(html);
+            // order customer
+            if (json.data.order.customer){
+                let html_customer_info = ` <a onclick="removeCustomer()" data-toggle="tooltip" data-html="true" title="${json.data.order.customer.firstname} ${json.data.order.customer.lastname}<br>${json.data.order.customer.email}<br>${json.data.order.customer.phone}">Customer: ${json.data.order.customer.firstname} ${json.data.order.customer.lastname} <i class="fa-solid fa-xmark text-danger"></i></a>`
+                $(document).ready(function(){
+                  $('[data-toggle="tooltip"]').tooltip();
+                });
+                $('#order-customer-info').html(html_customer_info);
+            }
+            else {
+                 $('#order-customer-info').html('Customer: NA')
+            }
 
             let cash_received = $('#CashReceivedValue').val()
             if (cash_received !== "") {
@@ -285,15 +300,6 @@ $('#apply-order-discount').click(() => {
     }, true)
 })
 
-$('#add-customer').click(() => {
-    let name = document.getElementById('cus_name').value
-    let phone_number = document.getElementById("cus_number").value
-    updateOrderDetails({
-        'action': 'add-customer', 'name': name,
-        'phone_number': phone_number,
-    }, false, false, true)
-})
-
 $('#quick-add-item').click(() => {
     let name = document.getElementById('qa_name').value
     let quantity = document.getElementById('qa_quantity').value
@@ -304,15 +310,13 @@ $('#quick-add-item').click(() => {
     }, true)
 })
 
-// $('#test-button').click(function () {
-//     let data_json = {
-//         'action': 'add-order-item',
-//         'product_code': '2008',
-//     }
-//     scanned_product_code = '2008';
-//     updateOrderDetails(data_json, true)
-// })
-
+// remove customer
+function removeCustomer(){
+    updateOrderDetails({
+                    'action': 'remove-customer',
+                }, true, false, true)
+    $('[data-toggle="tooltip"], .tooltip').tooltip("hide");
+    }
 
 // Initialize with options
 onScan.attachTo(document, {
@@ -364,12 +368,13 @@ function product_search(value) {
             trHTML += `<li><div class="alert alert-secondary" role="alert">  No Products Found</div></li>`
         } else {
             $.each(response, function (e, item) {
+                console.log(item)
                 trHTML += `<li class="list-group-item">
                             <div class="row pt-2 ">
-                                <div class="col"><div>${item.product.name}</div>
+                                <div class="col"><div class="h6">${item.product.name} [${item.variation_name}]</div>
                                     <div class="row">
-                                       <div class="col"><span class="align-middle text-muted small">Code: ${item.product.product_code}</span></div>
-                                       <div class="col-auto"><span class="align-middle text-muted small float-right"> ₹${item.discount_price}</span></div>
+                                       <div class="col"><span class="align-middle text-muted ">Code: ${item.product.product_code}</span></div>
+                                       <div class="col-auto"><span class="align-middle text-muted float-right">${store_currency}${item.discount_price}</span></div>
                                     </div>
                                 </div>
                                 <div class="col-auto">

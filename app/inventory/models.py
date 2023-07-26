@@ -1,10 +1,13 @@
 from datetime import date
 
 from django.db import models
-from accounts.models import User, PosCustomer
+from accounts.models import User
 from inventory.helpers import calculateDiscountPrice
 from django.utils.timezone import now
 from coupons_discounts.models import Discount
+from accounts.models import StoreSettings
+
+config = StoreSettings.get_solo()
 
 # from PIL import Image
 
@@ -24,14 +27,6 @@ Weight_unit = (
     ("kg", "kg"),
     ("ml", "ml"),
     ("L", "L")
-)
-
-Payment_mode = (
-    ("Cash", "Cash"),
-    ("Card", "Card"),
-    ("Paytm", "Paytm"),
-    ("UPI", "UPI"),
-    ("Other", "Other")
 )
 
 
@@ -148,7 +143,7 @@ class ProductVariation(models.Model):
     weight_unit = models.CharField(max_length=9, choices=Weight_unit, default="", blank=True, null=True)
     expiry_date = models.DateField(blank=True, null=True)
     modified_time = models.DateTimeField(default=now, blank=True, null=True, editable=False)
-    image = models.ImageField(default='images/default.jpg', null=True, blank=True, upload_to="images/")
+    image = models.ImageField(default='images/default.jpg', blank=True, upload_to="images/")
     colour = models.CharField(max_length=20, blank=True, null=True)
     orders = models.IntegerField(default=0)
 
@@ -320,11 +315,17 @@ class StockBillItems(models.Model):
         return self.name
 
 
+def getPaymentChoices():
+    choices = tuple((x, x) for x in config.payment_status)
+    return choices
+
+
 class Order(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    pos_customer = models.ForeignKey(PosCustomer, on_delete=models.SET_NULL, blank=True, null=True)
+    cashier = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='cashier')
+    customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='customer')
+    pos_customer = models.BooleanField(blank=True, null=True)
     date_order = models.DateTimeField(default=now, editable=False)
-    payment_mode = models.CharField(max_length=10, choices=Payment_mode, default="Cash", blank=True, null=True)
+    payment_mode = models.CharField(max_length=10, choices=getPaymentChoices(), default="Cash", blank=True, null=True)
     cart_revenue = models.FloatField(null=True, blank=True)
     cart_profit = models.FloatField(null=True, blank=True)
     cart_cost = models.FloatField(null=True, blank=True)
@@ -460,6 +461,10 @@ class OrderItem(models.Model):
         total = self.quantity * self.mrp
         return total
 
+    @property
+    def get_variation_name(self):
+        return self.variation.variation_name
+
     def __str__(self):
         return str(f'Order Id - {self.order} | Order Item Id - {self.id}')
 
@@ -476,4 +481,3 @@ class WishList(models.Model):
 
     def clear(self):
         self.items.clear()
-

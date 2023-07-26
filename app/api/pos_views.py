@@ -81,12 +81,13 @@ def add_product_with_variation(request):
             if product_serializer.is_valid():
                 product_serializer.save()
                 variation_data['product'] = product_data['product_code']
+            else:
+                print(product_serializer.errors)
 
         variation_data['image'] = request.FILES.get('image')
-        print("wadasdasdasd", request.FILES.get('image'))
+        print(variation_data)
         product_variation_serializer = ProductVariationPostSerializer(data=variation_data)
         if product_variation_serializer.is_valid():
-            print("image valid")
             try:
                 ProductVariation.objects.get(product=variation_data['product'],
                                              cost=variation_data['cost'],
@@ -99,13 +100,12 @@ def add_product_with_variation(request):
                 return Response({'status': 'error',
                                  'response': 'Variation with these values already exists!'})
             except ProductVariation.DoesNotExist:
-
                 product_variation_serializer.save()
                 return Response({'status': 'success', 'response': 'Variation was successfully added.',
                                  'variation_id': product_variation_serializer.data['id']},
                                 status=status.HTTP_201_CREATED)
         else:
-            print("image invalid")
+            print(product_variation_serializer.errors)
         return Response(product_variation_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

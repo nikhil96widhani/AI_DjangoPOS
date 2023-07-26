@@ -12,10 +12,10 @@ function loadOrderDetails(order_id, selector) {
                       <th scope="col" class="font-weight-bolder">Product Code</th>
                       <th scope="col" class="font-weight-bolder">Product Name</th>
                       <th scope="col" class="font-weight-bolder">Quantity</th>
-                      <th scope="col" class="font-weight-bolder">Cost (₹)</th>
-                      <th scope="col" class="font-weight-bolder">MRP (₹)</th>
-                      <th scope="col" class="font-weight-bolder">Final Price (₹)</th>
-                      <th scope="col" class="font-weight-bolder">Profit (₹)</th>
+                      <th scope="col" class="font-weight-bolder">Cost (${store_currency})</th>
+                      <th scope="col" class="font-weight-bolder">MRP (${store_currency})</th>
+                      <th scope="col" class="font-weight-bolder">Final Price (${store_currency})</th>
+                      <th scope="col" class="font-weight-bolder">Profit (${store_currency})</th>
                     </tr>
                   </thead>
                 <tbody>`;
@@ -90,6 +90,17 @@ function loadOrdersData(date1, date2) {
                     return dateFormat(data, "d mmm yyyy (HH:MM)");
                 }
             },
+                        {
+                'data': 'customer.firstname',
+                render: function (data, type, row) {
+                    if(data){
+                        return data+' '+row.customer.lastname;
+                    }
+                    else {
+                        return '-'
+                    }
+                }
+            },
             {'data': 'cart_quantity'},
             {'data': 'payment_mode'},
             {'data': 'cart_cost'},
@@ -98,12 +109,38 @@ function loadOrdersData(date1, date2) {
             {'data': 'cart_profit'},
             {
                 'data': 'id', sortable: false, render: function (data, type, row) {
-                    return `<a class="pr-3" href="/pos/receipt/${data}" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
+                    let invoice_or_receipt = ''
+                    if (row.customer && row.customer.email){
+                        if (row.payment_mode === 'Unpaid'){
+                          invoice_or_receipt = `<a class="dropdown-item" onclick="send_email_incoice_or_receipt(${data})"><i class="fa-solid fa-share"></i> Email Invoive</a>`
+                        }
+                        else {
+                            invoice_or_receipt = `<a class="dropdown-item" onclick="send_email_incoice_or_receipt(${data})"><i class="fa-solid fa-share"></i> Email Receipt</a>`
+                    }}
+                    return `
+                               <span class="dropdown"><span type="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                              </span>
+                              <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/pos/receipt/${data}?mode=print" target="_blank"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+                                <a class="dropdown-item" href="/pos/receipt/${data}" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> View</a>`+
+                                invoice_or_receipt
+                              +`</div> 
+                              </span> 
+                              <a id="editModalTriggerA" class="px-2" onclick="editOrderModal('${row.payment_mode}', ${row.id})"><i class="fa-solid fa-pen"></i></a>
                             <a class=""><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" 
                                 onclick="deleteOrderConfirmation('${data}')"></i></a>`;
                 }
             },
+            {'data': 'customer.lastname', "visible": false },
+            {'data': 'customer.email', "visible": false},
+            {'data': 'customer.phone', "visible": false},
         ],
+        "rowCallback": function( row, data, index ) {
+          if (data.payment_mode === "Unpaid") {
+            $('td', row).css('background-color', '#FEE6E6');
+          }
+        }
     });
 }
 
@@ -134,8 +171,8 @@ function loadOrdersDatatable(date1 = null, date2 = null) {
     $('#orders-datatable thead tr').clone(true).appendTo('#orders-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2").attr("style", "background: #f8f9fa");
     $('#orders-datatable thead tr:eq(1) th').each(function (i) {
         $(this).html(`<input type="text" class="form-control form-control-sm ml-1"/>`);
-        if (i === 9) {
-            $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button" onclick="resetAdvanceSearch()"><i class="fa fa-close" style="font-size: larger" aria-hidden="true"></i></div>');
+        if (i === 10) {
+            $(this).html('<div class="mb-1 ml-4" id="advance-search-clear-button" type="button" onclick="resetAdvanceSearch()">Clear <i class="fa fa-close" style="font-size: larger" aria-hidden="true"></i></div>');
         } else if (i === 2) {
             $(this).html(`<input type="date" class="form-control form-control-sm ml-1"/>`);
         } else if (i === 0) {
@@ -197,6 +234,66 @@ $('#order-delete-yes').on('click', function () {
     deleteOrder();
 });
 
+function send_email_incoice_or_receipt(id){
+    Pace.restart();
+    fetch(`/api/send_receipt_email/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken, // Use the global csrf token variable
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        toastr.success(data.message)
+        // console.log(data.message); // Receipt email sent successfully.
+        // alert('Receipt email sent successfully.');
+    })
+    .catch(error => {
+        // console.error('Error sending receipt email:', error);
+        toastr.error('An error occurred while sending the receipt email.');
+    });
+}
+
+function editOrderModal(CurrentSelection, order_id){
+    $('#editOrderModal').modal('show');
+    document.getElementById('paymentMode').value=CurrentSelection;
+    document.getElementById('submit-order-edit-btnn').innerHTML = `<button class="btn btn-primary" onclick=updatePaymentMode(${order_id})>Save</button>`
+}
+
+
+function updatePaymentMode(orderId) {
+  // Prepare the data to be sent in the API request
+  const data = {
+      order_id: orderId,
+        payment_mode: document.getElementById('paymentMode').value,
+  };
+
+  // Make the API call using the fetch() method with a PUT request
+  fetch(`/api/orders/`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+         'X-CSRFToken': csrftoken,
+      // Add any additional headers if required, such as authentication headers
+    },
+    body: JSON.stringify(data),
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle the API response here if needed
+      $('#editOrderModal').modal('hide');
+    toastr.success('Payment mode updated successfully:', data)
+   dataTable.DataTable().draw(false);
+
+  })
+  .catch(error => {
+    // Handle any errors that occur during the API call
+    // console.error('Error updating payment mode:', error);
+    toastr.error('Error updating payment mode:', error)
+  });
+}
+
+
 $(function () {
     $(document).pos();
     $(document).on('scan.pos.barcode', function (event) {
@@ -206,3 +303,4 @@ $(function () {
         dataTable.DataTable().column(1).search("^" + event.code + "$", true, false, true).draw();
     });
 });
+

@@ -19,6 +19,7 @@
     <orderEntry type="jdk" jdkName="Python 3.9 (AI_DjangoPOS)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jsbarcode" level="application" />
+    <orderEntry type="library" name="6350c75e82" level="application" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="renderExternalDocumentation" value="true" />

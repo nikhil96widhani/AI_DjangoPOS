@@ -6,7 +6,6 @@ from .forms import *
 import uuid
 from api.pos_views import *
 from inventory.models import Product, ProductVariation, WishList
-from accounts.models import SiteConfiguration
 
 
 # Create your views here.

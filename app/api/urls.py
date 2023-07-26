@@ -1,9 +1,10 @@
-from django.urls import path, re_path
+from django.urls import path
 
 from .cart_views import handle_order, CartListView
 from .pos_views import *
 from .report_views import *
 from .inventory_views import *
+from .account_views import *
 
 cart_urls = [
     # path('cart/', Cart.as_view(), name='cart'),
@@ -49,6 +50,7 @@ order_urls = [
     path('orders-datatable/', OrdersListView.as_view(), name='api-orders-datatable'),
     path('order-items/', OrderItemsView.as_view(), name='api-orders-items'),
     path('orders-chart-data/', OrdersChartDataView.as_view(), name='api-orders-chart-data'),
+    path('send_receipt_email/<int:order_id>/', send_receipt_email, name='send_receipt_email'),
 ]
 
 stock_bill_urls = [
@@ -59,4 +61,10 @@ stock_bill_urls = [
     path('vendor-list/', VendorListView.as_view(), name='api-vendor-list'),
 ]
 
-urlpatterns = [*cart_urls, *product_urls, *order_urls, *stock_bill_urls, *store_urls]
+accounts_urls = [
+    path('expenses/', ExpenseListView.as_view(), name='expense-list'),
+    path('expenses/<int:pk>/', ExpenseDetailView.as_view(), name='expense-detail'),
+    path('manage_customer_users/', manage_customer_user, name='manage_customer_users'),
+]
+
+urlpatterns = [*cart_urls, *product_urls, *order_urls, *stock_bill_urls, *store_urls, *accounts_urls]

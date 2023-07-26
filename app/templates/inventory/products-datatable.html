@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/fm.tagator.jquery.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.autocomplete.css' %}">
+
 {% endblock %}
 
 {% block page-title %}
@@ -44,9 +45,9 @@
                 <tr style="background: #e2e6ea">
                     <th>Product Code</th>
                     <th>Product Name</th>
-                    <th>Cost</th>
-                    <th>MRP</th>
-                    <th>Discounted Price</th>
+                    <th>Cost {{ my_config.currency }}</th>
+                    <th>MRP {{ my_config.currency }}</th>
+                    <th>Discounted Price {{ my_config.currency }}</th>
                     <th>Quantity</th>
                     <th>Weight</th>
                     <th>Company</th>

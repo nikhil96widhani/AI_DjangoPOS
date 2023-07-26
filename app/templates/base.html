@@ -24,7 +24,7 @@
     <!-- Material Design Bootstrap -->
     <link rel="stylesheet" href="{% static 'css/mdb.css' %}">
     <link rel="stylesheet" href="{% static 'css/stepper.css' %}">
-
+    <link rel="stylesheet" href="{% static 'css/pos-style.css' %}">
     <!-- menu editor -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
     <link rel="stylesheet" href="{% static 'new/store/menu-editor/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css' %}">
@@ -76,7 +76,7 @@
             <li>
                 <ul class="collapsible collapsible-accordion">
                     <li><a href="{% url 'pos-home' %}" class="waves-effect"><i
-                            class="fas fa-rupee-sign"></i>POS</a></li>
+                            class="fas fa-cash-register"></i>POS</a></li>
                     <li><a class="collapsible-header waves-effect"><i class="fas fas fa-book"></i>Inventory<i
                             class="fas fa-angle-down pl-5"></i></a></li>
                     <li>
@@ -97,6 +97,8 @@
                     {#                            </ul>#}
                     {#                        </div>#}
                     {#                    </li>#}
+                    <li><a class="waves-effect" href="{% url 'expenses' %}"><i class="fas fa-sack-dollar"></i>Expenses</a></li>
+                    <li>
                     <li><a class="collapsible-header waves-effect"><i class="fas fa-chart-bar"></i>Reports<i
                             class="fas fa-angle-down pl-5"></i></a></li>
                     <li>
@@ -305,7 +307,7 @@
 <script type="text/javascript" src="{% static 'scripts/scripts.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/darkmode.js' %}"></script>
-
+<script type="text/javascript" src="{% static 'js/fa_latest.js' %}"></script>
 <script>
     // SideNav Initialization
     $(".button-collapse").sideNav();

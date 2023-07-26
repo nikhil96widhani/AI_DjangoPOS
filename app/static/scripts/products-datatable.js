@@ -166,7 +166,8 @@ function loadProductsData() {
                 }
             },
             {'data': 'quantity_unit', "visible": false},
-            {'data': 'weight_unit', "visible": false}
+            {'data': 'weight_unit', "visible": false},
+            {'data': 'product.name', "visible": false},
         ],
     });
 }

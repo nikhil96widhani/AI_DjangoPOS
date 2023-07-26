@@ -9,8 +9,8 @@ from django.utils.timezone import now
 
 def getOrderData(request):
     if 'order_id' not in request.data.keys() and request.user.is_authenticated:
-        customer = request.user
-        order = Order.objects.get(customer=customer, complete=False)
+        cashier = request.user
+        order = Order.objects.get(cashier=cashier, complete=False)
         order_id = order.id
 
     else:
@@ -104,8 +104,9 @@ def updateProducts_fromBillItems(bill_items):
 
 def add_order_item(request):
     order, order_id = getOrderData(request)
-
+    print(1)
     if 'variation_id' in request.data.keys():
+        print(2)
         variation_id = request.data['variation_id']
         variation = ProductVariation.objects.get(pk=variation_id)
 
@@ -121,6 +122,7 @@ def add_order_item(request):
 
     else:
         # Add Variation using Product Code if only one variation is present
+        print(3)
         product_code = request.data['product_code']
         try:
             variation = ProductVariation.objects.get(product=product_code)
@@ -161,8 +163,8 @@ def update_order_item(request):
 
 def clear_cart(request):
     if 'order_id' not in request.data.keys() and request.user.is_authenticated:
-        customer = request.user
-        order = Order.objects.get(customer=customer, complete=False)
+        cashier = request.user
+        order = Order.objects.get(cashier=cashier, complete=False)
 
     else:
         order_id = request.data['order_id']
@@ -179,7 +181,7 @@ def apply_order_discount(request):
         value = request.data['value']
         is_percentage = request.data['is_percentage']
 
-        discount, created = Discount.objects.get_or_create(value=int(value), is_percentage=is_percentage)
+        discount, created = Discount.objects.get_or_create(value=float(value), is_percentage=is_percentage)
         order.discount = discount
         order.save()
         return Response(
@@ -217,12 +219,19 @@ def completeOrder(request):
 
 def addCustomer(request):
     order, order_id = getOrderData(request)
-    phone_number = int(request.data['phone_number']) if request.data['phone_number'] != '' or None else None
-    customer, created = PosCustomer.objects.get_or_create(name=request.data['name'],
-                                                          phone_number=phone_number)
-    order.pos_customer = customer
+    user = User.objects.get(pk=request.data['id'])
+    order.customer = user
     order.save()
     return Response(
         {"status": 'added',
          "response": "Customer was successfully added"}
+    )
+
+def removeCustomer(request):
+    order, order_id = getOrderData(request)
+    order.customer = None
+    order.save()
+    return Response(
+        {"status": 'Removed',
+         "response": "Customer was successfully removed"}
     )

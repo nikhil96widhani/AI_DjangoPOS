@@ -25,14 +25,15 @@
             <thead>
             <tr class="" style="background: #e2e6ea">
                 <th></th>
-                <th>Order Number</th>
-                <th>Order Date</th>
-                <th>Products Quantity</th>
+                <th>Order No.</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Total Quantity</th>
                 <th>Payment Mode</th>
-                <th>Buying Cost (₹)</th>
-                <th>Total MRP (₹)</th>
-                <th>Final Price (₹)</th>
-                <th>Profit (₹)</th>
+                <th>Buying Cost ({{ my_config.currency }})</th>
+                <th>Total MRP ({{ my_config.currency }})</th>
+                <th>Final Price ({{ my_config.currency }})</th>
+                <th>Profit ({{ my_config.currency }})</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -63,4 +64,31 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Edit Order Modal -->
+<!-- Edit Order Modal -->
+<div class="modal fade" id="editOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Order</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="paymentMode">Payment Mode</label>
+            <select id="paymentMode" name="payment_mode" class="form-control">
+             {% for x in my_config.payment_status %}
+                <option value="{{ x }}"{% if x == 'Cash' %}
+                        selected{% endif %}>{{ x }}</option>
+            {% endfor %}
+            </select>
+          </div>
+            <div id="submit-order-edit-btnn"></div>
+      </div>
+    </div>
+  </div>
 </div>

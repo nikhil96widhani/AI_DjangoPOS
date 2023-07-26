@@ -176,7 +176,7 @@ function product_search(value) {
                             </button>
                             <div class="title"><b>${item.product.name} ${weight}</b></div>
                             <div class="text-muted">Code: ${item.product.product_code}</div>
-                            <div class="text-muted">MRP: ${store_currency}${item.mrp} | OurPrice: ₹${item.discount_price}</span>
+                            <div class="text-muted">MRP: ${store_currency}${item.mrp} | OurPrice: ${store_currency}${item.discount_price}</span>
                         </div>
                     </div>
                 </article>`

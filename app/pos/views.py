@@ -2,8 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
-
-from inventory.models import ProductVariation, Order, Payment_mode
+from django.core.exceptions import MultipleObjectsReturned
+from inventory.models import ProductVariation, Order
 
 
 # Create your views here.
@@ -11,8 +11,16 @@ from inventory.models import ProductVariation, Order, Payment_mode
 @login_required
 def pos_homeView(request):
     if request.user.is_authenticated:
-        customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        def getCreateOrder_Patch(user):
+            try:
+                orderr, created = Order.objects.get_or_create(cashier=user, pos_customer=True, complete=False)
+                return orderr
+            except MultipleObjectsReturned:
+                orders = Order.objects.filter(cashier=user, pos_customer=True, complete=False)
+                orders.delete()
+                return getCreateOrder_Patch(user)
+
+        order = getCreateOrder_Patch(request.user)
         try:
             last_order_id = int(order.id) - 1
         except:
@@ -21,7 +29,6 @@ def pos_homeView(request):
         context = {
             # 'all_products': all_products,
             'order': order,
-            'payment_mode': Payment_mode,
             'last_order_id': last_order_id
         }
     else:

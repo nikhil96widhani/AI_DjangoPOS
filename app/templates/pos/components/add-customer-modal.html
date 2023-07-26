@@ -11,24 +11,55 @@
 
 
 {% block modal-body %}
+           <div class="modal-body">
+                <ul class="nav nav-tabs mb-3" id="userTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="search-tab" data-toggle="tab" href="#searchFormTab" role="tab" aria-controls="searchFormTab" aria-selected="true">Search Customers</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="add-tab" data-toggle="tab" href="#addCustomerTab" role="tab" aria-controls="addCustomerTab" aria-selected="false">Add New Customer</a>
+                    </li>
+                </ul>
 
-    <div class="input-group mb-4">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><strong>Customer Name</strong></span>
-        </div>
-        <input type="text" class="form-control" aria-label="Name"
-               id="cus_name" required>
-    </div>
+                <div class="tab-content">
+                    <!-- Search Customers Tab -->
+                    <div class="tab-pane fade show active" id="searchFormTab" role="tabpanel" aria-labelledby="search-tab">
+                        <form id="searchForm">
+                            <div class="form-group">
+                                <label for="searchName">Search by First Name and Last Name:</label>
+                                <input type="text" class="form-control" id="searchName" name="name">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
 
-    <div class="input-group mb-4">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><strong>Phone Number</strong></span>
-        </div>
-        <input id="cus_number" type="tel" required class="form-control"
-               aria-label="quantity">
-    </div>
-    <small id="emailHelp" class="form-text text-muted text-center">
-                                                    Leave Blank for no Phone Number</small>
+                        <!-- Display search results here -->
+                        <div id="searchResults" class="mt-3"></div>
+                    </div>
+
+                    <!-- Add New Customer Tab -->
+                    <div class="tab-pane fade" id="addCustomerTab" role="tabpanel" aria-labelledby="add-tab">
+                        <form id="addCustomerForm">
+                            <div class="form-group">
+                                <label for="newEmail">Email:</label>
+                                <input type="email" class="form-control" id="newEmail" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newFirstName">First Name:</label>
+                                <input type="text" class="form-control" id="newFirstName" name="firstname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newLastName">Last Name:</label>
+                                <input type="text" class="form-control" id="newLastName" name="lastname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPhone">Phone Number:</label>
+                                <input type="text" class="form-control" id="newPhone" name="phone" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Register New Customer & add to order</button>
+                        </form>
+                    </div>
+                </div>
+           </div>
 
 {% endblock %}
 
@@ -41,9 +72,80 @@
 {% endblock %}
 
 {% block modal-buttons %}
-    <button id="add-customer" type="submit" class="btn btn-primary" data-dismiss="modal">Add</button>
 {% endblock %}
 
 {% block modal-javascript %}
-    {#    <script src="{% static 'js/calculator-script.js' %}"></script>#}
+{#                        toastr.success(data);#}
+{#    headers: {#}
+{#                        'X-CSRFToken': csrftoken#}
+{#                            },#}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchForm = document.getElementById('searchForm');
+        const searchResults = document.getElementById('searchResults');
+        const addCustomerForm = document.getElementById('addCustomerForm');
+
+        searchForm.addEventListener('submit', function (event) {
+            searchResults.innerHTML = "";
+            event.preventDefault();
+            const formData = new FormData(searchForm);
+            let searchName = formData.get('name'); // Get the combined first name and last name
+            let searchParams = new URLSearchParams({search_term: searchName}).toString();
+            fetch('/api/manage_customer_users/?' + searchParams, {
+                headers: {
+                    'X-CSRFToken': csrftoken, // Use the global csrf token variable
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response (e.g., display search results in the #searchResults div)
+                let html = '';
+                data.forEach(customer => {
+                    html += `<li><h6>${customer.firstname} ${customer.lastname} - ${customer.email} - ${customer.phone} <a type=button onclick="addCustomer(${customer.id})"><i class="fa-solid fa-plus text-primary pl-3"></i></a></h6> </li>`;
+                });
+                searchResults.innerHTML = html;
+            })
+            .catch(error => {
+                // Handle the error (e.g., show an error message)
+                toastr.error(error); // Use Toastr to display error messages
+                console.error('Error:', error);
+            });
+        });
+
+        addCustomerForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(addCustomerForm);
+            formData.append('is_customer', 'true')
+            fetch('/api/manage_customer_users/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrftoken, // Use the global csrf token variable
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response (e.g., show a success message)
+                addCustomer(data['id']);
+                toastr.success(data); // Use Toastr to display success messages
+                console.log(data);
+                alert(data['id'])
+            })
+            .catch(error => {
+                // Handle the error (e.g., show an error message)
+                toastr.error(error); // Use Toastr to display error messages
+                console.error('Error:', error);
+            });
+        });
+    });
+function addCustomer(id){
+    updateOrderDetails({
+                    'action': 'add-customer', 'id': id,
+                }, true, false, true)
+        $('#add-customer-modal').modal('hide');
+    }
+
+</script>
+
+
 {% endblock %}

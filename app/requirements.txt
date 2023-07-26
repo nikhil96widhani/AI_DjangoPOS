@@ -20,3 +20,5 @@ Werkzeug
 whichcraft
 whitenoise
 xlrd
+reportlab
+xhtml2pdf

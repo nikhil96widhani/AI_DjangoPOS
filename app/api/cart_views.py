@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from api.helper import get_variation_data, get_order_item_data, add_order_item, update_order_item, clear_cart, \
-    apply_order_discount, completeOrder, addCustomer
+    apply_order_discount, completeOrder, addCustomer, removeCustomer
 
 from api.serializers import OrderItemSerializer, CartOrderSerializer
 from inventory.models import ProductVariation, Order, OrderItem
@@ -17,7 +17,7 @@ class CartListView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        order, created = Order.objects.get_or_create(customer=request.user, complete=False)
+        order, created = Order.objects.get_or_create(cashier=request.user, complete=False)
         order_items = order.orderitem_set.all()
         queryset = self.filter_queryset(order_items)
         serializer = self.get_serializer(reversed(queryset), many=True)
@@ -45,6 +45,9 @@ def handle_order(request):
 
         elif action == 'add-customer':
             return addCustomer(request)
+
+        elif action == 'remove-customer':
+            return removeCustomer(request)
 
         else:
             return Response({'status': 'unknown_request'})

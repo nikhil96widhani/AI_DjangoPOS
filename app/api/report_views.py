@@ -96,6 +96,24 @@ class OrdersView(APIView):
                 "orders_summary": summary_orders(orders),
                 "orders": orders_serialized.data,
             })
+
+    def put(self, request, *args, **kwargs):
+        order_id = request.data.get('order_id')
+        new_payment_mode = request.data.get('payment_mode')
+
+        if not order_id or not new_payment_mode:
+            return Response({'message': 'Order ID and Payment Mode are required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            order = Order.objects.get(pk=order_id)
+        except Order.DoesNotExist:
+            return Response({'message': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        order.payment_mode = new_payment_mode
+        order.save()
+
+        return Response({'message': 'Payment mode updated successfully.'})
 #
 #     # @staticmethod
 #     # def post(request):

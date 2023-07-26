@@ -1,5 +1,7 @@
 {% load static %}
 {% load pos_tags %}
+{% load solo_tags %}
+{% get_solo 'accounts.StoreSettings' as my_config %}
 
 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/receipt.css' %}">
@@ -19,26 +21,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Receipt for Order-{{ order.id }} </title>
+
     </head>
     <body>
     <div class="card-body receipt pt-0 py-0 px-4">
         <!-- HEADER RECEIPT -->
         <div class="text-center py-4">
 
-            <img src="{% static "images/receipt-logo.png" %}" class="w-75 pb-2" alt="Logo">
-            <h6>21, POOJA SHRI NAGAR, CTO, BAIRAGARH</h6>
-            <h6><i class="las la-phone"></i>: 8989017745 <i class="lab la-whatsapp"></i>: 9179722160
-                <br><i class="las la-envelope"></i>: shoprightsupermarket@gmail.com</h6>
+            <img src="{{ my_config.site_logo.url }}" class="w-75 pb-2" alt="Logo" style="max-width:200px;width:100%">
+            <h6>{{ my_config.address }}</h6>
+            <h6><i class="las la-phone"></i>: {{ my_config.phone_number }} <i class="lab la-whatsapp"></i>: {{ my_config.whatsapp_number }}
+                <br><i class="las la-envelope"></i>: {{ my_config.email }}</h6>
             <h3 class="py-1 font-weight-bold">ORDER RECEIPT</h3>
             <svg id="barcode-text"></svg>
         </div>
         <!-- END HEADER RECEIPT -->
 
-        {% if order.pos_customer %}
+        {% if order.customer %}
             <div class="text-left pb-2 font-weight-bold">
                 Customer Name
                 <span class="float-right">
-                        {{ order.pos_customer.name }}
+                        {{ order.customer.firstname }} {{ order.customer.lastname }}
                     </span>
             </div>
         {% endif %}
@@ -51,7 +54,7 @@
                 <div class="text-left border-dark border-top py-1">
                     Cashier :
                     <span class="float-right">
-                        {{ order.customer }}
+                        {{ order.cashier }}
                     </span>
                 </div>
                 <div class="text-left pb-1">
@@ -77,9 +80,9 @@
                 <table class="text-left ml-2 w-100">
                     <tr>
                         <td class="w-25">{{ a.quantity }}</td>
-                        <td class="w-25"><i class="las la-rupee-sign"></i>{{ a.mrp }}</td>
-                        <td class="w-25"><i class="las la-rupee-sign"></i>{{ a.discount_price }}</td>
-                        <td class="w-25"><i class="las la-rupee-sign"></i>{{ a.amount }}</td>
+                        <td class="w-25">{{ my_config.currency }}{{ a.mrp }}</td>
+                        <td class="w-25">{{ my_config.currency }}{{ a.discount_price }}</td>
+                        <td class="w-25">{{ my_config.currency }}{{ a.amount }}</td>
                     </tr>
                 </table>
             {% endfor %}
@@ -91,7 +94,7 @@
                 <th class="">{{ order.get_cart_items_quantity }}</th>
                 <th class="w-25"></th>
                 <th class="w-25"></th>
-                <th class="w-25"><i class="las la-rupee-sign"></i>{{ order.get_cart_revenue_NoDiscount }}</th>
+                <th class="w-25">{{ my_config.currency }}{{ order.get_cart_revenue_NoDiscount }}</th>
             </tr>
         </table>
         <hr class="border-dark my-1">
@@ -103,14 +106,14 @@
                     <th class="">
 
                         {% if not order.discount.is_percentage %}
-                            <i class="las la-rupee-sign"></i>{{ order.discount.value }}
+                            {{ my_config.currency }}{{ order.discount.value }}
                         {% else %}
                             {{ order.discount.value }}%
                         {% endif %}
 
                     </th>
                     <th class="">
-                        - <i class="las la-rupee-sign"></i>{{ discount_savings }}
+                        - {{ my_config.currency }}{{ discount_savings }}
                     </th>
                 </tr>
             </table>
@@ -120,33 +123,25 @@
                     <th class="w-25 pl-1">SUBTOTAL</th>
                     <th class="w-25"></th>
                     <th class="w-25"></th>
-                    <th class="w-25 pl-2"><i class="las la-rupee-sign"></i>{{ order.get_cart_revenue }}</th>
+                    <th class="w-25 pl-2">{{ my_config.currency }}{{ order.get_cart_revenue }}</th>
                 </tr>
             </table>
         {% endif %}
         <!-- RECEIPT BODY Footer Total -->
         <div class="text-right pb-3 pt-4 pr-2">
-            <div class="h5">M.R.P TOTAL: <i class="las la-rupee-sign la-1x"></i>{{ order.get_cart_mrp }} </div>
-            <div class="h5 font-weight-bold">YOU SAVED: <i class="las la-rupee-sign la-1x"></i>{{ savings }}</div>
+            <div class="h5">M.R.P TOTAL: {{ my_config.currency }}{{ order.get_cart_mrp }} </div>
+            <div class="h5 font-weight-bold">YOU SAVED: {{ my_config.currency }}{{ savings }}</div>
             <br>
-            <div class="font-weight-bold h4">NET PAYABLE: <i
-                    class="las la-rupee-sign la-lg"></i>{{ order.get_cart_revenue }} </div>
+            <div class="font-weight-bold h4">NET PAYABLE: {{ my_config.currency }}{{ order.get_cart_revenue }} </div>
         </div>
         <!-- END RECEIPT BODY -->
 
         <!-- TNC and Credits -->
         <div class="border-dark border-top py-2">
             <div class="font-weight-bold text-center footer-text-small pb-1">Terms & Conditions</div>
-            <ul class="footer-text-smallul">
-                <li>No Return on goods sold</li>
-                <li>Non discounted goods can be exchanged within 3 days</li>
-                <li>Opened items will not be exchanged</li>
-                <li>Whole grains will not be taken back</li>
-                <li>This bill will be visible for only 10 days</li>
-                <li>Subject to BHOPAL Jurisdiction</li>
-            </ul>
-            <div class="text-center border-dark border-dotted footer-text-small py-1">Thank you for shopping at
-                ShopRight Supermarket Hope to see you again!
+                {{ my_config.receipt_tnc|safe }}
+            <div class="text-center border-dark border-dotted footer-text-small py-1">
+                {{ my_config.receipt_message }}
             </div>
         </div>
         <!-- END TNC and Credits -->
@@ -172,8 +167,12 @@
     });
 </script>
 <script type="text/javascript">
-    window.print();
-    window.onafterprint = function () {
-        window.close();
+    var url = new URL(window.location.href);
+    var c = url.searchParams.get("mode");
+    if (c === 'print'){
+        window.print();
+        window.onafterprint = function () {
+            window.close();
+        }
     }
 </script>

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import MultipleObjectsReturned
 from inventory.models import Weight_unit, Quantity_unit, StockBill
 
 
@@ -40,8 +41,16 @@ def products_view(request):
 @login_required
 def updateInventoryByBill(request):
     if request.user.is_authenticated:
-        user = request.user
-        bill, created = StockBill.objects.get_or_create(user=user, complete=False)
+        def getCreateOrder_Patch(user):
+            try:
+                billl, created = StockBill.objects.get_or_create(user=user, complete=False)
+                return billl
+            except MultipleObjectsReturned:
+                bills = StockBill.objects.filter(customer=user, complete=False)
+                bills.delete()
+                return getCreateOrder_Patch(user)
+
+        bill = getCreateOrder_Patch(request.user)
 
         context = {
             'bill': bill,
