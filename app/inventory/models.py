@@ -7,8 +7,6 @@ from django.utils.timezone import now
 from coupons_discounts.models import Discount
 from accounts.models import StoreSettings
 
-config = StoreSettings.get_solo()
-
 # from PIL import Image
 
 # Create your models here.
@@ -132,7 +130,7 @@ class Product(models.Model):
 
 class ProductVariation(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    variation_name = models.CharField(max_length=30, null=True)
+    variation_name = models.CharField(max_length=30, null=True, default='#1')
     cost = models.FloatField(blank=True, null=True)
     mrp = models.FloatField(blank=True, null=True)
     discount_price = models.FloatField(blank=True, null=True)
@@ -243,12 +241,18 @@ class StockBill(models.Model):
         return profit_total
 
     def save(self, *args, **kwargs):
-        self.bill_revenue = "{:.2f}".format(self.get_bill_revenue)
-        self.bill_profit = "{:.2f}".format(self.get_bill_profit)
-        self.bill_cost = "{:.2f}".format(self.get_bill_cost)
-        self.bill_mrp = self.get_bill_mrp
-        self.bill_quantity = self.get_bill_items_quantity
-
+        try:
+            self.bill_revenue = "{:.2f}".format(self.get_bill_revenue)
+            self.bill_profit = "{:.2f}".format(self.get_bill_profit)
+            self.bill_cost = "{:.2f}".format(self.get_bill_cost)
+            self.bill_mrp = "{:.2f}".format(self.get_bill_mrp)
+            self.bill_quantity = self.get_bill_items_quantity
+        except:
+            self.bill_revenue = "{:.2f}".format(0)
+            self.bill_profit = "{:.2f}".format(0)
+            self.bill_cost = "{:.2f}".format(0)
+            self.bill_mrp = 0
+            self.bill_quantity = 0
         if not self.date_ordered:
             self.expiry_date = now
 
@@ -316,7 +320,14 @@ class StockBillItems(models.Model):
 
 
 def getPaymentChoices():
-    choices = tuple((x, x) for x in config.payment_status)
+    payment_status_default = ["Cash", 'Unpaid']
+    try:
+        config = StoreSettings.objects.get()
+        payment_status_default = config.payment_status
+    except Exception:
+        print(Exception)
+        pass
+    choices = tuple((x, x) for x in payment_status_default)
     return choices
 
 
@@ -325,7 +336,7 @@ class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='customer')
     pos_customer = models.BooleanField(blank=True, null=True)
     date_order = models.DateTimeField(default=now, editable=False)
-    payment_mode = models.CharField(max_length=10, choices=getPaymentChoices(), default="Cash", blank=True, null=True)
+    payment_mode = models.CharField(max_length=30, choices=getPaymentChoices(), default="Cash", blank=True, null=True)
     cart_revenue = models.FloatField(null=True, blank=True)
     cart_profit = models.FloatField(null=True, blank=True)
     cart_cost = models.FloatField(null=True, blank=True)
@@ -343,9 +354,9 @@ class Order(models.Model):
         revenue_total = sum([item.get_revenue for item in order_items])
         if self.discount:
             if self.discount.is_percentage:
-                revenue_total = calculateDiscountPrice(revenue_total, int(self.discount.value))
+                revenue_total = calculateDiscountPrice(revenue_total, self.discount.value)
             else:
-                revenue_total = revenue_total - int(self.discount.value)
+                revenue_total = revenue_total - self.discount.value
         return round(revenue_total, 2)
 
     @property
@@ -378,11 +389,18 @@ class Order(models.Model):
         return profit_total
 
     def save(self, *args, **kwargs):
-        self.cart_revenue = "{:.2f}".format(self.get_cart_revenue)
-        self.cart_profit = "{:.2f}".format(self.get_cart_profit)
-        self.cart_cost = "{:.2f}".format(self.get_cart_cost)
-        self.cart_mrp = self.get_cart_mrp
-        self.cart_quantity = self.get_cart_items_quantity
+        try:
+            self.cart_revenue = "{:.2f}".format(self.get_cart_revenue)
+            self.cart_profit = "{:.2f}".format(self.get_cart_profit)
+            self.cart_cost = "{:.2f}".format(self.get_cart_cost)
+            self.cart_mrp = "{:.2f}".format(self.get_cart_mrp)
+            self.cart_quantity = self.get_cart_items_quantity
+        except:
+            self.cart_revenue = "{:.2f}".format(0)
+            self.cart_profit = "{:.2f}".format(0)
+            self.cart_cost = "{:.2f}".format(0)
+            self.cart_mrp = 0
+            self.cart_quantity = 0
         super(Order, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -401,6 +419,7 @@ class OrderItem(models.Model):
     # Product Values
     product_code = models.CharField(max_length=30, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
+    variation_name = models.CharField(max_length=100, blank=True, null=True)
 
     # Variation Values
     weight = models.IntegerField(blank=True, null=True)
@@ -425,6 +444,7 @@ class OrderItem(models.Model):
             if self.product is not None:
                 self.product_code = self.product.product_code
                 self.name = self.product.name
+                self.variation_name = self.variation.variation_name
                 self.discount_price = self.discount_price if self.discount_price else self.variation.discount_price
                 self.mrp = self.mrp if self.mrp else self.variation.mrp
                 self.cost = self.variation.cost
@@ -434,7 +454,7 @@ class OrderItem(models.Model):
             else:
                 self.product_code = None
                 self.mrp = self.discount_price if self.mrp is None or self.mrp < self.discount_price else self.mrp
-                self.cost = self.discount_price
+                self.cost = self.discount_price if self.cost is None else self.cost
 
             if self.discount_price and self.quantity:
                 self.amount = round(self.quantity * self.discount_price, 2)

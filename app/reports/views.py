@@ -8,16 +8,20 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from inventory.models import Order
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def dashboard_view(request):
     return render(request, 'reports/dashboard.html', {})
 
 
+@login_required
 def orders_view(request):
     return render(request, 'reports/orders.html', {})
 
 
+@login_required
 def orders_datatable_view(request):
     return render(request, 'reports/orders-datatable-page.html', {})
 

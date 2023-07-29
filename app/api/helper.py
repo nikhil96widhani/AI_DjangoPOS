@@ -104,9 +104,7 @@ def updateProducts_fromBillItems(bill_items):
 
 def add_order_item(request):
     order, order_id = getOrderData(request)
-    print(1)
     if 'variation_id' in request.data.keys():
-        print(2)
         variation_id = request.data['variation_id']
         variation = ProductVariation.objects.get(pk=variation_id)
 
@@ -114,15 +112,16 @@ def add_order_item(request):
         name = request.data['quick_add_item_name']
         discount_price = request.data['discount_price']
         quantity = request.data['quantity']
+        cost = request.data.get('cost')
+        print(cost)
         order_item = OrderItem.objects.create(order=order, product=None, quantity=int(quantity), name=name,
-                                              discount_price=float(discount_price))
+                                              discount_price=float(discount_price), cost=float(cost))
         order_item.save()
         return Response({'status': 'custom-item_added',
                          'response': '{} was added to order'.format(name), })
 
     else:
         # Add Variation using Product Code if only one variation is present
-        print(3)
         product_code = request.data['product_code']
         try:
             variation = ProductVariation.objects.get(product=product_code)

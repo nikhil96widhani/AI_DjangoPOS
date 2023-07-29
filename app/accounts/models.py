@@ -52,7 +52,7 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=30, unique=True, blank=True, null=True, )
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20, default='0000000000', null=True, blank=True)
     # These are required for the AbstractBaseUser class by Django
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
@@ -64,7 +64,7 @@ class User(AbstractBaseUser):
     # In a custom field, we need to set the field by which
     # users log in with. Here we want to use email.
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'phone', 'firstname', 'lastname']
+    REQUIRED_FIELDS = ['email', 'firstname', 'lastname']
 
     # Tell the user model where the user manager is
     objects = UserManager()
@@ -121,7 +121,7 @@ class StoreSettings(SingletonModel):
     receipt_message = models.CharField(max_length=100, blank=True, null=True, default='Thank you for shopping')
     receipt_tnc = RichTextField(blank=True, null=True, default='<li>All Sales are final</li>')
 
-    payment_status = models.JSONField(default=["cash"], blank=True, null=True)
+    payment_status = models.JSONField(default=["Cash", 'Unpaid'], blank=True, null=True)
     # Weburls
     instagram = models.URLField(null=True, blank=True)
     facebook = models.URLField(null=True, blank=True)

@@ -22,12 +22,19 @@
     <div class="input-group mb-4">
         <div class="input-group-prepend">
             <span class="input-group-text"><strong>Sale Price</strong></span>
-            <span class="input-group-text"><strong>₹</strong></span>
+            <span class="input-group-text"><strong>{{ my_config.currency }}</strong></span>
         </div>
         <input id="qa_discount_price" type="number" step=".01" required class="form-control"
                aria-label="discount_price">
     </div>
-
+    <div class="input-group mb-4">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><span>Cost Price (optional)</span></span>
+            <span class="input-group-text"><span>{{ my_config.currency }}</span></span>
+        </div>
+        <input id="qa_cost_price" type="number" step=".01" required class="form-control"
+               aria-label="cost_price">
+    </div>
     <div class="input-group mb-4">
         <div class="input-group-prepend">
             <span class="input-group-text"><strong>Quantity</strong></span>

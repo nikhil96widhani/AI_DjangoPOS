@@ -87,7 +87,7 @@ function loadOrdersData(date1, date2) {
             {
                 'data': 'date_order',
                 render: function (data) {
-                    return dateFormat(data, "d mmm yyyy (HH:MM)");
+                    return dateFormat(data, "d mmm yyyy (h:MM TT)");
                 }
             },
                         {
@@ -127,7 +127,7 @@ function loadOrdersData(date1, date2) {
                                 invoice_or_receipt
                               +`</div> 
                               </span> 
-                              <a id="editModalTriggerA" class="px-2" onclick="editOrderModal('${row.payment_mode}', ${row.id})"><i class="fa-solid fa-pen"></i></a>
+                              <a id="editModalTriggerA" class="px-2" onclick="editOrderModal('${row.payment_mode}','${row.date_order}', ${row.id})"><i class="fa-solid fa-pen"></i></a>
                             <a class=""><i class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteOrderPrompt" 
                                 onclick="deleteOrderConfirmation('${data}')"></i></a>`;
                 }
@@ -150,22 +150,47 @@ function deleteOrderConfirmation(order_id) {
 }
 
 function deleteOrder() {
-    let url = "/api/orders/" + order_id_to_delete + "/";
+    let url = `/api/orders/?order_id=${order_id_to_delete}`;
 
-    $.ajax(url, {
-        method: 'DELETE',
+    $.ajax({
+        url: url,
+        type: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
+            'X-CSRFToken': csrftoken,  // Make sure you have the csrftoken available in your context or obtain it from the cookie
         },
-    }).done(function () {
-        dataTable.DataTable().draw(false);
-        toastr.info('Order was deleted successfully.');
-        $('.close').click();
-    }).fail(function () {
-        toastr.error('Unable to delete order! Please try again.');
-    })
+        success: function (data) {
+            toastr.info('Order was deleted successfully.');
+            // Optionally, you can reload the page or update the order list after successful deletion
+            // For example, if you are using DataTables to display orders:
+            dataTable.DataTable().draw(false);
+            $('.close').click();
+        },
+        error: function () {
+            toastr.error('Unable to delete order! Please try again.');
+        }
+    });
 }
+
+// function deleteOrder() {
+//
+//     let url = "/api/orders/?order_id=" + order_id_to_delete ;
+//
+//     $.ajax(url, {
+//         method: 'DELETE',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': csrftoken,
+//         },
+//         data: {'order_id': order_id_to_delete}
+//     }).done(function () {
+//         dataTable.DataTable().draw(false);
+//         toastr.info('Order was deleted successfully.');
+//         $('.close').click();
+//     }).fail(function () {
+//         toastr.error('Unable to delete order! Please try again.');
+//     })
+// }
 
 function loadOrdersDatatable(date1 = null, date2 = null) {
     $('#orders-datatable thead tr').clone(true).appendTo('#orders-datatable thead').attr("id", "advance-search-bar").attr("class", "d-none my-2").attr("style", "background: #f8f9fa");
@@ -254,9 +279,12 @@ function send_email_incoice_or_receipt(id){
     });
 }
 
-function editOrderModal(CurrentSelection, order_id){
+function editOrderModal(CurrentPaymentMode, CurrentDate, order_id){
+    var date_time = new Date(CurrentDate)
+    date_time.setMinutes(date_time.getMinutes() - date_time.getTimezoneOffset());
     $('#editOrderModal').modal('show');
-    document.getElementById('paymentMode').value=CurrentSelection;
+    document.getElementById('paymentMode').value=CurrentPaymentMode;
+    document.getElementById('orderDate').value = date_time.toISOString().slice(0,16);
     document.getElementById('submit-order-edit-btnn').innerHTML = `<button class="btn btn-primary" onclick=updatePaymentMode(${order_id})>Save</button>`
 }
 
@@ -265,7 +293,8 @@ function updatePaymentMode(orderId) {
   // Prepare the data to be sent in the API request
   const data = {
       order_id: orderId,
-        payment_mode: document.getElementById('paymentMode').value,
+      payment_mode: document.getElementById('paymentMode').value,
+      date_order: document.getElementById('orderDate').value
   };
 
   // Make the API call using the fetch() method with a PUT request

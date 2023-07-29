@@ -1,9 +1,8 @@
 from datetime import timedelta, datetime
 
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
 from .serializers import *
 from inventory.models import *
 from dateutil import parser
@@ -100,6 +99,7 @@ class OrdersView(APIView):
     def put(self, request, *args, **kwargs):
         order_id = request.data.get('order_id')
         new_payment_mode = request.data.get('payment_mode')
+        new_order_date = request.data.get('date_order')
 
         if not order_id or not new_payment_mode:
             return Response({'message': 'Order ID and Payment Mode are required.'},
@@ -111,9 +111,21 @@ class OrdersView(APIView):
             return Response({'message': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         order.payment_mode = new_payment_mode
+        order.date_order = new_order_date
         order.save()
 
         return Response({'message': 'Payment mode updated successfully.'})
+
+    def delete(self, request, *args, **kwargs):
+        order_id = request.GET.get('order_id')
+        print(order_id)
+        try:
+            order = Order.objects.get(pk=order_id)
+        except Order.DoesNotExist:
+            return Response({'message': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        order.delete()
+        return Response({'message': 'Order deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
 #
 #     # @staticmethod
 #     # def post(request):

@@ -6,6 +6,6 @@ services:
     command: /code/runapp.sh
     container_name: shopright_v3
     volumes:
-      - ./db:/code/db
+      - ./db:/db
     ports:
       - 8090:8000

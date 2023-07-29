@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from .models import *
 from .forms import *
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 
 
 def loginView(request):
@@ -39,6 +40,7 @@ def user_redirect(request):
         return redirect("login")
 
 
+@login_required
 def settingsView(request):
     form_store = StoreSettingsForm(request.POST or None, request.FILES or None, instance=StoreSettings.objects.get())
 
@@ -48,5 +50,6 @@ def settingsView(request):
     return render(request, 'accounts/settings.html', {'form_store': form_store})
 
 
+@login_required
 def expensesView(request):
     return render(request, 'accounts/expenses_datatable.html')

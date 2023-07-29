@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from django.core.exceptions import MultipleObjectsReturned
 from inventory.models import ProductVariation, Order
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -40,6 +41,8 @@ def pos_homeView(request):
     # return render(request, 'new/pos/pos-home2.html', context)
     return render(request, 'pos/cart-datatable.html', context)
 
+
+@login_required
 def receiptView(request, pk):
     try:
         order = Order.objects.get(pk=pk)
@@ -48,7 +51,7 @@ def receiptView(request, pk):
             'order': order,
             'cart_items': cart_items,
             'discount_savings': "{:.2f}".format(order.get_cart_revenue_NoDiscount - order.get_cart_revenue),
-            'savings': order.get_cart_mrp - order.get_cart_revenue,
+            'savings': "{:.2f}".format(order.get_cart_mrp - order.get_cart_revenue),
         }
         return render(request, 'pos/receipt.html', context)
     except ObjectDoesNotExist:
@@ -58,6 +61,7 @@ def receiptView(request, pk):
                                                              " Check orders page to print the receipt"})
 
 
+@login_required
 def productLabelView(request, pk):
     try:
         product = ProductVariation.objects.get(id=pk)
@@ -70,9 +74,9 @@ def productLabelView(request, pk):
                                                                    "Product not found with that product id"})
 
 
+@login_required
 def productExpLabelView(request):
     return render(request, 'pos/product-expiry-label.html', {'date': now().date()})
-
 
 # @login_required
 # def cart_datatable_view(request):

@@ -41,7 +41,13 @@ function loadCartData() {
         'columns': [
             {
                 'data': 'name', 'class': 'text-left font-weight-bold', render: function (data, type, row) {
-                    return `${data} [${row.get_variation_name}]`
+                    if (row.get_variation_name){
+                        return `${data} [${row.get_variation_name}]`
+                    }
+                    else{
+                        return data
+                    }
+
                 }
             },
             {'data': 'weight', 'width': '10%', render: handleBlankData},
@@ -304,9 +310,10 @@ $('#quick-add-item').click(() => {
     let name = document.getElementById('qa_name').value
     let quantity = document.getElementById('qa_quantity').value
     let discount_price = document.getElementById('qa_discount_price').value
+    let cost_price = document.getElementById('qa_cost_price').value
     updateOrderDetails({
         'action': 'add-order-item', 'quick_add_item_name': name,
-        'quantity': quantity, 'discount_price': discount_price
+        'quantity': quantity, 'discount_price': discount_price, 'cost': cost_price
     }, true)
 })
 
@@ -362,13 +369,11 @@ function product_search(value) {
     let url = '/api/product-variation-search/';
 
     $.getJSON(url, {'search_term': value}, function (response) {
-        console.log(response)
         let trHTML = '';
         if (response === undefined || response.length === 0) {
             trHTML += `<li><div class="alert alert-secondary" role="alert">  No Products Found</div></li>`
         } else {
             $.each(response, function (e, item) {
-                console.log(item)
                 trHTML += `<li class="list-group-item">
                             <div class="row pt-2 ">
                                 <div class="col"><div class="h6">${item.product.name} [${item.variation_name}]</div>

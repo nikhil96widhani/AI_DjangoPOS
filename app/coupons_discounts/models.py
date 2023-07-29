@@ -76,7 +76,7 @@ class CouponUser(models.Model):
 
 
 class Discount(models.Model):
-    value = models.IntegerField(default=0, verbose_name="Value")
+    value = models.FloatField(default=0, verbose_name="Value")
     is_percentage = models.BooleanField(default=False, verbose_name="Is percentage?")
 
     def __str__(self):

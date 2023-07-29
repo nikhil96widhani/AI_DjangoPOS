@@ -13,7 +13,11 @@ from django.core.mail.backends.smtp import EmailBackend
 from accounts.models import StoreSettings, User
 from xhtml2pdf import pisa
 from io import BytesIO
+
 from .serializers import UserRegistrationSerializer
+from django.conf import settings
+from email.mime.image import MIMEImage
+import base64
 
 
 @api_view(['POST', 'GET'])
@@ -87,6 +91,8 @@ def send_receipt_email(request, order_id):
 
     order = Order.objects.get(pk=order_id)
     cart_items = order.orderitem_set.all()
+
+
     context = {
         'order': order,
         'cart_items': cart_items,
@@ -107,6 +113,7 @@ def send_receipt_email(request, order_id):
         recipt_or_invoice = 'Invoice'
     else:
         recipt_or_invoice = 'Receipt'
+
     subject = f'Your Order {recipt_or_invoice}'
     to_email = [f'{order.customer.email}']  # Replace with the customer's email address
     email = EmailMultiAlternatives(
@@ -114,6 +121,16 @@ def send_receipt_email(request, order_id):
     )
     email.attach_alternative(email_body, "text/html")
     # email.attach('receipt.pdf', pdf_receipt, 'application/pdf')
+
+    # SITE LOGO
+    with open(f'{settings.BASE_DIR}{config.site_logo.url}', 'rb') as image_file:
+        image_data = image_file.read()
+    # Attach the inline image to the email
+    image_mime = MIMEImage(image_data)
+    image_mime.add_header('Content-ID', '<site_logo>')  # Set the Content-ID for referencing in the template
+    image_mime.add_header('Content-Disposition', 'inline', filename='site_logo.png')
+    email.attach(image_mime)
+
     email.send()
 
     # Return a success response

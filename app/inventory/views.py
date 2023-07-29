@@ -3,13 +3,14 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import MultipleObjectsReturned
 from inventory.models import Weight_unit, Quantity_unit, StockBill
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
 # def homeView(request):
 #     return render(request, 'home.html', {})
 
-
+@login_required
 def updateInventoryView(request):
     xls_file = request.FILES.get('xlsfile')
     if xls_file:
@@ -23,7 +24,7 @@ def updateInventoryView(request):
         return render(request, 'update-inventory.html', context)
     return render(request, 'update-inventory.html', {})
 
-
+@login_required
 def products_view(request):
     weight_unit = Weight_unit
     quantity_unit = Quantity_unit
@@ -61,6 +62,6 @@ def updateInventoryByBill(request):
         }
     return render(request, 'inventory/update_inventory_by_bill.html', context)
 
-
+@login_required
 def stock_bills_datatable_view(request):
     return render(request, 'inventory/stock-bills-datatable.html', {})

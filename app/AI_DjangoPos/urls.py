@@ -20,6 +20,7 @@ from api import pos_views
 from accounts import views as account_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.decorators import login_required
 
 
 urlpatterns = [

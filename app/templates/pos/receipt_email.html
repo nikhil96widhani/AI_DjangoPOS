@@ -133,8 +133,8 @@
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="center" valign="top" style="padding: 36px 24px;">
-              <a href="{{ my_config.site_logo.url }}" target="_blank" style="display: inline-block;">
-                <img src="{{ my_config.site_logo.url }}" alt="Logo" border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px;">
+              <a href="#" target="_blank" style="display: inline-block;">
+                <img src="cid:site_logo" alt="Logo" border="0" style="display: block; width: 150px; max-width: 150px; min-width: 150px;">
               </a>
             </td>
           </tr>
@@ -159,7 +159,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
-                <p style="margin: 0;">Dear {{ order.customer.firstname }} {{ order.customer.lastname }},</p>
+                <h3 style="margin: 0;">Dear {{ order.customer.firstname }} {{ order.customer.lastname }},</h3>
               <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Thank you for your order!</h1>
             </td>
           </tr>
@@ -187,7 +187,7 @@
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
             {% if order.payment_mode == "Unpaid" %}
-              <p style="margin: 0;">A payment of <span style="font-size: 1.2em">{{ my_config.currency }}{{ order.get_cart_revenue }}</span> is required for your order #{{ order.id }}. You can make the payment by E-Transfer to {{my_config.email}} or Cash.</p>
+              <p style="margin: 0;">A payment of <span style="font-size: 1.2em">{{ my_config.currency }}{{ order.get_cart_revenue }}</span> is required for your order #{{ order.id }}. You can make the payment by E-Transfer to {{my_config.email}} or pay by Cash.</p>
                <br><p style="margin: 0;">All orders are due for payment when the order is picked up/finished. Thank you for being a valuable customer.</p><br>
             {% endif %}
               <p style="margin: 0;">Here is a summary of your recent order. If you have any questions or concerns about your order, please <a href="mailto: {{my_config.email}}">contact us</a>.</p>
@@ -213,9 +213,11 @@
 
                 {% for a in cart_items %}
                 <tr>
-                    <td align="left" width="75%" style="padding: 2px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;" colspan="4">{{ a.product.name }}
-                        {% if a.weight %}, {{ a.weight }}{{ a.weight_unit }}
-                        {% endif %}</td>
+                    <td align="left" width="75%" style="padding: 2px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;" colspan="4">{{ a.name }}
+                    {% if a.variation_name %} [{{ a.variation_name }}]
+                    {% endif %}
+                    {% if a.weight %}, {{ a.weight }}{{ a.weight_unit }}
+                    {% endif %}</td>
                   </tr>
                 <tr>
                   <td align="left" width="25%" style="padding: 2px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">{{ a.quantity }}</td>

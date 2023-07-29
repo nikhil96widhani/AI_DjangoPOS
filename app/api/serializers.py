@@ -66,6 +66,7 @@ class StockBillSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     customer = UserRegistrationSerializer()
+    cashier = UserRegistrationSerializer()
 
     class Meta:
         model = Order

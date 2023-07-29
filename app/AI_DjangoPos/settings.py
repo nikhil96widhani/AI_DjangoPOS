@@ -26,8 +26,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+if os.environ.get('CSRF_TRUSTED_ORIGINS'):
+    CSRF_TRUSTED_ORIGINS = [os.environ.get('CSRF_TRUSTED_ORIGINS')]
+
 
 # Application definition
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -117,7 +121,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Kolkata'
+if os.environ.get('TZ'):
+    TIME_ZONE = os.environ.get('TZ')
+else:
+    TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
